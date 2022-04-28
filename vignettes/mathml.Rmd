@@ -35,12 +35,25 @@ HTML; MathML; R
 
 # 1. mathml: Translate R expressions to MathML
 
+The R extension of the markdown language [@Xie2020] enables reproducible
+statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
+However, so far, R expressions such as `pbinom(k, N, p)` are typeset as-is; 
+prettier mathematical expressions such as $P_\mathrm{Bi}(X \le k; N, p)$ require
+Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`, which are
+cumbersome to type in and hard to read even if the expressions are simple.
+Since recently, manual pages include support for mathematical 
+expressions [@Sarkar2022], which already is a big improvement.
+
+Below Prolog's grammar rules are used for an _automatic_ translation of R
+expressions to MathML. The result can then be used for calculations or it can be
+rendered on a web page. A limited set of rules for translation from R to MathML
+is found in `pl/mathml.pl` of the rolog package. The relevant code snippets are
+shown in the listings below, along with their output.
+
 ```{r, results="asis"}
 library(mathml)
 
 term <- quote(pbinom(k, N, p))
-
-# Pretty print
 mathml(term)
 
 # Do some calculations with the same term
