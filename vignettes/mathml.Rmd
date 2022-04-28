@@ -1,0 +1,51 @@
+---
+title: "mathml: Translate R expressions to MathML"
+author: "Matthias Gondan (Department of Psychology, University of Innsbruck, Austria)"
+date: "2022-04-28"
+bibliography: bibliography.bibtex
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rolog}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(rmarkdown.html_vignette.check_title=FALSE)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(htmltools)
+```
+
+  Matthias Gondan\
+  Department of Psychology\
+  University of Innsbruck\
+  Innrain 9\
+  A-6020 Innsbruck\
+  Matthias.Gondan-Rochon@uibk.ac.at
+  
+# Abstract
+
+123
+
+## Keywords
+
+HTML; MathML; R
+
+# 1. mathml: Translate R expressions to MathML
+
+```{r, results="asis"}
+library(mathml)
+
+term <- quote(pbinom(k, N, p))
+
+# Pretty print
+mathml(term)
+
+# Do some calculations with the same term
+k = 10
+N = 22
+p = 0.4
+eval(term)
+```
