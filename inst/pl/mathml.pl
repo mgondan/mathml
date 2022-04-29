@@ -173,6 +173,71 @@ math(_Flags, besselJ(X, Nu), M)
 math(_Flags, besselY(X, Nu), M)
  => M = fn(sub('Y', Nu), [X]).
 
+math(_Flags, beta(A, B), M)
+ => M = fn('B', [A, B]).
+
+math(_Flags, lbeta(A, B), M)
+ => M = log(beta(A, B)).
+
+math(_Flags, gamma(A), M)
+ => M = fn('Gamma', [A]).
+
+math(_Flags, lgamma(A), M)
+ => M = log(gamma(A)).
+
+% todo: psigamma
+
+math(_Flags, digamma(A), M)
+ => M = frac(d, d*A) * log(gamma(A)).
+
+math(_Flags, trigamma(A), M)
+ => M = frac(d^2, (d*A)^2) * log(gamma(A)).
+
+ml(Flags, choose(N, K), M)
+ => ml(Flags, N, X),
+    ml(Flags, K, Y),
+    M = mrow([mo('('), mfrac([linethickness(0)], [X, Y]), mo(')')]).
+
+paren(_Flags, choose(_, _), Paren)
+ => Paren = 1.
+
+prec(_Flags, choose(_, _), Prec)
+ => Prec = 0.
+
+type(_Flags, choose(_, _), Type)
+ => Type = paren.
+
+math(_Flags, lchoose(N, K), M)
+ => M = log(choose(N, K)).
+
+math(_Flags, factorial(N), M)
+ => current(Prec, xfy, ^),
+    M = yf(Prec, !, N).
+
+math(_Flags, lfactorial(N), M)
+ => M = log(factorial(N)).
+
+math(_Flags, and(A, B), M)
+ => current(Prec, xfy, ','),
+    M = xfy(Prec, &(and), A, B).
+
+math(_Flags, or(A, B), M)
+ => current(Prec, xfy, ';'),
+    M = xfy(Prec, &(or), A, B).
+
+math(_Flags, !(A), M)
+ => current(Prec, xfy, ^),
+    M = fy(Prec, &(not), A).
+
+math(_Flags, xor(A, B), M)
+ => current(Prec, xfy, ';'),
+    M = xfy(Prec, &(veebar), A, B).
+
+
+
+math(_Flags, log(A), M)
+ => M = fn('log', [A]).
+
 %
 % Sum over index
 %
@@ -643,6 +708,11 @@ ml(Flags, fy(Prec, Op, A), M)
     ml(Flags, right(Prec, A), X),
     M = mrow([S, X]).
 
+ml(Flags, yf(Prec, Op, A), M)
+ => ml(Flags, sign(Op), S),
+    ml(Flags, left(Prec, A), X),
+    M = mrow([X, S]).
+
 ml(Flags, xfx(Prec, Op, A, B), M)
  => ml(Flags, left(Prec-1, A), X),
     ml(Flags, sign(Op), S),
@@ -667,10 +737,11 @@ ml(Flags, yfy(Prec, Op, A, B), M)
     ml(Flags, right(Prec, B), Y),
     M = mrow([X, S, Y]).
 
-denoting(Flags, fy(_, A, B), Den)
- => denoting(Flags, A, DenA),
-    denoting(Flags, B, DenB),
-    append(DenA, DenB, Den).
+denoting(Flags, fy(_, _, A), Den)
+ => denoting(Flags, A, Den).
+
+denoting(Flags, yf(_, _, A), Den)
+ => denoting(Flags, A, Den).
 
 denoting(Flags, xfx(_, _, A, B), Den)
  => denoting(Flags, A, DenA),
@@ -693,6 +764,9 @@ denoting(Flags, yfy(_, _, A, B), Den)
     append(DenA, DenB, Den).
 
 prec(_Flags, fy(P, _, _), Prec)
+ => Prec = P.
+
+prec(_Flags, yf(P, _, _), Prec)
  => Prec = P.
 
 prec(_Flags, xfx(P, _, _, _), Prec)
@@ -1111,26 +1185,8 @@ math(Flags, buggy(Flags, _, B), New, X)
     X = B.
 
 %
-% Binomial coefficient and distribution
+% Binomial distribution
 %
-ml(Flags, choose(N, K), M)
- => ml(Flags, N, X),
-    ml(Flags, K, Y),
-    M = mrow([mo('('), mfrac([linethickness(0)], [X, Y]), mo(')')]).
-
-paren(_Flags, choose(_, _), Paren)
- => Paren = 1.
-
-prec(_Flags, choose(_, _), Prec)
- => Prec = 0.
-
-type(_Flags, choose(_, _), Type)
- => Type = paren.
-
-test :- test(choose('N', k)).
-
-test :- test(choose('N', k) * pi^k * (1 - pi)^('N' - k)).
-
 % Density, distribution etc.
 math(Flags, dbinom(K, N, Pi), New, X)
  => New = Flags,
