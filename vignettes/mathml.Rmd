@@ -62,3 +62,43 @@ N = 22
 p = 0.4
 eval(term)
 ```
+
+# Package base
+
+```{r, results="asis"}
+mathml(quote(abs(x)))
+mathml(quote(sqrt(2L)))
+
+mathml(quote(sin(pi/2L)))
+mathml(quote(cos(pi/2L)))
+mathml(quote(tan(pi/2L)))
+
+mathml(quote(asin(1L/2L * sqrt(2L))))
+mathml(quote(acos(1L/2L * sqrt(2L))))
+mathml(quote(atan(1L/2L * sqrt(2L))))
+mathml(quote(atan2(1L, sqrt(3L))))
+
+mathml(quote(sinpi(2L)))
+mathml(quote(cospi(2L)))
+mathml(quote(tanpi(2L)))
+
+mathml(quote(sinh(x)))
+mathml(quote(cosh(x)))
+mathml(quote(tanh(x)))
+
+mathml(quote(asinh(x)))
+mathml(quote(acosh(x)))
+mathml(quote(atanh(x)))
+
+mathml(quote(all(x)))
+mathml(quote(any(x)))
+
+mathml(quote(besselI(x, nu)))
+mathml(quote(besselK(x, nu)))
+mathml(quote(besselJ(x, nu)))
+mathml(quote(besselY(x, nu)))
+
+# todo: catmath mit non-standard evaluation
+```
+
+# References

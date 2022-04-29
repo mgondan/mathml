@@ -1,4 +1,4 @@
-:- discontiguous test/0, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3.
+:- discontiguous test/0, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3.
 :- use_module(library(http/html_write)).
 
 %
@@ -25,6 +25,11 @@ mathml(Flags, A, X) :-
 %
 % Macros
 %
+ml(Flags, A, X),
+    math(Flags, A, M),
+    dif(A, M)
+ => ml(Flags, M, X).
+
 ml(Flags, A, X),
     math(Flags, A, New, M),
     dif(Flags-A, New-M)
@@ -56,7 +61,117 @@ type(_Flags, greek(_), Type)
 denoting(_Flags, greek(_), Den)
  => Den = [].
 
-test :- test(epsilon).
+%
+% R package base
+%
+ml(Flags, abs(A), M)
+ => ml(Flags, A, X),
+    M = mrow([mo(&(vert)), X, mo(&(vert))]).
+
+paren(_Flags, abs(_), Paren)
+ => Paren = 0.
+
+prec(Flags, abs(A), Prec)
+ => prec(Flags, paren(A), Prec).
+
+ml(Flags, sqrt(A), M)
+ => ml(Flags, A, X),
+    M = msqrt(X).
+
+paren(_Flags, sqrt(_), Paren)
+ => Paren = 0.
+
+prec(_Flags, sqrt(_), Prec)
+ => current(P, xfy, ^),
+    Prec is P + 1.
+
+math(_Flags, sin(Alpha), X)
+ => X = fn("sin", [Alpha]).
+
+math(_Flags, cos(Alpha), X)
+ => X = fn("cos", [Alpha]).
+
+math(_Flags, tan(Alpha), X)
+ => X = fn("tan", [Alpha]).
+
+math(_Flags, asin(A), X)
+ => X = fn("asin", [A]).
+
+math(_Flags, acos(A), X)
+ => X = fn("acos", [A]).
+
+math(_Flags, atan(A), X)
+ => X = fn("atan", [A]).
+
+math(_Flags, atan2(A, B), X)
+ => X = fn("arctan2", [A, B]).
+
+math(_Flags, sinpi(Alpha), X)
+ => X = fn("sin", [Alpha*pi]).
+
+math(_Flags, cospi(Alpha), X)
+ => X = fn("cos", [Alpha*pi]).
+
+math(_Flags, tanpi(Alpha), X)
+ => X = fn("tan", [Alpha*pi]).
+
+math(_Flags, sinh(A), X)
+ => X = fn("sinh", [A]).
+
+math(_Flags, cosh(A), X)
+ => X = fn("cosh", [A]).
+
+math(_Flags, tanh(A), X)
+ => X = fn("tanh", [A]).
+
+math(_Flags, asinh(A), X)
+ => X = fn("arsinh", [A]).
+
+math(_Flags, acosh(A), X)
+ => X = fn("arcosh", [A]).
+
+math(_Flags, atanh(A), X)
+ => X = fn("artanh", [A]).
+
+math(_Flags, all(A), X)
+ => X = forall(A).
+
+ml(Flags, forall(A), M)
+ => ml(Flags, A, X),
+    M = mrow([mo(&('ForAll')), mo(&(af)), X]).
+
+paren(Flags, forall(A), Paren)
+ => paren(Flags, A, Paren).
+
+prec(_Flags, forall(_), Prec)
+ => current(Prec, yfx, *).
+
+math(_Flags, any(A), X)
+ => X = exists(A).
+
+ml(Flags, exists(A), M)
+ => ml(Flags, A, X),
+    M = mrow([mo(&('Exists')), mo(&(af)), X]).
+
+paren(Flags, exists(A), Paren)
+ => paren(Flags, A, Paren).
+
+prec(_Flags, exists(_), Prec)
+ => current(Prec, yfx, *).
+
+% todo: expon.scaled
+math(_Flags, besselI(X, Nu), M)
+ => M = fn(sub('I', Nu), [X]).
+
+% todo: expon.scaled
+math(_Flags, besselK(X, Nu), M)
+ => M = fn(sub('K', Nu), [X]).
+
+math(_Flags, besselJ(X, Nu), M)
+ => M = fn(sub('J', Nu), [X]).
+
+math(_Flags, besselY(X, Nu), M)
+ => M = fn(sub('Y', Nu), [X]).
 
 %
 % Sum over index
@@ -806,20 +921,6 @@ math(Flags, dfrac(N, D), New, X)
 test :- test(dfrac(1, pi)).
 
 %
-% Square root
-%
-ml(Flags, sqrt(A), M)
- => ml(Flags, A, X),
-    M = msqrt(X).
-
-prec(_Flags, sqrt(_), Prec)
- => current(P, xfy, ^),
-    Prec is P + 1.
-
-test :- test(sqrt(2)).
-test :- test(sqrt(2)^2).
-
-%
 % Sum over index
 %
 ml(Flags, sum(I, From, To, A), M)
@@ -1084,21 +1185,6 @@ test :- test(cbinom(alpha, 'N', pi, tail("lowerdens"), dist("density"))).
 test :- test(cbinom(alpha, 'N', pi, tail("upperdens"), dist("density"))).
 
 %
-% Trigonometry
-%
-math(Flags, sin(Alpha), New, X)
- => New = Flags,
-    X = fn("sin", [Alpha]).
-
-math(Flags, cos(Alpha), New, X)
- => New = Flags,
-    X = fn("cos", [Alpha]).
-
-math(Flags, tan(Alpha), New, X)
- => New = Flags,
-    X = fn("tan", [Alpha]).
-
-%
 % Functions like f(x) and f(x; a, b)
 %
 ml(Flags, fn(Name, (Args ; Params)), M)
@@ -1147,6 +1233,9 @@ type(_Flags, fn(_Name, _Args), Type)
 %
 % Defaults
 %
+math(_Flags, A, X)
+ => A = X.
+
 math(Flags, A, New, X)
  => A = X,
     New = Flags.
