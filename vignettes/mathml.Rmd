@@ -122,33 +122,6 @@ catmath(and(a, b))
 catmath(or(a, b))
 catmath(!a)
 catmath(xor(a, b))
-
-catmath(c(a, b, c))
-catmath(cbind(a, b, c))
-catmath(rbind(a, b, c))
-
-catmath(ceiling(a))
-catmath(floor(a))
-
-catmath(x < y)
-catmath(x > y)
-catmath(x <= y)
-catmath(x >= y)
-catmath(x == y)
-catmath(x != y)
-
-catmath(1:10)
-
-catmath(Re(z))
-catmath(Im(z))
-catmath(Conj(z))
-
-catmath(crossprod(A, B))
-catmath(tcrossprod(A, B))
-catmath(A %*% B)
-catmath(t(A))
-
-# todo: eckige Klammer bei lgamma
 ```
 
 # References

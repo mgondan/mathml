@@ -86,52 +86,52 @@ prec(_Flags, sqrt(_), Prec)
     Prec is P + 1.
 
 math(_Flags, sin(Alpha), X)
- => X = fn(sin, [Alpha]).
+ => X = fn("sin", [Alpha]).
 
 math(_Flags, cos(Alpha), X)
- => X = fn(cos, [Alpha]).
+ => X = fn("cos", [Alpha]).
 
 math(_Flags, tan(Alpha), X)
- => X = fn(tan, [Alpha]).
+ => X = fn("tan", [Alpha]).
 
 math(_Flags, asin(A), X)
- => X = fn(asin, [A]).
+ => X = fn("asin", [A]).
 
 math(_Flags, acos(A), X)
- => X = fn(acos, [A]).
+ => X = fn("acos", [A]).
 
 math(_Flags, atan(A), X)
- => X = fn(atan, [A]).
+ => X = fn("atan", [A]).
 
 math(_Flags, atan2(A, B), X)
- => X = fn(arctan2, [A, B]).
+ => X = fn("arctan2", [A, B]).
 
 math(_Flags, sinpi(Alpha), X)
- => X = fn(sin, [Alpha*pi]).
+ => X = fn("sin", [Alpha*pi]).
 
 math(_Flags, cospi(Alpha), X)
- => X = fn(cos, [Alpha*pi]).
+ => X = fn("cos", [Alpha*pi]).
 
 math(_Flags, tanpi(Alpha), X)
- => X = fn(tan, [Alpha*pi]).
+ => X = fn("tan", [Alpha*pi]).
 
 math(_Flags, sinh(A), X)
- => X = fn(sinh, [A]).
+ => X = fn("sinh", [A]).
 
 math(_Flags, cosh(A), X)
- => X = fn(cosh, [A]).
+ => X = fn("cosh", [A]).
 
 math(_Flags, tanh(A), X)
- => X = fn(tanh, [A]).
+ => X = fn("tanh", [A]).
 
 math(_Flags, asinh(A), X)
- => X = fn(arsinh, [A]).
+ => X = fn("arsinh", [A]).
 
 math(_Flags, acosh(A), X)
- => X = fn(arcosh, [A]).
+ => X = fn("arcosh", [A]).
 
 math(_Flags, atanh(A), X)
- => X = fn(artanh, [A]).
+ => X = fn("artanh", [A]).
 
 math(_Flags, all(A), X)
  => X = forall(A).
@@ -233,55 +233,7 @@ math(_Flags, xor(A, B), M)
  => current(Prec, xfy, ';'),
     M = xfy(Prec, &(veebar), A, B).
 
-math(_Flags, Expr, M),
-    compound(Expr),
-    compound_name_arguments(Expr, c, Args)
- => M = list(',', Args).
 
-math(_Flags, Expr, M),
-    compound(Expr),
-    compound_name_arguments(Expr, cbind, Args)
- => M = Args.
-
-ml(Flags, Expr, M),
-    compound(Expr),
-    compound_name_arguments(Expr, rbind, Args)
- => ml(Flags, rows(Args), X),
-    M = mtable(X).
-
-ml(Flags, rows(Rows), M)
- => ml(Flags, Rows, X),
-    M = mtr(X).
-
-ml(Flags, ceiling(A), M)
- => ml(Flags, A, X),
-    M = mrow([mo(&('#x2308')), X, mo(&('#x2309'))]).
-
-ml(Flags, floor(A), M)
- => ml(Flags, A, X),
-    M = mrow([mo(&('#x230a')), X, mo(&('#x230b'))]).
-
-math(_Flags, A:B, M)
- => M = list(',', [A, sign(&(hellip)), B]).
-
-math(_Flags, 'Re'(Z), M)
- => M = fn('Re', [Z]).
-
-math(_Flags, 'Im'(Z), M)
- => M = fn('Im', [Z]).
-
-math(_Flags, 'Conj'(Z), M)
- => M = overline(Z).
-
-math(_Flags, crossprod(A, B), M)
- => M = times(t(A), B).
-
-math(_Flags, tcrossprod(A, B), M)
- => M = times(A, t(B)).
-
-math(_Flags, t(A), M)
- => current(Prec, xfy, ^),
-    M = yf(Prec, &(prime), A).
 
 math(_Flags, log(A), M)
  => M = fn(log, [A]).
@@ -647,38 +599,38 @@ test :- test(-pi).
 %
 % Operators
 %
-math(_Flags, '=='(A, B), M)
- => M = (A = B).
+math(Flags, '=='(A, B), New, X)
+ => math(Flags, A = B, New, X).
 
-math(_Flags, '!='(A, B), M)
- => M = (A \= B).
+math(Flags, A = B, New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, =, A, B).
 
-math(_Flags, A = B, M)
- => current_op(Prec, xfx, =),
-    M = yfy(Prec, =, A, B).
+math(Flags, A \= B, New, X)
+ => New = Flags,
+    current_op(Prec, xfx, \=),
+    X = xfx(Prec, &(ne), A, B).
 
-math(_Flags, A \= B, M)
- => current_op(Prec, xfx, \=),
-    M = xfx(Prec, &(ne), A, B).
+math(Flags, A < B, New, X)
+ => New = Flags,
+    current_op(Prec, xfx, <),
+    X = yfy(Prec, <, A, B).
 
-math(_Flags, A < B, M)
- => current_op(Prec, xfx, <),
-    M = yfy(Prec, <, A, B).
+math(Flags, A =< B, New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =<),
+    X = yfy(Prec, &(le), A, B).
 
-math(_Flags, A =< B, M)
- => current_op(Prec, xfx, =<),
-    M = yfy(Prec, &(le), A, B).
+math(Flags, ~(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, &('Tilde'), A, B).
 
-math(_Flags, '<='(A, B), M)
- => M = (A =< B).
-
-math(_Flags, ~(A, B), M)
- => current_op(Prec, xfx, =),
-    M = yfy(Prec, &('Tilde'), A, B).
-
-math(_Flags, A > B, M)
- => current_op(Prec, xfx, >),
-    M = yfy(Prec, >, A, B).
+math(Flags, A > B, New, X)
+ => New = Flags,
+    current_op(Prec, xfx, >),
+    X = yfy(Prec, >, A, B).
 
 math(Flags, A >= B, New, X)
  => New = Flags,
@@ -733,14 +685,6 @@ math(Flags, nodot(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
     X = yfy(Prec, &('#x2062'), A, B).
-
-math(Flags, times(A, B), New, X)
- => New = Flags,
-    current_op(Prec, yfx, *),
-    X = yfy(Prec, &(cross), A, B).
-
-math(_Flags, '%*%'(A, B), M)
- => M = times(A, B).
 
 math(Flags, A / B, New, X)
  => New = Flags,
@@ -1316,17 +1260,11 @@ type(_Flags, fn(_Name, (_Args ; _Params)), Type)
  => Type = paren.
 
 ml(Flags, fn(Name, [Arg]), M),
-    member(Name, [sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, arsinh,
-      arcosh, artanh]),
+    member(Name, ["sin", "cos", "tan"]),
     prec(Flags, Arg, P),
     P = 0
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
-    M = mrow([F, mo(&(af)), X]).
-
-ml(Flags, fn(Name, [Arg]), M)
- => ml(Flags, Name, F),
-    ml(Flags, paren(Arg), X),
     M = mrow([F, mo(&(af)), X]).
 
 ml(Flags, fn(Name, Args), M)
@@ -1334,8 +1272,9 @@ ml(Flags, fn(Name, Args), M)
     ml(Flags, paren(list(sign(','), Args)), X),
     M = mrow([F, mo(&(af)), X]).
 
-paren(Flags, fn(_Name, Args), Paren)
- => paren(Flags, list(sign(','), Args), Paren).
+paren(Flags, fn(_Name, Args), P)
+ => paren(Flags, list(sign(','), Args), P0),
+    succ(P0, P).
 
 prec(_Flags, fn(_Name, _Args), Prec)
  => current(Prec, yfx, *).
@@ -1352,6 +1291,11 @@ math(_Flags, A, X)
 math(Flags, A, New, X)
  => A = X,
     New = Flags.
+
+paren(Flags, A, Den),
+    math(Flags, A, M),
+    dif(Flags-A, Flags-M)
+ => paren(Flags, M, Den).
 
 paren(Flags, A, Den),
     math(Flags, A, New, M),
