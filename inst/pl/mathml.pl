@@ -233,7 +233,11 @@ math(_Flags, xor(A, B), M)
  => current(Prec, xfy, ';'),
     M = xfy(Prec, &(veebar), A, B).
 
+math(_Flags, exp(A), M)
+ => M = fn(exp, [A]).
 
+math(_Flags, expm1(A), M)
+ => M = fn(exp, [A]) - 1.
 
 math(_Flags, log(A), M)
  => M = fn(log, [A]).
@@ -1281,6 +1285,12 @@ prec(_Flags, fn(_Name, _Args), Prec)
 
 type(_Flags, fn(_Name, _Args), Type)
  => Type = paren.
+
+% Default compounds
+%math(_Flags, A, M),
+%    compound(A),
+%    compound_name_arguments(A, N, Args)
+% => M = fn(N, Args).
 
 %
 % Defaults

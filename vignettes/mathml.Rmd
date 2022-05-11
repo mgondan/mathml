@@ -122,6 +122,9 @@ catmath(and(a, b))
 catmath(or(a, b))
 catmath(!a)
 catmath(xor(a, b))
+
+catmath(exp(2L*pi*i))
+catmath(expm1(2L*pi*i))
 ```
 
 # References
