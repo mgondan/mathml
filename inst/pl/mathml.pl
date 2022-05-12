@@ -242,6 +242,20 @@ math(_Flags, expm1(A), M)
 math(_Flags, log(A), M)
  => M = fn(log, [A]).
 
+ml(Flags, ceiling(A), M)
+ => ml(Flags, A, X),
+    M = mrow([mo(&(lceil)), X, mo(&(rceil))]).
+
+paren(_Flags, ceiling(_), P)
+ => P is 0.
+
+ml(Flags, floor(A), M)
+ => ml(Flags, A, X),
+    M = mrow([mo(&(lfloor)), X, mo(&(rfloor))]).
+
+paren(_Flags, floor(_), P)
+ => P is 0.
+
 %
 % Sum over index
 %
