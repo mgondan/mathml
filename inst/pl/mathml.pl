@@ -103,6 +103,9 @@ math(_Flags, acos(A), X)
 math(_Flags, atan(A), X)
  => X = fn("atan", [A]).
 
+math(_Flags, atan2(y=A, x=B), M)
+ => M = atan2(A, B).
+
 math(_Flags, atan2(A, B), X)
  => X = fn("arctan2", [A, B]).
 
@@ -160,21 +163,39 @@ prec(_Flags, exists(_), Prec)
  => current(Prec, yfx, *).
 
 % todo: expon.scaled
+math(_Flags, besselI(x=X, nu=Nu), M)
+ => M = besselI(X, Nu).
+
 math(_Flags, besselI(X, Nu), M)
  => M = fn(sub('I', Nu), [X]).
 
 % todo: expon.scaled
+math(_Flags, besselK(x=X, nu=Nu), M)
+ => M = besselK(X, Nu).
+
 math(_Flags, besselK(X, Nu), M)
  => M = fn(sub('K', Nu), [X]).
+
+math(_Flags, besselJ(x=X, nu=Nu), M)
+ => M = besselJ(X, Nu).
 
 math(_Flags, besselJ(X, Nu), M)
  => M = fn(sub('J', Nu), [X]).
 
+math(_Flags, besselY(x=X, nu=Nu), M)
+ => M = besselY(X, Nu).
+
 math(_Flags, besselY(X, Nu), M)
  => M = fn(sub('Y', Nu), [X]).
 
+math(_Flags, beta(a=A, b=B), M)
+ => M = beta(A, B).
+
 math(_Flags, beta(A, B), M)
  => M = fn('B', [A, B]).
+
+math(_Flags, lbeta(a=A, b=B), M)
+ => M = lbeta(A, B).
 
 math(_Flags, lbeta(A, B), M)
  => M = log(beta(A, B)).
@@ -193,6 +214,9 @@ math(_Flags, digamma(A), M)
 math(_Flags, trigamma(A), M)
  => M = frac(d^2, (d*A)^2) * log(gamma(A)).
 
+math(_Flags, choose(n=N, k=K), M)
+ => M = choose(N, K).
+
 ml(Flags, choose(N, K), M)
  => ml(Flags, N, X),
     ml(Flags, K, Y),
@@ -207,12 +231,21 @@ prec(_Flags, choose(_, _), Prec)
 type(_Flags, choose(_, _), Type)
  => Type = paren.
 
+math(_Flags, lchoose(n=N, k=K), M)
+ => M = lchoose(N, K).
+
 math(_Flags, lchoose(N, K), M)
  => M = log(choose(N, K)).
+
+math(_Flags, factorial(x=N), M)
+ => M = factorial(N).
 
 math(_Flags, factorial(N), M)
  => current(Prec, xfy, ^),
     M = yf(Prec, !, N).
+
+math(_Flags, lfactorial(x=N), M)
+ => M = lfactorial(N).
 
 math(_Flags, lfactorial(N), M)
  => M = log(factorial(N)).

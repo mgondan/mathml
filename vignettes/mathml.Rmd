@@ -116,6 +116,7 @@ catmath(digamma(x))
 catmath(trigamma(x))
 
 catmath(choose(n, k))
+catmath(choose(k=K, n=N))
 catmath(lchoose(n, k))
 catmath(factorial(x))
 catmath(lfactorial(x))
@@ -130,13 +131,9 @@ catmath(expm1(2L*pi*i))
 
 catmath(ceiling(pi))
 catmath(floor(pi))
-# catmath(trunc(pi, ...))
-# catmath(round(pi, ...))
-# catmath(signif(pi, ...))
 
-# todo: accept both round(pi, 1) and round(digits=1, pi)
-# todo: handle canonicalized arguments, avoid log(x = x)
-# todo: f <- function(x) {sin(x)^2}
+# catmath(function(x) {sin(x) + cos(x)})
+# rolog: support for CLOSXP/Rcpp function
 ```
 
 # References
