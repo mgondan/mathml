@@ -289,6 +289,27 @@ ml(Flags, floor(A), M)
 paren(_Flags, floor(_), P)
  => P is 0.
 
+math(_Flags, (_F :- Body), M)
+ => M = Body.
+
+math(_Flags, function(na, Body, _), M),
+    compound_name_arguments(Body, '{', [Arg])
+ => M = Arg.
+
+math(_Flags, function(na, Body, _), M),
+    compound_name_arguments(Body, '{', Args)
+ => M = Args.
+
+math(_Flags, function(na, Body, _), M)
+ => M = Body.
+
+math(_Flags, Identical, M),
+    compound(Identical),
+    compound_name_arguments(Identical, identical, Args)
+ => member(x=X, Args),
+    member(y=Y, Args),
+    M = (X == Y).
+
 %
 % Sum over index
 %

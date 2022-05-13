@@ -66,7 +66,7 @@ catmath <- function(term)
 {
   s <- substitute(term)
   c <- canonical(s)
-	mathml(c)
+  mathml(c)
 }
 ```
 
@@ -132,8 +132,14 @@ catmath(expm1(2L*pi*i))
 catmath(ceiling(pi))
 catmath(floor(pi))
 
-# catmath(function(x) {sin(x) + cos(x)})
-# rolog: support for CLOSXP/Rcpp function
+f <- function(x) sin(x)
+mathml(canonical(f))
+
+catmath(function(x) sin(x))
+catmath(function(x) {sin(x)})
+catmath(function(x) {sin(x); cos(x)})
+
+catmath(identical(1L, 2L))
 ```
 
 # References
