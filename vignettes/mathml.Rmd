@@ -147,8 +147,9 @@ catmath(intersect(A, B))
 catmath(union(A, B))
 catmath(a:b)
 
+catmath(X %x% Y)
+
 # todo: https://getdoc.wiki/Mathml-set
-# todo: left-align in stack (ifelse)
 # todo: complex numbers, Re, Im
 ```
 

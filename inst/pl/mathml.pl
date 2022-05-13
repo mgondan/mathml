@@ -315,11 +315,11 @@ ml(Flags, ifelse(test=T, yes=Y, no=N), M)
     ml(Flags, Y, Yes),
     ml(Flags, N, No),
     ml(Flags, space, S),
-    ml(Flags, sign(','), C),
-    M = mrow([mo('{'), mfrac([linethickness(0)],
-          [ mrow([Yes, C, S, mtext("if"), S, Test]),
-            mrow([No, C, S, mtext("otherwise")])
-          ])]).
+    M = mrow([mo('{'),
+      mtable(columnalign(left),
+      [	mtr([Yes, mrow([mtext("if"), S, Test])]),
+      	mtr([No, mtext("otherwise")])
+      ])]).
 
 paren(_Flags, ifelse(_), P)
  => P is 0.
@@ -335,6 +335,9 @@ math(_Flags, intersect(x=X, y=Y), M)
 
 math(_Flags, union(x=X, y=Y), M)
  => M = union(X, Y).
+
+math(_Flags, '%x%'('X'=X, 'Y'=Y), M)
+ => M = kronecker(X, Y).
 
 %
 % Sum over index
@@ -721,6 +724,11 @@ math(Flags, ':'(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
     X = yfx(Prec, &('#58'), A, B).
+
+math(Flags, kronecker(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, yfx, *),
+    X = yfx(Prec, &('CircleTimes'), A, B).
 
 math(Flags, '=='(A, B), New, X)
  => math(Flags, A = B, New, X).
