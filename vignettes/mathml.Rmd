@@ -140,6 +140,16 @@ catmath(function(x) {sin(x)})
 catmath(function(x) {sin(x); cos(x)})
 
 catmath(identical(1L, 2L))
+catmath(ifelse(a > b, a, b))
+
+catmath(a %in% A)
+catmath(intersect(A, B))
+catmath(union(A, B))
+catmath(a:b)
+
+# todo: https://getdoc.wiki/Mathml-set
+# todo: left-align in stack (ifelse)
+# todo: complex numbers, Re, Im
 ```
 
 # References

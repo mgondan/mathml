@@ -310,6 +310,32 @@ math(_Flags, Identical, M),
     member(y=Y, Args),
     M = (X == Y).
 
+ml(Flags, ifelse(test=T, yes=Y, no=N), M)
+ => ml(Flags, T, Test),
+    ml(Flags, Y, Yes),
+    ml(Flags, N, No),
+    ml(Flags, space, S),
+    ml(Flags, sign(','), C),
+    M = mrow([mo('{'), mfrac([linethickness(0)],
+          [ mrow([Yes, C, S, mtext("if"), S, Test]),
+            mrow([No, C, S, mtext("otherwise")])
+          ])]).
+
+paren(_Flags, ifelse(_), P)
+ => P is 0.
+
+math(_Flags, '%in%'(x=X, 'table'=Y), M)
+ => M = isin(X, Y).
+
+math(_Flags, '%noin%'(x=X, 'table'=Y), M)
+ => M = notin(X, Y).
+
+math(_Flags, intersect(x=X, y=Y), M)
+ => M = intersect(X, Y).
+
+math(_Flags, union(x=X, y=Y), M)
+ => M = union(X, Y).
+
 %
 % Sum over index
 %
@@ -671,6 +697,31 @@ test :- test(-pi).
 %
 % Operators
 %
+math(Flags, isin(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfx(Prec, &(isin), A, B).
+
+math(Flags, notin(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfx(Prec, &(notin), A, B).
+
+math(Flags, intersect(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, yfx, *),
+    X = yfx(Prec, &(cap), A, B).
+
+math(Flags, union(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, yfx, *),
+    X = yfx(Prec, &(cup), A, B).
+
+math(Flags, ':'(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, yfx, *),
+    X = yfx(Prec, &('#58'), A, B).
+
 math(Flags, '=='(A, B), New, X)
  => math(Flags, A = B, New, X).
 
