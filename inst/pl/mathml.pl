@@ -77,6 +77,9 @@ paren(_Flags, abs(_), Paren)
 prec(Flags, abs(A), Prec)
  => prec(Flags, paren(A), Prec).
 
+math(_Flags, sign(X), M)
+ => M = fn("sgn", [X]).
+
 ml(Flags, sqrt(A), M)
  => ml(Flags, A, X),
     M = msqrt(X).
@@ -358,6 +361,12 @@ math(_Flags, intersect(x=X, y=Y), M)
 math(_Flags, union(x=X, y=Y), M)
  => M = union(X, Y).
 
+math(_Flags, setdiff(x=X, y=Y), M)
+ => M = setdiff(X, Y).
+
+math(_Flags, setdiff(X, Y), M)
+ => M = X - Y.
+
 math(_Flags, '%x%'('X'=X, 'Y'=Y), M)
  => M = kronecker(X, Y).
 
@@ -436,6 +445,29 @@ math(_Flags, Max, M),
     compound(Max),
     compound_name_arguments(Max, max, Args)
  => M = fn("max", Args).
+
+math(_Flags, t(x=A), M)
+ => M = t(A).
+
+math(_Flags, t(A), M)
+ => M = A^"T".
+
+math(_Flags, Which, M),
+    compound(Which),
+    compound_name_arguments(Which, which, Args)
+ => M = sub("I", Args).
+
+math(_Flags, 'which.max'(x=A), M)
+ => M = 'which.max'(A).
+
+math(_Flags, 'which.max'(A), M)
+ => M = fn("argmax", [A]).
+
+math(_Flags, 'which.min'(x=A), M)
+ => M = 'which.min'(A).
+
+math(_Flags, 'which.min'(A), M)
+ => M = fn("argmin", [A]).
 
 
 
@@ -601,20 +633,20 @@ test :- test("Text").
 %
 % Mathematical signs
 %
-ml(_Flags, sign(A), X)
+ml(_Flags, op(A), X)
  => X = mo(A).
 
-prec(_Flags, sign(A), Prec),
+prec(_Flags, op(A), Prec),
     current(P, _Fix, A)
  => Prec = P.
 
 current(Prec, yfx, &(sdot))
  => current_op(Prec, yfx, *).
 
-denoting(_Flags, sign(_), Den)
+denoting(_Flags, op(_), Den)
  => Den = [].
 
-test :- test(sign(&(sdot))).
+test :- test(op(&(sdot))).
 
 %
 % Indices like s_D
@@ -850,6 +882,9 @@ math(Flags, A < B, New, X)
     current_op(Prec, xfx, <),
     X = yfy(Prec, <, A, B).
 
+math(_Flags, '<='(A, B), M)
+ => M = (A =< B).
+
 math(Flags, A =< B, New, X)
  => New = Flags,
     current_op(Prec, xfx, =<),
@@ -904,6 +939,17 @@ math(Flags, A * B, New, M)
 math(_Flags, '%*%'(A, B), M)
  => M = times(A, B).
 
+math(_Flags, crossprod(A, B), M)
+ => M = '%*%'(t(A), B).
+
+math(_Flags, tcrossprod(A, B), M)
+ => M = '%*%'(A, t(B)).
+
+math(Flags, ~(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, &('Tilde'), A, B).
+
 test :- test(a * b).
 test :- test(a * (b * c)).
 test :- test((a * b) * c).
@@ -944,36 +990,36 @@ math(Flags, A^B, New, X)
 % Render
 %
 ml(Flags, fy(Prec, Op, A), M)
- => ml(Flags, sign(Op), S),
+ => ml(Flags, op(Op), S),
     ml(Flags, right(Prec, A), X),
     M = mrow([S, X]).
 
 ml(Flags, yf(Prec, Op, A), M)
- => ml(Flags, sign(Op), S),
+ => ml(Flags, op(Op), S),
     ml(Flags, left(Prec, A), X),
     M = mrow([X, S]).
 
 ml(Flags, xfx(Prec, Op, A, B), M)
  => ml(Flags, left(Prec-1, A), X),
-    ml(Flags, sign(Op), S),
+    ml(Flags, op(Op), S),
     ml(Flags, right(Prec-1, B), Y),
     M = mrow([X, S, Y]).
 
 ml(Flags, yfx(Prec, Op, A, B), M)
  => ml(Flags, left(Prec, A), X),
-    ml(Flags, sign(Op), S),
+    ml(Flags, op(Op), S),
     ml(Flags, right(Prec-1, B), Y),
     M = mrow([X, S, Y]).
 
 ml(Flags, xfy(Prec, Op, A, B), M)
  => ml(Flags, left(Prec-1, A), X),
-    ml(Flags, sign(Op), S),
+    ml(Flags, op(Op), S),
     ml(Flags, right(Prec, B), Y),
     M = mrow([X, S, Y]).
 
 ml(Flags, yfy(Prec, Op, A, B), M)
  => ml(Flags, left(Prec, A), X),
-    ml(Flags, sign(Op), S),
+    ml(Flags, op(Op), S),
     ml(Flags, right(Prec, B), Y),
     M = mrow([X, S, Y]).
 
@@ -1002,6 +1048,32 @@ denoting(Flags, yfy(_, _, A, B), Den)
  => denoting(Flags, A, DenA),
     denoting(Flags, B, DenB),
     append(DenA, DenB, Den).
+
+paren(Flags, fy(_, _, A), P)
+ => paren(Flags, A, P).
+
+paren(Flags, yf(_, _, A), P)
+ => paren(Flags, A, P).
+
+paren(Flags, xfx(_, _, A, B), P)
+ => paren(Flags, A, PA),
+    paren(Flags, B, PB),
+    P is max(PA, PB).
+
+paren(Flags, yfx(_, _, A, B), P)
+ => paren(Flags, A, PA),
+    paren(Flags, B, PB),
+    P is max(PA, PB).
+
+paren(Flags, xfy(_, _, A, B), P)
+ => paren(Flags, A, PA),
+    paren(Flags, B, PB),
+    P is max(PA, PB).
+
+paren(Flags, yfy(_, _, A, B), P)
+ => paren(Flags, A, PA),
+    paren(Flags, B, PB),
+    P is max(PA, PB).
 
 prec(_Flags, fy(P, _, _), Prec)
  => Prec = P.
@@ -1367,13 +1439,13 @@ math(Flags, omit_left(Expr), New, M),
     option(error(fix), Flags, highlight),
     Expr =.. [Op, L, R]
  => Flags = New,
-    M = list(space, [box(list(space, [L, sign(Op)])), R]).
+    M = list(space, [box(list(space, [L, op(Op)])), R]).
 
 math(Flags, omit_left(Expr), New, M),
     option(error(highlight), Flags, highlight),
     Expr =.. [Op, L, R]
  => Flags = New,
-    M = list(space, [cancel(list(space, [L, sign(Op)])), R]).
+    M = list(space, [cancel(list(space, [L, op(Op)])), R]).
 
 math(Flags, omit_right(Expr), New, M),
     option(error(ignore), Flags, highlight)
@@ -1384,13 +1456,13 @@ math(Flags, omit_right(Expr), New, M),
     option(error(fix), Flags, highlight),
     Expr =.. [Op, L, R]
  => Flags = New,
-    M = list(space, [L, box(list(space, [sign(Op), R]))]).
+    M = list(space, [L, box(list(space, [op(Op), R]))]).
 
 math(Flags, omit_right(Expr), New, M),
     option(error(highlight), Flags, highlight),
     Expr =.. [Op, L, R]
  => Flags = New,
-    M = list(space, [L, cancel(list(space, [sign(Op), R]))]).
+    M = list(space, [L, cancel(list(space, [op(Op), R]))]).
 
 math(Flags, instead(_Wrong, Correct), New, M),
     option(error(ignore), Flags, highlight)
@@ -1431,6 +1503,9 @@ math(Flags, buggy(Flags, _, B), New, X)
 math(Flags, dbinom(K, N, Pi), New, X)
  => New = Flags,
     X = fn(sub('P', "Bi"), (['X' = K] ; [N, Pi])).
+
+math(_Flags, pbinom(q=K, size=N, prob=Pi), M)
+ => M = fn(sub('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
 math(Flags, pbinom(K, N, Pi), New, X)
  => New = Flags,
@@ -1485,13 +1560,13 @@ test :- test(cbinom(alpha, 'N', pi, tail("upperdens"), dist("density"))).
 %
 ml(Flags, fn(Name, (Args ; Params)), M)
  => ml(Flags, Name, F),
-    ml(Flags, paren(list(sign(';'), [list(sign(','), Args), list(sign(','), Params)])), X),
+    ml(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
     M = mrow([F, mo(&(af)), X]).
 
 paren(Flags, fn(_Name, (Args ; Params)), Paren)
- => paren(Flags, list(sign(','), Args), X),
-    paren(Flags, list(sign(','), Params), Y),
-    Paren is max(X, Y).
+ => paren(Flags, list(op(','), Args), X),
+    paren(Flags, list(op(','), Params), Y),
+    Paren is max(X, Y) + 1.
 
 prec(Flags, fn(_Name, (_Args ; _Params)), Prec)
  => prec(Flags, a * b, Prec).
@@ -1509,11 +1584,11 @@ ml(Flags, fn(Name, [Arg]), M),
 
 ml(Flags, fn(Name, Args), M)
  => ml(Flags, Name, F),
-    ml(Flags, paren(list(sign(','), Args)), X),
+    ml(Flags, paren(list(op(','), Args)), X),
     M = mrow([F, mo(&(af)), X]).
 
 paren(Flags, fn(_Name, Args), P)
- => paren(Flags, list(sign(','), Args), P0),
+ => paren(Flags, list(op(','), Args), P0),
     succ(P0, P).
 
 prec(_Flags, fn(_Name, _Args), Prec)

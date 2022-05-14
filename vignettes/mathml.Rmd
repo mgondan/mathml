@@ -74,6 +74,7 @@ catmath <- function(term)
 
 ```{r, results="asis"}
 catmath(abs(x))
+catmath(sign(x))
 catmath(sqrt(2L))
 
 catmath(sin(pi/2L))
@@ -157,9 +158,13 @@ catmath(a %in% A)
 catmath(intersect(A, B))
 catmath(union(A, B))
 catmath(a:b)
+catmath(setdiff(A, B))
 
 catmath(X %x% Y)
 catmath(a*b + c/d - e %*% f)
+catmath(crossprod(A, B))
+catmath(tcrossprod(A, B))
+catmath(A ~ B)
 
 # not the desired result
 X <- rnorm(5)
@@ -175,11 +180,18 @@ catmath(L == prod(L[i]))
 catmath(mean(X) == sum(X[i])/N)
 catmath(min(X[i]))
 catmath(max(X[i]))
+catmath((t(X)*X)^-1L*t(X)*y)
+
+N = 20
+k = 0:N
+alpha = 0.05
+catmath(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
+catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
 # todo: https://getdoc.wiki/Mathml-set
 # todo: complex numbers, Re, Im
 # todo: package stats (e.g., integrate)
-# todo: sum for x=1 to N
+# todo: sum for x=1 to N, argmax[k]
 ```
 
 # References
