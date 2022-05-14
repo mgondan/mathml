@@ -64,6 +64,9 @@ denoting(_Flags, greek(_), Den)
 %
 % R package base
 %
+math(_Flags, length(X), M)
+ => M = abs(X).
+
 ml(Flags, abs(A), M)
  => ml(Flags, A, X),
     M = mrow([mo(&(vert)), X, mo(&(vert))]).
@@ -270,10 +273,29 @@ math(_Flags, exp(A), M)
  => M = fn(exp, [A]).
 
 math(_Flags, expm1(A), M)
- => M = fn(exp, [A]) - 1.
+ => M = exp(A) - 1.
 
-math(_Flags, log(A), M)
- => M = fn(log, [A]).
+math(_Flags, log(X), M)
+ => M = fn(log, [X]).
+
+math(_Flags, log10(X), M)
+ => M = fn(sub(log, 10), [X]).
+
+math(_Flags, log2(X), M)
+ => M = logb(X, base=2).
+
+% unclear why the cases need to be handled separately
+math(_Flags, logb(x=X, B), M)
+ => M = logb(X, B).
+
+math(_Flags, logb(X, base=B), M)
+ => M = logb(X, B).
+
+math(_Flags, logb(X, B), M)
+ => M = fn(sub(log, B), [X]).
+
+math(_Flags, log1p(A), M)
+ => M = 1 + log(A).
 
 ml(Flags, ceiling(A), M)
  => ml(Flags, A, X),
@@ -338,6 +360,86 @@ math(_Flags, union(x=X, y=Y), M)
 
 math(_Flags, '%x%'('X'=X, 'Y'=Y), M)
  => M = kronecker(X, Y).
+
+math(_Flags, '&'(A, B), M)
+ => M = and(A, B).
+
+math(_Flags, '|'(A, B), M)
+ => M = or(A, B).
+
+math(_Flags, xor(x=A, y=B), M)
+ => M = xor(A, B).
+
+ml(Flags, Sum, M),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args)
+ => maplist(ml(Flags), Args, MX),
+    M = mrow([mo(&(sum)), mrow(MX)]).
+
+paren(Flags, Sum, P),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args)
+ => maplist(paren(Flags), Args, PX),
+    max_list(PX, P).
+
+prec(_Flags, Sum, P),
+    compound(Sum),
+    compound_name_arity(Sum, sum, _)
+ => current(P, yfx, +).
+
+ml(Flags, Prod, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args)
+ => maplist(ml(Flags), Args, MX),
+    M = mrow([mo(&(prod)), mrow(MX)]).
+
+paren(Flags, Prod, P),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args)
+ => maplist(paren(Flags), Args, PX),
+    max_list(PX, P).
+
+prec(_Flags, Prod, P),
+    compound(Prod),
+    compound_name_arity(Prod, prod, _)
+ => current(P, yfx, *).
+
+ml(Flags, Prod, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args)
+ => maplist(ml(Flags), Args, MX),
+    M = mrow([mo(&(prod)), mrow(MX)]).
+
+paren(Flags, Prod, P),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args)
+ => maplist(paren(Flags), Args, PX),
+    max_list(PX, P).
+
+prec(_Flags, Prod, P),
+    compound(Prod),
+    compound_name_arity(Prod, prod, _)
+ => current(P, yfx, *).
+
+math(_Flags, mean(x=A), M)
+ => M = mean(A).
+
+math(_Flags, mean(A), M)
+ => M = overline(A).
+
+math(_Flags, Min, M),
+    compound(Min),
+    compound_name_arguments(Min, min, Args)
+ => M = fn("min", Args).
+
+math(_Flags, Max, M),
+    compound(Max),
+    compound_name_arguments(Max, max, Args)
+ => M = fn("max", Args).
+
+
+
+
 
 %
 % Sum over index
@@ -795,9 +897,12 @@ math(Flags, A * B, New, X),
  => New = Flags,
     X = nodot(A, B).
 
-math(Flags, A * B, New, X)
+math(Flags, A * B, New, M)
  => New = Flags,
-    X = dot(A, B).
+    M = dot(A, B).
+
+math(_Flags, '%*%'(A, B), M)
+ => M = times(A, B).
 
 test :- test(a * b).
 test :- test(a * (b * c)).
@@ -816,6 +921,10 @@ math(Flags, nodot(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
     X = yfy(Prec, &('#x2062'), A, B).
+
+math(_Flags, times(A, B), M)
+ => current_op(Prec, yfx, *),
+    M = yfy(Prec, &(times), A, B).
 
 math(Flags, A / B, New, X)
  => New = Flags,
@@ -1017,8 +1126,8 @@ math(Flags, '('(A), New, X)
 
 ml(Flags, paren(A), X),
     paren(Flags, A, P),
-    0 is P mod 3
- => ml(Flags, parentheses(A), X).
+    2 is P mod 3
+ => ml(Flags, braces(A), X).
 
 ml(Flags, paren(A), X),
     paren(Flags, A, P),
@@ -1027,8 +1136,8 @@ ml(Flags, paren(A), X),
 
 ml(Flags, paren(A), X),
     paren(Flags, A, P),
-    2 is P mod 3
- => ml(Flags, braces(A), X).
+    0 is P mod 3
+ => ml(Flags, parentheses(A), X).
 
 paren(Flags, paren(A), Paren)
  => paren(Flags, A, P),

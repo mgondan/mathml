@@ -121,13 +121,24 @@ catmath(lchoose(n, k))
 catmath(factorial(x))
 catmath(lfactorial(x))
 
-# catmath(and(a, b))
-# catmath(or(a, b))
-# catmath(!a)
-# catmath(xor(a, b))
+catmath(A & B)
+catmath(A | B)
+catmath(!A)
+catmath(xor(A, B))
+
+catmath(A & B)
+catmath(A | B)
+catmath(!A)
+catmath(xor(A, B))
 
 catmath(exp(2L*pi*i))
 catmath(expm1(2L*pi*i))
+
+catmath(log(x))
+catmath(log10(x))
+catmath(log2(x))
+catmath(logb(x, e))
+catmath(log1p(x))
 
 catmath(ceiling(pi))
 catmath(floor(pi))
@@ -148,9 +159,27 @@ catmath(union(A, B))
 catmath(a:b)
 
 catmath(X %x% Y)
+catmath(a*b + c/d - e %*% f)
+
+# not the desired result
+X <- rnorm(5)
+catmath(sum(X))
+
+# this yields the desired result
+X <- rnorm(5)
+i <- seq_along(X)
+catmath(sum(X[i]))
+
+catmath(L == prod(L[i]))
+
+catmath(mean(X) == sum(X[i])/N)
+catmath(min(X[i]))
+catmath(max(X[i]))
 
 # todo: https://getdoc.wiki/Mathml-set
 # todo: complex numbers, Re, Im
+# todo: package stats (e.g., integrate)
+# todo: sum for x=1 to N
 ```
 
 # References
