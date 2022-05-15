@@ -1,14 +1,14 @@
 Package: mathml
 Type: Package
-Title: Translate R expressions to MathML
-Version: 0.9
-Date: 2022-04-28
+Title: Translate R expressions to MathML and LaTeX/MathJax
+Version: 0.1
+Date: 2022-05-15
 Author: Matthias Gondan
 Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
-Description: This package translates R expressions to MathML so that they can
-    be rendered in HTML markdown documents and shiny apps.
+Description: This package translates R expressions to MathML or MathJax so that
+    they can be rendered in rmarkdown documents and shiny apps.
 License: FreeBSD
-Imports: rolog
+Imports: rolog (>= 0.9.4)
 Encoding: UTF-8
 Suggests: 
     rmarkdown,
