@@ -68,35 +68,80 @@ catmath <- function(term)
   c <- canonical(s)
   mathml(c)
 }
+
+catmathjax <- function(term)
+{
+  s <- substitute(term)
+  c <- canonical(s)
+  mathjax(c)
+}
 ```
 
 # Package base
 
 ```{r, results="asis"}
+catmath("text")
+catmathjax("text")
+
+catmath(pi)
+catmathjax(pi)
+
 catmath(abs(x))
+catmathjax(abs(alpha))
+
 catmath(sign(x))
+catmathjax(sign(alpha))
+
 catmath(sqrt(2L))
+catmathjax(sqrt(alpha))
 
 catmath(sin(pi/2L))
+catmathjax(sin(pi/2L))
+
 catmath(cos(pi/2L))
+catmathjax(cos(pi/2L))
+
 catmath(tan(pi/2L))
+catmathjax(tan(pi/2L))
 
 catmath(asin(1L/2L * sqrt(2L)))
+catmathjax(asin(1L/2L * sqrt(2L)))
+
 catmath(acos(1L/2L * sqrt(2L)))
+catmathjax(acos(1L/2L * sqrt(2L)))
+
 catmath(atan(1L/2L * sqrt(2L)))
+catmathjax(atan(1L/2L * sqrt(2L)))
+
 catmath(atan2(1L, sqrt(3L)))
+catmathjax(atan2(1L, sqrt(3L)))
 
 catmath(sinpi(2L))
+catmathjax(sinpi(2L))
+
 catmath(cospi(2L))
+catmathjax(cospi(2L))
+
 catmath(tanpi(2L))
+catmathjax(tanpi(2L))
 
 catmath(sinh(x))
+catmathjax(sinh(x))
+
 catmath(cosh(x))
+catmathjax(cosh(x))
+
 catmath(tanh(x))
+catmathjax(tanh(x))
 
 catmath(asinh(x))
+catmathjax(asinh(x))
+
 catmath(acosh(x))
+catmathjax(acosh(x))
+
 catmath(atanh(x))
+catmathjax(atanh(x))
 
 catmath(all(x))
 catmath(any(x))
@@ -174,6 +219,7 @@ catmath(sum(X))
 X <- rnorm(5)
 i <- seq_along(X)
 catmath(sum(X[i]))
+catmath(over(index=i, from=1L, to=N, fun=sum(X[i])))
 
 catmath(L == prod(L[i]))
 
@@ -191,7 +237,7 @@ catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 # todo: https://getdoc.wiki/Mathml-set
 # todo: complex numbers, Re, Im
 # todo: package stats (e.g., integrate)
-# todo: sum for x=1 to N, argmax[k]
+# todo: sum for k \in calligraphic(K), P(K = k) * pi_K
 ```
 
 # References

@@ -4,10 +4,22 @@
   consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
-mathml = function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
   t = once(call("r2mathml", term, expression(X)))
   cat(paste(t$X, collapse=""))
+}
+
+mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+{
+  t = once(call("r2mathjax", term, expression(X)))
+  cat(paste(t$X, collapse=""))
+}
+
+# sum over x
+over <- function(index=i, from=1, to=N, fun=sum(1:10))
+{
+  return(fun)
 }
 
 canonical <- function(term)
