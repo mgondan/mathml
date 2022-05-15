@@ -144,95 +144,184 @@ catmath(atanh(x))
 catmathjax(atanh(x))
 
 catmath(all(x))
+catmathjax(all(x))
+
 catmath(any(x))
+catmathjax(any(x))
 
 catmath(besselI(x, nu))
+catmathjax(besselI(x, nu))
+
 catmath(besselK(x, nu))
+catmathjax(besselK(x, nu))
+
 catmath(besselJ(x, nu))
+catmathjax(besselJ(x, nu))
+
 catmath(besselY(x, nu))
+catmathjax(besselY(x, nu))
 
 catmath(beta(a, b))
+catmathjax(beta(a, b))
+
 catmath(lbeta(a, b))
+catmathjax(lbeta(a, b))
 
 catmath(gamma(x))
-catmath(lgamma(x))
+catmathjax(gamma(x))
 
-# catmath(psigamma(x, deriv = 0))
+catmath(lgamma(x))
+catmathjax(lgamma(x))
+
+catmath(psigamma(x, deriv=psi))
+catmathjax(psigamma(x, deriv=psi))
+
 catmath(digamma(x))
+catmathjax(digamma(x))
+
 catmath(trigamma(x))
+catmathjax(trigamma(x))
 
 catmath(choose(n, k))
+catmathjax(choose(n, k))
+
 catmath(choose(k=K, n=N))
+catmathjax(choose(k=K, n=N))
+
 catmath(lchoose(n, k))
+catmathjax(lchoose(n, k))
+
 catmath(factorial(x))
+catmathjax(factorial(x))
+
 catmath(lfactorial(x))
+catmathjax(lfactorial(x))
 
 catmath(A & B)
-catmath(A | B)
-catmath(!A)
-catmath(xor(A, B))
+catmathjax(A & B)
 
-catmath(A & B)
 catmath(A | B)
+catmathjax(A | B)
+
 catmath(!A)
+catmathjax(!A)
+
 catmath(xor(A, B))
+catmathjax(xor(A, B))
 
 catmath(exp(2L*pi*i))
+catmathjax(exp(2L*pi*i))
+
 catmath(expm1(2L*pi*i))
+catmathjax(expm1(2L*pi*i))
 
 catmath(log(x))
+catmathjax(log(x))
+
 catmath(log10(x))
+catmathjax(log10(x))
+
 catmath(log2(x))
+catmathjax(log2(x))
+
 catmath(logb(x, e))
+catmathjax(logb(x, e))
+
 catmath(log1p(x))
+catmathjax(log1p(x))
 
 catmath(ceiling(pi))
+catmathjax(ceiling(pi))
+
 catmath(floor(pi))
+catmathjax(floor(pi))
 
 f <- function(x) sin(x)
 mathml(canonical(f))
+mathjax(canonical(f))
 
 catmath(function(x) sin(x))
+catmathjax(function(x) sin(x))
+
 catmath(function(x) {sin(x)})
+catmathjax(function(x) {sin(x)})
+
 catmath(function(x) {sin(x); cos(x)})
+catmathjax(function(x) {sin(x); cos(x)})
 
 catmath(identical(1L, 2L))
+catmathjax(identical(1L, 2L))
+
 catmath(ifelse(a > b, a, b))
+catmathjax(ifelse(a > b, a, b))
 
 catmath(a %in% A)
+catmathjax(a %in% A)
+
 catmath(intersect(A, B))
+catmathjax(intersect(A, B))
+
 catmath(union(A, B))
+catmathjax(union(A, B))
+
 catmath(a:b)
+catmathjax(a:b)
+
 catmath(setdiff(A, B))
+catmathjax(setdiff(A, B))
 
 catmath(X %x% Y)
+catmathjax(X %x% Y)
+
 catmath(a*b + c/d - e %*% f)
+catmathjax(a*b + c/d - e %*% f)
+
 catmath(crossprod(A, B))
+catmathjax(crossprod(A, B))
+
 catmath(tcrossprod(A, B))
+catmathjax(tcrossprod(A, B))
+
 catmath(A ~ B)
+catmathjax(A ~ B)
 
 # not the desired result
 X <- rnorm(5)
 catmath(sum(X))
+catmathjax(sum(X))
 
 # this yields the desired result
 X <- rnorm(5)
 i <- seq_along(X)
 catmath(sum(X[i]))
+catmathjax(sum(X[i]))
+
 catmath(over(index=i, from=1L, to=N, fun=sum(X[i])))
+catmathjax(over(index=i, from=1L, to=N, fun=sum(X[i])))
 
 catmath(L == prod(L[i]))
+catmathjax(L == prod(L[i]))
 
 catmath(mean(X) == sum(X[i])/N)
+catmathjax(mean(X) == sum(X[i])/N)
+
 catmath(min(X[i]))
+catmathjax(min(X[i]))
+
 catmath(max(X[i]))
+catmathjax(max(X[i]))
+
 catmath((t(X)*X)^-1L*t(X)*y)
+catmathjax((t(X)*X)^-1L*t(X)*y)
 
 N = 20
 k = 0:N
 alpha = 0.05
 catmath(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
+catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
+
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
+catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
 # todo: https://getdoc.wiki/Mathml-set
 # todo: complex numbers, Re, Im
