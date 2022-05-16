@@ -323,7 +323,7 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo: argmax klammer
+# todo: "log" -> \log
 # todo: https://getdoc.wiki/Mathml-set
 # todo: complex numbers, Re, Im
 # todo: package stats (e.g., integrate)

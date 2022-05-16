@@ -72,6 +72,21 @@ jax(Flags, A, X),
     dif(Flags-A, New-M)
  => jax(New, M, X).
 
+prec(Flags, A, P),
+    math(A, M),
+    dif(A, M)
+ => prec(Flags, M, P).
+
+prec(Flags, A, P),
+    math(Flags, A, M),
+    dif(A, M)
+ => prec(Flags, M, P).
+
+prec(Flags, A, P),
+    math(Flags, A, New, M),
+    dif(Flags-A, New-M)
+ => prec(New, M, P).
+
 math(Flags, A, New, X),
     member(replace(A, _), Flags)
  => select(replace(A, X), Flags, New).
@@ -371,7 +386,7 @@ math(logb(x=X, base=B), M)
  => M = logb(X, B).
 
 math(logb(X, B), M)
- => M = fn(sub(log, B), [X]).
+ => M = fn(sub("log", B), [X]).
 
 math(log1p(A), M)
  => M = 1 + log(A).
@@ -477,6 +492,10 @@ ml(Flags, Prod, M),
  => maplist(ml(Flags), Args, MX),
     M = mrow([mo(&(prod)), mrow(MX)]).
 
+jax(Flags, prod(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\prod{~w}", [X]).
+
 jax(Flags, Prod, M),
     compound(Prod),
     compound_name_arguments(Prod, prod, Args)
@@ -552,6 +571,10 @@ ml(Flags, Sum, M),
     compound_name_arguments(Sum, sum, Args)
  => maplist(ml(Flags), Args, X),
     M = mrow([mo(&(sum)), mrow(X)]).
+
+jax(Flags, sum(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\sum{~w}", [X]).
 
 jax(Flags, Sum, M),
     compound(Sum),
@@ -794,6 +817,9 @@ current(0, fy, &(sum)).
 current(Prec, yfx, &(sdot)) :-
     current_op(Prec, yfx, *).
 
+current(Prec, yfy, '<=') :-
+    current_op(Prec, xfx, =<).
+
 denoting(_Flags, op(_), D)
  => D = [].
 
@@ -814,11 +840,12 @@ math(Flags, sub(A, Idx), New, M),
 %
 % Render
 %
-math(Flags, sub(A, Idx), M),
-    prec(Flags, sub(A, Idx), Outer),
-    prec(Flags, A, Inner),
-    Outer < Inner
- => M = sub(paren(A), Idx).
+
+%math(Flags, sub(A, Idx), M),
+%    prec(Flags, sub(A, Idx), Outer),
+%    prec(Flags, A, Inner),
+%    Outer < Inner
+% => M = sub(paren(A), Idx).
 
 ml(Flags, sub(A, B), M)
  => ml(Flags, A, X),
@@ -852,11 +879,12 @@ math(Flags, sup(A, Pwr), New, M),
 %
 % Render
 %
-math(Flags, sup(A, Pwr), M),
-    prec(Flags, sup(A, Pwr), Outer),
-    prec(Flags, A, Inner),
-    Outer < Inner
- => M = sup(paren(A), Pwr).
+
+%math(Flags, sup(A, Pwr), M),
+%    prec(Flags, sup(A, Pwr), Outer),
+%    prec(Flags, A, Inner),
+%    Outer < Inner
+% => M = sup(paren(A), Pwr).
 
 ml(Flags, sup(A, B), M)
  => ml(Flags, A, X),
@@ -880,11 +908,12 @@ type(_Flags, sup(A, B), T)
 %
 % Index and Exponent: s_D^2
 %
-math(Flags, subsup(A, Idx, Pwr), X),
-    prec(Flags, subsup(A, Idx, Pwr), Outer),
-    prec(Flags, A, Inner),
-    Outer < Inner
- => X = subsup(paren(A), Idx, Pwr).
+
+%math(Flags, subsup(A, Idx, Pwr), X),
+%    prec(Flags, subsup(A, Idx, Pwr), Outer),
+%    prec(Flags, A, Inner),
+%    Outer < Inner
+% => X = subsup(paren(A), Idx, Pwr).
 
 ml(Flags, subsup(A, B, C), M)
  => ml(Flags, A, X),
@@ -1379,9 +1408,7 @@ ml(Flags, paren(A), M),
     1 is P mod 3
  => ml(Flags, brackets(A), M).
 
-ml(Flags, paren(A), M),
-    paren(Flags, A, P),
-    0 is P mod 3
+ml(Flags, paren(A), M)
  => ml(Flags, parentheses(A), M).
 
 jax(Flags, paren(A), M),
@@ -1813,6 +1840,18 @@ type(_Flags, fn(_Name, (_Args ; _Params)), Type)
  => Type = paren.
 
 ml(Flags, fn(Name, [Arg]), M),
+    type(Flags, Arg, paren)
+ => ml(Flags, Name, F),
+    ml(Flags, Arg, X),
+    M = mrow([F, mo(&(af)), X]).
+
+ml(Flags, fn(Name, [Arg]), M),
+    type(Flags, Arg, function)
+ => ml(Flags, Name, F),
+    ml(Flags, Arg, X),
+    M = mrow([F, mo(&(af)), X]).
+
+ml(Flags, fn(Name, [Arg]), M),
     prec(Flags, Arg, P),
     P = 0
  => ml(Flags, Name, F),
@@ -1825,12 +1864,16 @@ ml(Flags, fn(Name, Args), M)
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, [Arg]), M),
-    prec(Flags, Arg, P),
-    P = 0,
     type(Flags, Arg, paren)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
+
+jax(Flags, fn(Name, [Arg]), M),
+    type(Flags, Arg, function)
+ => jax(Flags, Name, F),
+    jax(Flags, Arg, X),
+    format(string(M), "{~w\\,~w}", [F, X]).
 
 jax(Flags, fn(Name, [Arg]), M),
     prec(Flags, Arg, P),
@@ -1843,6 +1886,16 @@ jax(Flags, fn(Name, Args), M)
  => jax(Flags, Name, F),
     jax(Flags, paren(list(op(','), Args)), X),
     format(string(M), "{~w~w}", [F, X]).
+
+paren(Flags, fn(_Name, [Arg]), P),
+    type(Flags, Arg, paren)
+ => paren(Flags, Arg, P).
+
+paren(Flags, fn(_Name, [Arg]), P),
+    prec(Flags, Arg, P0),
+    P0 = 0
+ => paren(Flags, Arg, P1),
+    succ(P1, P).
 
 paren(Flags, fn(_Name, Args), P)
  => paren(Flags, list(op(','), Args), P0),
@@ -1873,15 +1926,20 @@ math(Flags, A, New, M)
  => New = Flags,
     M = A.
 
-paren(Flags, A, Den),
-    math(Flags, A, M),
-    dif(Flags-A, Flags-M)
- => paren(Flags, M, Den).
+paren(Flags, A, P),
+    math(A, M),
+    dif(A, M)
+ => paren(Flags, M, P).
 
-paren(Flags, A, Den),
+paren(Flags, A, P),
+    math(Flags, A, M),
+    dif(A, M)
+ => paren(Flags, M, P).
+
+paren(Flags, A, P),
     math(Flags, A, New, M),
     dif(Flags-A, New-M)
- => paren(New, M, Den).
+ => paren(New, M, P).
 
 paren(_, _, P) =>
     P = 0.
