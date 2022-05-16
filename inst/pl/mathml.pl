@@ -122,9 +122,76 @@ ml(_Flags, greek(A), M) =>
     M = mi(&(A)).
 
 jax(_Flags, greek(A), M) =>
-    format(string(M), "{\\~w}", [A]).
+    format(string(M), "\\~w", [A]).
 
 type(_Flags, greek(_), T)
+ => T = atomic.
+
+%
+% Booleans
+%
+math('TRUE', M)
+ => M = boolean('T').
+
+math('FALSE', M)
+ => M = boolean('F').
+
+ml(_Flags, boolean(A), M)
+ => M = mi(A).
+
+jax(_Flags, boolean(A), M)
+ => format(string(M), "{~w}", [A]).
+
+type(_Flags, boolean(_), T)
+ => T = atomic.
+
+%
+% Function names
+%
+math(A, M),
+    atom(A),
+    member(A, [sgn, sin, cos, tan, asin, acos, atan, arctan2, sinh, cosh, tanh,
+               arsinh, arcosh, artanh, log, exp])
+ => M = func(A).
+
+ml(_Flags, func(A), X)
+ => X = mi(A).
+
+jax(_Flags, func(sgn), M)
+ => M = "{\\mathrm{sgn}\\,}".
+
+jax(_Flags, func(A), M)
+ => format(string(M), "\\~w", [A]).
+
+%
+% Space
+%
+math(space, X)
+ => X = space(thinmathspace).
+
+ml(_Flags, space(Width), M)
+ => M = mspace(width(Width), []).
+
+jax(_Flags, space(thinmathspace), M)
+ => M = "\\,".
+
+jax(_Flags, space(_Width), M)
+ => M = "\\ ".
+
+%
+% Symbols/Identifiers
+%
+math(A, M),
+    atom(A)
+ => M = ident(A).
+
+ml(_Flags, ident(A), X)
+ => X = mi(A).
+
+jax(_Flags, ident(A), M)
+ => format(string(M), "{~w}", [A]).
+
+type(_Flags, ident(_), T)
  => T = atomic.
 
 %
@@ -148,7 +215,7 @@ prec(Flags, abs(A), P)
  => prec(Flags, paren(A), P).
 
 math(sign(A), M)
- => M = fn("sgn", [A]).
+ => M = fn(sgn, [A]).
 
 ml(Flags, sqrt(A), M)
  => ml(Flags, A, X),
@@ -166,55 +233,55 @@ prec(_Flags, sqrt(_), P)
     P is P0 + 1.
 
 math(sin(A), M)
- => M = fn("sin", [A]).
+ => M = fn(sin, [A]).
 
 math(cos(A), M)
- => M = fn("cos", [A]).
+ => M = fn(cos, [A]).
 
 math(tan(A), M)
- => M = fn("tan", [A]).
+ => M = fn(tan, [A]).
 
 math(asin(A), M)
- => M = fn("asin", [A]).
+ => M = fn(sup(sin, -1), [A]).
 
 math(acos(A), M)
- => M = fn("acos", [A]).
+ => M = fn(sup(cos, -1), [A]).
 
 math(atan(A), M)
- => M = fn("atan", [A]).
+ => M = fn(sup(tan, -1), [A]).
 
 math(atan2(y=A, x=B), M)
  => M = atan2(A, B).
 
 math(atan2(A, B), M)
- => M = fn("arctan2", [A, B]).
+ => M = fn(sup(tan, -1), [A, B]).
 
 math(sinpi(A), M)
- => M = fn("sin", [A*pi]).
+ => M = fn(sin, [A*pi]).
 
 math(cospi(A), M)
- => M = fn("cos", [A*pi]).
+ => M = fn(cos, [A*pi]).
 
 math(tanpi(A), M)
- => M = fn("tan", [A*pi]).
+ => M = fn(tan, [A*pi]).
 
 math(sinh(A), M)
- => M = fn("sinh", [A]).
+ => M = fn(sinh, [A]).
 
 math(cosh(A), M)
- => M = fn("cosh", [A]).
+ => M = fn(cosh, [A]).
 
 math(tanh(A), M)
- => M = fn("tanh", [A]).
+ => M = fn(tanh, [A]).
 
 math(asinh(A), M)
- => M = fn("arsinh", [A]).
+ => M = fn(sup(sinh, -1), [A]).
 
 math(acosh(A), M)
- => M = fn("arcosh", [A]).
+ => M = fn(sup(cosh, -1), [A]).
 
 math(atanh(A), M)
- => M = fn("artanh", [A]).
+ => M = fn(sup(tanh, -1), [A]).
 
 math(all(A), M)
  => M = forall(A).
@@ -367,13 +434,13 @@ math(xor(A, B), M)
     M = xfy(Prec, &(veebar), A, B).
 
 math(exp(A), M)
- => M = fn("exp", [A]).
+ => M = fn(exp, [A]).
 
 math(expm1(A), M)
  => M = exp(A) - 1.
 
 math(log(X), M)
- => M = fn("log", [X]).
+ => M = fn(log, [X]).
 
 math(log10(X), M)
  => M = logb(x=X, base=10).
@@ -386,7 +453,7 @@ math(logb(x=X, base=B), M)
  => M = logb(X, B).
 
 math(logb(X, B), M)
- => M = fn(sub("log", B), [X]).
+ => M = fn(sub(log, B), [X]).
 
 math(log1p(A), M)
  => M = 1 + log(A).
@@ -680,65 +747,6 @@ prec(Flags, tilde(A), Prec)
 type(Flags, tilde(A), Type)
  => type(Flags, A, Type).
 
-test :- test(tilde('D')).
-
-test :- test(tilde('X')^2).
-
-%
-% Booleans
-%
-math(Flags, A, New, X),
-    atom(A),
-    memberchk(A, ['TRUE', 'FALSE'])
- => New = Flags,
-    X = boolean(A).
-
-denoting(_Flags, boolean(_), Den)
- => Den = [].
-
-%
-% Space
-%
-math(space, X)
- => X = space(thinmathspace).
-
-ml(_Flags, space(Width), M)
- => M = mspace(width(Width), []).
-
-jax(_Flags, space(thinmathspace), M)
- => M = "\\,".
-
-jax(_Flags, space(_Width), M)
- => M = "\\ ".
-
-denoting(_Flags, space(_), D)
- => D = [].
-
-%
-% Symbols/Identifiers
-%
-math(A, M),
-    atom(A)
- => M = ident(A).
-
-ml(_Flags, ident(A), X)
- => X = mi(A).
-
-type(_Flags, ident(_), Type)
- => Type = atomic.
-
-denoting(_Flags, ident(_), Den)
- => Den = [].
-
-ml(_Flags, ident(A), M)
- => M = mi(A).
-
-jax(_Flags, ident(A), M)
- => format(string(M), "{~w}", [A]).
-
-type(_Flags, ident(_), T)
- => T = atomic.
-
 %
 % Mathematical signs
 %
@@ -806,7 +814,7 @@ jax(_Flags, op(&(cup)), M)
  => M = "\\cup".
 
 jax(_Flags, op(A), M)
- => format(string(M), "{~w}", [A]).
+ => format(string(M), "~w", [A]).
 
 prec(_Flags, op(A), P),
     current(P0, _Fix, A)
@@ -1873,14 +1881,14 @@ jax(Flags, fn(Name, [Arg]), M),
     type(Flags, Arg, function)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
-    format(string(M), "{~w\\,~w}", [F, X]).
+    format(string(M), "{~w~w}", [F, X]).
 
 jax(Flags, fn(Name, [Arg]), M),
     prec(Flags, Arg, P),
     P = 0
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
-    format(string(M), "{~w\\,~w}", [F, X]).
+    format(string(M), "{~w~w}", [F, X]).
 
 jax(Flags, fn(Name, Args), M)
  => jax(Flags, Name, F),
