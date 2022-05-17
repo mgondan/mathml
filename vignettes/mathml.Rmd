@@ -13,9 +13,6 @@ vignette: >
 ```{r, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(rmarkdown.html_vignette.check_title=FALSE)
-library(DiagrammeR)
-library(DiagrammeRsvg)
-library(htmltools)
 ```
 
   Matthias Gondan\
@@ -264,6 +261,9 @@ catmathjax(intersect(A, B))
 catmath(union(A, B))
 catmathjax(union(A, B))
 
+catmath(is.null(intersect(A, B)))
+catmathjax(is.null(intersect(A, B)))
+
 catmath(a:b)
 catmathjax(a:b)
 
@@ -323,13 +323,14 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo: https://getdoc.wiki/Mathml-set
-# todo: complex numbers, Re, Im
-# todo: package stats (e.g., integrate)
-# todo: sum for k \in calligraphic(K), P(K = k) * pi_K
-# todo: hook for custom functions and macros
-# todo: function bodies
-# todo: case study
+# todo 0.2: complex numbers, Re, Im
+# todo 0.3: sum for k \in calligraphic(K), P(K = k) * pi_K
+# todo 0.4: package stats (e.g., integrate)
+# todo 0.5: hook for custom functions and macros
+# todo 0.6: function bodies
+# todo 0.7: case study
+# todo 0.8: generate expressions for Rd file
+# todo 0.9: RJ paper, see Sarkar2022
 ```
 
 # References

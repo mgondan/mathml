@@ -146,6 +146,24 @@ type(_Flags, boolean(_), T)
  => T = atomic.
 
 %
+% Set
+%
+math('is.null'(A), M)
+ => M = (A = 'NULL').
+
+math('NULL', M)
+ => M = set(empty).
+
+ml(_Flags, set(empty), M)
+ => M = mi(&(empty)).
+
+jax(_Flags, set(empty), M)
+ => M = "\\emptyset".
+
+type(_Flags, set(_), T)
+ => T = atomic.
+
+%
 % Function names
 %
 math(A, M),
