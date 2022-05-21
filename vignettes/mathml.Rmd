@@ -83,6 +83,9 @@ catmathjax("text")
 catmath(pi)
 catmathjax(pi)
 
+catmath(K %in% cal(K))
+catmathjax(K %in% cal(K))
+
 catmath(abs(x))
 catmathjax(abs(alpha))
 
@@ -323,8 +326,7 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo 0.2: complex numbers, Re, Im
-# todo 0.3: sum for k \in calligraphic(K), P(K = k) * pi_K
+# todo 0.3: sum for k \in cal(K), P(K = k) * pi_K
 # todo 0.4: package stats (e.g., integrate)
 # todo 0.5: hook for custom functions and macros
 # todo 0.6: function bodies

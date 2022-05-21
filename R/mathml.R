@@ -16,6 +16,8 @@ mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
   cat(paste(t$X, collapse=""))
 }
 
+cal <- identity
+
 # sum over x
 over <- function(index=i, from=1, to=N, fun=sum(1:10))
 {

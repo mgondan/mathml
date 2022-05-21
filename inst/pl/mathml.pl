@@ -203,8 +203,16 @@ math(A, M),
     atom(A)
  => M = ident(A).
 
-ml(_Flags, ident(A), X)
- => X = mi(A).
+ml(Flags, ident(A), M),
+    member(mathvariant(calligraphy), Flags)
+ => M = mi(mathvariant(script), A).
+
+ml(_Flags, ident(A), M)
+ => M = mi(A).
+
+jax(Flags, ident(A), M),
+    member(mathvariant(calligraphy), Flags)
+ => format(string(M), "\\mathcal{~w}", [A]).
 
 jax(_Flags, ident(A), M)
  => format(string(M), "{~w}", [A]).
@@ -636,6 +644,14 @@ math('which.min'(x=A), M)
 
 math('which.min'(A), M)
  => M = fn("argmin", [A]).
+
+% calligraphic letters
+math(cal(x=A), M)
+ => M = cal(A).
+
+math(Flags, cal(A), New, M)
+ => New = [mathvariant(calligraphy) | Flags],
+    M = A.
 
 % Sum over index
 math(Flags, over(index=I, from=F, to=T, fun=Fn), New, M)
