@@ -68,19 +68,14 @@ mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
 cal <- identity
 
-#' Sum over a range, e.g., sum x_i for i=1 to N
+#' Subscript. On the R side, this function is a wrapper of identity, but allows
+#' for decorations.
 #'
-#' @param index
-#' an R symbol, e.g., i.
-#'
-#' @param from
-#' an R symbol, e.g., 1.
-#'
-#' @param to
-#' an R symbol, e.g., N.
+#' @param sub
+#' an R symbol or call, e.g., i
 #'
 #' @param fun
-#' an R call. This is the return value of the function.
+#' an R call or symbol, e.g. sum(x). This is the return value of the function.
 #'
 #' @return
 #' The function over is a wrapper for the identity function, returning _fun_
@@ -90,9 +85,63 @@ cal <- identity
 #' @seealso [identity()]
 #'
 #' @examples
-#' mathjax(quote(over(index=i, from=1, to=N, fun=sum(1:10))))
+#' mathjax(quote(subscript(sub=i, fun=x)))
 #'
-over <- function(index=quote(i), from=1, to=quote(N), fun=sum(1:10))
+subscript <- function(fun=quote(x), sub=quote(i))
+{
+  return(fun)
+}
+
+#' Superscript. This is a wrapper for the identity function, but decorates the
+#' result with a superscript.
+#'
+#' @param sup
+#' an R symbol, e.g., "*"
+#'
+#' @param fun
+#' an R call or symbol, e.g. x. This is the return value of the function.
+#'
+#' @return
+#' The function over is a wrapper for the identity function, returning _fun_
+#'
+#' @md
+#'
+#' @seealso [identity()]
+#'
+#' @examples
+#' mathjax(quote(superscript(fun=A, sup="*")))
+#'
+superscript <- function(fun=quote(A), sup="*")
+{
+  return(fun)
+}
+
+#' Subsupscript. This is a wrapper for the identity function, but decorates the
+#' result with a sub- and a superscript.
+#'
+#' @md
+#'
+#' @param sub
+#' an R symbol, e.g., `i=1`
+#'
+#' @param sup
+#' an R symbol, e.g., `N`
+#'
+#' @param fun
+#' an R call or symbol, e.g. `sum(x[i])`. This is the return value.
+#'
+#' @return
+#' The function over is a wrapper for the identity function, returning _fun_
+#'
+#' @seealso [identity()]
+#'
+#' @examples
+#' N <- 10
+#' i <- 1:N
+#' x <- rnorm(N)
+#' mathjax(call("subsupscript", fun=sum(x[i]), sub=quote(`=`(i, 1L)), sup=quote(N)))
+#'
+subsupscript <- function(fun=quote(sum(x[i])), sub=quote(`=`(i, 1)), sup=quote(N))
 {
   return(fun)
 }

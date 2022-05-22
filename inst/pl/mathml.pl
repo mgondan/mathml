@@ -92,6 +92,143 @@ math(Flags, A, New, X),
  => select(replace(A, X), Flags, New).
 
 %
+% Index and Exponent: s_D^2
+%
+% Special cases
+%
+math(Flags, Sum, New, M),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args),
+    select(subscript(Idx), Flags, New0),
+    select(superscript(Pwr), New0, New1)
+ => New = New1,
+    M = fn(subsupscript(op(&(sum)), Idx, Pwr), Args).
+
+math(Flags, Sum, New, M),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args),
+    select(subscript(Idx), Flags, New1)
+ => New = New1,
+    M = fn(subscript(op(&(sum)), Idx), Args).
+
+math(Flags, Sum, New, M),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args),
+    select(superscript(Pwr), Flags, New1)
+ => New = New1,
+    M = fn(superscript(op(&(sum)), Pwr), Args).
+
+math(Flags, Sum, New, M),
+    compound(Sum),
+    compound_name_arguments(Sum, sum, Args)
+ => New = Flags,
+    M = fn(op(&(sum)), Args).
+
+math(Flags, Prod, New, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args),
+    select(subscript(Idx), Flags, New0),
+    select(superscript(Pwr), New0, New1)
+ => New = New1,
+    M = fn(subsupscript(op(&(prod)), Idx, Pwr), Args).
+
+math(Flags, Prod, New, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args),
+    select(subscript(Idx), Flags, New1)
+ => New = New1,
+    M = fn(subscript(op(&(prod)), Idx), Args).
+
+math(Flags, Prod, New, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args),
+    select(superscript(Pwr), Flags, New1)
+ => New = New1,
+    M = fn(superscript(op(&(prod)), Pwr), Args).
+
+math(Flags, Prod, New, M),
+    compound(Prod),
+    compound_name_arguments(Prod, prod, Args)
+ => New = Flags,
+    M = fn(op(&(prod)), Args).
+
+%
+% General case
+%
+math(subsupscript(fun=A, sub=Idx, sup=Pwr), M)
+ => M = subsupscript(A, Idx, Pwr).
+
+math(Flags, subsupscript(A, Idx, Pwr), New, M)
+ => New = [subscript(Idx), superscript(Pwr) | Flags],
+    M = A.
+
+% Render
+ml(Flags, A, M),
+    select(subscript(Idx), Flags, New0),
+    select(superscript(Pwr), New0, New)
+ => ml(New, A, X),
+    ml(New, Idx, Y),
+    ml(New, Pwr, Z),
+    M = msubsup([X, Y, Z]).
+
+jax(Flags, A, M),
+    select(subscript(Idx), Flags, New0),
+    select(superscript(Pwr), New0, New)
+ => jax(New, A, X),
+    jax(New, Idx, Y),
+    jax(New, Pwr, Z),
+    format(string(M), "{~w_~w^~w}", [X, Y, Z]).
+
+%
+% Indices like s_D
+%
+math(Flags, '['(A, Idx), New, X)
+ => math(Flags, subscript(A, Idx), New, X).
+
+math(subscript(fun=A, sub=Idx), M)
+ => M = subscript(A, Idx).
+
+math(Flags, subscript(A, Idx), New, M)
+ => New = [subscript(Idx) | Flags],
+    M = A.
+
+% Render
+ml(Flags, A, M),
+    select(subscript(Idx), Flags, New)
+ => ml(New, A, X),
+    ml(New, Idx, Y),
+    M = msub([X, Y]).
+
+jax(Flags, A, M),
+    select(subscript(Idx), Flags, New)
+ => jax(New, A, X),
+    jax(New, Idx, Y),
+    format(string(M), "{~w_~w}", [X, Y]).
+
+%
+% Powers like s^D
+%
+math(superscript(fun=A, sup=Pwr), M)
+ => M = superscript(A, Pwr).
+
+math(Flags, superscript(A, Idx), New, M)
+ => New = [superscript(Idx) | Flags],
+    M = A.
+
+% Render
+ml(Flags, A, M),
+    select(superscript(Pwr), Flags, New)
+ => ml(New, A, X),
+    ml(New, Pwr, Y),
+    M = msup([X, Y]).
+
+jax(Flags, A, M),
+    select(superscript(Pwr), Flags, New)
+ => jax(New, A, X),
+    jax(New, Pwr, Y),
+    format(string(M), "{~w^~w}", [X, Y]).
+
+%
 % Upright text
 %
 math(A, M),
@@ -268,19 +405,19 @@ math(tan(A), M)
  => M = fn(tan, [A]).
 
 math(asin(A), M)
- => M = fn(sup(sin, -1), [A]).
+ => M = fn(superscript(sin, -1), [A]).
 
 math(acos(A), M)
- => M = fn(sup(cos, -1), [A]).
+ => M = fn(superscript(cos, -1), [A]).
 
 math(atan(A), M)
- => M = fn(sup(tan, -1), [A]).
+ => M = fn(superscript(tan, -1), [A]).
 
 math(atan2(y=A, x=B), M)
  => M = atan2(A, B).
 
 math(atan2(A, B), M)
- => M = fn(sup(tan, -1), [A, B]).
+ => M = fn(superscript(tan, -1), [A, B]).
 
 math(sinpi(A), M)
  => M = fn(sin, [A*pi]).
@@ -301,13 +438,13 @@ math(tanh(A), M)
  => M = fn(tanh, [A]).
 
 math(asinh(A), M)
- => M = fn(sup(sinh, -1), [A]).
+ => M = fn(superscript(sinh, -1), [A]).
 
 math(acosh(A), M)
- => M = fn(sup(cosh, -1), [A]).
+ => M = fn(superscript(cosh, -1), [A]).
 
 math(atanh(A), M)
- => M = fn(sup(tanh, -1), [A]).
+ => M = fn(superscript(tanh, -1), [A]).
 
 math(all(A), M)
  => M = forall(A).
@@ -348,26 +485,26 @@ math(besselI(x=X, nu=Nu), M)
  => M = besselI(X, Nu).
 
 math(besselI(X, Nu), M)
- => M = fn(sub('I', Nu), [paren(X)]).
+ => M = fn(subscript('I', Nu), [paren(X)]).
 
 % todo: expon.scaled
 math(besselK(x=X, nu=Nu), M)
  => M = besselK(X, Nu).
 
 math(besselK(X, Nu), M)
- => M = fn(sub('K', Nu), [paren(X)]).
+ => M = fn(subscript('K', Nu), [paren(X)]).
 
 math(besselJ(x=X, nu=Nu), M)
  => M = besselJ(X, Nu).
 
 math(besselJ(X, Nu), M)
- => M = fn(sub('J', Nu), [paren(X)]).
+ => M = fn(subscript('J', Nu), [paren(X)]).
 
 math(besselY(x=X, nu=Nu), M)
  => M = besselY(X, Nu).
 
 math(besselY(X, Nu), M)
- => M = fn(sub('Y', Nu), [paren(X)]).
+ => M = fn(subscript('Y', Nu), [paren(X)]).
 
 math(beta(a=A, b=B), M)
  => M = beta(A, B).
@@ -479,7 +616,7 @@ math(logb(x=X, base=B), M)
  => M = logb(X, B).
 
 math(logb(X, B), M)
- => M = fn(sub(log, B), [X]).
+ => M = fn(subscript(log, B), [X]).
 
 math(log1p(A), M)
  => M = 1 + log(A).
@@ -634,7 +771,7 @@ math(t(A), M)
 math(Which, M),
     compound(Which),
     compound_name_arguments(Which, which, Args)
- => M = sub("I", Args).
+ => M = subscript("I", Args).
 
 math('which.max'(x=A), M)
  => M = 'which.max'(A).
@@ -655,63 +792,6 @@ math(cal(x=A), M)
 math(Flags, cal(A), New, M)
  => New = [mathvariant(calligraphy) | Flags],
     M = A.
-
-% Sum over index
-math(Flags, over(index=I, from=F, to=T, fun=Fn), New, M)
- => New = [index(I), from(F), to(T) | Flags],
-    M = Fn.
-
-math(Flags, Sum, New, M),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, Args),
-    select(index(I), Flags, F0),
-    select(from(F), F0, F1),
-    select(to(T), F1, F2)
- => New=F2,
-    M = fn(subsup(op(&(sum)), I=F, T), Args).
-
-ml(Flags, Sum, M),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, Args)
- => maplist(ml(Flags), Args, X),
-    M = mrow([mo(&(sum)), mrow(X)]).
-
-jax(Flags, sum(A), M)
- => jax(Flags, A, X),
-    format(string(M), "\\sum{~w}", [X]).
-
-jax(Flags, Sum, M),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, Args)
- => maplist(jax(Flags), Args, X),
-    format(string(M), "\\sum{~w}", [X]).
-
-paren(Flags, Sum, P),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, Args)
- => maplist(paren(Flags), Args, PX),
-    max_list(PX, P).
-
-prec(_Flags, Sum, P),
-    compound(Sum),
-    compound_name_arity(Sum, sum, _)
- => current(P, yfx, +).
-
-%
-%
-ml(Flags, sum(I, From, To, A), M)
- => ml(Flags, I = From, XFrom),
-    ml(Flags, To, XTo),
-    ml(Flags, A, X),
-    M = mrow([munderover([mo(&(sum)), XFrom, XTo]), X]).
-
-paren(Flags, sum(_, _, _, A), Paren)
- => paren(Flags, A, Paren).
-
-prec(_Flags, sum(_, _, _, _), Prec)
- => current(Prec, yfx, +).
-
-test :- test(sum(i, 1, 10, i)).
 
 %
 % Integrate over range
@@ -867,119 +947,6 @@ current(Prec, yfy, '<=') :-
 
 denoting(_Flags, op(_), D)
  => D = [].
-
-%
-% Indices like s_D
-%
-math(Flags, '['(A, Idx), New, X)
- => math(Flags, sub(A, Idx), New, X).
-
-%
-% Check for sub(sup(A, Power), Index)
-%
-math(Flags, sub(A, Idx), New, M),
-    type(Flags, A, sup(Bas, Pwr))
- => New = [replace(sup(Bas, Pwr), subsup(Bas, Idx, Pwr)) | Flags],
-    M = A.
-
-%
-% Render
-%
-
-%math(Flags, sub(A, Idx), M),
-%    prec(Flags, sub(A, Idx), Outer),
-%    prec(Flags, A, Inner),
-%    Outer < Inner
-% => M = sub(paren(A), Idx).
-
-ml(Flags, sub(A, B), M)
- => ml(Flags, A, X),
-    ml(Flags, B, Y),
-    M = msub([X, Y]).
-
-jax(Flags, sub(A, B), M)
- => jax(Flags, A, X),
-    jax(Flags, B, Y),
-    format(string(M), "{~w_~w}", [X, Y]).
-
-paren(Flags, sub(A, _), P)
- => paren(Flags, A, P).
-
-prec(Flags, sub(A, _), P)
- => prec(Flags, A, P).
-
-type(Flags, sub(A, _), T)
- => type(Flags, A, T).
-
-%
-% Powers like s^D
-%
-% Check for sup(sub(A, Index), Power)
-%
-math(Flags, sup(A, Pwr), New, M),
-    type(Flags, A, sub(Bas, Idx))
- => New = [replace(sub(Bas, Idx), subsup(Bas, Idx, Pwr)) | Flags],
-    M = A.
-
-%
-% Render
-%
-
-%math(Flags, sup(A, Pwr), M),
-%    prec(Flags, sup(A, Pwr), Outer),
-%    prec(Flags, A, Inner),
-%    Outer < Inner
-% => M = sup(paren(A), Pwr).
-
-ml(Flags, sup(A, B), M)
- => ml(Flags, A, X),
-    ml(Flags, B, Y),
-    M = msup([X, Y]).
-
-jax(Flags, sup(A, B), M)
- => jax(Flags, A, X),
-    jax(Flags, B, Y),
-    format(string(M), "{~w^~w}", [X, Y]).
-
-paren(Flags, sup(A, _), P)
- => paren(Flags, A, P).
-
-prec(_Flags, sup(_, _), P)
- => current(P, xfy, ^).
-
-type(_Flags, sup(A, B), T)
- => T = sup(A, B).
-
-%
-% Index and Exponent: s_D^2
-%
-
-%math(Flags, subsup(A, Idx, Pwr), X),
-%    prec(Flags, subsup(A, Idx, Pwr), Outer),
-%    prec(Flags, A, Inner),
-%    Outer < Inner
-% => X = subsup(paren(A), Idx, Pwr).
-
-ml(Flags, subsup(A, B, C), M)
- => ml(Flags, A, X),
-    ml(Flags, B, Y),
-    ml(Flags, C, Z),
-    M = msubsup([X, Y, Z]).
-
-jax(Flags, subsup(A, B, C), M)
- => jax(Flags, A, X),
-    jax(Flags, B, Y),
-    jax(Flags, C, Z),
-    format(string(M), "{~w_~w^~w}", [X, Y, Z]).
-
-paren(Flags, subsup(A, _, _), P)
- => paren(Flags, A, P).
-
-prec(Flags, subsup(A, _, C), P)
- => prec(Flags, sup(A, C), P).
-
-type(_Flags, subsup(A, B, C), T)
- => T = subsup(A, B, C).
 
 %
 % Numbers
@@ -1208,7 +1175,7 @@ math(Flags, (A ; B), New, X)
 
 math(Flags, A^B, New, X)
  => New = Flags,
-    X = sup(A, B).
+    X = superscript(A, B).
 
 %
 % Render
@@ -1390,13 +1357,13 @@ denoting(Flags, with(A, Expr, Info), Den)
     Den = [denoting(A, Expr, Info) | T].
 
 test :-
-    S2P = with(sub(s, "pool")^2,
-                   frac((sub('N', "A") - 1) * sub(s, "A")^2 +
-                        (sub('N', "B") - 1) * sub(s, "B")^2,
-                        sub('N', "A") + sub('N', "B") - 2),
+    S2P = with(subscript(s, "pool")^2,
+                   frac((subscript('N', "A") - 1) * subscript(s, "A")^2 +
+                        (subscript('N', "B") - 1) * subscript(s, "B")^2,
+                        subscript('N', "A") + subscript('N', "B") - 2),
                    "the pooled variance"),
-    test(frac(sub(overline('X'), "A") - sub(overline('X'), "B"),
-                  sqrt(nodot(S2P, 1/sub('N', "A") + 1/sub('N', "B"))))).
+    test(frac(subscript(overline('X'), "A") - subscript(overline('X'), "B"),
+                  sqrt(nodot(S2P, 1/subscript('N', "A") + 1/subscript('N', "B"))))).
 
 %
 % Expand abbreviations
@@ -1785,10 +1752,10 @@ math(Flags, instead(Wrong, Correct), New, M),
     M = underbrace(list(space, ["instead of", Correct]), Wrong).
 
 test :- test(dfrac(omit_right(overline('D') - mu),
-                   sub(s, 'D') / sqrt('N'))).
+                   subscript(s, 'D') / sqrt('N'))).
 
 test :- test(dfrac(overline('D') - mu,
-                   sub(s, 'D') / instead('N', sqrt('N')))).
+                   subscript(s, 'D') / instead('N', sqrt('N')))).
 
 %
 % Expert and buggy rules
@@ -1807,38 +1774,38 @@ math(Flags, buggy(Flags, _, B), New, X)
 % Density, distribution etc.
 math(Flags, dbinom(K, N, Pi), New, X)
  => New = Flags,
-    X = fn(sub('P', "Bi"), (['X' = K] ; [N, Pi])).
+    X = fn(subscript('P', "Bi"), (['X' = K] ; [N, Pi])).
 
 math(_Flags, pbinom(q=K, size=N, prob=Pi), M)
- => M = fn(sub('P', "Bi"), (['X' =< K] ; [N, Pi])).
+ => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
 math(Flags, pbinom(K, N, Pi), New, X)
  => New = Flags,
-    X = fn(sub('P', "Bi"), (['X' =< K] ; [N, Pi])).
+    X = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
 math(Flags, upbinom(K, N, Pi), New, X)
  => New = Flags,
-    X = fn(sub('P', "Bi"), (['X' >= K] ; [N, Pi])).
+    X = fn(subscript('P', "Bi"), (['X' >= K] ; [N, Pi])).
 
 math(Flags, cbinom(Alpha, N, Pi, Tail, Dist), New, X)
  => New = Flags,
-    X = fn(Tail, [fn(sub('P', "Bi"), ([Dist] ; [N, Pi])) =< Alpha]).
+    X = fn(Tail, [fn(subscript('P', "Bi"), ([Dist] ; [N, Pi])) =< Alpha]).
 
 math(Flags, tail("upper"), New, X)
  => New = Flags,
-    X = sub("argmin", k).
+    X = subscript("argmin", k).
 
 math(Flags, tail("lower"), New, X)
  => New = Flags,
-    X = sub("argmax", k).
+    X = subscript("argmax", k).
 
 math(Flags, tail("upperdens"), New, X)
  => New = Flags,
-    X = sub("argmin", k > 'N' * pi).
+    X = subscript("argmin", k > 'N' * pi).
 
 math(Flags, tail("lowerdens"), New, X)
  => New = Flags,
-    X = sub("argmax", k < 'N' * pi).
+    X = subscript("argmax", k < 'N' * pi).
 
 math(Flags, dist("upper"), New, X)
  => New = Flags,
@@ -1867,6 +1834,12 @@ ml(Flags, fn(Name, (Args ; Params)), M)
  => ml(Flags, Name, F),
     ml(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
     M = mrow([F, mo(&(af)), X]).
+
+jax(Flags, fn(Name, (Args ; Params)), M),
+    string(Name)
+ => jax(Flags, Name, F),
+    jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
+    format(string(M), "{~w\\,~w}", [F, X]).
 
 jax(Flags, fn(Name, (Args ; Params)), M)
  => jax(Flags, Name, F),
@@ -1919,6 +1892,14 @@ jax(Flags, fn(Name, [Arg]), M),
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
+
+jax(Flags, fn(Name, [Arg]), M),
+    string(Name),
+    prec(Flags, Arg, P),
+    P = 0
+ => jax(Flags, Name, F),
+    jax(Flags, Arg, X),
+    format(string(M), "{~w\\,~w}", [F, X]).
 
 jax(Flags, fn(Name, [Arg]), M),
     prec(Flags, Arg, P),

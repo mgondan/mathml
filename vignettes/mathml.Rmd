@@ -299,14 +299,17 @@ i <- seq_along(X)
 catmath(sum(X[i]))
 catmathjax(sum(X[i]))
 
-catmath(over(index=i, from=1L, to=N, fun=sum(X[i])))
-catmathjax(over(index=i, from=1L, to=N, fun=sum(X[i])))
+catmath(subsupscript(sub=`=`(i, 1L), sup=N, fun=sum(X[i])))
+catmathjax(subsupscript(sub=`=`(i, 1L), sup=N, fun=sum(X[i])))
 
 catmath(L == prod(L[i]))
 catmathjax(L == prod(L[i]))
 
 catmath(mean(X) == sum(X[i])/N)
 catmathjax(mean(X) == sum(X[i])/N)
+
+catmath(subsupscript(sub=`=`(i, 1L), sup=N, fun=prod(X[i])))
+catmathjax(subsupscript(sub=`=`(i, 1L), sup=N, fun=prod(X[i])))
 
 catmath(min(X[i]))
 catmathjax(min(X[i]))
@@ -326,7 +329,6 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo 0.3: sum for k \in cal(K), P(K = k) * pi_K
 # todo 0.4: package stats (e.g., integrate)
 # todo 0.5: hook for custom functions and macros
 # todo 0.6: function bodies
