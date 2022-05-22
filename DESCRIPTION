@@ -8,9 +8,10 @@ Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
 Description: This package translates R expressions to MathML or MathJax so that
     they can be rendered in rmarkdown documents and shiny apps.
 License: FreeBSD
-Imports: rolog (>= 0.9.4)
+Depends: rolog (>= 0.9.4)
 Encoding: UTF-8
 Suggests: 
     rmarkdown,
     knitr
 VignetteBuilder: knitr, rmarkdown
+RoxygenNote: 7.2.0

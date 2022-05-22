@@ -550,6 +550,9 @@ paren(_Flags, ifelse(_), P)
  => P is 0.
 
 math('%in%'(x=X, 'table'=Y), M)
+ => M = '%in%'(X, Y).
+
+math('%in%'(X, Y), M)
  => M = isin(X, Y).
 
 math('%noin%'(x=X, 'table'=Y), M)
