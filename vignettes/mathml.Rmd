@@ -51,6 +51,7 @@ shown in the listings below, along with their output.
 library(mathml)
 
 term <- quote(pbinom(k, N, p))
+hook(quote(p), quote(pi))
 mathml(term)
 
 # Do some calculations with the same term
@@ -58,7 +59,10 @@ k = 10
 N = 22
 p = 0.4
 eval(term)
+```
 
+
+```{r}
 catmath <- function(term)
 {
   s <- substitute(term)

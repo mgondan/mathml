@@ -1,8 +1,8 @@
 Package: mathml
 Type: Package
 Title: Translate R expressions to MathML and LaTeX/MathJax
-Version: 0.3
-Date: 2022-05-22
+Version: 0.4
+Date: 2022-05-24
 Author: Matthias Gondan
 Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
 Description: This package translates R expressions to MathML or MathJax so that

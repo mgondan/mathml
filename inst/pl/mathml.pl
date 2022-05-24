@@ -1,6 +1,12 @@
 :- discontiguous test/0, math/2, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3, jax/3.
 :- use_module(library(http/html_write)).
 
+% Here you can define your own macros
+%
+% Example: assert(math_hook(t0, subscript(t, 0)))
+%
+:- dynamic math_hook/2.
+
 %
 % R interface
 %
@@ -42,6 +48,14 @@ mathjax(Flags, A, X) :-
 %
 % Macros
 %
+% math(In, Out): translates In to Out
+% math(Flags, In, Out): translates In to Out, given Flags
+% math(Flags, In, New, Out): translates In to Out, changing Flags to New
+%
+macro(Flags, A, Flags, M) :-
+    math_hook(A, X),
+    !, M = X.
+
 macro(Flags, A, Flags, M) :-
     math(A, M),
     dif(A, M).

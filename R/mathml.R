@@ -170,3 +170,30 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)))
   }
   return(term)
 }
+
+#' Hook for custom symbols
+#'
+#' @param term
+#' an R call or symbol/number. This is the expression to replace.
+#'
+#' @param display
+#' an R call or symbol/number. This is shown instead of _term_.
+#'
+#' @return
+#' TRUE on success
+#'
+#' @md
+#'
+#' @examples
+#' hook(term=quote(t0), display=quote(subscript(t, 0)))
+#' mathml(quote(t0))
+#'
+hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
+{
+  r <- rolog::once(call("assert", call("math_hook", term, display)))
+  if(isFALSE(r))
+    return(FALSE)
+
+  invisible(r)
+}
+
