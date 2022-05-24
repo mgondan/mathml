@@ -42,50 +42,29 @@ mathjax(Flags, A, X) :-
 %
 % Macros
 %
-ml(Flags, A, X),
+macro(Flags, A, Flags, M) :-
     math(A, M),
-    dif(A, M)
- => ml(Flags, M, X).
+    dif(A, M).
 
-ml(Flags, A, X),
+macro(Flags, A, Flags, M) :-
     math(Flags, A, M),
-    dif(A, M)
- => ml(Flags, M, X).
+    dif(A, M).
 
-ml(Flags, A, X),
+macro(Flags, A, New, M) :-
     math(Flags, A, New, M),
-    dif(Flags-A, New-M)
- => ml(New, M, X).
+    dif(Flags-A, New-M).
 
-jax(Flags, A, X),
-    math(A, M),
-    dif(A, M)
- => jax(Flags, M, X).
+ml(Flags, A, M),
+    macro(Flags, A, New, X)
+ => ml(New, X, M).
 
-jax(Flags, A, X),
-    math(Flags, A, M),
-    dif(A, M)
- => jax(Flags, M, X).
-
-jax(Flags, A, X),
-    math(Flags, A, New, M),
-    dif(Flags-A, New-M)
- => jax(New, M, X).
+jax(Flags, A, M),
+    macro(Flags, A, New, X)
+ => jax(New, X, M).
 
 prec(Flags, A, P),
-    math(A, M),
-    dif(A, M)
- => prec(Flags, M, P).
-
-prec(Flags, A, P),
-    math(Flags, A, M),
-    dif(A, M)
- => prec(Flags, M, P).
-
-prec(Flags, A, P),
-    math(Flags, A, New, M),
-    dif(Flags-A, New-M)
- => prec(New, M, P).
+    macro(Flags, A, New, X)
+ => prec(New, X, P).
 
 math(Flags, A, New, X),
     member(replace(A, _), Flags)
