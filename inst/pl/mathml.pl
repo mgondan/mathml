@@ -1316,7 +1316,7 @@ math(Flags, left(Prec, A), M),
     P > Prec
  => M = paren(A).
 
-math(left(_, A), M)
+math(_Flags, left(_, A), M)
  => M = A.
 
 math(right(Prec, A), M)
@@ -1913,15 +1913,19 @@ paren(Flags, fn(_Name, [Arg]), P),
 paren(Flags, fn(_Name, [Arg]), P),
     prec(Flags, Arg, P0),
     P0 = 0
- => paren(Flags, Arg, P1),
-    succ(P1, P).
+ => paren(Flags, Arg, P).
 
 paren(Flags, fn(_Name, Args), P)
- => paren(Flags, list(op(','), Args), P0),
-    succ(P0, P).
+ => paren(Flags, list(op(','), Args), P).
 
-prec(_Flags, fn(_Name, _Args), Prec)
- => current(Prec, yfx, *).
+prec(Flags, fn(Name, _Args), Prec),
+    prec(Flags, Name, P),
+    P = 0
+ => current(Prec0, yfx, *),
+    Prec is Prec0 + 1.
+
+prec(Flags, fn(Name, _Args), Prec)
+ => prec(Flags, Name, Prec).
 
 type(_Flags, fn(_Name, _Args), Type)
  => Type = function.

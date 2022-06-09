@@ -177,8 +177,24 @@ catmathjax(gamma(x))
 catmath(lgamma(x))
 catmathjax(lgamma(x))
 
+# fixme: braces not needed
 catmath(psigamma(x, deriv=psi))
 catmathjax(psigamma(x, deriv=psi))
+
+# fixme: braces not needed when right to *
+catmath(a * log(b))
+
+# fixme: dot is sufficient
+catmath(log(b) * a)
+
+# fixme: braces not needed when right to *
+catmath(a * sum(b))
+
+# paren needed
+catmath(sum(b) * a)
+
+# paren needed
+catmath(sum(b) * sum(a))
 
 catmath(digamma(x))
 catmathjax(digamma(x))
@@ -312,6 +328,10 @@ catmathjax(L == prod(L[i]))
 catmath(mean(X) == sum(X[i])/N)
 catmathjax(mean(X) == sum(X[i])/N)
 
+# fixme, paren not needed
+catmath(mean(X) == sum(X[i]/N))
+catmathjax(mean(X) == sum(X[i]/N))
+
 catmath(subsupscript(sub=`=`(i, 1L), sup=N, fun=prod(X[i])))
 catmathjax(subsupscript(sub=`=`(i, 1L), sup=N, fun=prod(X[i])))
 
@@ -333,9 +353,8 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo 0.4: package stats (e.g., integrate)
-# todo 0.5: hook for custom functions and macros
-# todo 0.6: function bodies
+# todo 0.5: function bodies, use case: Schwarz Eq. 10 with mistake
+# todo 0.6: package stats (e.g., integrate)
 # todo 0.7: case study
 # todo 0.8: generate expressions for Rd file
 # todo 0.9: RJ paper, see Sarkar2022
