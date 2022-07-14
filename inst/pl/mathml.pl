@@ -296,10 +296,13 @@ type(_Flags, set(_), T)
 %
 % Function names
 %
-math(A, M),
+special(A) :-
     atom(A),
     member(A, [sgn, sin, cos, tan, asin, acos, atan, arctan2, sinh, cosh, tanh,
-               arsinh, arcosh, artanh, log, exp])
+               arsinh, arcosh, artanh, log, exp]).
+
+math(A, M),
+    special(A)
  => M = func(A).
 
 ml(_Flags, func(A), X)
@@ -349,6 +352,24 @@ jax(_Flags, ident(A), M)
 
 type(_Flags, ident(_), T)
  => T = atomic.
+
+%
+% Probabilities like P(X)
+%
+math('P'(event=A), M)
+ => M = 'P'(A).
+
+math('P'(A), M)
+ => M = fn('P', [A]).
+
+%
+% Linear model
+%
+math(lm(formula=F, data=D), M)
+ => M = lm(F, D).
+
+math(lm(F, _D), M)
+ => M = F.
 
 %
 % R package base
@@ -1010,6 +1031,12 @@ math(number(A), M)
  => M = pos(A).
 
 %
+% Hypothenuse
+%
+math(hypo(A, B), M)
+ => M = sqrt(A^2 + B^2).
+
+%
 % Operators
 %
 math(Flags, isin(A, B), New, X)
@@ -1320,7 +1347,7 @@ math(_Flags, left(_, A), M)
  => M = A.
 
 math(right(Prec, A), M)
- => M = left(Prec, A).
+ => M = left(Prec+1, A).
 
 denoting(Flags, left(_, A), D)
  => denoting(Flags, A, D).
@@ -1862,9 +1889,10 @@ ml(Flags, fn(Name, [Arg]), M),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
 
+% Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
-    prec(Flags, Arg, P),
-    P = 0
+    prec(Flags, Arg, 0),
+    special(Name)
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
