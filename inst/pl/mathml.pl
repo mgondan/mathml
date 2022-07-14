@@ -1706,7 +1706,7 @@ ml(Flags, underbrace(A, U), M)
  => ml(Flags, A, X),
     ml(Flags, U, Y),
     M = munder([munder(accentunder(true),
-                  [Y, mo(stretchy(true), &('UnderBrace'))]), X]).
+                  [X, mo(stretchy(true), &('UnderBrace'))]), Y]).
 
 paren(Flags, underbrace(A, _), Paren)
  => paren(Flags, A, Paren).
