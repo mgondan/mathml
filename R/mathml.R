@@ -197,3 +197,5 @@ hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
   invisible(r)
 }
 
+#' Some convenience functions
+frac = dfrac = `/`
