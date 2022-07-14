@@ -999,13 +999,9 @@ ml(_Flags, pos(1.0Inf), M)
 
 ml(Flags, pos(A), M)
  => option(round(D), Flags, 2),
-    D =< 99,
-    format(codes(X), '~99f', [A]),
-    nth1(Dot, X, 46),
-    N is Dot + D,
-    findall(E, (nth1(I, X, E), I =< N), Round),
-    string_codes(S, Round),
-    M = mn(S).
+    format(atom(Mask), '~~~wf', [D]),
+    format(string(X), Mask, [A]),
+    M = mn(X).
 
 jax(_Flags, posint(A), M)
  => format(string(M), "{~w}", [A]).
