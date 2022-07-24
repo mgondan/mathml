@@ -1,7 +1,7 @@
 ---
 title: "mathml: Translate R expressions to MathML"
 author: "Matthias Gondan (Department of Psychology, University of Innsbruck, Austria)"
-date: "2022-04-28"
+date: "2022-07-24"
 bibliography: bibliography.bibtex
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,10 +10,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include=FALSE}
+````{r, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(rmarkdown.html_vignette.check_title=FALSE)
-```
+library(mathml)
+````
 
   Matthias Gondan\
   Department of Psychology\
@@ -34,15 +35,68 @@ HTML; MathML; R
 
 The R extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
-However, so far, R expressions such as `pbinom(k, N, p)` are typeset as-is; 
+However, so far, R expressions such as `pbinom(k, N, p)` are printed as-is; 
 prettier mathematical expressions such as $P_\mathrm{Bi}(X \le k; N, p)$ require
-Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`, which are
-cumbersome to type in and hard to read even if the expressions are simple.
-Since recently, manual pages include support for mathematical 
-expressions [@Sarkar2022], which already is a big improvement.
+Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for
+minimalistic examples, these commands are tedious to type in and hard to read in
+the original code. Since recently [@R, version 4.2], manual pages include
+support for mathematical expressions [@Sarkar2022], which already is a big
+improvement. Rules for the translation of R's built-in language elements to
+their mathematical representation are lacking.
 
-Below Prolog's grammar rules are used for an _automatic_ translation of R
-expressions to MathML. The result can then be used for calculations or it can be
+In this R package, such rules are defined for the _automatic_ translation of R
+expressions mathematical output. The translation is done by an embedded
+Prolog interpreter that maps nested expressions recursively to MathML and
+LaTeX/MathJax, respectively, for typesetting of R Markdown documents in
+different formats or ShinyApp webpages. User-defined hooks enable to extend the
+set of rules and/or replace specific R elements by special mathematical signs.
+
+## User-defined hooks
+
+Mathematical expressions are typically rather concise, with a limited set of
+identifiers for variables and functions (e.g., \(f(x)\)). In contrast, typical
+R programs use informative names for variables and functions. As illustrated in
+the example below, the one-to-one translation of these variable and function
+names to MathML/MathJax often yields aesthetically unsatisfactory results.
+
+````{r, results="asis"}
+term <- quote(pbinom(successes, size, prob))
+mathml(term)
+````
+
+The situation can be improved by user-defined hooks that map individual elements
+to prettier mathematical counterparts.
+
+````{r, results="asis"}
+hook(quote(successes), quote(k))
+hook(quote(size), quote(N))
+hook(quote(prob), quote(pi))
+
+term <- quote(pbinom(successes, size, prob))
+mathml(term)
+````
+
+If the hooks apply to individual elements as in the example above, every
+subsequent occurrence of `successes` will be translated to \(k\), which may not
+be desired. More complex hooks allow to restrict such replacements to specific
+terms, such as replacement of `s1` to \(k\) only if `s1` occurs as the first
+argument of `pbinom`, as shown below.
+
+````{r, results="asis"}
+hook(call("pbinom", quote(s1), expression(Size), expression(Prob)), 
+     call("pbinom", quote(k), expression(Size), expression(Prob)))
+
+term <- quote(dbinom(s1, N, p))
+mathml(term)
+term <- quote(pbinom(s1, N, p))
+mathml(term)
+````
+
+Note that the `s1` in `dbinom` is left untouched.
+
+# Discussion
+
+The result can then be used for calculations or it can be
 rendered on a web page. A limited set of rules for translation from R to MathML
 is found in `pl/mathml.pl` of the rolog package. The relevant code snippets are
 shown in the listings below, along with their output.

@@ -146,10 +146,13 @@ subsupscript <- function(fun=quote(sum(x[i])), sub=quote(`=`(i, 1)), sup=quote(N
   return(fun)
 }
 
-#' Canonicalize an R call: Reorder and named the function arguments
+#' Canonicalize an R call: Reorder the function arguments
 #'
 #' @param term
 #' an R call.
+#'
+#' @param drop
+#' whether to drop the argument names or not
 #'
 #' @return
 #' The R function, with arguments rearranged
@@ -159,15 +162,18 @@ subsupscript <- function(fun=quote(sum(x[i])), sub=quote(`=`(i, 1)), sup=quote(N
 #' @examples
 #' canonical(term=quote(`%in%`(table=Table, x=X)))
 #'
-canonical <- function(term=quote(`%in%`(table=Table, x=X)))
+canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 {
   if(is.call(term))
   {
     f <- match.fun(term[[1]])
     if(!is.primitive(f))
       term <- match.call(f, term)
-    term[-1] <- lapply(term[-1], canonical)
+    term[-1] <- lapply(term[-1], canonical, drop=drop)
   }
+  if(drop)
+    return(unname(term))
+
   return(term)
 }
 
