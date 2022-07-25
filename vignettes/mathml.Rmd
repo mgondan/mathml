@@ -132,7 +132,46 @@ catmathjax <- function(term)
 }
 ```
 
-# Package base
+## Mistakes
+
+An interesting use case of the package is the readability of self-written
+functions in R code. R code is notoriously hard to read, as are most programming
+languages [@green1977]. The poor legibility of the language is one of the main
+sources of mistakes. For illustration, consider Equation 10 in
+Schwarz [@schwarz1994]. The first version has a wrong parenthesis, which is
+barely visible in the R code.
+
+````{r, results="asis"}
+f <- function(tau)
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
+}
+
+mathml(f)
+````
+
+If the function is rendered in MathML, the wrong parenthesis appears as a curly
+brace, and we immediately see the mistake. The correct version is shown below
+for comparison.
+
+````{r, results="asis"}
+f <- function(tau)
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
+}
+
+mathml(f)
+````
+
+
+
+# Appendix
+
+## Package base
 
 ```{r, results="asis"}
 catmath("text")
