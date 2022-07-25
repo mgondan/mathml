@@ -310,9 +310,28 @@ catmathjax(ceiling(pi))
 catmath(floor(pi))
 catmathjax(floor(pi))
 
+f <- as.function(alist(a=, b=2, a+b))
+mathml(canonical(f))
+mathjax(canonical(f))
+
 f <- function(x) sin(x)
 mathml(canonical(f))
 mathjax(canonical(f))
+
+f <- function(x) { sin(x) }
+mathml(canonical(f))
+mathjax(canonical(f))
+
+f <- function(x) { sin(x) ; tan(x) }
+mathml(canonical(f))
+mathjax(canonical(f))
+
+f <- function(x) { sin(x) ; tan(x) }
+mathml(canonical(f))
+mathjax(canonical(f))
+
+catmath(f <- function(x) sin(x))
+catmathjax(f <- function(x) sin(x))
 
 catmath(function(x) sin(x))
 catmathjax(function(x) sin(x))
@@ -320,8 +339,19 @@ catmathjax(function(x) sin(x))
 catmath(function(x) {sin(x)})
 catmathjax(function(x) {sin(x)})
 
-catmath(function(x) {sin(x); cos(x)})
-catmathjax(function(x) {sin(x); cos(x)})
+catmath(
+  function(x) 
+  {
+    sin(x) ;
+    cos(x)
+  })
+
+catmathjax(
+  function(x)
+  {
+    sin(x)
+    cos(x)
+  })
 
 catmath(identical(1L, 2L))
 catmathjax(identical(1L, 2L))

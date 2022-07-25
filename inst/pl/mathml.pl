@@ -664,19 +664,71 @@ jax(Flags, floor(A), M)
 paren(_Flags, floor(_), P)
  => P is 0.
 
-math((_F :- Body), M)
- => M = Body.
+math(_Flags, (F :- Body), M)
+ => M = (F == Body).
+
+math(_Flags, Function, M),
+    compound(Function),
+    compound_name_arguments(Function, '$function', Args)
+ => M = lambda(Args).
+
+math(lambda(Args), M)
+ => M = fn(lambda, Args).
+
+type(_Flags, lambda(_), T)
+ => T = special.
+
+math('<-'(R, S), M)
+ => M = (R == S).
 
 math(function(na, Body, _), M),
-    compound_name_arguments(Body, '{', [Arg])
- => M = Arg.
-
-math(function(na, Body, _), M),
+    compound(Body),
     compound_name_arguments(Body, '{', Args)
- => M = Args.
+ => M = body(Args).
 
 math(function(na, Body, _), M)
- => M = Body.
+ => M = body([[Body]]).
+
+math(Curly, M),
+    compound(Curly),
+    compound_name_arguments(Curly, '{', Args)
+ => M = body(Args).
+
+math(body([R]), M)
+ => M = R.
+
+math(body(Body), M)
+ => findall([A], member(A, Body), List),
+    M = rbind(List).
+
+% Matrices
+ml(Flags, rbind(R), M)
+ => maplist(ml_row(Flags), R, Rows),
+    M = mrow([mo(&(vert)), mtable(Rows)]).
+
+ml_row(Flags, R, M)
+ => maplist(ml_cell(Flags), R, Cells),
+    M = mtr(Cells).
+
+ml_cell(Flags, C, M)
+ => ml(Flags, C, X),
+    M = mtd(X).
+
+jax(Flags, rbind([H | R]), M)
+ => findall(l, member(_, H), Ls),
+    atomic_list_concat(Ls, LLL),
+    maplist(jax_row(Flags), [H | R], Rows),
+    atomic_list_concat(Rows, Lines),
+    format(string(M), "\\begin{array}{|~w}~n~w\\end{array}\n", [LLL, Lines]).
+
+jax_row(Flags, R, M)
+ => maplist(jax_cell(Flags), R, Cells),
+    atomic_list_concat(Cells, ' & ', Row),
+    format(string(M), "~w\\\\\n", [Row]).
+
+jax_cell(Flags, C, M)
+ => jax(Flags, C, X),
+    format(string(M), "~w", [X]).
 
 math(Identical, M),
     compound(Identical),

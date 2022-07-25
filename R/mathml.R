@@ -205,3 +205,7 @@ hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
 
 #' Some convenience functions
 frac = dfrac = `/`
+fname = function(fname, body)
+{
+  return(body)
+}
