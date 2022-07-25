@@ -1658,6 +1658,9 @@ jax(Flags, display(A), M)
  => jax(Flags, A, X),
     format(string(M), "\\displaystyle{~w}", [X]).
 
+prec(Flags, display(A), P)
+ => prec(Flags, A, P).
+
 type(Flags, display(A), T)
  => type(Flags, A, T).
 
