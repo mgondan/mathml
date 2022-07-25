@@ -1082,12 +1082,8 @@ jax(_Flags, pos(1.0Inf), M)
 
 jax(Flags, pos(A), M)
  => option(round(D), Flags, 2),
-    D =< 99,
-    format(codes(X), '~99f', [A]),
-    nth1(Dot, X, 46),
-    N is Dot + D,
-    findall(E, (nth1(I, X, E), I =< N), Round),
-    string_codes(M, Round).
+    format(atom(Mask), '{~~~wf}', [D]),
+    format(string(M), Mask, [A]).
 
 math(number(A), M),
     A < 0
@@ -1846,6 +1842,12 @@ math(Flags, dist("lower"), New, X)
 math(Flags, dist("density"), New, X)
  => New = Flags,
     X = ('X' = k).
+
+%
+% Normal distribution
+%
+math(pnorm(X, Mu, Sigma2), M)
+ => M = fn('Phi', ([X] ; [Mu, Sigma2])).
 
 %
 % Functions like f(x) and f(x; a, b)

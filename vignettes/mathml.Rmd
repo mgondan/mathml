@@ -437,7 +437,20 @@ catmathjax(c["lower"] == which.max(pbinom(k, N, pi) <= alpha))
 catmath(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 
-# todo 0.5: function bodies, use case: Schwarz Eq. 10 with mistake
+#
+# Schwarz (1994), Eq. 10
+#
+f <- function(tau)
+{
+  dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
+    (pnorm(c, mu["A"]*tau, sigma["A"]^2L*tau) * (mu["A"]*tau - c) -
+     exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L)) *
+       pnorm(-c, mu["A"]*tau, sigma["A"]^2*tau) * (mu["A"]*tau + c))
+}
+
+mathml(f)
+mathjax(f)
+
 # todo 0.6: package stats (e.g., integrate)
 # todo 0.7: case study
 # todo 0.8: generate expressions for Rd file
