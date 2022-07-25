@@ -1849,6 +1849,9 @@ math(Flags, dist("density"), New, X)
 math(pnorm(X, Mu, Sigma2), M)
  => M = fn('Phi', ([X] ; [Mu, Sigma2])).
 
+math(pnorm(Z), M)
+ => M = fn('Phi', [Z]).
+
 %
 % Functions like f(x) and f(x; a, b)
 %

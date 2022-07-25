@@ -443,9 +443,9 @@ catmathjax(c["upper"] == which.min(1L-pbinom(k, N, pi) <= alpha))
 f <- function(tau)
 {
   dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
-    (pnorm(c, mu["A"]*tau, sigma["A"]^2L*tau) * (mu["A"]*tau - c) -
-     exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L)) *
-       pnorm(-c, mu["A"]*tau, sigma["A"]^2*tau) * (mu["A"]*tau + c))
+    (pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))) * (mu["A"]*tau - c)
+     - exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L)) *
+       pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))) * (mu["A"]*tau + c))
 }
 
 mathml(f)
