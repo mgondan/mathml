@@ -1877,7 +1877,8 @@ paren(Flags, fn(_Name, (Args ; Params)), Paren)
     Paren is max(X, Y) + 1.
 
 prec(Flags, fn(_Name, (_Args ; _Params)), Prec)
- => prec(Flags, a * b, Prec).
+ => prec(Flags, a * b, P0),
+    Prec is P0 - 1.
 
 type(_Flags, fn(_Name, (_Args ; _Params)), Type)
  => Type = paren.
@@ -1947,7 +1948,7 @@ prec(Flags, fn(Name, _Args), Prec),
     prec(Flags, Name, P),
     P = 0
  => current(Prec0, yfx, *),
-    Prec is Prec0 + 1.
+    Prec is Prec0 - 1.
 
 prec(Flags, fn(Name, _Args), Prec)
  => prec(Flags, Name, Prec).
