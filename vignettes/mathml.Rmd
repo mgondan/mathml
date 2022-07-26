@@ -51,6 +51,22 @@ LaTeX/MathJax, respectively, for typesetting of R Markdown documents in
 different formats or ShinyApp webpages. User-defined hooks enable to extend the
 set of rules and/or replace specific R elements by special mathematical signs.
 
+## Macros
+
+The mathml package uses two classes of rules to translation of R expressions to
+a mathematical representation, macros and target-specific rules. Macros make use
+of the available elements of the R\ language, including extensions provided by
+the package. In other words, macros translate R\ expressions to other
+R\ expressions. For example, mathml defines a macro that translates the
+R\ expression `dbinom(x, size, prob)`
+to `fn(subscript(P, "Bi"), ';'(list(X <= x), list(size, prob)))`, that is, a
+function with the name \(P_\mathrm{Bi}\), the argument \(X \le x\) and two
+parameters size and prob.
+
+With mathml, target-specific rules are then used to render these basic elements
+in either MathML (`<mrow><msub><mi>P</mi><mtext>Bi</mtext></msub>...`) or
+MathJax/Latex (`P_\mathrm{bi}\left(...\right)`).
+
 ## User-defined hooks
 
 Mathematical expressions are typically rather concise, with a limited set of
@@ -64,8 +80,9 @@ term <- quote(pbinom(successes, size, prob))
 mathml(term)
 ````
 
-The situation can be improved by user-defined hooks that map individual elements
-to prettier mathematical counterparts.
+The situation can be improved by user-defined hooks ("macros", in the
+terminology of the previous section) that map individual elements to prettier
+mathematical counterparts.
 
 ````{r, results="asis"}
 hook(quote(successes), quote(k))
@@ -93,6 +110,10 @@ mathml(term)
 ````
 
 Note that the `s1` in `dbinom` is left untouched.
+
+## Extending the package
+
+Example: plus/minus
 
 # Discussion
 
