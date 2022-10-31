@@ -1,6 +1,6 @@
 .onAttach <- function(libname, pkgname)
 {
-  if(!requireNamespace("rolog", quietly=TRUE))
+  if(!requireNamespace("rologlite", quietly=TRUE))
     stop("Could not attach library rolog.")
 
   rolog::consult(system.file("pl/mathml.pl", package=pkgname))
