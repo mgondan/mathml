@@ -196,7 +196,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #'
 hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
 {
-  r <- rolog::once(call("assert", call("math_hook", term, display)))
+  r <- rologlite::once(call("assert", call("math_hook", term, display)))
   if(isFALSE(r))
     return(FALSE)
 
