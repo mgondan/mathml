@@ -203,9 +203,46 @@ hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
   invisible(r)
 }
 
-#' Some convenience functions
-frac = dfrac = `/`
-fname = function(fname, body)
+#' Division displayed as fraction
+#'
+#' @param e1
+#' numerator
+#'
+#' @param e2
+#' denominator
+#'
+#' @return
+#' e1 / e2
+#'
+frac <- function(e1, e2)
+  e1 / e2
+
+#' Division displayed as large fraction
+#'
+#' @param e1
+#' numerator
+#'
+#' @param e2
+#' denominator
+#'
+#' @return
+#' e1 / e2
+#'
+dfrac <- function(e1, e2)
+  e1 / e2
+
+#' Return function body
+#'
+#' @param fname
+#' not clear
+#'
+#' @param body
+#' not clear
+#'
+#' @return
+#' body
+#'
+fname <- function(fname, body)
 {
   return(body)
 }
