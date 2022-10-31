@@ -24,7 +24,7 @@
 #'
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rolog::once(call("r2mathml", term, expression(X)))
+  t = rologlite::once(call("r2mathml", term, expression(X)))
   cat(paste(t$X, collapse=""))
 }
 
@@ -46,7 +46,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rolog::once(call("r2mathjax", term, expression(X)))
+  t = rologlite::once(call("r2mathjax", term, expression(X)))
   cat(paste(t$X, collapse=""))
 }
 
