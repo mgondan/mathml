@@ -5,7 +5,7 @@ date: "2022-07-24"
 bibliography: bibliography.bibtex
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rolog}
+  %\VignetteIndexEntry{mathml}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -85,9 +85,9 @@ terminology of the previous section) that map individual elements to prettier
 mathematical counterparts.
 
 ````{r, results="asis"}
-hook(quote(successes), quote(k))
-hook(quote(size), quote(N))
-hook(quote(prob), quote(pi))
+# hook(quote(successes), quote(k))
+# hook(quote(size), quote(N))
+# hook(quote(prob), quote(pi))
 
 term <- quote(pbinom(successes, size, prob))
 mathml(term)
@@ -100,8 +100,8 @@ terms, such as replacement of `s1` to \(k\) only if `s1` occurs as the first
 argument of `pbinom`, as shown below.
 
 ````{r, results="asis"}
-hook(call("pbinom", quote(s1), expression(Size), expression(Prob)), 
-     call("pbinom", quote(k), expression(Size), expression(Prob)))
+# hook(call("pbinom", quote(s1), expression(Size), expression(Prob)), 
+#      call("pbinom", quote(k), expression(Size), expression(Prob)))
 
 term <- quote(dbinom(s1, N, p))
 mathml(term)
@@ -126,7 +126,7 @@ shown in the listings below, along with their output.
 library(mathml)
 
 term <- quote(pbinom(k, N, p))
-hook(quote(p), quote(pi))
+# hook(quote(p), quote(pi))
 mathml(term)
 
 # Do some calculations with the same term
