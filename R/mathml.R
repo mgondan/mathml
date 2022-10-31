@@ -3,7 +3,7 @@
   if(!requireNamespace("rologlite", quietly=TRUE))
     stop("Could not attach library rolog.")
 
-  rolog::consult(system.file("pl/mathml.pl", package=pkgname))
+  rologlite::consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
 #' MathML output
