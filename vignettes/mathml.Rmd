@@ -419,6 +419,16 @@ catmathjax(identical(1L, 2L))
 catmath(ifelse(a > b, a, b))
 catmathjax(ifelse(a > b, a, b))
 
+f <- function(x)
+{
+  if(x > 0L) sin(x) ;
+  if(x < 0L) cos(x) ;
+  if(x == 0L) tan(x)
+}
+
+mathml(canonical(f))
+mathjax(canonical(f))
+
 catmath(a %in% A)
 catmathjax(a %in% A)
 

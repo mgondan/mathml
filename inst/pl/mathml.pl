@@ -754,7 +754,21 @@ jax(Flags, ifelse(T, Y, N), M)
       "\\left\\{\\begin{array}{ll}~w & \\mathrm{if}\\ ~w\\\\ ~w & \\mathrm{otherwise}\\end{array}\\right.",
       [Yes, Test, No]).
 
-paren(_Flags, ifelse(_), P)
+paren(_Flags, ifelse(_, _, _), P)
+ => P is 0.
+
+ml(Flags, if(T, Y), M)
+ => ml(Flags, T, Test),
+    ml(Flags, Y, Yes),
+    ml(Flags, space, S),
+    M = mrow([Yes, mtext(","), S, mtext("if"), S, Test]).
+
+jax(Flags, if(T, Y), M)
+ => jax(Flags, T, Test),
+    jax(Flags, Y, Yes),
+    format(string(M), "~w,\\ \\mathrm{if}\\ ~w", [Yes, Test]).
+
+paren(_Flags, if(_, _), P)
  => P is 0.
 
 math('%in%'(X, Y), M)
