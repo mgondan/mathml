@@ -85,9 +85,9 @@ terminology of the previous section) that map individual elements to prettier
 mathematical counterparts.
 
 ````{r, results="asis"}
-# hook(quote(successes), quote(k))
-# hook(quote(size), quote(N))
-# hook(quote(prob), quote(pi))
+hook(quote(successes), quote(k))
+hook(quote(size), quote(N))
+hook(quote(prob), quote(pi))
 
 term <- quote(pbinom(successes, size, prob))
 mathml(term)
@@ -100,13 +100,20 @@ terms, such as replacement of `s1` to \(k\) only if `s1` occurs as the first
 argument of `pbinom`, as shown below.
 
 ````{r, results="asis"}
-# hook(call("pbinom", quote(s1), expression(Size), expression(Prob)), 
-#      call("pbinom", quote(k), expression(Size), expression(Prob)))
+hook(call("pbinom", quote(s1), expression(Size), expression(Prob)), 
+     call("pbinom", quote(k), expression(Size), expression(Prob)))
 
 term <- quote(dbinom(s1, N, p))
 mathml(term)
 term <- quote(pbinom(s1, N, p))
 mathml(term)
+````
+
+Note that the `s1` in `dbinom` is left untouched.
+
+````{r, results="asis"}
+hook(call("f", expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V)), 
+     call("fn", call("paren", expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V))))
 ````
 
 Note that the `s1` in `dbinom` is left untouched.
@@ -186,6 +193,19 @@ f <- function(tau)
 }
 
 mathml(f)
+````
+
+
+````{r, results="asis"}
+f <- function(x) {sin(x)}
+
+mathml(f)
+````
+
+````{r, results="asis"}
+ff <- quote(f <- function(x) {sin(x)})
+
+mathml(ff)
 ````
 
 
@@ -378,7 +398,7 @@ f <- function(x) sin(x)
 mathml(canonical(f))
 mathjax(canonical(f))
 
-f <- function(x) { sin(x) }
+f <- function(x) { sin(x)}
 mathml(canonical(f))
 mathjax(canonical(f))
 
@@ -418,16 +438,6 @@ catmathjax(identical(1L, 2L))
 
 catmath(ifelse(a > b, a, b))
 catmathjax(ifelse(a > b, a, b))
-
-f <- function(x)
-{
-  if(x > 0L) sin(x) ;
-  if(x < 0L) cos(x) ;
-  if(x == 0L) tan(x)
-}
-
-mathml(canonical(f))
-mathjax(canonical(f))
 
 catmath(a %in% A)
 catmathjax(a %in% A)

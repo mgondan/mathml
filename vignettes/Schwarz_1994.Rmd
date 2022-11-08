@@ -1,0 +1,148 @@
+---
+title: 'Case study: Schwarz (1994)'
+author: "Irene Alfarone"
+date: "11/7/2022"
+bibliography: bibliography.bibtex
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: Schwarz (1994)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Case study
+
+As a case study, we present here the work of Schwarz (1994). The reader may recognize that Schwarz (1994) can be traced back to the strand of studies on decision-making models, where the decision-making is assumed to be a process of noisy accumulation of information over time (Ratcliff et al. 2016). The aim of Schwarz (1994) is to present a new version of a superposition model based on a diffusion model that encompasses a flexible process of activation accumulation and an arbitrary value of channel correlation. For a more detailed description the reader may refer to the original article and e.g., […].
+
+Model’s assumptions:
+
+* Process A \(X_A(t)\) is a two-dimensional Wiener process. The response is elicited when the process reaches the absorbing barrier \(a=x\);
+
+* Process B \(X_B(t)\) is a two-dimensional Wiener process. Similarly, the response is produced when the process reaches the absorbing barrier \(a=x\);
+
+*	The joint activation of the two channels can be described as a two-dimensional Wiener process;
+
+*	The activations of the two separate channels are superposed and form the overall diffusion process: 
+\(X_R(t) = X_A(t)+ X_B(t)\);
+
+Furthermore:
+
+*	The two marginal processes are Wiener processes;
+
+*	The marginal distributions coincide with the distribution for the single-target presentations.
+
+
+
+Then,
+
+\(X_R(t) \equiv X_A(t)+X_B(t)\) is a Wiener process with drift \(\mu_A+\mu_B\), variance \(\sigma_A^2+\sigma_B^2+2\rho_{A, B}\sigma_A\sigma_B\) .
+
+```{r}
+# We load the mathml package
+library(mathml)
+```
+
+Then Schwarz (1994) expresses the expected first time passage as:
+
+\(E_i[T]=\frac{a}{\mu_i},\ \ \ \ \ \ \ \ i= A, B\)
+
+And the expected first time passage in the redundant-target trials as:
+
+\(E_i[T]=\frac{a}{\mu_A+\mu_B}\)
+
+Furthermore Schwarz (1994) stresses that the correlation \(\rho_{A, B}\) does not influence \(E_R[T]\). Under the superposition models the processes start when the relevant target is presented. 
+
+
+
+To further test the model, Schwarz (1994) assumes that \(S_A\) precedes \(S_B\) by \(\tau\) ms, \(\tau>0\). Then, Schwarz (1994) derives the expected first passage time \(E_R[T]\) as a function of the Stimulus Onset Asincrony (SOA) \(\tau\). From which he obtains that the SOA-curve is:
+
+
+````{r, results="asis"}
+# Schwarz (1994), Eq. 10
+#
+
+hook(quote(mu_A), quote(mu["A"]))
+hook(quote(mu_B), quote(mu["B"]))
+hook(quote(sigma_A), quote(sigma["A"]))
+hook(quote(sigma_B), quote(sigma["B"]))
+
+f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*c, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
+}
+
+mathml(f)
+````
+
+
+Then, Schwarz (1994) applies his finding to Miller’s (1989) data. Where the total RT (Response Time) is composed by T, the time employed to reach the threshold and M, the duration of other processes. With:
+
+\(E[RT]= E[T+M]=E[T]+E[M]=E[T]+\mu_M\)
+
+\(Var[RT]= \sigma^2_T+\sigma^2_M+2\rho_{T, M}\sigma_T\sigma_M\)
+
+
+In Miller’s (1989) task, participants were presented a visual \(S_V\) and an auditory signal \(S_A\), with SOAs of  […].
+
+````{r}
+mu_A = 0.53
+mu_B = 1.34
+sigma_A = 4.3
+sigma_B = 11.7
+tau = 33
+c = 100
+mu_M = 160
+
+
+f(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+
+mu_A = 0.53
+mu_B = 1.34
+sigma_A = 4.3 
+sigma_B = 11.7
+tau = 67
+c = 100
+
+f(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+
+````
+
+
+```{r, results="asis"}
+hook(call("f", expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V)), 
+     call("fn", quote(f), list(expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V))))
+
+# Conditions
+
+g <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+{
+    if( tau == Inf) return(dfrac(c, mu_A));
+    if( tau == -Inf) return(dfrac(c, mu_B));
+    if( tau > 0L)  return(f(tau, c, mu_A, sigma_A, mu_B, sigma_B));
+    if( tau == 0L) return(dfrac(c, mu_A + mu_B));
+    if( tau < 0L) return(f(-tau, c,  mu_B, sigma_B, mu_A, sigma_A))
+}
+
+mathml(g)
+```
+
+```{r}
+mu_A = 0.53
+mu_B = 1.34
+sigma_A = 4.3 
+sigma_B = 11.7
+tau = -167
+c = 100
+
+g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+
+```
+
+
+
