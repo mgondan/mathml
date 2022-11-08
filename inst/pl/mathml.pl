@@ -396,6 +396,9 @@ math(lm(F, _Data), M)
 %
 % R package base
 %
+math(return(X), M)
+ => M = X.
+
 math(length(R), M)
  => M = abs(R).
 
@@ -704,7 +707,7 @@ math(body(Body), M)
 % Matrices
 ml(Flags, rbind(R), M)
  => maplist(ml_row(Flags), R, Rows),
-    M = mrow([mo(&(vert)), mtable(Rows)]).
+    M = mrow([mo('{'), mtable(columnalign(left), Rows)]).
 
 ml_row(Flags, R, M)
  => maplist(ml_cell(Flags), R, Cells),
@@ -719,7 +722,7 @@ jax(Flags, rbind([H | R]), M)
     atomic_list_concat(Ls, LLL),
     maplist(jax_row(Flags), [H | R], Rows),
     atomic_list_concat(Rows, Lines),
-    format(string(M), "\\begin{array}{|~w}~n~w\\end{array}\n", [LLL, Lines]).
+    format(string(M), "\\left\\{\\begin{array}{~w}~n~w\\end{array}\\right.\n", [LLL, Lines]).
 
 jax_row(Flags, R, M)
  => maplist(jax_cell(Flags), R, Cells),
