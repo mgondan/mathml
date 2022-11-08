@@ -1977,10 +1977,23 @@ type(_Flags, fn(_Name, _Args), Type)
  => Type = function.
 
 % Default compounds
-%math(_Flags, A, M),
-%    compound(A),
-%    compound_name_arguments(A, N, Args)
-% => M = fn(N, Args).
+%
+% Can't use the macros here because of left recursion
+ml(Flags, A, M),
+    compound(A),
+    compound_name_arguments(A, N, Args)
+ => ml(Flags, fn(N, Args), M).
+
+jax(Flags, A, M),
+    compound(A),
+    compound_name_arguments(A, N, Args)
+ => jax(Flags, fn(N, Args), M).
+
+type(Flags, A, M),
+    compound(A),
+    compound_name_arguments(A, N, Args)
+ => type(Flags, fn(N, Args), M).
+
 
 %
 % Defaults
