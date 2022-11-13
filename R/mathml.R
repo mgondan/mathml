@@ -1,9 +1,9 @@
 .onAttach <- function(libname, pkgname)
 {
-  if(!requireNamespace("rologlite", quietly=TRUE))
+  if(!requireNamespace("rolog", quietly=TRUE))
     stop("Could not attach library rolog.")
 
-  rologlite::consult(system.file("pl/mathml.pl", package=pkgname))
+  rolog::consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
 #' MathML output
@@ -24,7 +24,7 @@
 #'
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rologlite::once(call("r2mathml", term, expression(X)))
+  t = rolog::once(call("r2mathml", term, expression(X)))
   cat(paste(t$X, collapse=""))
 }
 
@@ -46,7 +46,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rologlite::once(call("r2mathjax", term, expression(X)))
+  t = rolog::once(call("r2mathjax", term, expression(X)))
   cat(paste(t$X, collapse=""))
 }
 
@@ -196,7 +196,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #'
 hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
 {
-  r <- rologlite::once(call("assert", call("math_hook", term, display)))
+  r <- rolog::once(call("assert", call("math_hook", term, display)))
   if(isFALSE(r))
     return(FALSE)
 
