@@ -93,6 +93,9 @@ term <- quote(pbinom(successes, size, prob))
 mathml(term)
 ````
 
+The user should be careful not to define recursive hooks, e.g., something
+like `hook(quote(X), quote(overline(X)))` results in an endless loop.
+
 If the hooks apply to individual elements as in the example above, every
 subsequent occurrence of `successes` will be translated to \(k\), which may not
 be desired. More complex hooks allow to restrict such replacements to specific
