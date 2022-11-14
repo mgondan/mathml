@@ -1697,7 +1697,8 @@ paren(Flags, overline(A), Paren)
 
 % Put overline(x)^2 in parentheses
 prec(_Flags, overline(_), Prec)
- => current(Prec, yfx, *).
+ => current(P, yfx, *),
+    Prec = P.
 
 type(Flags, overline(A), Type)
  => type(Flags, A, Type).
