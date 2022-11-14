@@ -365,6 +365,10 @@ math(R, M),
 ml(_Flags, special(sum), M)
  => M = mo(&(sum)).
 
+prec(_Flags, special(sum), Prec)
+ => current(P, yfx, *),
+    Prec is P + 1.
+
 ml(_Flags, special(prod), M)
  => M = mo(&(prod)).
 
@@ -764,7 +768,7 @@ jax(Flags, rbind([H | R]), M)
     atomic_list_concat(Ls, LLL),
     maplist(jax_row(Flags), [H | R], Rows),
     atomic_list_concat(Rows, Lines),
-    format(string(M), "\\left\\{\\begin{array}{~w}~n~w\\end{array}\\right.\n", [LLL, Lines]).
+    format(string(M), "\\left\\{\\begin{array}{~w}~w\\end{array}\\right.", [LLL, Lines]).
 
 jax_row(Flags, R, M)
  => maplist(jax_cell(Flags), R, Cells),
@@ -796,7 +800,7 @@ jax(Flags, ifelse(T, Y, N), M)
     jax(Flags, Y, Yes),
     jax(Flags, N, No),
     format(string(M),
-      "\\left\\{\\begin{array}{ll}~w & \\mathrm{if}\\ ~w\\\\ ~w & \\mathrm{otherwise}\\end{array}\\right.",
+      "\\left\\{\\begin{array}{ll} ~w & \\mathrm{if}~~~w\\\\ ~w & \\mathrm{otherwise}\\end{array}\\right.",
       [Yes, Test, No]).
 
 paren(_Flags, ifelse(_, _, _), P)
@@ -1144,6 +1148,12 @@ jax(Flags, pos(A), M)
     format(atom(Mask), '{~~~wf}', [D]),
     format(string(M), Mask, [A]).
 
+type(_Flags, pos(_), Type)
+ => Type = atomic.
+
+type(_Flags, posint(_), Type)
+ => Type = atomic.
+
 math(number(A), M),
     A < 0
  => Abs is abs(A),
@@ -1254,8 +1264,10 @@ math(Flags, A - B, New, X)
 
 % Use dot or no dot instead of asterisk
 math(Flags, A * B, New, X),
-    type(Flags, B, Type),
-    Type = atomic
+    type(Flags, A, TypeA),
+    TypeA = atomic,
+    type(Flags, B, TypeB),
+    TypeB = atomic
  => New = Flags,
     X = nodot(A, B).
 
