@@ -1,4 +1,4 @@
-:- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3, jax/3.
+:- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3, jax/3, mathml/0.
 :- use_module(library(http/html_write)).
 
 % Here you can define your own macros
@@ -35,15 +35,15 @@ mathml(Flags, R, M)
     !, M = [math(M0), With].
 
 mathjax(Flags, R, M)
- =>  jax(Flags, R, M0),
-%    denoting(Flags, R, Denoting),
-%    ml(Flags, with(Denoting), With),
-    !, format(string(M), "$~w$", [M0]).
+ => jax(Flags, R, M0),
+    denoting(Flags, R, Denoting),
+    jax(Flags, with(Denoting), With),
+    !, format(string(M), "$~w$~w", [M0, With]).
 
 %
 % Macros
 %
-% math(Flags, R, New, M): translates the R expression to another R
+% macro(Flags, R, New, M): translates the R expression to another R
 % expression M, checking for Flags and eventually changing Flags to New
 %
 % Calls math/2,3,4 macros
@@ -73,7 +73,7 @@ macro(Flags, R, New, M) :-
 % M: HTML term
 %
 % This predicate only checks if a macro can be applied. Add ml/3 predicates for
-% R expressions with their translation.
+% R expressions with their translation below.
 %
 ml(Flags, R, M),
     macro(Flags, R, New, R0)
@@ -84,10 +84,18 @@ jax(Flags, R, M),
     macro(Flags, R, New, R0)
  => jax(New, R0, M).
 
-% Same for precedence checks
-prec(Flags, R, P),
+% Same for precedence checks, parentheses and types
+prec(Flags, R, Prec),
     macro(Flags, R, New, R0)
- => prec(New, R0, P).
+ => prec(New, R0, Prec).
+
+paren(Flags, R, Paren),
+    macro(Flags, R, New, R0)
+ => paren(New, R0, Paren).
+
+type(Flags, R, Paren),
+    macro(Flags, R, New, R0)
+ => type(New, R0, Paren).
 
 %
 % Check if the current element is to be replaced
@@ -97,8 +105,23 @@ math(Flags, R, New, M),
  => select(replace(R, M), Flags, New).
 
 %
-% Summation sign from to (subscript and superscript)
+% Examples
 %
+mathml(R) :-
+    r2mathml([], R, M),
+    atomic_list_concat(M, S),
+    writeln(R-S).
+
+mathjax(R) :-
+    r2mathjax([], R, M),
+    atomic_list_concat(M, S),
+    writeln(R-S).
+
+%
+% Content starts here
+%
+
+% Summation sign from to (subscript and superscript)
 math(Flags, Sum, New, M),
     compound(Sum),
     compound_name_arguments(Sum, sum, Arg),
@@ -121,9 +144,10 @@ math(Flags, Sum, New, M),
  => New = Flags,
     M = fn(sum, Arg).
 
-%
+mathml :-
+    mathml(sum('['(x, i))).
+
 % Same for product sign
-%
 math(Flags, Prod, New, M),
     compound(Prod),
     compound_name_arguments(Prod, prod, Arg),
@@ -152,8 +176,11 @@ math(Flags, Prod, New, M),
  => New = Flags,
     M = fn(prod, Arg).
 
+mathml :-
+    mathml(prod('['(x, i))).
+
 %
-% Subscript and superscript at the same time
+% Subscript and superscript
 %
 % Moves sub- and superscript into the flags, so that the next available
 % function can handle them. This is needed, e.g., if colors are to be
@@ -180,8 +207,11 @@ jax(Flags, R, M),
     jax(New, Pwr, Z),
     format(string(M), "{~w_~w^~w}", [X, Y, Z]).
 
+mathml :-
+    mathml(subsupscript(x, i, 2)).
+
 %
-% Indices like s_D
+% Subscript like s_D
 %
 math('['(R, Idx), M)
  => M = subscript(R, Idx).
@@ -203,8 +233,11 @@ jax(Flags, R, M),
     jax(New, Idx, Y),
     format(string(M), "{~w_~w}", [X, Y]).
 
+mathml :-
+    mathml(subscript(x, i)).
+
 %
-% Powers like s^D
+% Superscripts like s^D
 %
 math(Flags, superscript(R, Idx), New, M)
  => New = [superscript(Idx) | Flags],
@@ -223,10 +256,11 @@ jax(Flags, R, M),
     jax(New, Pwr, Y),
     format(string(M), "{~w^~w}", [X, Y]).
 
+mathml :-
+    mathml(superscript(x, 2)).
+
 %
-% Named function arguments
-%
-% Suppress the names of the function arguments from R.
+% Suppress the names of function arguments from R
 %
 math(name(_)=R, M)
  => M = R.
@@ -246,6 +280,12 @@ jax(_Flags, text(R), M)
 
 type(_Flags, text(_), T)
  => T = atomic.
+
+mathml :-
+    mathml("text").
+
+mathjax :-
+    mathjax("text").
 
 %
 % Greek letters
@@ -267,6 +307,9 @@ jax(_Flags, greek(R), M)
 type(_Flags, greek(_), T)
  => T = atomic.
 
+mathml :-
+    mathml(alpha).
+
 %
 % Booleans
 %
@@ -284,6 +327,10 @@ jax(_Flags, boolean(R), M)
 
 type(_Flags, boolean(_), T)
  => T = atomic.
+
+mathml :-
+    mathml('TRUE'),
+    mathml('FALSE').
 
 %
 % Set
@@ -339,6 +386,10 @@ jax(_Flags, special(R), M)
 type(_Flags, special(_), T)
  => T = special.
 
+mathml :-
+    mathml(exp(x)),
+    mathml(exp(x + y)).
+
 %
 % Space
 %
@@ -377,15 +428,6 @@ jax(_Flags, ident(R), M)
 
 type(_Flags, ident(_), T)
  => T = atomic.
-
-%
-% Probabilities like P(X)
-%
-% Consider if this is actually needed, or if a generic rule could be
-% used instead that transforms all compounds to fn(...). Todo.
-%
-math('P'(R), M)
- => M = fn('P', [R]).
 
 %
 % Linear model
@@ -1404,6 +1446,25 @@ prec(_Flags, xfy(Prec, _, _, _), P)
 prec(_Flags, yfy(Prec, _, _, _), P)
  => P = Prec.
 
+type(_Flags, fy(_, _, _), Type)
+ => Type = op.
+
+type(_Flags, yf(_, _, _), Type)
+ => Type = op.
+
+type(_Flags, xfx(_, _, _, _), Type)
+ => Type = op.
+
+type(_Flags, yfx(_, _, _, _), Type)
+ => Type = op.
+
+type(_Flags, xfy(_, _, _, _), Type)
+ => Type = op.
+
+type(_Flags, yfy(_, _, _, _), Type)
+ => Type = op.
+
+
 math(Flags, left(Prec, A), M),
     prec(Flags, A, P),
     P > Prec
@@ -1428,6 +1489,9 @@ denoting(Flags, right(_, A), D)
 %
 ml(Flags, with(A, _, _), X)
  => ml(Flags, A, X).
+
+jax(Flags, with(A, _, _), X)
+ => jax(Flags, A, X).
 
 paren(Flags, with(A, _, _), Paren)
  => paren(Flags, A, Paren).
@@ -1480,6 +1544,30 @@ ml(Flags, and([A | T]), W)
  => ml(Flags, A, X),
     ml(Flags, and(T), Y),
     W = span([", and", &(nbsp), math(X) | Y]).
+
+jax(Flags, with(Abbreviations), X)
+ => sort(Abbreviations, Sorted), % remove duplicates
+    jax(Flags, with_(Sorted), X).
+
+jax(_Flags, with_([]), W)
+ => W = "".
+
+jax(Flags, with_([A]), W)
+ => jax(Flags, A, X),
+    format(string(W), ", with~~$~w$", [X]).
+
+jax(Flags, with_([A, B | T]), W)
+ => jax(Flags, A, X),
+    jax(Flags, and([B | T]), Y),
+    format(string(W), ", with~~$~w$~w", [X, Y]).
+
+jax(_Flags, and([]), W)
+ => W = ".".
+
+jax(Flags, and([A | T]), W)
+ => jax(Flags, A, X),
+    jax(Flags, and(T), Y),
+    format(string(W), ", and~~$~w$~w", [X, Y]).
 
 %
 % Parentheses
@@ -1994,7 +2082,6 @@ type(Flags, A, M),
     compound(A),
     compound_name_arguments(A, N, Args)
  => type(Flags, fn(N, Args), M).
-
 
 %
 % Defaults
