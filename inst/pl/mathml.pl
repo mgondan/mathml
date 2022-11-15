@@ -1541,7 +1541,7 @@ ml(Flags, with(Abbreviations), X)
     ml(Flags, with_(Sorted), X).
 
 ml(_Flags, with_([]), W)
- => W = " ".
+ => W = "".
 
 ml(Flags, with_([A]), W)
  => ml(Flags, A, X),

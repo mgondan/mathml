@@ -12,6 +12,6 @@ test_that("strings",
 
 test_that("atoms",
 {
-  q <- tml(as.name(atom))
+  q <- tml(as.symbol("atom"))
   expect_equal(q, "<math><mi>atom</mi></math>")
 })
