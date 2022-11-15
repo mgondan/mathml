@@ -369,6 +369,9 @@ prec(_Flags, special(sum), Prec)
  => current(P, yfx, *),
     Prec is P + 1.
 
+prec(_Flags, special(_), Prec)
+ => current(Prec, yfx, *).
+
 ml(_Flags, special(prod), M)
  => M = mo(&(prod)).
 
@@ -1739,10 +1742,10 @@ paren(_Flags, frac(_, _), P)
 
 prec(_Flags, frac(_, _), P)
  => current(P0, yfx, /),
-    P is P0 - 1.
+    P is P0. % was - 1
 
 type(_Flags, frac(_, _), Type)
- => Type = fraction.
+  => Type = fraction.
 
 %
 % Large fraction
@@ -2019,29 +2022,39 @@ jax(Flags, fn(Name, [Arg]), M),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
 
+% Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
-    type(Flags, Arg, function)
+%    type(Flags, Arg, function),
+    type(Flags, Name, special),
+    prec(Flags, Name, P),
+    prec(Flags, Arg, Prec),
+%    writeln(P-Prec),
+    P > Prec
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, [Arg]), M),
-    type(Flags, Arg, function)
+%    type(Flags, Arg, function)
+    type(Flags, Name, special),
+    prec(Flags, Name, P),
+    prec(Flags, Arg, Prec),
+%    writeln(P-Prec),
+    P > Prec
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
 
-% Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
-    prec(Flags, Arg, 0),
-    type(Flags, Name, special)
+    type(Flags, Name, special),
+    prec(Flags, Arg, 0)
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, [Arg]), M),
-    prec(Flags, Arg, 0),
-    type(Flags, Name, special)
+    type(Flags, Name, special),
+    prec(Flags, Arg, 0)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
@@ -2126,16 +2139,16 @@ paren(Flags, A, P),
     dif(Flags-A, New-M)
  => paren(New, M, P).
 
-paren(_, _, P) =>
-    P = 0.
+paren(_, _, P)
+ => P = 0.
 
 prec(Flags, A, Den),
     math(Flags, A, New, M),
     dif(Flags-A, New-M)
  => prec(New, M, Den).
 
-prec(_, _, P) =>
-    P = 0.
+prec(_, _, P)
+ => P = 0.
 
 type(Flags, A, Type),
     math(A, M),
