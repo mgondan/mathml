@@ -1741,6 +1741,9 @@ prec(_Flags, frac(_, _), P)
  => current(P0, yfx, /),
     P is P0 - 1.
 
+type(_Flags, frac(_, _), Type)
+ => Type = fraction.
+
 %
 % Large fraction
 %

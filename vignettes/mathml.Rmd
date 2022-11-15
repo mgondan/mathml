@@ -432,7 +432,7 @@ catmath(
 catmathjax(
   function(x)
   {
-    sin(x)
+    sin(x) ;
     cos(x)
   })
 
