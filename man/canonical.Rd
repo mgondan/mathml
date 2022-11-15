@@ -2,18 +2,20 @@
 % Please edit documentation in R/mathml.R
 \name{canonical}
 \alias{canonical}
-\title{Canonicalize an R call: Reorder and named the function arguments}
+\title{Canonicalize an R call: Reorder the function arguments}
 \usage{
-canonical(term = quote(`\%in\%`(table = Table, x = X)))
+canonical(term = quote(`\%in\%`(table = Table, x = X)), drop = TRUE)
 }
 \arguments{
 \item{term}{an R call.}
+
+\item{drop}{whether to drop the argument names or not}
 }
 \value{
 The R function, with arguments rearranged
 }
 \description{
-Canonicalize an R call: Reorder and named the function arguments
+Canonicalize an R call: Reorder the function arguments
 }
 \examples{
 canonical(term=quote(`\%in\%`(table=Table, x=X)))

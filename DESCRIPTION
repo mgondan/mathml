@@ -12,6 +12,10 @@ Depends: rolog (>= 0.9.5)
 Encoding: UTF-8
 Suggests: 
     rmarkdown,
-    knitr
-VignetteBuilder: knitr, rmarkdown
+    knitr,
+    testthat
+VignetteBuilder:
+    knitr,
+    rmarkdown
 RoxygenNote: 7.2.0
+Config/testthat/edition: 3
