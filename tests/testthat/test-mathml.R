@@ -1,4 +1,4 @@
-tml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+tml <- function(term)
 {
   t = rolog::once(call("r2mathml", term, expression(X)))
   paste(t$X, collapse="")
@@ -14,4 +14,10 @@ test_that("atoms",
 {
   q <- tml(as.symbol("atom"))
   expect_equal(q, "<math><mi>atom</mi></math>")
+})
+
+test_that("greek",
+{
+  q <- tml(as.symbol("pi"))
+  expect_equal(q, "<math><mi>&pi;</mi></math>")
 })
