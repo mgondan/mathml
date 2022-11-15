@@ -1,75 +1,79 @@
 ---
-title: 'Case study: Schwarz (1994)'
+title: 'Report Schwarz (1994)'
 author: "Irene Alfarone"
 date: "11/7/2022"
 bibliography: bibliography.bibtex
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case study: Schwarz (1994)}
+  %\VignetteIndexEntry{Report Schwarz (1994)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Case study
+# A case study
 
-As a case study, we present here the work of Schwarz (1994). The reader may recognize that Schwarz (1994) can be traced back to the strand of studies on decision-making models, where the decision-making is assumed to be a process of noisy accumulation of information over time (Ratcliff et al. 2016). The aim of Schwarz (1994) is to present a new version of a superposition model based on a diffusion model that encompasses a flexible process of activation accumulation and an arbitrary value of channel correlation. For a more detailed description the reader may refer to the original article and e.g., […].
-
-Model’s assumptions:
-
-* Process A \(X_A(t)\) is a two-dimensional Wiener process. The response is elicited when the process reaches the absorbing barrier \(a=x\);
-
-* Process B \(X_B(t)\) is a two-dimensional Wiener process. Similarly, the response is produced when the process reaches the absorbing barrier \(a=x\);
-
-*	The joint activation of the two channels can be described as a two-dimensional Wiener process;
-
-*	The activations of the two separate channels are superposed and form the overall diffusion process: 
-\(X_R(t) = X_A(t)+ X_B(t)\);
-
-Furthermore:
-
-*	The two marginal processes are Wiener processes;
-
-*	The marginal distributions coincide with the distribution for the single-target presentations.
+As a case study, we present here the work of Schwarz [-@schwarz1994]. The reader
+may recognize that this study can be traced back to the strand of
+decision-making models, where decision-making is assumed to be a process of
+noisy accumulation of information over time [e.g., @ratcliff2016]. The aim of
+Schwarz' study is to present a new explanation of redundancy gains when
+observers make speeded responses to stimuli of different sources, and the same
+information is presented on two channels. Schwarz describes a model that assumes
+the superposition of channel-specific diffusion processes that eventually reach
+an absorbing barrier to elicit the response. For a detailed description the
+reader may refer to the original article.
 
 
-
-Then,
-
-\(X_R(t) \equiv X_A(t)+X_B(t)\) is a Wiener process with drift \(\mu_A+\mu_B\), variance \(\sigma_A^2+\sigma_B^2+2\rho_{A, B}\sigma_A\sigma_B\) .
-
-```{r}
-# We load the mathml package
+```{r, echo=FALSE}
+library(rolog)
 library(mathml)
-```
 
-Then Schwarz (1994) expresses the expected first time passage as:
-
-\(E_i[T]=\frac{a}{\mu_i},\ \ \ \ \ \ \ \ i= A, B\)
-
-And the expected first time passage in the redundant-target trials as:
-
-\(E_i[T]=\frac{a}{\mu_A+\mu_B}\)
-
-Furthermore Schwarz (1994) stresses that the correlation \(\rho_{A, B}\) does not influence \(E_R[T]\). Under the superposition models the processes start when the relevant target is presented. 
-
-
-
-To further test the model, Schwarz (1994) assumes that \(S_A\) precedes \(S_B\) by \(\tau\) ms, \(\tau>0\). Then, Schwarz (1994) derives the expected first passage time \(E_R[T]\) as a function of the Stimulus Onset Asincrony (SOA) \(\tau\). From which he obtains that the SOA-curve is:
-
-
-````{r, results="asis"}
-# Schwarz (1994), Eq. 10
-#
-
+# Improve display
 hook(quote(mu_A), quote(mu["A"]))
 hook(quote(mu_B), quote(mu["B"]))
 hook(quote(sigma_A), quote(sigma["A"]))
 hook(quote(sigma_B), quote(sigma["B"]))
+hook(quote(mu_M), quote(mu["M"]))
+hook(quote(zn), quote(z[tau]))
+hook(quote(M), quote(overline(X)))
+```
 
+## The model 
+
+Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
+alone or in combination (redundant stimuli), with the redundant stimuli being
+presented either simultaneously or with onset asynchrony \(\tau\). The channel
+activation is described as a two-dimensional Wiener process with
+drifts \(\mu_\mathrm A\), \(\mu_\mathrm B\),
+variances \(\sigma^2_\mathrm A\), \(\sigma^2_\mathrm B\),
+correlation \(\rho_\mathrm{AB}\) and initial
+conditions \(X_i(t=0)=0, i=\mathrm{A, B}\). The response is elicited when the
+process reaches the absorbing barrier \(c > 0\) for the first time. In combined
+stimuli ("redundant" stimuli), the overall diffusion process
+is \(X_\mathrm{AB}(t) = X_\mathrm A(t) + X_\mathrm B(t)\) , which is again a
+Wiener process with drift \(\mu_\mathrm A + \mu_\mathrm B\) and
+variance \(\sigma^2_\mathrm A + \sigma^2_\mathrm B
+  + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B\). 
+
+In single-target trials, the first passages at \(c\) are expected at
+\(E\left[D_i\right] = \frac{c}{\mu_i}, i = A, B\), whereas in synchronous
+redundant-target trials, we have
+\(E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}\).
+
+For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
+first-passage time \(E[D_{\mathrm A(\tau)\mathrm B}]\) as a function of the
+stimulus onset asyncrony \(\tau > 0\) (Eq.\ 10),
+
+````{r, results="asis", echo=FALSE}
 f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
@@ -80,43 +84,38 @@ f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 mathml(f)
 ````
 
+The observable response time is assumed to be the sum of \(D\), the time
+employed to reach the threshold for the decision, and \(M\), denoting the of the
+other processes.
 
-Then, Schwarz (1994) applies his finding to Miller’s (1989) data. Where the total RT (Response Time) is composed by T, the time employed to reach the threshold and M, the duration of other processes. With:
+\(E[T]= E[D + M] = E[D] + E[M] = E[D] + \mu_M\)
 
-\(E[RT]= E[T+M]=E[T]+E[M]=E[T]+\mu_M\)
+## Methods
 
-\(Var[RT]= \sigma^2_T+\sigma^2_M+2\rho_{T, M}\sigma_T\sigma_M\)
+Schwarz [-@schwarz1994] applied the model to Miller’s [-@miller1986] data from
+a redundant signals task with 13 onset
+asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
+where 0 refers to synchronous AB, \(\infty\) refers to the single-target
+presentation, and negative \(\tau\) denote those conditions in which B is
+presented before A. Each condition was replicated 400 times. The 13 mean RTs and
+standard deviations are given in Table 2 below.
+
+Then, from Schwarz's (1994) Equations [2] [3] and [10], we calculated the expected first time passage for the respective \(\tau\) and the parameters \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.34, \sigma_ \mathrm A = 4.3, \sigma_ \mathrm B = 11.7, c = 100, \mu_\mathrm M = 160\)
 
 
-In Miller’s (1989) task, participants were presented a visual \(S_V\) and an auditory signal \(S_A\), with SOAs of  […].
-
-````{r}
+````{r, echo=FALSE}
 mu_A = 0.53
 mu_B = 1.34
 sigma_A = 4.3
 sigma_B = 11.7
-tau = 33
+tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
 c = 100
 mu_M = 160
-
-
-f(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
-
-mu_A = 0.53
-mu_B = 1.34
-sigma_A = 4.3 
-sigma_B = 11.7
-tau = 67
-c = 100
-
-f(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
-
 ````
 
 
-```{r, results="asis"}
-hook(call("f", expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V)), 
-     call("fn", quote(f), list(expression(Tau), expression(C), expression(Mu_A), expression(Sigma_A), expression(Mu_V), expression(Sigma_V))))
+
+```{r, results="asis", echo=FALSE}
 
 # Conditions
 
@@ -130,19 +129,199 @@ g <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 }
 
 mathml(g)
+
 ```
 
-```{r}
+
+For instance, we can see that with \(\tau = -167\) the expected first passage time is:
+
+
+```{r, results= "asis", echo=FALSE}
 mu_A = 0.53
 mu_B = 1.34
 sigma_A = 4.3 
 sigma_B = 11.7
 tau = -167
 c = 100
+mu_M = 160
 
 g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 
 ```
 
 
+To which we have to add \(\mu_M = 160\) (which represents the amount of time that the movement of providing the answer takes) and we obtain: 
 
+
+```{r, results= "asis", echo=FALSE}
+g(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+```
+
+Similarly, we obtain the first-time passage for every \(\tau\):
+
+
+
+```{r, results= "asis", echo=FALSE}
+
+G <- Vectorize(g, vectorize.args = 'tau')
+
+h <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+{
+  G(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+}
+mathml(h)
+```
+
+
+
+```{r, results= "asis", echo=FALSE}
+
+mu_M = 160
+mu_A = 0.53
+mu_B = 1.34
+sigma_A = 4.3 
+sigma_B = 11.7
+tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
+c = 100
+
+# (h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M))
+library(knitr)
+
+```
+
+
+
+
+### Model fitting and Parameters Estimation
+
+Then we proceeded with the model fitting, using the data provided by Miller's (1986) study in Schwarz (1994). First, we calculated the predicted means RT as \(E[RT]=E[T]+\mu_M\). 
+
+We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed (Ratcliff & McKoon, 2008) with at the first passage of c \(X(t) \sim N(\mu t , \sigma^2 t)\). Where \(T\) is expressed as \(T= \arg \min_t X(t)\geq c\) with \(T \sim IG (c, \mu, \sigma^2)\) with mean \(E(T)=\displaystyle \frac{c}{\mu}\) and variance \(Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}\). Furthermore, for the Central Limit Theorem \(\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})\)
+  
+
+For these reasons, in order to obtain the Goodness of Fit measure we proceeded with a z-standardisation.
+
+```{r, results= "asis", echo=FALSE}
+
+
+zf <-  function(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+{
+  E <- h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+  dfrac(M-E, s/sqrt(N))
+}
+
+mathml(zf)
+
+```
+
+
+
+
+```{r, results= "asis", echo=FALSE}
+
+# The vector X contains the observed values, the vector s their observed standard deviation and N = 400 are the number of trials. 
+
+M = c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
+s = c(56, 58, 40, 40, 32, 28, 28, 28, 26, 30, 32, 34, 92)
+N = c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400) 
+
+zn <- zf(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+# zn
+
+```
+
+
+
+Then, we calculated the Goodness of Fit as follows: 
+
+\(X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)\).
+
+
+
+```{r, results= "asis", echo=FALSE}
+
+par <- c(mu_A = 0.53, sigma_A = 4.3, mu_B = 1.34, sigma_B = 11.7, mu_M = 160)
+
+# Goodness of Fit
+
+gof <- function(par, tau, M, s, N)
+{
+  zn <- zf(M, s, N, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])
+  sum(zn^2L)
+}
+
+mathml(gof)
+
+n <- gof(par, tau, M, s, N)
+# n
+
+# pchisq(n, 8, lower.tail = FALSE, log.p = FALSE)
+
+```
+
+
+
+```{r, results= "asis", echo=FALSE}
+
+lsq = function(tau, M, s, N)
+{
+  start = c(mu_A = 0.3, sigma_A = 2, mu_B = 1 , sigma_B = 5, mu_M = 200)
+  optim(start, fn = gof,
+    tau = tau, M = M, s = s, N = N, hessian = TRUE, control = list(fnscale = 1))
+}
+
+# mathml(lsq)
+
+# Parameters' estimates
+fit <-  lsq(tau, M, s, N)
+
+est = fit$par
+se = sqrt(diag(solve(fit$hessian)))
+cilo = qnorm(0.025, est, se)
+ciup = qnorm(0.975, est, se)
+
+# Lower bound
+#cilo
+
+# Upper bound
+#ciup
+
+```
+
+### Results
+
+The calculated Goodness of Fit value is \(X^2= 29.43\), \(p= 0.0003\). Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
+
+The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz (1994).
+
+: Table 1: Estimated Model's Parameters
+
+| Parameters | Estimate | 95% Confidence Interval
+| :---: | :---: | :---:|
+| \( \mu_ \mathrm A \)| 0.53 | 0.51, 0.56
+| \( \sigma_ \mathrm A \)| 4.4 | 3.8, 5.1
+| \( \mu_ \mathrm B \)| 1.3 | 1.2, 1.4
+| \( \sigma_ \mathrm B \)| 18.3 | 11.6, 24.9
+| \( \mu_ \mathrm M \)| 160 | 157, 165
+
+
+Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. \(\tau= 100\)) Miller's (1986) observed values are quite similar to the one predicted by Schwarz's (1994) model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz's (1994) sufficiently fit the data. 
+
+: Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's (1989) study in Schwarz (1994)
+
+| SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
+|:--------:|:-----------------:|:----------------:|:-----------:|
+\(-\infty\)| 235 | 231 | 56 |
+\(-167\)   | 232 | 234 | 58 |
+\(-133\)   | 231 | 230 | 40 |
+\(-100\)   | 229 | 227 | 40 |
+\(-67\)    | 227 | 228 | 32 |
+\(-33\)    | 222 | 221 | 28 |
+\(0\)      | 213 | 217 | 28 |
+\(33\)     | 237 | 238 | 28 |
+\(67\)     | 261 | 263 | 26 |
+\(100\)    | 282 | 277 | 30 |
+\(133\)    | 299 | 298 | 32 |
+\(167\)    | 312 | 316 | 34 |
+\(\infty\) | 349 | 348 | 92 | 
+ _Note_.  Parameters: \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.34, \sigma_ \mathrm A = 4.3, \sigma_ \mathrm B = 11.7, c = 100, \mu_\mathrm M = 160\) 
