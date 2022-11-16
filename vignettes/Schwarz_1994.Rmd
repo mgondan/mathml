@@ -25,9 +25,9 @@ As a case study, we present here the work of Schwarz [-@schwarz1994]. The reader
 may recognize that this study can be traced back to the strand of
 decision-making models, where decision-making is assumed to be a process of
 noisy accumulation of information over time [e.g., @ratcliff2016]. The aim of
-Schwarz' study is to present a new explanation of redundancy gains when
+Schwarz' [-@schwarz1994] study is to present a new explanation of redundancy gains when
 observers make speeded responses to stimuli of different sources, and the same
-information is presented on two channels. Schwarz describes a model that assumes
+information is presented on two channels. Schwarz [-@schwarz1994] describes a model that assumes
 the superposition of channel-specific diffusion processes that eventually reach
 an absorbing barrier to elicit the response. For a detailed description the
 reader may refer to the original article.
@@ -65,7 +65,7 @@ variance \(\sigma^2_\mathrm A + \sigma^2_\mathrm B
   + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B\). 
 
 In single-target trials, the first passages at \(c\) are expected at
-\(E\left[D_i\right] = \frac{c}{\mu_i}, i = A, B\), whereas in synchronous
+\(E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}\), whereas in synchronous
 redundant-target trials, we have
 \(E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}\).
 
@@ -100,17 +100,17 @@ presentation, and negative \(\tau\) denote those conditions in which B is
 presented before A. Each condition was replicated 400 times. The 13 mean RTs and
 standard deviations are given in Table 2 below.
 
-Then, from Schwarz's (1994) Equations [2] [3] and [10], we calculated the expected first time passage for the respective \(\tau\) and the parameters \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.34, \sigma_ \mathrm A = 4.3, \sigma_ \mathrm B = 11.7, c = 100, \mu_\mathrm M = 160\)
+Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective \(\tau\) and the parameters \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.43, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\)
 
 
 ````{r, echo=FALSE}
 mu_A = 0.53
-mu_B = 1.34
-sigma_A = 4.3
-sigma_B = 11.7
+mu_B = 1.32
+sigma_A = 4.4
+sigma_B = 18.3
 tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
 c = 100
-mu_M = 160
+mu_M = 161
 ````
 
 
@@ -138,19 +138,19 @@ For instance, we can see that with \(\tau = -167\) the expected first passage ti
 
 ```{r, results= "asis", echo=FALSE}
 mu_A = 0.53
-mu_B = 1.34
-sigma_A = 4.3 
-sigma_B = 11.7
+mu_B = 1.32
+sigma_A = 4.4 
+sigma_B = 18.3
 tau = -167
 c = 100
-mu_M = 160
+mu_M = 161
 
 g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 
 ```
 
 
-To which we have to add \(\mu_M = 160\) (which represents the amount of time that the movement of providing the answer takes) and we obtain: 
+To which we have to add \(\mu_M = 161\) (which represents the amount of time that the movement of providing the answer takes) and we obtain: 
 
 
 ```{r, results= "asis", echo=FALSE}
@@ -158,7 +158,6 @@ g(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
 ```
 
 Similarly, we obtain the first-time passage for every \(\tau\):
-
 
 
 ```{r, results= "asis", echo=FALSE}
@@ -176,16 +175,15 @@ mathml(h)
 
 ```{r, results= "asis", echo=FALSE}
 
-mu_M = 160
+mu_M = 161
 mu_A = 0.53
-mu_B = 1.34
-sigma_A = 4.3 
-sigma_B = 11.7
+mu_B = 1.32
+sigma_A = 4.4
+sigma_B = 18.3
 tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
 c = 100
 
-# (h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M))
-library(knitr)
+#h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 
 ```
 
@@ -194,9 +192,9 @@ library(knitr)
 
 ### Model fitting and Parameters Estimation
 
-Then we proceeded with the model fitting, using the data provided by Miller's (1986) study in Schwarz (1994). First, we calculated the predicted means RT as \(E[RT]=E[T]+\mu_M\). 
+Then we proceeded with the model fitting, using the data provided by Miller [-@miller1986] study in Schwarz [-@schwarz1994]. First, we calculated the predicted means RT as \(E[RT]=E[T]+\mu_M\). 
 
-We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed (Ratcliff & McKoon, 2008) with at the first passage of c \(X(t) \sim N(\mu t , \sigma^2 t)\). Where \(T\) is expressed as \(T= \arg \min_t X(t)\geq c\) with \(T \sim IG (c, \mu, \sigma^2)\) with mean \(E(T)=\displaystyle \frac{c}{\mu}\) and variance \(Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}\). Furthermore, for the Central Limit Theorem \(\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})\)
+We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed [@ratcliff2008] with at the first passage of \(c\) \(X(t) \sim N(\mu t , \sigma^2 t)\). Where \(T\) is expressed as \(T= \arg \min_t X(t)\geq c\) with \(T \sim IG (c, \mu, \sigma^2)\) with mean \(E(T)=\displaystyle \frac{c}{\mu}\) and variance \(Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}\). Furthermore, for the Central Limit Theorem \(\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})\)
   
 
 For these reasons, in order to obtain the Goodness of Fit measure we proceeded with a z-standardisation.
@@ -213,8 +211,6 @@ zf <-  function(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 mathml(zf)
 
 ```
-
-
 
 
 ```{r, results= "asis", echo=FALSE}
@@ -237,10 +233,9 @@ Then, we calculated the Goodness of Fit as follows:
 \(X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)\).
 
 
-
 ```{r, results= "asis", echo=FALSE}
 
-par <- c(mu_A = 0.53, sigma_A = 4.3, mu_B = 1.34, sigma_B = 11.7, mu_M = 160)
+par <- c(mu_A = 0.53, sigma_A = 4.4, mu_B = 1.32, sigma_B = 18.3, mu_M = 161)
 
 # Goodness of Fit
 
@@ -253,9 +248,9 @@ gof <- function(par, tau, M, s, N)
 mathml(gof)
 
 n <- gof(par, tau, M, s, N)
-# n
+#n
 
-# pchisq(n, 8, lower.tail = FALSE, log.p = FALSE)
+#pchisq(n, 8, lower.tail = FALSE, log.p = FALSE)
 
 ```
 
@@ -290,9 +285,9 @@ ciup = qnorm(0.975, est, se)
 
 ### Results
 
-The calculated Goodness of Fit value is \(X^2= 29.43\), \(p= 0.0003\). Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
+The calculated Goodness of Fit value is \(X^2= 30.54\), \(p= 0.0002\). Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
 
-The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz (1994).
+The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz [-@schwarz1994].
 
 : Table 1: Estimated Model's Parameters
 
@@ -300,28 +295,36 @@ The values of the estimated parameters reported in the table below are consisten
 | :---: | :---: | :---:|
 | \( \mu_ \mathrm A \)| 0.53 | 0.51, 0.56
 | \( \sigma_ \mathrm A \)| 4.4 | 3.8, 5.1
-| \( \mu_ \mathrm B \)| 1.3 | 1.2, 1.4
+| \( \mu_ \mathrm B \)| 1.32 | 1.2, 1.4
 | \( \sigma_ \mathrm B \)| 18.3 | 11.6, 24.9
-| \( \mu_ \mathrm M \)| 160 | 157, 165
+| \( \mu_ \mathrm M \)| 161 | 157, 165
 
 
-Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. \(\tau= 100\)) Miller's (1986) observed values are quite similar to the one predicted by Schwarz's (1994) model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz's (1994) sufficiently fit the data. 
+Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. \(\tau= 100\)) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data. 
 
-: Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's (1989) study in Schwarz (1994)
+: Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's [-@miller1986] study in Schwarz [-@schwarz1994]
 
 | SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
 |:--------:|:-----------------:|:----------------:|:-----------:|
-\(-\infty\)| 235 | 231 | 56 |
-\(-167\)   | 232 | 234 | 58 |
-\(-133\)   | 231 | 230 | 40 |
-\(-100\)   | 229 | 227 | 40 |
-\(-67\)    | 227 | 228 | 32 |
+\(-\infty\)| 237 | 231 | 56 |
+\(-167\)   | 231 | 234 | 58 |
+\(-133\)   | 230 | 230 | 40 |
+\(-100\)   | 228 | 227 | 40 |
+\(-67\)    | 226 | 228 | 32 |
 \(-33\)    | 222 | 221 | 28 |
-\(0\)      | 213 | 217 | 28 |
-\(33\)     | 237 | 238 | 28 |
-\(67\)     | 261 | 263 | 26 |
-\(100\)    | 282 | 277 | 30 |
-\(133\)    | 299 | 298 | 32 |
-\(167\)    | 312 | 316 | 34 |
-\(\infty\) | 349 | 348 | 92 | 
- _Note_.  Parameters: \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.34, \sigma_ \mathrm A = 4.3, \sigma_ \mathrm B = 11.7, c = 100, \mu_\mathrm M = 160\) 
+\(0\)      | 215 | 217 | 28 |
+\(33\)     | 239 | 238 | 28 |
+\(67\)     | 262 | 263 | 26 |
+\(100\)    | 283 | 277 | 30 |
+\(133\)    | 300 | 298 | 32 |
+\(167\)    | 313 | 316 | 34 |
+\(\infty\) | 350 | 348 | 92 | 
+ _Note_.  Parameters: \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\) 
+
+
+
+
+
+
+
+
