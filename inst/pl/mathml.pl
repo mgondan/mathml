@@ -724,7 +724,15 @@ math(_Flags, Function, M),
     compound_name_arguments(Function, '$function', Args)
  => M = lambda(Args).
 
-math(lambda(Args), M)
+math(Flags, lambda(Args), M),
+    member(name-N, Flags)
+ => M = fn(N, Args).
+
+math(Flags, lambda(Args), M)
+ => option(name(N), Flags),
+    M = fn(N, Args).
+
+math(_Flags, lambda(Args), M)
  => M = fn(lambda, Args).
 
 type(_Flags, lambda(_), T)

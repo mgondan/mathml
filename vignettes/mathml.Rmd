@@ -180,6 +180,7 @@ f <- function(tau)
         * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
 }
 
+attributes(f)$name = quote(f)
 mathml(f)
 ````
 
@@ -195,23 +196,9 @@ f <- function(tau)
         * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
 }
 
+attributes(f)$name = quote(f)
 mathml(f)
 ````
-
-
-````{r, results="asis"}
-f <- function(x) {sin(x)}
-
-mathml(f)
-````
-
-````{r, results="asis"}
-ff <- quote(f <- function(x) {sin(x)})
-
-mathml(ff)
-````
-
-
 
 # Appendix
 

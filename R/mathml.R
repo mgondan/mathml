@@ -24,7 +24,8 @@
 #'
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rolog::once(call("r2mathml", term, expression(X)))
+  flags = attributes(term)
+  t = rolog::once(call("r2mathml", flags, term, expression(X)))
   cat(paste(t$X, collapse=""))
 }
 
