@@ -25,8 +25,34 @@
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
   flags = attributes(term)
-  t = rolog::once(call("r2mathml", flags, term, expression(X)))
+  t = rolog::once(call("r2mathml", flags, term, expression(X)),
+    options=list(preproc=mathml_preproc))
   cat(paste(t$X, collapse=""))
+}
+
+# Prolog representation of not equal etc. (left: R, right: Prolog)
+mathml_operators = c(
+  "!=" = "\\=",
+  "<=" = "=<")
+
+mathml_preproc <- function(query=quote(2 != 2))
+{
+  if(is.call(query))
+  {
+    args <- as.list(query)
+
+    index <- which(args[[1]] == names(mathml_operators))
+    if(length(index) == 1)
+      args[[1]] <- mathml_operators[index]
+
+    args[-1] <- lapply(args[-1], FUN=mathml_preproc)
+    return(as.call(args))
+  }
+
+  if(is.list(query))
+    return(lapply(query, FUN=mathml_preproc))
+
+  return(query)
 }
 
 #' Mathjax output
@@ -47,7 +73,8 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rolog::once(call("r2mathjax", term, expression(X)))
+  t = rolog::once(call("r2mathjax", term, expression(X)),
+    options=list(preproc=mathml_preproc))
   cat(paste(t$X, collapse=""))
 }
 

@@ -1105,9 +1105,6 @@ current(0, fy, op(sum)).
 current(Prec, yfx, sdot) :-
     current_op(Prec, yfx, *).
 
-current(Prec, yfy, '<=') :-
-    current_op(Prec, xfx, =<).
-
 denoting(_Flags, op(_), D)
  => D = [].
 
@@ -1233,9 +1230,6 @@ math(Flags, A < B, New, X)
  => New = Flags,
     current_op(Prec, xfx, <),
     X = yfy(Prec, <, A, B).
-
-math(_Flags, '<='(A, B), M)
- => M = (A =< B).
 
 math(Flags, A =< B, New, X)
  => New = Flags,
