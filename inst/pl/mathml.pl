@@ -988,10 +988,10 @@ ml(_Flags, op(ne), M)
 jax(_Flags, op(ne), M)
  => M = "\\ne".
 
-ml(_Flags, op(sdot), M)
+ml(_Flags, op(cdot), M)
  => M = mo(&(sdot)).
 
-jax(_Flags, op(sdot), M)
+jax(_Flags, op(cdot), M)
  => M = "\\cdot".
 
 ml(_Flags, op(times), M)
@@ -1101,9 +1101,6 @@ prec(_Flags, op(A), P),
  => P = P0.
 
 current(0, fy, op(sum)).
-
-current(Prec, yfx, sdot) :-
-    current_op(Prec, yfx, *).
 
 denoting(_Flags, op(_), D)
  => D = [].
@@ -1282,7 +1279,7 @@ math(Flags, A * B, New, X),
 
 math(Flags, A * B, New, M)
  => New = Flags,
-    M = dot(A, B).
+    M = cdot(A, B).
 
 math(_Flags, '%*%'(A, B), M)
  => M = times(A, B).
@@ -1298,10 +1295,10 @@ math(Flags, ~(A, B), New, X)
     current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
-math(Flags, dot(A, B), New, X)
+math(Flags, cdot(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
-    X = yfy(Prec, sdot, A, B).
+    X = yfy(Prec, cdot, A, B).
 
 math(Flags, nodot(A, B), New, X)
  => New = Flags,
