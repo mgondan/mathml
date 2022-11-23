@@ -940,6 +940,10 @@ ml(Flags, hat(A), M)
  => ml(Flags, A, X),
     M = mover(accent(true), [X, mo(&('Hat'))]).
 
+jax(Flags, hat(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\hat{~w}", [X]).
+
 paren(Flags, hat(A), Paren)
  => paren(Flags, A, Paren).
 
