@@ -305,3 +305,15 @@ fname <- function(fname, body)
 {
   return(c(x - y, x + y))
 }
+
+
+#'x dot y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x*y
+#'
+'%.%' <- function(x, y)
+x*y
