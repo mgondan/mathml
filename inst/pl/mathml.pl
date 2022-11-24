@@ -1759,6 +1759,9 @@ type(_Flags, frac(_, _), Type)
 math(dfrac(Num, Den), M)
  => M = display(frac(Num, Den)).
 
+math(over(Num, Den), M)
+ => M = frac(Num, Den).
+
 %
 % Integrate over range
 %

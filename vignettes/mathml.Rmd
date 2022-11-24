@@ -200,7 +200,437 @@ attributes(f)$name = quote(f)
 mathml(f)
 ````
 
+## Mathematical Annotation in R  @murrell2000
+
+### To do list:
+* Aritmetic operators: \( \times \div \) 
+* Juxtaposition: _paste_
+* Spacing
+* Comma separated list
+* Ellipsis
+* Radicals: \(\sqrt[3]2\)
+* Relations: \(\equiv \simeq \approx \cong ...\)
+* Set relations
+* Arrows
+* Accent
+* Symbolic names
+* Operators: \(\lim \min\)
+* Grouping: \( (a, b]\)
+* Phantoms
+
+### Arithmetic Operators
+
+```{r results="asis"}
+
+catmath(x + y)
+catmathjax(x + y)
+
+catmath(x - y)
+catmathjax(x - y)
+
+catmath(x*y)
+catmathjax(x*y)
+
+catmath(x/y)
+catmathjax(x/y)
+
+# # Plus Minus: NOT WORKING
+# catmath(x %+-% y)
+# catmathjax(x %+-% y)
+
+# # %/%: NOT WORKING
+# catmath(x %/% y)
+# catmathjax(x %/% y)
+
+# # %*%: NOT WORKING
+# catmath(x %*% y)
+# catmathjax(x %*% y)
+
+# # %.%: NOT WORKING
+#catmath(x %.% y)
+# catmathjax(x %.% y)
+```
+
+### Juxtaposition
+
+```{r results="asis"}
+catmath(x[i])
+catmathjax(x[i])
+
+catmath(x^2L)
+catmathjax(x^2L)
+
+catmath(paste(x, y, z))
+catmathjax(paste(x, y, z))
+```
+
+### Radicals
+
+```{r results="asis"}
+catmath(sqrt(x))
+catmathjax(sqrt(x))
+
+# It works, but it is NOT correct
+catmath(sqrt(x, y))
+catmathjax(sqrt(x, y))
+```
+
+### Relations
+
+```{r results="asis"}
+# # %~%: NOT WORKING
+# catmath(x %~% y)
+# catmathjax(x %~% y)
+
+catmath(x==y)
+catmathjax(x==y)
+
+catmath(x < y)
+catmathjax(x < y)
+
+catmath(x <= y)
+catmathjax(x <= y)
+
+catmath(x >= y)
+catmathjax(x >= y)
+
+catmath(!x)
+catmathjax(!x)
+
+catmath(x != y)
+catmathjax(x != y)
+
+
+# # ~ ~: NOT WORKING
+# catmath(x %~~% y)
+# catmathjax(x %~~% y)
+# 
+# # = =: NOT WORKING
+# catmath(x %==% y)
+# catmathjax(x %==% y)
+# 
+# # ~ =: NOT WORKING
+# catmath(x %=~% y)
+# catmathjax(x %=~% y)
+# 
+# # prop: NOT WORKING
+# catmath(x %prop% y)
+# catmathjax(x %prop% y)
+```
+
+
+```{r results="asis"}
+# # plain(x): NOT WORKING
+# catmath(plain(x))
+# catmathjax(plain(x))
+
+# # bold(x): NOT WORKING
+# catmath(bold(x))
+# catmathjax(bold(x))
+
+# # italic(x): NOT WORKING
+# catmath(italic(x))
+# catmathjax(italic(x))
+
+# # bolditalic(x): NOT WORKING
+# catmath(bolditalic(x))
+# catmathjax(bolditalic(x))
+
+# # symbol(x): NOT WORKING
+# catmath(symbol(x))
+# catmathjax(symbol(x))
+
+# It works, but it is NOT correct
+catmath(list(x, y, z))
+catmathjax(list(x, y, z))
+
+# It works, but it is NOT correct
+catmath(cdots)
+catmathjax(cdots)
+
+# Idem
+catmath(ldots)
+catmathjax(ldots)
+
+# x %subset% y: NOT WORKING
+# catmath(symbol(x %subset% y))
+# catmathjax(symbol(x %subset% y))
+
+# x %subsetq% y: NOT WORKING
+# catmath(symbol(x %subsetq% y))
+# catmathjax(symbol(x %subsetq% y))
+
+# x %notsubset% y: NOT WORKING
+# catmath(symbol(x %notsubset% y))
+# catmathjax(symbol(x %notsubset% y))
+
+# x %supset% y: NOT WORKING
+# catmath(symbol(x %supset% y))
+# catmathjax(symbol(x %supset% y))
+
+# x %supsetq% y: NOT WORKING
+# catmath(symbol(x %supsetq% y))
+# catmathjax(symbol(x %supsetq% y))
+
+# x %in% y: NOT WORKING
+# catmath(symbol(x %in% y))
+# catmathjax(symbol(x %in% y))
+
+# x %notin% y: NOT WORKING
+# catmath(symbol(x %notin% y))
+# catmathjax(symbol(x %notin% y))
+
+catmath(hat(x))
+catmathjax(hat(x))
+
+# tilde(x): NOT WORKING
+# catmath(tilde(x))
+# catmathjax(tilde(x))
+
+# dot(x): NOT WORKING
+# catmath(dot(x))
+# catmathjax(dot(x))
+
+# ring(x): NOT WORKING
+# catmath(ring(x))
+# catmathjax(ring(x))
+
+# bar(x): NOT WORKING
+# catmath(bar(x))
+# catmathjax(bar(x))
+
+# widehat(x): NOT WORKING
+# catmath(widehat(x))
+# catmathjax(widehat(x))
+
+# widetilde(x): NOT WORKING
+# catmath(widetilde(x))
+# catmathjax(widetilde(x))
+
+# x %<->% y: NOT WORKING
+# catmath(symbol(x %<->% y))
+# catmathjax(symbol(x %<->% y))
+
+# x %->% y: NOT WORKING
+# catmath(symbol(x %->% y))
+# catmathjax(symbol(x %->% y))
+
+# x %<-% y: NOT WORKING
+# catmath(symbol(x %<-% y))
+# catmathjax(symbol(x %<-% y))
+
+# x %up% y: NOT WORKING
+# catmath(symbol(x %up% y))
+# catmathjax(symbol(x %up% y))
+
+# x %down% y: NOT WORKING
+# catmath(symbol(x %down% y))
+# catmathjax(symbol(x %down% y))
+
+# x %<=>% y: NOT WORKING
+# catmath(symbol(x %<=>% y))
+# catmathjax(symbol(x %<=>% y))
+
+# x %=>% y: NOT WORKING
+# catmath(symbol(x %=>% y))
+# catmathjax(symbol(x %=>% y))
+
+# x %<=% y: NOT WORKING
+# catmath(symbol(x %<=% y))
+# catmathjax(symbol(x %<=% y))
+
+# x %dblup% y: NOT WORKING
+# catmath(symbol(x %dblup% y))
+# catmathjax(symbol(x %dblup% y))
+
+# x %dbldown% y: NOT WORKING
+# catmath(symbol(x %dbldown% y))
+# catmathjax(symbol(x %dbldown% y))
+
+# It works, but it is NOT correct
+catmath(theta1)
+catmathjax(theta1)
+
+# It works, but it is NOT correct
+catmath(Upsilon1)
+catmathjax(Upsilon1)
+
+# It works, but it is NOT correct
+catmath(aleph)
+catmathjax(aleph)
+
+# It works, but it is NOT correct
+catmath(infinity)
+catmathjax(infinity)
+
+# It works, but it is NOT correct
+catmath(partialdiff)
+catmathjax(partialdiff)
+
+# It works, but it is NOT correct
+catmath(nabla)
+catmathjax(nabla)
+
+# It works, but it is NOT correct
+catmath(32*degree)
+catmathjax(32*degree)
+
+# It works, but it is NOT correct
+catmath(60*minute)
+catmathjax(60*minute)
+
+# It works, but it is NOT correct
+catmath(30*second)
+catmathjax(30*second)
+
+# # It doesn't work
+# catmath(displaystyle(x))
+# catmathjax(displaystyle(x))
+# 
+# # It doesn't work
+# catmath(textstyle(x))
+# catmathjax(textstyle(x))
+# 
+# # It doesn't work
+# catmath(scriptstyle(x))
+# catmathjax(scriptstyle(x))
+# 
+# # It doesn't work
+# catmath(scriptscriptstyle(x))
+# catmathjax(scriptscriptstyle(x))
+# 
+# # It doesn't work
+# catmath(underline(x))
+# catmathjax(underline(x))
+
+# It works, but it is NOT correct
+catmath(x ~~ y)
+catmathjax(x ~~ y)
+
+# # It doesn't work
+# catmath(x + phantom(0) + y)
+# catmathjax(x + phantom(0) + y)
+
+catmath(frac(x, y))
+catmathjax(frac(x, y))
+
+
+catmath(over(x, y))
+catmathjax(over(x, y))
+
+# # It doesn't work
+# catmath(atop(x, y))
+# catmathjax(atop(x, y))
+
+
+catmath(sum(x[i], i==1L, n))
+catmathjax(sum(x[i], i==1L, n))
+
+# # It doesn't work
+# catmath(prod(plain(P)(X==x), x))
+# catmathjax(prod(plain(P)(X==x), x))
+
+# # It doesn't work
+# catmath(integral(f(x)*dx, a, b))
+# catmathjax(integral(f(x)*dx, a, b))
+
+# # It doesn't work
+# catmath(union(A[i], i==1, n))
+# catmathjax(union(A[i], i==1, n))
+
+# # It doesn't work 
+# catmath(intersect(A[i], i==1, n))
+# catmathjax(intersect(A[i], i==1, n))
+
+# It doesn't work
+# catmath(lim(f(x), x %->% 0))
+# catmathjax(lim(f(x), x %->% 0))
+
+g <- function(x)
+# Catmath doesn't produce the output though
+catmath(min(g(x), x > 0L))
+catmathjax(min(g(x), x > 0L))
+
+# # It doesn't work
+# catmath(inf(S))
+# catmathjax(inf(S))
+
+# # It doesn't work
+# catmath(sup(S))
+# catmathjax(sup(S))
+
+
+catmath(x^y + z)
+catmathjax(x^y + z)
+
+catmath(x^(y + z))
+catmathjax(x^(y + z))
+
+catmath(x^{y + z})
+catmathjax(x^{y + z})
+
+# # It doesn't work
+# catmath(group("(",list(a, b),"]"))
+# catmathjax(group("(",list(a, b),"]"))
+
+# # It doesn't work
+# catmath(bgroup("(",atop(x,y),")"))
+# catmathjax(bgroup("(",atop(x,y),")"))
+
+# # It doesn't work
+# catmath(group(lceil, x, rceil))
+# catmathjax(group(lceil, x, rceil))
+
+# # It doesn't work
+# catmath(group(lfloor, x, rfloor))
+# catmathjax(group(lfloor, x, rfloor))
+
+# # It doesn't work
+# catmath(group(langle, list(x, y), rangle))
+# catmathjax(group(langle, list(x, y), rangle))
+
+
+catmathjax(x && y)
+catmathjax(x %/% y)
+
+catmathjax(x <- y)
+
+
+
+# How can we nicely render a matrix?
+# This is what I obtain: <math><mi>mat</mi></math> or ${mat}$
+mat <- matrix(data = c(2L, 3L, 4L, 5L), nrow = 2, ncol = 2)
+catmathjax(mat)
+
+
+# catmath(x %~~% y) This one produces an error
+catmath(x ~~ y) # This one doesn't do what is supposed to do
+
+```
+
+
 # Appendix
+
+## Some examples
+```{r, results="asis"}
+catmath(a["x"])
+catmathjax(a["x"])
+
+catmath(a^x)
+catmathjax(a^x)
+
+catmath(x["b"]^"a")
+catmathjax(x["b"]^"a")
+
+catmath(hat(b))
+catmathjax(hat(b))
+
+catmath(mean(x))
+catmathjax(mean(x))
+
+```
+
+
 
 ## Package base
 

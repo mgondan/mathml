@@ -33,8 +33,8 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 # Prolog representation of not equal etc. (left: R, right: Prolog)
 mathml_operators = c(
   "!=" = "\\=",
-  "<=" = "=<",
-  "%.%" = "sdot" )
+  "<=" = "=<"
+  )
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -246,6 +246,19 @@ hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
 frac <- function(e1, e2)
   e1 / e2
 
+#' Division displayed as fraction
+#'
+#' @param e1
+#' numerator
+#'
+#' @param e2
+#' denominator
+#'
+#' @return
+#' e1 / e2
+#'
+over <- frac
+
 #' Division displayed as large fraction
 #'
 #' @param e1
@@ -257,8 +270,9 @@ frac <- function(e1, e2)
 #' @return
 #' e1 / e2
 #'
-dfrac <- function(e1, e2)
-  e1 / e2
+#' @md
+#' @seealso [frac()], [over()]
+dfrac <- frac
 
 #' Return function body
 #'
