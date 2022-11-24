@@ -36,8 +36,8 @@ mathml_operators = c(
   "<=" = "=<",
   "%.%" = "cdot",
   "%/%" = "div",
-  "%+-%" = "pm"
-  )
+  "%+-%" = "pm",
+  "%*%" = "times")
 
 mathml_preproc <- function(query=quote(2 != 2))
 {

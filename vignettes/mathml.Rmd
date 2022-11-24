@@ -234,7 +234,7 @@ catmathjax(x*y)
 catmath(x/y)
 catmathjax(x/y)
 
-# # Plus Minus: NOT WORKING
+# Plus Minus
 catmath(x %+-% y)
 catmathjax(x %+-% y)
 
@@ -242,9 +242,9 @@ catmathjax(x %+-% y)
 catmath(x %/% y)
 catmathjax(x %/% y)
 
-# # %*%: NOT WORKING
-# catmath(x %*% y)
-# catmathjax(x %*% y)
+# %*%
+catmath(x %*% y)
+catmathjax(x %*% y)
 
 # # %.%: NOT WORKING
 #catmath(x %.% y)
