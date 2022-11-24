@@ -35,7 +35,9 @@ mathml_operators = c(
   "!=" = "\\=",
   "<=" = "=<",
   "%.%" = "cdot",
-  "%/%" = "div")
+  "%/%" = "div",
+  "%+-%" = "pm"
+  )
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -289,4 +291,17 @@ dfrac <- frac
 fname <- function(fname, body)
 {
   return(body)
+}
+
+#' Plus Minus
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return c(x - y, x + y)
+#'
+'%+-%' <- function(x, y)
+{
+  return(c(x - y, x + y))
 }

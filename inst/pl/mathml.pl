@@ -994,6 +994,12 @@ ml(_Flags, op(cdot), M)
 jax(_Flags, op(cdot), M)
  => M = "\\cdot".
 
+ml(_Flags, op(pm), M)
+ => M = mo(&(pm)).
+
+jax(_Flags, op(pm), M)
+ => M = "\\pm".
+
 ml(_Flags, op(times), M)
  => M = mo(&(times)).
 
@@ -1299,6 +1305,11 @@ math(Flags, cdot(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
     X = yfy(Prec, cdot, A, B).
+
+math(Flags, pm(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, yfx, +),
+    X = yfy(Prec, pm, A, B).
 
 math(Flags, nodot(A, B), New, X)
  => New = Flags,
@@ -2199,3 +2210,4 @@ denoting(_Flags, _, Den)
 current(Prec, Fix, Op) :-
     atom(Op),
     current_op(Prec, Fix, Op).
+

@@ -235,8 +235,8 @@ catmath(x/y)
 catmathjax(x/y)
 
 # # Plus Minus: NOT WORKING
-# catmath(x %+-% y)
-# catmathjax(x %+-% y)
+catmath(x %+-% y)
+catmathjax(x %+-% y)
 
 # %/%:
 catmath(x %/% y)
