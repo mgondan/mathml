@@ -33,8 +33,8 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 # Prolog representation of not equal etc. (left: R, right: Prolog)
 mathml_operators = c(
   "!=" = "\\=",
-  "<=" = "=<"
-  )
+  "<=" = "=<",
+  "%.%" = "cdot")
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
