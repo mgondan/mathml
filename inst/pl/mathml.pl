@@ -1759,6 +1759,11 @@ math(dfrac(Num, Den), M)
 math(over(Num, Den), M)
  => M = frac(Num, Den).
 
+% Integer division
+math(div(Num, Den), M)
+ => M = floor(Num / Den).
+
+
 %
 % Integrate over range
 %
