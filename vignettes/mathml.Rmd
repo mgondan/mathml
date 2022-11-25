@@ -413,10 +413,9 @@ catmathjax(hat(xyz))
 # catmath(widetilde(x))
 # catmathjax(widetilde(x))
 
-# x %<->% y: NOT WORKING
+# x %<->% y
 catmath(x %<->% y)
 catmathjax(x %<->% y)
-
 
 # x %->% y: NOT WORKING
 # catmath(symbol(x %->% y))

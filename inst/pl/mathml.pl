@@ -967,26 +967,6 @@ prec(Flags, tilde(A), Prec)
 type(Flags, tilde(A), Type)
  => type(Flags, A, Type).
 
-% lrarrow
-ml(Flags, lrarrow(A), M)
- => ml(Flags, A, X),
-    M = mover(accent(true), [X, mo(&(lrarrow))]).
-
-jax(Flags, lrarrow(A), M)
- => jax(Flags, A, X),
-    format(string(M), "\\leftrightarrow{~w}", [X]).
-
-paren(Flags, lrarrow(A), Paren)
- => paren(Flags, A, Paren).
-
-prec(Flags, lrarrow(A), Prec)
- => prec(Flags, A, Prec).
-
-type(Flags, lrarrow(A), Type)
- => type(Flags, A, Type).
-
-
-
 %
 % Mathematical signs
 %
@@ -1068,10 +1048,10 @@ ml(_Flags, op('Tilde'), M)
 jax(_Flags, op('Tilde'), M)
  => M = "\\sim".
 
-ml(_Flags, op(lrarrow), M)
- => M = mo(&(lrarrow)).
+ml(_Flags, op(leftrightarrow), M)
+ => M = mo(&(leftrightarrow)).
 
-jax(_Flags, op(lrarrow), M)
+jax(_Flags, op(leftrightarrow), M)
  => M = "\\leftrightarrow".
 
 ml(_Flags, op(approx), M)
@@ -1294,10 +1274,10 @@ math(Flags, ~(A, B), New, X)
     current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
-math(Flags, lrarrow(A, B), New, X)
+math(Flags, leftrightarrow(A, B), New, X)
  => New = Flags,
-    current_op(Prec, xfx, =),
-    X = yfy(Prec, lrarrow, A, B).
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, leftrightarrow, A, B).
 
 math(Flags, equiv(A, B), New, X)
  => New = Flags,

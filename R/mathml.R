@@ -42,7 +42,7 @@ mathml_operators = c(
   "%==%" = "equiv",
   "%=~%" = "cong",
   "%prop%" = "propto",
-  "%<->%" = "lrarrow")
+  "%<->%" = "leftrightarrow")
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -332,7 +332,7 @@ x*y
 #' @return x=y
 #'
 '%~~%' <- function(x, y)
-  x=y
+  isTRUE(all.equal(x, y))
 
 #'x equiv y
 #'
@@ -344,7 +344,6 @@ x*y
 #'
 '%==%' <- function(x, y)
   x=y
-
 
 
 #'x cong y
