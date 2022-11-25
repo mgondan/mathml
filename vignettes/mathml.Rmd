@@ -278,9 +278,9 @@ catmathjax(sqrt(x, y))
 ### Relations
 
 ```{r results="asis"}
-# # %~%: NOT WORKING
-# catmath(x %~% y)
-# catmathjax(x %~% y)
+# # ~: without percentages, we already had ~
+catmath(X ~ Y)
+catmathjax(X ~ Y)
 
 catmath(x==y)
 catmathjax(x==y)
