@@ -44,7 +44,15 @@ mathml_operators = c(
   "%prop%" = "propto",
   "%<->%" = "leftrightarrow",
   "%->%" = "rightarrow",
-  "%<-%" = "leftarrow")
+  "%<-%" = "leftarrow",
+  "%up%" = "uparrow",
+  "%down%" = "downarrow",
+  "%<=>%" = "iff",
+  "%=>%" = "rArr",
+  "%<=%" = "lArr",
+  "%dblup%" = "uArr",
+  "%dbldown%" = "dArr"
+)
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -403,3 +411,79 @@ x*y
 '%<-%' <- function(x, y)
   x=y
 
+#'x uparrow y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%up%' <- function(x, y)
+  x=y
+
+#'x downarrow y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%down%' <- function(x, y)
+  x=y
+
+#'x iff y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%<=>%' <- function(x, y)
+  x=y
+
+#'x rArr y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%<=%' <- function(x, y)
+  x=y
+
+#'x lArr y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%=>%' <- function(x, y)
+  x=y
+
+#'x uArr y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%dblup%' <- function(x, y)
+  x=y
+
+#'x dArr y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%dbldown%' <- function(x, y)
+  x=y

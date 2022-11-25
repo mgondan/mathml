@@ -425,33 +425,33 @@ catmathjax(x %->% y)
 catmath(x %<-% y)
 catmathjax(x %<-% y)
 
-# x %up% y: NOT WORKING
-# catmath(symbol(x %up% y))
-# catmathjax(symbol(x %up% y))
+# x %up% y: 
+catmath(x %up% y)
+catmathjax(x %up% y)
 
-# x %down% y: NOT WORKING
-# catmath(symbol(x %down% y))
-# catmathjax(symbol(x %down% y))
+# x %down% y: 
+catmath(x %down% y)
+catmathjax(x %down% y)
 
-# x %<=>% y: NOT WORKING
-# catmath(symbol(x %<=>% y))
-# catmathjax(symbol(x %<=>% y))
+# x %<=>% y: ACHTUNG I solved it using iff
+catmath(x %<=>% y)
+catmathjax(x %<=>% y)
 
-# x %=>% y: NOT WORKING
-# catmath(symbol(x %=>% y))
-# catmathjax(symbol(x %=>% y))
+# x %=>% y: ACHTUNG I solved it using rArr
+catmath(x %=>% y)
+catmathjax(x %=>% y)
 
-# x %<=% y: NOT WORKING
-# catmath(symbol(x %<=% y))
-# catmathjax(symbol(x %<=% y))
+# x %<=% y:  ACHTUNG I solved it using lArr
+catmath(x %<=% y)
+catmathjax(x %<=% y)
 
-# x %dblup% y: NOT WORKING
-# catmath(symbol(x %dblup% y))
-# catmathjax(symbol(x %dblup% y))
+# x %dblup% y: 
+catmath(x %dblup% y)
+catmathjax(x %dblup% y)
 
-# x %dbldown% y: NOT WORKING
-# catmath(symbol(x %dbldown% y))
-# catmathjax(symbol(x %dbldown% y))
+# x %dbldown% y: 
+catmath(x %dbldown% y)
+catmathjax(x %dbldown% y)
 
 # It works, but it is NOT correct
 catmath(theta1)

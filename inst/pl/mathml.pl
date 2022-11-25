@@ -1054,17 +1054,59 @@ ml(_Flags, op(leftrightarrow), M)
 jax(_Flags, op(leftrightarrow), M)
  => M = "\\leftrightarrow".
 
+ml(_Flags, op(iff), M)
+ => M = mo(&(iff)).
+
+jax(_Flags, op(iff), M)
+ => M = "\\iff".
+
 ml(_Flags, op(rightarrow), M)
  => M = mo(&(rightarrow)).
 
 jax(_Flags, op(rightarrow), M)
  => M = "\\rightarrow".
 
+ml(_Flags, op(rArr), M)
+ => M = mo(&(rArr)).
+
+jax(_Flags, op(rArr), M)
+ => M = "\\Rightarrow".
+
 ml(_Flags, op(leftarrow), M)
  => M = mo(&(leftarrow)).
 
 jax(_Flags, op(leftarrow), M)
  => M = "\\leftarrow".
+
+ml(_Flags, op(lArr), M)
+ => M = mo(&(lArr)).
+
+jax(_Flags, op(lArr), M)
+ => M = "\\Leftarrow".
+
+ml(_Flags, op(uparrow), M)
+ => M = mo(&(uparrow)).
+
+jax(_Flags, op(uparrow), M)
+ => M = "\\uparrow".
+
+ml(_Flags, op(uArr), M)
+ => M = mo(&(uArr)).
+
+jax(_Flags, op(uArr), M)
+ => M = "\\Uparrow".
+
+ml(_Flags, op(downarrow), M)
+ => M = mo(&(downarrow)).
+
+jax(_Flags, op(downarrow), M)
+ => M = "\\downarrow".
+
+ml(_Flags, op(dArr), M)
+ => M = mo(&(dArr)).
+
+jax(_Flags, op(dArr), M)
+ => M = "\\Downarrow".
 
 ml(_Flags, op(approx), M)
  => M = mo(&(approx)).
@@ -1291,15 +1333,50 @@ math(Flags, leftrightarrow(A, B), New, X)
     current_op(Prec, xfy, ->),
     X = yfy(Prec, leftrightarrow, A, B).
 
+math(Flags, iff(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, iff, A, B).
+
 math(Flags, rightarrow(A, B), New, X)
  => New = Flags,
     current_op(Prec, xfy, ->),
     X = yfy(Prec, rightarrow, A, B).
 
+math(Flags, rArr(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, rArr, A, B).
+
 math(Flags, leftarrow(A, B), New, X)
  => New = Flags,
     current_op(Prec, xfy, ->),
     X = yfy(Prec, leftarrow, A, B).
+
+math(Flags, lArr(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, lArr, A, B).
+
+math(Flags, uparrow(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, uparrow, A, B).
+
+math(Flags, uArr(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, uArr, A, B).
+
+math(Flags, downarrow(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, downarrow, A, B).
+
+math(Flags, dArr(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, dArr, A, B).
 
 math(Flags, equiv(A, B), New, X)
  => New = Flags,
