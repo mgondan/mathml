@@ -43,7 +43,8 @@ mathml_operators = c(
   "%=~%" = "cong",
   "%prop%" = "propto",
   "%<->%" = "leftrightarrow",
-  "%->%" = "rightarrow")
+  "%->%" = "rightarrow",
+  "%<-%" = "leftarrow")
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -389,5 +390,16 @@ x*y
 #' @return x=y
 #'
 '%->%' <- function(x, y)
+  x=y
+
+#'x leftarrow y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%<-%' <- function(x, y)
   x=y
 
