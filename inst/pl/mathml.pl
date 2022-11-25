@@ -1054,6 +1054,12 @@ ml(_Flags, op(leftrightarrow), M)
 jax(_Flags, op(leftrightarrow), M)
  => M = "\\leftrightarrow".
 
+ml(_Flags, op(rightarrow), M)
+ => M = mo(&(rightarrow)).
+
+jax(_Flags, op(rightarrow), M)
+ => M = "\\rightarrow".
+
 ml(_Flags, op(approx), M)
  => M = mo(&(approx)).
 
@@ -1278,6 +1284,11 @@ math(Flags, leftrightarrow(A, B), New, X)
  => New = Flags,
     current_op(Prec, xfy, ->),
     X = yfy(Prec, leftrightarrow, A, B).
+
+math(Flags, rightarrow(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfy, ->),
+    X = yfy(Prec, rightarrow, A, B).
 
 math(Flags, equiv(A, B), New, X)
  => New = Flags,

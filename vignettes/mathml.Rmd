@@ -418,8 +418,8 @@ catmath(x %<->% y)
 catmathjax(x %<->% y)
 
 # x %->% y: NOT WORKING
-# catmath(symbol(x %->% y))
-# catmathjax(symbol(x %->% y))
+catmath(x %->% y)
+catmathjax(x %->% y)
 
 # x %<-% y: NOT WORKING
 # catmath(symbol(x %<-% y))
