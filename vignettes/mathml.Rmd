@@ -300,18 +300,17 @@ catmathjax(!x)
 catmath(x != y)
 catmathjax(x != y)
 
+# # ~ ~: Check in mathml.R if it makes sense
+catmath(x %~~% y)
+catmathjax(x %~~% y)
 
-# # ~ ~: NOT WORKING
-# catmath(x %~~% y)
-# catmathjax(x %~~% y)
-# 
-# # = =: NOT WORKING
-# catmath(x %==% y)
-# catmathjax(x %==% y)
-# 
-# # ~ =: NOT WORKING
-# catmath(x %=~% y)
-# catmathjax(x %=~% y)
+# # = =: Check in mathml.R if it makes sense
+catmath(x %==% y)
+catmathjax(x %==% y)
+
+# # ~ =: Check in mathml.R if it makes sense
+catmath(x %=~% y)
+catmathjax(x %=~% y)
 # 
 # # prop: NOT WORKING
 # catmath(x %prop% y)

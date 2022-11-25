@@ -1048,6 +1048,24 @@ ml(_Flags, op('Tilde'), M)
 jax(_Flags, op('Tilde'), M)
  => M = "\\sim".
 
+ml(_Flags, op(approx), M)
+ => M = mo(&(approx)).
+
+jax(_Flags, op(approx), M)
+ => M = "\\approx".
+
+ml(_Flags, op(equiv), M)
+ => M = mo(&(equiv)).
+
+jax(_Flags, op(equiv), M)
+ => M = "\\equiv".
+
+ml(_Flags, op(cong), M)
+ => M = mo(&(cong)).
+
+jax(_Flags, op(cong), M)
+ => M = "\\cong".
+
 ml(_Flags, op(and), M)
  => M = mo(&(and)).
 
@@ -1244,6 +1262,16 @@ math(Flags, ~(A, B), New, X)
     current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
+math(Flags, equiv(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, equiv, A, B).
+
+math(Flags, cong(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, cong, A, B).
+
 math(Flags, A > B, New, X)
  => New = Flags,
     current_op(Prec, xfx, >),
@@ -1295,6 +1323,11 @@ math(_Flags, crossprod(A, B), M)
 
 math(_Flags, tcrossprod(A, B), M)
  => M = '%*%'(A, t(B)).
+
+math(Flags, approx(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, approx, A, B).
 
 math(Flags, ~(A, B), New, X)
  => New = Flags,
