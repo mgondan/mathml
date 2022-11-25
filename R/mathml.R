@@ -40,7 +40,9 @@ mathml_operators = c(
   "%*%" = "times",
   "%~~%" = "approx",
   "%==%" = "equiv",
-  "%=~%" = "cong")
+  "%=~%" = "cong",
+  "%prop%" = "propto",
+  "%<->%" = "lrarrow")
 
 mathml_preproc <- function(query=quote(2 != 2))
 {
@@ -354,5 +356,27 @@ x*y
 #' @return x=y
 #'
 '%=~%' <- function(x, y)
+  x=y
+
+#'x propto y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%prop%' <- function(x, y)
+  x=y
+
+#'x lrarrow y
+#'
+#' @param x
+#'
+#' @param y
+#'
+#' @return x=y
+#'
+'%<->%' <- function(x, y)
   x=y
 

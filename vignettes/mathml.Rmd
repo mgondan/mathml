@@ -311,10 +311,10 @@ catmathjax(x %==% y)
 # # ~ =: Check in mathml.R if it makes sense
 catmath(x %=~% y)
 catmathjax(x %=~% y)
-# 
-# # prop: NOT WORKING
-# catmath(x %prop% y)
-# catmathjax(x %prop% y)
+
+# # prop: Check in mathml.R if it makes sense
+catmath(x %prop% y)
+catmathjax(x %prop% y)
 ```
 
 
@@ -382,6 +382,13 @@ catmathjax(ldots)
 catmath(hat(x))
 catmathjax(hat(x))
 
+catmath(hat(xy))
+catmathjax(hat(xy))
+
+catmath(hat(xyz))
+catmathjax(hat(xyz))
+
+
 # tilde(x): NOT WORKING
 # catmath(tilde(x))
 # catmathjax(tilde(x))
@@ -407,8 +414,9 @@ catmathjax(hat(x))
 # catmathjax(widetilde(x))
 
 # x %<->% y: NOT WORKING
-# catmath(symbol(x %<->% y))
-# catmathjax(symbol(x %<->% y))
+catmath(x %<->% y)
+catmathjax(x %<->% y)
+
 
 # x %->% y: NOT WORKING
 # catmath(symbol(x %->% y))
@@ -471,16 +479,16 @@ catmath(nabla)
 catmathjax(nabla)
 
 # It works, but it is NOT correct
-catmath(32*degree)
-catmathjax(32*degree)
+catmath(32L*degree)
+catmathjax(32L*degree)
 
 # It works, but it is NOT correct
-catmath(60*minute)
-catmathjax(60*minute)
+catmath(60L*minute)
+catmathjax(60L*minute)
 
 # It works, but it is NOT correct
-catmath(30*second)
-catmathjax(30*second)
+catmath(30L*second)
+catmathjax(30L*second)
 
 # # It doesn't work
 # catmath(displaystyle(x))

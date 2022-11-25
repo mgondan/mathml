@@ -967,6 +967,26 @@ prec(Flags, tilde(A), Prec)
 type(Flags, tilde(A), Type)
  => type(Flags, A, Type).
 
+% lrarrow
+ml(Flags, lrarrow(A), M)
+ => ml(Flags, A, X),
+    M = mover(accent(true), [X, mo(&(lrarrow))]).
+
+jax(Flags, lrarrow(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\leftrightarrow{~w}", [X]).
+
+paren(Flags, lrarrow(A), Paren)
+ => paren(Flags, A, Paren).
+
+prec(Flags, lrarrow(A), Prec)
+ => prec(Flags, A, Prec).
+
+type(Flags, lrarrow(A), Type)
+ => type(Flags, A, Type).
+
+
+
 %
 % Mathematical signs
 %
@@ -1048,6 +1068,12 @@ ml(_Flags, op('Tilde'), M)
 jax(_Flags, op('Tilde'), M)
  => M = "\\sim".
 
+ml(_Flags, op(lrarrow), M)
+ => M = mo(&(lrarrow)).
+
+jax(_Flags, op(lrarrow), M)
+ => M = "\\leftrightarrow".
+
 ml(_Flags, op(approx), M)
  => M = mo(&(approx)).
 
@@ -1065,6 +1091,12 @@ ml(_Flags, op(cong), M)
 
 jax(_Flags, op(cong), M)
  => M = "\\cong".
+
+ml(_Flags, op(propto), M)
+ => M = mo(&(prop)).
+
+jax(_Flags, op(propto), M)
+ => M = "\\propto".
 
 ml(_Flags, op(and), M)
  => M = mo(&(and)).
@@ -1262,6 +1294,11 @@ math(Flags, ~(A, B), New, X)
     current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
+math(Flags, lrarrow(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, lrarrow, A, B).
+
 math(Flags, equiv(A, B), New, X)
  => New = Flags,
     current_op(Prec, xfx, =),
@@ -1271,6 +1308,11 @@ math(Flags, cong(A, B), New, X)
  => New = Flags,
     current_op(Prec, xfx, =),
     X = yfy(Prec, cong, A, B).
+
+math(Flags, propto(A, B), New, X)
+ => New = Flags,
+    current_op(Prec, xfx, =),
+    X = yfy(Prec, propto, A, B).
 
 math(Flags, A > B, New, X)
  => New = Flags,
@@ -1806,7 +1848,6 @@ math(over(Num, Den), M)
 % Integer division
 math(div(Num, Den), M)
  => M = floor(Num / Den).
-
 
 %
 % Integrate over range
