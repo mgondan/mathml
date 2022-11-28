@@ -602,12 +602,16 @@ catmathjax(x %/% y)
 catmathjax(x <- y)
 
 
+# How can we nicely render a vector?
+vec <- 1:3
+mathml(canonical(vec))
+mathjax(canonical(vec))
 
 # How can we nicely render a matrix?
 # This is what I obtain: <math><mi>mat</mi></math> or ${mat}$
 mat <- matrix(data = c(2L, 3L, 4L, 5L), nrow = 2, ncol = 2)
-catmathjax(mat)
-
+mathml(canonical(mat))
+mathjax(canonical(mat))
 
 # catmath(x %~~% y) This one produces an error
 catmath(x ~~ y) # This one doesn't do what is supposed to do
