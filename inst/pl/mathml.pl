@@ -293,7 +293,7 @@ mathjax :-
 math(R, M),
     atom(R),
     memberchk(R, [alpha, beta, gamma, delta, epsilon, varepsilon, zeta, eta,
-        theta, vartheta, iota, kappa, lambda, mu, nu, xi, pi, rho, sigma, tau,
+        theta, vartheta, iota, kappa, lambda, mu, nu, xi, pi, rho, sigma, varsigma, tau,
         upsilon, phi, varphi, chi, psi, omega, 'Gamma', 'Delta', 'Theta',
         'Lambda', 'Xi', 'Pi', 'Sigma', 'Upsilon', 'Phi', 'Psi', 'Omega'])
  => M = greek(R).
@@ -761,30 +761,49 @@ math(body(Body), M)
  => findall([A], member(A, Body), List),
     M = rbind(List).
 
+% Vectors
+math(Hash, M),
+    compound(Hash),
+    compound_name_arguments(Hash, Name, Elements),
+    member(Name, ['#', '$$', '%', '!'])
+ => M = paren(Elements).
+
 % Matrices
-ml(Flags, rbind(R), M)
- => maplist(ml_row(Flags), R, Rows),
-    M = mrow([mo('{'), mtable(columnalign(left), Rows)]).
+ml(Flags, Matrix, M),
+    compound(Matrix),
+    compound_name_arguments(Matrix, Name, Rows),
+    member(Name, ['##', '$$$', '%%', '!!'])
+ => maplist(ml_row(Flags), Rows, R),
+    M = mrow([mo('('), mtable(columnalign(left), R), mo(')')]).
 
-ml_row(Flags, R, M)
- => maplist(ml_cell(Flags), R, Cells),
-    M = mtr(Cells).
+ml_row(Flags, Row, M),
+    compound(Row),
+    compound_name_arguments(Row, Name, Cells),
+    member(Name, ['#', '$$', '%', '!'])
+ => maplist(ml_cell(Flags), Cells, C),
+    M = mtr(C).
 
-ml_cell(Flags, C, M)
- => ml(Flags, C, X),
-    M = mtd(X).
+ml_cell(Flags, Cell, M)
+ => ml(Flags, Cell, C),
+    M = mtd(C).
 
-jax(Flags, rbind([H | R]), M)
- => findall(l, member(_, H), Ls),
+jax(Flags, Matrix, M),
+    compound(Matrix),
+    compound_name_arguments(Matrix, Name, [Row1 | Rows]),
+    member(Name, ['##', '$$$', '%%', '!!'])
+ => findall(c, arg(_, Row1, _), Ls),
     atomic_list_concat(Ls, LLL),
-    maplist(jax_row(Flags), [H | R], Rows),
-    atomic_list_concat(Rows, Lines),
-    format(string(M), "\\left\\{\\begin{array}{~w}~w\\end{array}\\right.", [LLL, Lines]).
+    maplist(jax_row(Flags), [Row1 | Rows], R),
+    atomic_list_concat(R, Lines),
+    format(string(M), "\\left\\{\\begin{array}{~w}~w\\end{array}\\right\\}", [LLL, Lines]).
 
-jax_row(Flags, R, M)
- => maplist(jax_cell(Flags), R, Cells),
-    atomic_list_concat(Cells, ' & ', Row),
-    format(string(M), "~w\\\\\n", [Row]).
+jax_row(Flags, Row, M),
+    compound(Row),
+    compound_name_arguments(Row, Name, Cells),
+    member(Name, ['#', '$$', '%', '!'])
+ => maplist(jax_cell(Flags), Cells, C),
+    atomic_list_concat(C, ' & ', R),
+    format(string(M), "~w\\\\\n", [R]).
 
 jax_cell(Flags, C, M)
  => jax(Flags, C, X),
@@ -1194,6 +1213,7 @@ current(0, fy, op(sum)).
 
 denoting(_Flags, op(_), D)
  => D = [].
+
 
 %
 % Numbers
