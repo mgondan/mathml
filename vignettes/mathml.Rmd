@@ -572,6 +572,11 @@ catmathjax(x^y + z)
 catmath(x^(y + z))
 catmathjax(x^(y + z))
 
+# without parenthesis
+mathml(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol("z")))))
+mathjax(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol("z")))))
+
+# shortcut
 catmath(x^{y + z})
 catmathjax(x^{y + z})
 
