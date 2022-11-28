@@ -795,7 +795,7 @@ jax(Flags, Matrix, M),
     atomic_list_concat(Ls, LLL),
     maplist(jax_row(Flags), [Row1 | Rows], R),
     atomic_list_concat(R, Lines),
-    format(string(M), "\\left\\{\\begin{array}{~w}~w\\end{array}\\right\\}", [LLL, Lines]).
+    format(string(M), "\\left(\\begin{array}{~w}~w\\end{array}\\right)", [LLL, Lines]).
 
 jax_row(Flags, Row, M),
     compound(Row),
