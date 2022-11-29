@@ -1,12 +1,24 @@
 ---
-title: "mathml: Translate R expressions to MathML"
+title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
 date: "2022-11-09"
 abstract: >
-  An abstract of less than 150 words.
+  This R package translates R objects to suitable entities in MathML or LaTeX,
+  thereby enabling pretty mathematical representation of R functions or
+  algorithms in data analysis, scientific reports and interactive web content.
+  R code text descriptions and mathematical content already coexist,
+  side-by-side, in the RMarkdown document rendering language. The present
+  package allows to use the same R\ objects for both data analysis and
+  typesetting in documents or web content. By tightening the link between the
+  statistical analysis and its verbal or symbolic description, this new feature
+  is a futher step towards reprocible science. The package can be extended by
+  user-defined hooks that allow to replace variable names and new R functions by
+  a suitable symbolic representation. We provide two working examples that
+  illustrate the use of the new package in a scientific article and in an
+  interactive web page.
 draft: true
 author:  
   # see ?rjournal_article for more information
-  - name: Matthias Gondan-Rochon
+  - name: Matthias Gondan
     affiliation: University of Innsbruck
     address:
     - Department of Psychology
@@ -151,7 +163,7 @@ order.
 The \CRANpkg{palmerpenguins} data [@palmerpenguins]  features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
 
 ```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
-knitr::include_graphics("penguins.png")
+# knitr::include_graphics("penguins.png")
 ```
 
 Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
