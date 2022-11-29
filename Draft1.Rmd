@@ -1,0 +1,187 @@
+---
+title: "mathml: Translate R expressions to MathML"
+date: "2022-11-09"
+abstract: >
+  An abstract of less than 150 words.
+draft: true
+author:  
+  # see ?rjournal_article for more information
+  - name: Matthias Gondan-Rochon
+    affiliation: University of Innsbruck
+    address:
+    - Department of Psychology
+    - Innsbruck, Austria
+    url: https://www.britannica.com/animal/quokka
+    orcid: 0000-0001-9974-0057
+    email:  Matthias.Gondan-Rochon@uibk.ac.at
+  - name: Irene Alfarone
+    url: https://www.britannica.com/animal/bilby
+    email: Irene.Alfarone@uibk.ac.at
+    orcid: 0000-0002-8409-8900
+    affiliation: University of Innsbruck
+    address:
+    - Department of Psychology
+    - Innsbruck, Austria
+type: package
+output: 
+  rjtools::rjournal_web_article:
+    self_contained: yes
+    toc: no
+bibliography: RJreferences.bib
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(plotly)
+library(ggplot2)
+library(palmerpenguins)
+```
+
+# Introduction
+
+The R extension of the markdown language [@Xie2020] enables reproducible
+statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
+However, so far, R expressions such as `pbinom(k, N, p)` are printed as-is; 
+prettier mathematical expressions such as $P_\mathrm{Bi}(X \le k; N, p)$ require
+Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for
+minimalistic examples, these commands are tedious to type in and hard to read in
+the original code. Since recently [@R, version 4.2], manual pages include
+support for mathematical expressions [@Sarkar2022], which already is a big
+improvement. Rules for the translation of R's built-in language elements to
+their mathematical representation are lacking.
+
+In this R package, such rules are defined for the _automatic_ translation of R
+expressions mathematical output. The translation is done by an embedded
+Prolog interpreter that maps nested expressions recursively to MathML and
+LaTeX/MathJax, respectively, for typesetting of R Markdown documents in
+different formats or ShinyApp webpages. User-defined hooks enable to extend the
+set of rules and/or replace specific R elements by special mathematical signs.
+
+The paper is organized as follow. Section 2 presents the background of the mathml package, namely Prolog and the R package `rolog`. Section 3 illustrates the features of the mathml package, providing some examples. Section 4 embeds the Discussion and the presentation of a Case Study. Section 5 is devoted to Conclusions and Further Research. The reader may also find some additional characteristics of the package and its implementation in the Appendix. 
+
+# Background
+
+The automatic translation of R expressions to mathematical output is achieved through a Prolog interpreter. Prolog is a classical logic programming language with many applications in expert systems, computer linguistics and traditional, that is, symbolic artificial intelligence. The main strength of Prolog is its concise representation of facts and rules for the representation of knowledge and grammar, as well as its efficient built-in search engine for closed world domains. R, as it is well-known, is a statistical programming language for data analysis and statistical modeling which is widely used in academia and industry. Besides the core library, a lot of packages have been developed for all kinds of statistical problems, including statistics-based artificial intelligence tools such as neural networks for machine learning and deep learning. Whereas Prolog is weak in statistical computation, but strong in symbolic manipulation, the converse may be said for the R language. The `rolog` package then bridges this gap by providing an interface to a SWI-Prolog distribution in R. The communication between the two systems is mainly in the form of queries from R to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R. 
+Here is reported a first trivial example. At the Prolog end, there is a handler for `pbinom/3` that translates the term into a pretty MathML syntax like P_bi(X <= k; N, pi).
+
+
+```{r, echo=TRUE}
+library(rolog)
+library(mathml)
+term = quote(pbinom(k, N, p))
+
+# Pretty print
+mathml(term)
+```
+
+
+_I encounter a problem, when I explicit the 'asis' in the results='', the execution of the Rmd is halted. Yet, only when I use mathml()._
+ 
+Beside the graphical rendition of the term, an important feature is that the package allows also for its calculation, for example:
+
+```{r, results = 'asis', echo = TRUE}
+k = 10
+N = 22
+p = 0.4
+eval(term)
+```
+
+Here we present a second less trivial example where Prolog needs to find out the name of
+the integration variable for `sin`. For that purpose, rolog provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
+
+```{r, echo = TRUE}
+term = quote(integrate(sin, 0L, 2L*pi))
+mathml(term)
+eval(term)
+```
+
+Note that the Prolog end, the handler for `integrate/3` is rather rigid; it
+accepts only these three arguments in that particular order, and without names,
+that is, `integrate(sin, lower=0L, upper=2L * pi)` would not print the desired
+result.
+
+Therefore, `pl/mathml.pl` includes two handlers that accept terms with named
+arguments, `integrate(f=Fn, lower=Lower, upper=Upper)`, as well as terms of the
+form `$(integrate(Fn, Lower, Upper), value)` that are needed for the evaluation
+below.
+
+```{r, echo = TRUE}
+library(rolog)
+# Apply match.call to all components of a term
+canonical <- function(term)
+{
+  if(is.call(term))
+  {
+    f <- match.fun(term[[1]])
+    if(!is.primitive(f))
+      term <- match.call(f, term)
+    
+    # Recurse into arguments
+    term[-1] <- lapply(term[-1], canonical)
+  }
+  return(term)
+}
+# A custom function
+g <- function(u)
+{
+  sin(u)
+}
+# # Mixture of (partially) named and positional arguments in unusual order
+term <- quote(2L * integrate(low=-Inf, up=Inf, g)$value)
+# mathml(canonical(term))
+# # It is a bit of a mystery that R knows the result of this integral.
+# eval(term)
+```
+
+The extra R function `canonical()` applies `match.call()` to non-primitive R
+calls, basically cleaning up the arguments and bringing them into the correct
+order.
+
+<!-- Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} [@crosstalk] that specializes cross-linking elements across individual graphics.  The recent R Journal paper \CRANpkg{tsibbletalk} [@RJ-2021-050] provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries. -->
+
+
+
+# Customizing tooltip design with \pkg{ToOoOlTiPs}
+
+\pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
+
+# A gallery of tooltips examples
+
+The \CRANpkg{palmerpenguins} data [@palmerpenguins]  features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
+
+```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
+knitr::include_graphics("penguins.png")
+```
+
+Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
+
+```{r penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"}
+knitr::kable(head(penguins), format = "html", caption = "A basic table")
+```
+
+```{r penguins-tab-static, eval = knitr::is_latex_output()}
+knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
+  kableExtra::kable_styling(font_size = 7)
+```   
+
+Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package. 
+
+```{r penguins-plotly, echo = TRUE, fig.height = 5, fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
+p <- penguins %>% 
+  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
+             color = species)) + 
+  geom_point()
+ggplotly(p)
+```
+
+```{r penguins-ggplot, echo = TRUE, fig.height = 5, fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
+penguins %>% 
+  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
+             color = species)) + 
+  geom_point()
+```
+
+# Summary
+
+We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}. 
