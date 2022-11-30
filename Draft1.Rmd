@@ -10,7 +10,7 @@ abstract: >
   package allows to use the same R\ objects for both data analysis and
   typesetting in documents or web content. By tightening the link between the
   statistical analysis and its verbal or symbolic description, this new feature
-  is a futher step towards reprocible science. The package can be extended by
+  is a futher step towards reproducible science. The package can be extended by
   user-defined hooks that allow to replace variable names and new R functions by
   a suitable symbolic representation. We provide two working examples that
   illustrate the use of the new package in a scientific article and in an
@@ -48,6 +48,21 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(plotly)
 library(ggplot2)
 library(palmerpenguins)
+
+catmath <- function(term)
+{
+  s <- substitute(term)
+  c <- canonical(s)
+  mathml(c)
+}
+
+catmathjax <- function(term)
+{
+  s <- substitute(term)
+  c <- canonical(s)
+  mathjax(c)
+}
+
 ```
 
 # Introduction
@@ -70,15 +85,15 @@ LaTeX/MathJax, respectively, for typesetting of R Markdown documents in
 different formats or ShinyApp webpages. User-defined hooks enable to extend the
 set of rules and/or replace specific R elements by special mathematical signs.
 
-The paper is organized as follow. Section 2 presents the background of the mathml package, namely Prolog and the R package `rolog`. Section 3 illustrates the features of the mathml package, providing some examples. Section 4 embeds the Discussion and the presentation of a Case Study. Section 5 is devoted to Conclusions and Further Research. The reader may also find some additional characteristics of the package and its implementation in the Appendix. 
+The paper is organized as follow. Section 2 presents the background of the mathml package, namely Prolog and the R package \pkg{rolog}. Section 3 illustrates the features of the \pkg{mathml} package, providing some examples. Section 4 embeds the Discussion and the presentation of a Case Study. Section 5 is devoted to Conclusions and Further Research. The reader may also find some additional characteristics of the package and its implementation in the Appendix. 
 
 # Background
 
-The automatic translation of R expressions to mathematical output is achieved through a Prolog interpreter. Prolog is a classical logic programming language with many applications in expert systems, computer linguistics and traditional, that is, symbolic artificial intelligence. The main strength of Prolog is its concise representation of facts and rules for the representation of knowledge and grammar, as well as its efficient built-in search engine for closed world domains. R, as it is well-known, is a statistical programming language for data analysis and statistical modeling which is widely used in academia and industry. Besides the core library, a lot of packages have been developed for all kinds of statistical problems, including statistics-based artificial intelligence tools such as neural networks for machine learning and deep learning. Whereas Prolog is weak in statistical computation, but strong in symbolic manipulation, the converse may be said for the R language. The `rolog` package then bridges this gap by providing an interface to a SWI-Prolog distribution in R. The communication between the two systems is mainly in the form of queries from R to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R. 
+The automatic translation of R expressions to mathematical output is achieved through a Prolog interpreter. Prolog is a classical logic programming language with many applications in expert systems, computer linguistics and traditional, that is, symbolic artificial intelligence. The main strength of Prolog is its concise representation of facts and rules for the representation of knowledge and grammar, as well as its efficient built-in search engine for closed world domains. R, as it is well-known, is a statistical programming language for data analysis and statistical modeling which is widely used in academia and industry. Besides the core library, a lot of packages have been developed for all kinds of statistical problems, including statistics-based artificial intelligence tools such as neural networks for machine learning and deep learning. Whereas Prolog is weak in statistical computation, but strong in symbolic manipulation, the converse may be said for the R language. The \pkg{rolog} package then bridges this gap by providing an interface to a SWI-Prolog distribution in R. The communication between the two systems is mainly in the form of queries from R to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R. 
 Here is reported a first trivial example. At the Prolog end, there is a handler for `pbinom/3` that translates the term into a pretty MathML syntax like P_bi(X <= k; N, pi).
 
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, results='asis', eval=knitr::is_html_output()}
 library(rolog)
 library(mathml)
 term = quote(pbinom(k, N, p))
@@ -87,9 +102,15 @@ term = quote(pbinom(k, N, p))
 mathml(term)
 ```
 
+```{r, echo=TRUE, results='asis', eval=knitr::is_latex_output()}
+library(rolog)
+library(mathml)
+term = quote(pbinom(k, N, p))
 
-_I encounter a problem, when I explicit the 'asis' in the results='', the execution of the Rmd is halted. Yet, only when I use mathml()._
- 
+# Pretty print
+mathjax(term)
+```
+
 Beside the graphical rendition of the term, an important feature is that the package allows also for its calculation, for example:
 
 ```{r, results = 'asis', echo = TRUE}
@@ -102,9 +123,12 @@ eval(term)
 Here we present a second less trivial example where Prolog needs to find out the name of
 the integration variable for `sin`. For that purpose, rolog provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
 
-```{r, echo = TRUE}
+```{r,  results = 'asis', echo = TRUE, eval=knitr::is_html_output()}
 term = quote(integrate(sin, 0L, 2L*pi))
 mathml(term)
+```
+
+```{r, echo = TRUE}
 eval(term)
 ```
 
@@ -143,7 +167,7 @@ g <- function(u)
 term <- quote(2L * integrate(low=-Inf, up=Inf, g)$value)
 # mathml(canonical(term))
 # # It is a bit of a mystery that R knows the result of this integral.
-# eval(term)
+eval(term)
 ```
 
 The extra R function `canonical()` applies `match.call()` to non-primitive R
@@ -154,46 +178,475 @@ order.
 
 
 
-# Customizing tooltip design with \pkg{ToOoOlTiPs}
+# Package capabilities
 
-\pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
+\pkg{mathml} is a package for pretty mathematical representation of R functions or algorithms in data analysis, scientific reports and interactive web content. The features currently supported are listed below, following the order proposed by [@murrell2000].  
 
-# A gallery of tooltips examples
+## Arithmetic operators
+The \pkg{mathml} package provides the graphical representation for addition, subtraction, multiplication and division. Additionally, we have provided two possible ways to represent multiplication: With sign and by juxtaposition and two different kinds of division.  
 
-The \CRANpkg{palmerpenguins} data [@palmerpenguins]  features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(x + y)
+catmathjax(x + y)
 
-```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
-# knitr::include_graphics("penguins.png")
+catmath(x - y)
+catmathjax(x - y)
+
+# Plus Minus
+catmath(x %+-% y)
+catmathjax(x %+-% y)
+
+catmath(x*y)
+catmathjax(x*y)
+
+# %*%
+catmath(x %*% y)
+catmathjax(x %*% y)
+
+# %.%
+catmath(x %.% y)
+catmathjax(x %.% y)
+
+catmath(X %x% Y)
+catmathjax(X %x% Y)
+
+catmath(x/y)
+catmathjax(x/y)
+
+# %/%: integer division
+catmath(x %/% y)
+catmathjax(x %/% y)
 ```
 
-Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
+## Fractions
+As in [@murrell2000] the `frac` and `over` functions aim to represent fractions. `choose` and `lchoose`, as in R\ \pkg{base}, display the binomial coefficient. 
 
-```{r penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"}
-knitr::kable(head(penguins), format = "html", caption = "A basic table")
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(frac(x, y))
+catmathjax(frac(x, y))
+
+catmath(over(x, y))
+catmathjax(over(x, y))
+
+catmath(choose(n, k))
+catmathjax(choose(n, k))
+
+catmath(choose(k=K, n=N))
+catmathjax(choose(k=K, n=N))
+
+catmath(lchoose(n, k))
+catmathjax(lchoose(n, k))
 ```
 
-```{r penguins-tab-static, eval = knitr::is_latex_output()}
-knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
-  kableExtra::kable_styling(font_size = 7)
-```   
 
-Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package. 
+## Relations
 
-```{r penguins-plotly, echo = TRUE, fig.height = 5, fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
-p <- penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-ggplotly(p)
+Among the possible relational operators, following [@murrell2000], we included:
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(x==y)
+catmathjax(x==y)
+
+catmath(x < y)
+catmathjax(x < y)
+
+catmath(x <= y)
+catmathjax(x <= y)
+
+catmath(x >= y)
+catmathjax(x >= y)
+
+catmath(!x)
+catmathjax(!x)
+
+catmath(x != y)
+catmathjax(x != y)
+
+catmath(X ~ Y)
+catmathjax(X ~ Y)
+
+catmath(x %~~% y)
+catmathjax(x %~~% y)
+
+catmath(x %==% y)
+catmathjax(x %==% y)
+
+catmath(x %=~% y)
+catmathjax(x %=~% y)
+
+catmath(x %prop% y)
+catmathjax(x %prop% y)
+
 ```
 
-```{r penguins-ggplot, echo = TRUE, fig.height = 5, fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
+## Set relations
+
+Here is provided a series of useful set relations.
+
+_Still to be implemented_
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(a %in% A)
+catmathjax(a %in% A)
+
+catmath(intersect(A, B))
+catmathjax(intersect(A, B))
+
+catmath(union(A, B))
+catmathjax(union(A, B))
+
+catmath(is.null(intersect(A, B)))
+catmathjax(is.null(intersect(A, B)))
 ```
 
-# Summary
+## Arrows
 
-We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}. 
+Following once again [@murrell2000], we provide here a list of useful arrows
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+# x %<->% y
+catmath(x %<->% y)
+catmathjax(x %<->% y)
+
+# x %->% y
+catmath(x %->% y)
+catmathjax(x %->% y)
+
+# x %<-% y
+catmath(x %<-% y)
+catmathjax(x %<-% y)
+
+# x %up% y:
+catmath(x %up% y)
+catmathjax(x %up% y)
+
+# x %down% y:
+catmath(x %down% y)
+catmathjax(x %down% y)
+
+# x %<=>% y: solved it using iff
+catmath(x %<=>% y)
+catmathjax(x %<=>% y)
+
+# x %=>% y: solved using rArr
+catmath(x %=>% y)
+catmathjax(x %=>% y)
+
+# x %<=% y: solved using lArr
+catmath(x %<=% y)
+catmathjax(x %<=% y)
+
+# x %dblup% y:
+catmath(x %dblup% y)
+catmathjax(x %dblup% y)
+
+# x %dbldown% y:
+catmath(x %dbldown% y)
+catmathjax(x %dbldown% y)
+
+```
+
+# A case study
+
+For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented. The reader
+may recognize that Schwarz [-@schwarz1994]'s study can be traced back to the strand of
+decision-making models, where decision-making is assumed to be a process of
+noisy accumulation of information over time [e.g., @ratcliff2016]. The aim of
+Schwarz' [-@schwarz1994] study is to present a new explanation of redundancy gains when
+observers make speeded responses to stimuli of different sources, and the same
+information is presented on two channels. Schwarz [-@schwarz1994] describes a model that assumes
+the superposition of channel-specific diffusion processes that eventually reach
+an absorbing barrier to elicit the response. For a detailed description the
+reader may refer to the original article.
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+# Improve display
+hook(quote(mu_A), quote(mu["A"]))
+hook(quote(mu_B), quote(mu["B"]))
+hook(quote(sigma_A), quote(sigma["A"]))
+hook(quote(sigma_B), quote(sigma["B"]))
+hook(quote(mu_M), quote(mu["M"]))
+hook(quote(zn), quote(z[tau]))
+hook(quote(M), quote(overline(X)))
+```
+
+### The model 
+
+Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
+alone or in combination (redundant stimuli), with the redundant stimuli being
+presented either simultaneously or with onset asynchrony \(\tau\). The channel
+activation is described as a two-dimensional Wiener process with
+drifts \(\mu_\mathrm A\), \(\mu_\mathrm B\),
+variances \(\sigma^2_\mathrm A\), \(\sigma^2_\mathrm B\),
+correlation \(\rho_\mathrm{AB}\) and initial
+conditions \(X_i(t=0)=0, i=\mathrm{A, B}\). The response is elicited when the
+process reaches the absorbing barrier \(c > 0\) for the first time. In combined
+stimuli ("redundant" stimuli), the overall diffusion process
+is \(X_\mathrm{AB}(t) = X_\mathrm A(t) + X_\mathrm B(t)\) , which is again a
+Wiener process with drift \(\mu_\mathrm A + \mu_\mathrm B\) and
+variance \(\sigma^2_\mathrm A + \sigma^2_\mathrm B
+  + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B\).
+
+In single-target trials, the first passages at \(c\) are expected at
+\(E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}\), whereas in synchronous
+redundant-target trials, we have
+\(E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}\).
+
+For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
+first-passage time \(E[D_{\mathrm A(\tau)\mathrm B}]\) as a function of the
+stimulus onset asyncrony \(\tau > 0\) (Eq.\ 10),
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*c, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
+}
+
+mathml(f)
+``` 
+
+
+The observable response time is assumed to be the sum of \(D\), the time
+employed to reach the threshold for the decision, and \(M\), denoting the of the
+other processes.
+
+\(E[T]= E[D + M] = E[D] + E[M] = E[D] + \mu_M\)
+
+### Methods
+
+Schwarz [-@schwarz1994] applied the model to Miller’s [-@miller1986] data from
+a redundant signals task with 13 onset
+asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
+where 0 refers to synchronous AB, \(\infty\) refers to the single-target
+presentation, and negative \(\tau\) denote those conditions in which B is
+presented before A. Each condition was replicated 400 times. The 13 mean RTs and
+standard deviations are given in Table 2 below.
+
+Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective \(\tau\) and the parameters \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.43, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\)
+
+
+````{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+mu_A = 0.53
+mu_B = 1.32
+sigma_A = 4.4
+sigma_B = 18.3
+tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
+c = 100
+mu_M = 161
+````
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+# Conditions
+
+g <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+{
+    if( tau == Inf) return(dfrac(c, mu_A));
+    if( tau == -Inf) return(dfrac(c, mu_B));
+    if( tau > 0L)  return(f(tau, c, mu_A, sigma_A, mu_B, sigma_B));
+    if( tau == 0L) return(dfrac(c, mu_A + mu_B));
+    if( tau < 0L) return(f(-tau, c,  mu_B, sigma_B, mu_A, sigma_A))
+}
+
+mathml(g)
+
+```
+
+
+For instance, we can see that with \(\tau = -167\) the expected first passage time is:
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+mu_A = 0.53
+mu_B = 1.32
+sigma_A = 4.4
+sigma_B = 18.3
+tau = -167
+c = 100
+mu_M = 161
+
+g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+
+```
+
+
+To which we have to add \(\mu_M = 161\) (which represents the amount of time that the movement of providing the answer takes) and we obtain:
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+g(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+```
+
+Similarly, we obtain the first-time passage for every \(\tau\):
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+G <- Vectorize(g, vectorize.args = 'tau')
+
+h <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+{
+  G(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+}
+mathml(h)
+```
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+mu_M = 161
+mu_A = 0.53
+mu_B = 1.32
+sigma_A = 4.4
+sigma_B = 18.3
+tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
+c = 100
+
+#h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+
+```
+
+
+### Model fitting and Parameters Estimation
+
+Then we proceeded with the model fitting, using the data provided by Miller [-@miller1986] study in Schwarz [-@schwarz1994]. First, we calculated the predicted means RT as \(E[RT]=E[T]+\mu_M\).
+
+We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed [@ratcliff2008] with at the first passage of \(c\) \(X(t) \sim N(\mu t , \sigma^2 t)\). Where \(T\) is expressed as \(T= \arg \min_t X(t)\geq c\) with \(T \sim IG (c, \mu, \sigma^2)\) with mean \(E(T)=\displaystyle \frac{c}{\mu}\) and variance \(Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}\). Furthermore, for the Central Limit Theorem \(\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})\)
+
+
+For these reasons, in order to obtain the Goodness of Fit measure we proceeded with a z-standardisation.
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+zf <-  function(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+{
+  E <- h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+  dfrac(M-E, s/sqrt(N))
+}
+
+mathml(zf)
+```
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+# The vector X contains the observed values, the vector s their observed standard deviation and N = 400 are the number of trials.
+
+M = c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
+s = c(56, 58, 40, 40, 32, 28, 28, 28, 26, 30, 32, 34, 92)
+N = c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
+
+zn <- zf(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+# zn
+
+```
+
+Then, we calculated the Goodness of Fit as follows:
+
+\(X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)\).
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+par <- c(mu_A = 0.53, sigma_A = 4.4, mu_B = 1.32, sigma_B = 18.3, mu_M = 161)
+
+# Goodness of Fit
+
+gof <- function(par, tau, M, s, N)
+{
+  zn <- zf(M, s, N, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])
+  sum(zn^2L)
+}
+
+mathml(gof)
+
+n <- gof(par, tau, M, s, N)
+#n
+
+#pchisq(n, 8, lower.tail = FALSE, log.p = FALSE)
+
+```
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+lsq = function(tau, M, s, N)
+{
+  start = c(mu_A = 0.3, sigma_A = 2, mu_B = 1 , sigma_B = 5, mu_M = 200)
+  optim(start, fn = gof,
+    tau = tau, M = M, s = s, N = N, hessian = TRUE, control = list(fnscale = 1))
+}
+
+# mathml(lsq)
+
+# Parameters' estimates
+fit <-  lsq(tau, M, s, N)
+
+est = fit$par
+se = sqrt(diag(solve(fit$hessian)))
+cilo = qnorm(0.025, est, se)
+ciup = qnorm(0.975, est, se)
+
+# Lower bound
+#cilo
+
+# Upper bound
+#ciup
+
+```
+
+### Results
+
+The calculated Goodness of Fit value is \(X^2= 30.54\), \(p= 0.0002\). Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
+
+The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz [-@schwarz1994].
+
+: Table 1: Estimated Model's Parameters
+
+| Parameters | Estimate | 95% Confidence Interval
+| :---: | :---: | :---:|
+| \( \mu_ \mathrm A \)| 0.53 | 0.51, 0.56
+| \( \sigma_ \mathrm A \)| 4.4 | 3.8, 5.1
+| \( \mu_ \mathrm B \)| 1.32 | 1.2, 1.4
+| \( \sigma_ \mathrm B \)| 18.3 | 11.6, 24.9
+| \( \mu_ \mathrm M \)| 161 | 157, 165
+
+Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. \(\tau= 100\)) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data.
+
+: Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's [-@miller1986] study in Schwarz [-@schwarz1994]
+
+| SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
+|:--------:|:-----------------:|:----------------:|:-----------:|
+\(-\infty\)| 237 | 231 | 56 |
+\(-167\)   | 231 | 234 | 58 |
+\(-133\)   | 230 | 230 | 40 |
+\(-100\)   | 228 | 227 | 40 |
+\(-67\)    | 226 | 228 | 32 |
+\(-33\)    | 222 | 221 | 28 |
+\(0\)      | 215 | 217 | 28 |
+\(33\)     | 239 | 238 | 28 |
+\(67\)     | 262 | 263 | 26 |
+\(100\)    | 283 | 277 | 30 |
+\(133\)    | 300 | 298 | 32 |
+\(167\)    | 313 | 316 | 34 |
+\(\infty\) | 350 | 348 | 92 |
+
+ _Note_.  Parameters: \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\)
+
+# Conclusions
+
+* General introduction on R and its features
+* What is mathml 
+* issues the user must be aware of
+* points of strength
+* future directions
+* (inspirational ending)
+* ways to install rolog and mathml
+
+# Acknowledgments
+ 
+

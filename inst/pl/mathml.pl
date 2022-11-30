@@ -932,6 +932,10 @@ math(Flags, $(integrate(Fn, Lower, Upper), value), New, M)
  => Flags = New,
     M = integrate(Fn, Lower, Upper).
 
+math(Flags, integrate(f=Fn, lower=Lower, upper=Upper), New, M)
+ => Flags = New,
+    M = integrate(Fn, Lower, Upper).
+
 % No argument names
 math(Flags, integrate(Fn, Lower, Upper), New, M)
  => Flags = New,
