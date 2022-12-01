@@ -144,20 +144,7 @@ below.
 
 ```{r, echo = TRUE}
 library(rolog)
-# Apply match.call to all components of a term
-canonical <- function(term)
-{
-  if(is.call(term))
-  {
-    f <- match.fun(term[[1]])
-    if(!is.primitive(f))
-      term <- match.call(f, term)
-    
-    # Recurse into arguments
-    term[-1] <- lapply(term[-1], canonical)
-  }
-  return(term)
-}
+
 # A custom function
 g <- function(u)
 {
