@@ -328,10 +328,10 @@ fname <- function(fname, body)
 #'
 #' @param y
 #'
-#' @return x*y
+#' @return e1*e2
 #'
-'%.%' <- function(x, y)
-x*y
+'%.%' <- function(e1, e2)
+e1*e2
 
 #'x approx y
 #'
@@ -472,7 +472,7 @@ x*y
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return e1=e2
 #'
 '%dblup%' <- function(x, y)
   x=y

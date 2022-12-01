@@ -360,7 +360,8 @@ catmathjax(a * sum(b))
 
 # Multiplication (capital Pi) is missing
 
-# Integral is missing
+catmath(integrate(x))
+catmathjax(integrate(x))
 
 catmath(A & B)
 catmathjax(A & B)
@@ -425,9 +426,10 @@ catmathjax(abs(alpha))
 
 # A case study
 
-For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented. The reader
-may recognize that Schwarz [-@schwarz1994]'s study can be traced back to the strand of
-decision-making models, where decision-making is assumed to be a process of
+For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented.
+
+
+The reader may recognize that Schwarz' [-@schwarz1994] study can be traced back to the strand of decision-making models, where decision-making is assumed to be a process of
 noisy accumulation of information over time [e.g., @ratcliff2016]. The aim of
 Schwarz' [-@schwarz1994] study is to present a new explanation of redundancy gains when
 observers make speeded responses to stimuli of different sources, and the same
@@ -757,7 +759,7 @@ This example may seem trivial. However, as the reader well knows, a missed paren
 # Conclusions
 
 This package expands the possibilities of R\ by allowing calculations and graphical rendition at the same time. This makes it easier for the user to notice writing errors and correct them more smoothly. Building on current features of R\ and existing packages for displaying formulas in R\ (e.g. Murrell and Ihaka [-@murrell2000], Allaire et al. [-@allaire2018]), the \pkg{mathml} package bridges the gap between computational needs, presentation of results, and their reproducibility. To do so, it uses the Prolog's grammar rules, via the \pkg{rolog}, and translates the R\ expressions to MathML. Then, two possible solutions for typesetting are available: LaTeX and MathJax to export R\ Markdown documents in different formats or ShinyApp webpages. The article and Appendix show examples of how the package can be used and what operations are currently possible. Additionally, \pkg{mathml} allows for user's custom hooks to provide a better definition of the needed functions.
-In its current version \pkg{mathml} presents some limitations, as, for instance, (...). However, several solutions to this issue are possible (...).
+In its current version \pkg{mathml} has some limitations. For example, it is still not possible to use the functions of \pkg{mathml} for writing intratextual formulas, while it is still more convenient to adopt the usual LateX notation. However, we do not consider this to be a serious limitation, since the most productive use of \pkg{mathml} still comes from more complicated calculations. Nevertheless, in the future versions of this package we will address this issue, to broaden its spectrum of possible applications. 
 
 \pkg{mathml} is available for R\ version (…) and later, and can be easily installed using the usual `install.packages("mathml")`. The source code of the package is found at (…) including installation instructions for Unix, Windows and macOS.
 
