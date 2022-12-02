@@ -843,6 +843,18 @@ mathml(f)
 
 This example may seem trivial. However, as the reader well knows, a missed parenthesis is often the cause of untraceable errors and contradictory results. Thus, rendering the expression in MathMl improves the readability of the text, allowing better identification of the sources of possible errors. 
 
+## Errors
+
+An additional feature that this package offers is related to its application in educational scenarios. The functions here reported are intended to identify and highlight possible errors that students make, as well as provide the correct answer for the task.
+
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+
+
+```
+
 # Conclusions
 
 This package expands the possibilities of R\ by allowing calculations and graphical rendition at the same time. This makes it easier for the user to notice writing errors and correct them smoothly. Building on current features of R\ and existing packages for displaying formulas in R\ (e.g. Murrell and Ihaka [-@murrell2000], Allaire et al. [-@allaire2018]), the \pkg{mathml} package bridges the gap between computational needs, presentation of results, and their reproducibility. To do so, it uses the Prolog's grammar rules and translates the R\ expressions to MathML. Then, two possible solutions for typesetting are available to export R\ Markdown documents in different formats or ShinyApp webpages: MathML and MathJax. 
