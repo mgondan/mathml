@@ -293,9 +293,10 @@ mathjax :-
 math(R, M),
     atom(R),
     memberchk(R, [alpha, beta, gamma, delta, epsilon, varepsilon, zeta, eta,
-        theta, vartheta, iota, kappa, lambda, mu, nu, xi, pi, rho, sigma, varsigma, tau,
-        upsilon, phi, varphi, chi, psi, omega, 'Gamma', 'Delta', 'Theta',
-        'Lambda', 'Xi', 'Pi', 'Sigma', 'Upsilon', 'Phi', 'Psi', 'Omega'])
+        theta, vartheta, iota, kappa, lambda, mu, nu, xi, omikron, pi, rho, sigma, varsigma, tau,
+        upsilon, phi, varphi, chi, psi, omega, 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon',
+        'Zeta', 'Eta','Theta', 'Iota', 'Kappa', 'Lambda', 'Mi', 'Ni', 'Xi', 'Omikron', 'Pi',
+        'Rho','Sigma', 'Tau','Upsilon', 'Phi', 'Chi','Psi', 'Omega'])
  => M = greek(R).
 
 ml(_Flags, greek(R), M)
