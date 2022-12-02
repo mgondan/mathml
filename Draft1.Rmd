@@ -65,6 +65,19 @@ catmathjax <- function(term)
 
 ```
 
+#### To do
+
+* paste(x, y, z)
+* Spacing
+* Comma separated lists
+* Ellipsis
+* Radicals
+* Subsets
+* Greek letters in MathJax
+* Typeface
+* Stylechanges
+* Phantoms
+
 # Introduction
 
 The R extension of the markdown language [@Xie2020] enables reproducible
@@ -75,8 +88,8 @@ Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for
 minimalistic examples, these commands are tedious to type in and hard to read in
 the original code. Since recently [@R, version 4.2], manual pages include
 support for mathematical expressions [@Sarkar2022], which already is a big
-improvement. Rules for the translation of R's built-in language elements to
-their mathematical representation are lacking.
+improvement. However, rules for the translation of R's built-in language elements to
+their mathematical representation are still lacking.
 
 In this R package, such rules are defined for the _automatic_ translation of R
 expressions mathematical output. The translation is done by an embedded
@@ -88,6 +101,8 @@ set of rules and/or replace specific R elements by special mathematical signs.
 The paper is organized as follow. Section 2 presents the background of the mathml package, namely Prolog and the R package \pkg{rolog}. Section 3 illustrates the features of the \pkg{mathml} package, providing some examples. Section 4 embeds the Discussion and the presentation of a Case Study. Section 5 is devoted to Conclusions and Further Research. The reader may also find some additional characteristics of the package and its implementation in the Appendix. 
 
 # Background
+
+## Prolog: the \pkg{rolog} package
 
 The automatic translation of R expressions to mathematical output is achieved through a Prolog interpreter. Prolog is a classical logic programming language with many applications in expert systems, computer linguistics and traditional, that is, symbolic artificial intelligence. The main strength of Prolog is its concise representation of facts and rules for the representation of knowledge and grammar, as well as its efficient built-in search engine for closed world domains. R, as it is well-known, is a statistical programming language for data analysis and statistical modeling which is widely used in academia and industry. Besides the core library, a lot of packages have been developed for all kinds of statistical problems, including statistics-based artificial intelligence tools such as neural networks for machine learning and deep learning. Whereas Prolog is weak in statistical computation, but strong in symbolic manipulation, the converse may be said for the R language. The \pkg{rolog} package then bridges this gap by providing an interface to a SWI-Prolog distribution in R. The communication between the two systems is mainly in the form of queries from R to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R. 
 Here is reported a first trivial example. At the Prolog end, there is a handler for `pbinom/3` that translates the term into a pretty MathML syntax like P_bi(X <= k; N, pi).
@@ -121,7 +136,7 @@ eval(term)
 ```
 
 Here we present a second less trivial example where Prolog needs to find out the name of
-the integration variable for `sin`. For that purpose, rolog provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
+the integration variable for `sin`. For that purpose, \pkg{rolog} provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
 
 ```{r,  results = 'asis', echo = TRUE, eval=knitr::is_html_output()}
 term = quote(integrate(sin, 0L, 2L*pi))
@@ -132,9 +147,9 @@ mathml(term)
 eval(term)
 ```
 
-Note that the Prolog end, the handler for `integrate/3` is rather rigid; it
+Note that, on the Prolog end, the handler for `integrate/3` is rather rigid; it
 accepts only these three arguments in that particular order, and without names,
-that is, `integrate(sin, lower=0L, upper=2L * pi)` would not print the desired
+that is, `integrate(sin, lower=0L, upper=2L * pi)`, would not print the desired
 result.
 
 Therefore, `pl/mathml.pl` includes two handlers that accept terms with named
@@ -179,18 +194,15 @@ catmathjax(x + y)
 catmath(x - y)
 catmathjax(x - y)
 
-# Plus Minus
 catmath(x %+-% y)
 catmathjax(x %+-% y)
 
 catmath(x*y)
 catmathjax(x*y)
 
-# %*%
 catmath(x %*% y)
 catmathjax(x %*% y)
 
-# %.%
 catmath(x %.% y)
 catmathjax(x %.% y)
 
@@ -200,10 +212,24 @@ catmathjax(X %x% Y)
 catmath(x/y)
 catmathjax(x/y)
 
-# %/%: integer division
 catmath(x %/% y)
 catmathjax(x %/% y)
 ```
+
+## Subscripts and Superscripts
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(a["x"])
+catmathjax(a["x"])
+
+catmath(a^x)
+catmathjax(a^x)
+
+catmath(x["b"]^"a")
+catmathjax(x["b"]^"a")
+
+```
+
 
 ## Fractions
 As in [@murrell2000] the `frac` and `over` functions aim to represent fractions. `choose` and `lchoose`, as in R\ \pkg{base}, display the binomial coefficient. 
@@ -218,11 +244,17 @@ catmathjax(over(x, y))
 catmath(choose(n, k))
 catmathjax(choose(n, k))
 
-catmath(choose(k=K, n=N))
-catmathjax(choose(k=K, n=N))
-
 catmath(lchoose(n, k))
 catmathjax(lchoose(n, k))
+```
+
+## Radicals
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+
+catmath(sqrt(x))
+catmathjax(sqrt(x))
+
 ```
 
 
@@ -333,6 +365,38 @@ catmathjax(x %dbldown% y)
 
 ```
 
+## Accents
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+catmath(hat(x))
+catmathjax(hat(x))
+
+catmath(hat(xy))
+catmathjax(hat(xy))
+
+catmath(mean(x))
+catmathjax(mean(x))
+
+catmath(mean(xy))
+catmathjax(mean(xy))
+
+```
+
+## Symbolic names
+
+```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
+
+catmath(Alpha-Omega)
+catmathjax(Alpha-Omega)
+
+catmath(alpha-omega)
+catmathjax(alpha-omega)
+
+catmath(Inf)
+catmathjax(Inf)
+
+```
+
 ## Operators
 A list of possible operators is available here.
 
@@ -347,8 +411,8 @@ catmathjax(a * sum(b))
 
 # Multiplication (capital Pi) is missing
 
-catmath(integrate(x))
-catmathjax(integrate(x))
+catmath(integrate(sin, 0L, 2L*pi))
+catmathjax(integrate(sin, 0L, 2L*pi))
 
 catmath(A & B)
 catmathjax(A & B)
@@ -400,6 +464,25 @@ catmathjax(tan(pi/2L))
 
 ```
 
+## Grouping
+
+```{r, results='asis', echo=TRUE,  eval=knitr::is_html_output()}
+catmath(x^y + z)
+catmathjax(x^y + z)
+
+catmath(x^(y + z))
+catmathjax(x^(y + z))
+
+# without parenthesis
+mathml(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol("z")))))
+mathjax(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol("z")))))
+
+# shortcut
+catmath(x^{y + z})
+catmathjax(x^{y + z})
+
+```
+
 ## Absolute value
 
 Is it also possible to calculate and represent the absolute value, as:
@@ -410,6 +493,23 @@ catmathjax(abs(alpha))
 
 ```
 
+## Matrix and Vectors
+
+Since also Matrices and Vectors are important elements in R\, we decided to implement them and render them graphically in the following ways.
+
+```{r, results='asis', echo=TRUE,  eval=knitr::is_html_output()}
+
+vec <- 1:3
+mathml(canonical(vec))
+mathml(vec)
+mathjax(canonical(vec))
+mathjax(vec)
+
+mat <- matrix(data = c(2L, 3L, 4L, 5L), nrow = 2, ncol = 2)
+mathml(canonical(mat))
+mathjax(canonical(mat))
+
+```
 
 # A case study
 
@@ -743,10 +843,27 @@ mathml(f)
 
 This example may seem trivial. However, as the reader well knows, a missed parenthesis is often the cause of untraceable errors and contradictory results. Thus, rendering the expression in MathMl improves the readability of the text, allowing better identification of the sources of possible errors. 
 
+## Errors
+
+An additional feature that this package offers is related to its application in educational scenarios. The functions here reported are intended to identify and highlight possible errors that students make, as well as provide the correct answer for the task.
+
+
+
+```{r, results="asis", echo=FALSE,  eval=knitr::is_html_output()}
+
+
+
+```
+
 # Conclusions
 
-This package expands the possibilities of R\ by allowing calculations and graphical rendition at the same time. This makes it easier for the user to notice writing errors and correct them more smoothly. Building on current features of R\ and existing packages for displaying formulas in R\ (e.g. Murrell and Ihaka [-@murrell2000], Allaire et al. [-@allaire2018]), the \pkg{mathml} package bridges the gap between computational needs, presentation of results, and their reproducibility. To do so, it uses the Prolog's grammar rules, via the \pkg{rolog}, and translates the R\ expressions to MathML. Then, two possible solutions for typesetting are available: LaTeX and MathJax to export R\ Markdown documents in different formats or ShinyApp webpages. The article and Appendix show examples of how the package can be used and what operations are currently possible. Additionally, \pkg{mathml} allows for user's custom hooks to provide a better definition of the needed functions.
+This package expands the possibilities of R\ by allowing calculations and graphical rendition at the same time. This makes it easier for the user to notice writing errors and correct them smoothly. Building on current features of R\ and existing packages for displaying formulas in R\ (e.g. Murrell and Ihaka [-@murrell2000], Allaire et al. [-@allaire2018]), the \pkg{mathml} package bridges the gap between computational needs, presentation of results, and their reproducibility. To do so, it uses the Prolog's grammar rules and translates the R\ expressions to MathML. Then, two possible solutions for typesetting are available to export R\ Markdown documents in different formats or ShinyApp webpages: MathML and MathJax. 
+
+The article and Appendix show examples of how the package can be used and what operations are currently possible. Additionally, \pkg{mathml} allows for user's custom hooks to provide a better definition of the needed functions.
+
+
 In its current version \pkg{mathml} has some limitations. For example, it is still not possible to use the functions of \pkg{mathml} for writing intratextual formulas, while it is still more convenient to adopt the usual LateX notation. However, we do not consider this to be a serious limitation, since the most productive use of \pkg{mathml} still comes from more complicated calculations. Nevertheless, in the future versions of this package we will address this issue, to broaden its spectrum of possible applications. 
+
 
 \pkg{mathml} is available for R\ version (…) and later, and can be easily installed using the usual `install.packages("mathml")`. The source code of the package is found at (…) including installation instructions for Unix, Windows and macOS.
 
