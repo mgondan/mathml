@@ -92,7 +92,8 @@ mathml_preproc <- function(query=quote(2 != 2))
 #'
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 {
-  t = rolog::once(call("r2mathjax", term, expression(X)),
+  flags = attributes(term)
+  t = rolog::once(call("r2mathjax", flags, term, expression(X)),
     options=list(preproc=mathml_preproc))
   cat(paste(t$X, collapse=""))
 }

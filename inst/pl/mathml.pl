@@ -254,7 +254,7 @@ jax(Flags, R, M),
     select(superscript(Pwr), Flags, New)
  => jax(New, R, X),
     jax(New, Pwr, Y),
-    format(string(M), "{~w^~w}", [X, Y]).
+    format(string(M), "{{~w}^{~w}}", [X, Y]).
 
 mathml :-
     mathml(superscript(x, 2)).
@@ -293,10 +293,10 @@ mathjax :-
 math(R, M),
     atom(R),
     memberchk(R, [alpha, beta, gamma, delta, epsilon, varepsilon, zeta, eta,
-        theta, vartheta, iota, kappa, lambda, mu, nu, xi, omikron, pi, rho, sigma, varsigma, tau,
-        upsilon, phi, varphi, chi, psi, omega, 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon',
-        'Zeta', 'Eta','Theta', 'Iota', 'Kappa', 'Lambda', 'Mi', 'Ni', 'Xi', 'Omikron', 'Pi',
-        'Rho','Sigma', 'Tau','Upsilon', 'Phi', 'Chi','Psi', 'Omega'])
+        theta, vartheta, iota, kappa, lambda, mu, nu, xi, pi, rho, sigma,
+        varsigma, tau, upsilon, phi, varphi, chi, psi, omega, 'Gamma', 'Delta',
+        'Theta', 'Lambda', 'Xi', 'Pi', 'Sigma', 'Upsilon', 'Phi', 'Psi',
+        'Omega'])
  => M = greek(R).
 
 ml(_Flags, greek(R), M)
@@ -952,6 +952,14 @@ ml(Flags, integrate(Fn, From, To, DX), M)
     ml(Flags, DX, XDX),
     ml(Flags, space, Space),
     M = mrow([munderover([mo(&(int)), XFrom, XTo]), XFn, Space, mi(d), XDX]).
+
+% Internal
+jax(Flags, integrate(Fn, From, To, DX), M)
+ => jax(Flags, Fn, XFn),
+    jax(Flags, From, XFrom),
+    jax(Flags, To, XTo),
+    jax(Flags, DX, XDX),
+    format(string(M), "\\int_{~w}^{~w}{~w}\\,{d~w}", [XFrom, XTo, XFn, XDX]).
 
 paren(Flags, integrate(_, _, _, A), Paren)
  => paren(Flags, A, Paren).
