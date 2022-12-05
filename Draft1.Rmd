@@ -23,7 +23,7 @@ author:
     address:
     - Department of Psychology
     - Innsbruck, Austria
-    url: https://www.britannica.com/animal/quokka
+    url: https://www.uibk.ac.at/psychologie/mitarbeiter/gondan-rochon/
     orcid: 0000-0001-9974-0057
     email:  Matthias.Gondan-Rochon@uibk.ac.at
   - name: Irene Alfarone
