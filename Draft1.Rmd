@@ -217,6 +217,7 @@ catmathjax(x %/% y)
 ```
 
 ## Subscripts and Superscripts
+Secondly, \pkg{mathml} allows also for the display of subscripts, superscripts and their combination. 
 
 ```{r, results="asis", echo=TRUE,  eval=knitr::is_html_output()}
 catmath(a["x"])
