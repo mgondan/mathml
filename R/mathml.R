@@ -212,6 +212,8 @@ subsupscript <- function(fun=quote(sum(x[i])), sub=quote(`=`(i, 1)), sup=quote(N
 #'
 canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 {
+  attr <- attributes(term)
+
   if(is.call(term))
   {
     f <- match.fun(term[[1]])
@@ -219,9 +221,11 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
       term <- match.call(f, term)
     term[-1] <- lapply(term[-1], canonical, drop=drop)
   }
-  if(drop)
-    return(unname(term))
 
+  if(drop)
+    term <- unname(term)
+
+  attributes(term) <- attr
   return(term)
 }
 

@@ -23,11 +23,11 @@ author:
     address:
     - Department of Psychology
     - Innsbruck, Austria
-    url: https://www.uibk.ac.at/psychologie/mitarbeiter/gondan-rochon/
+    url: https://www.uibk.ac.at/psychologie/mitarbeiter/gondan-rochon/index.html.en
     orcid: 0000-0001-9974-0057
     email:  Matthias.Gondan-Rochon@uibk.ac.at
   - name: Irene Alfarone
-    url: https://www.uibk.ac.at/psychologie/mitarbeiter/alfarone/
+    url: https://www.uibk.ac.at/psychologie/mitarbeiter/alfarone/index.html.en
     email: Irene.Alfarone@uibk.ac.at
     orcid: 0000-0002-8409-8900
     affiliation: University of Innsbruck
@@ -151,7 +151,7 @@ arguments, `integrate(f=Fn, lower=Lower, upper=Upper)`, as well as terms of the
 form `$(integrate(Fn, Lower, Upper), value)` that are needed for the evaluation
 below.
 
-```{r, echo = TRUE, results='asis'}
+```{r, echo=TRUE, results='asis'}
 # A custom function
 g <- function(u)
 {
@@ -159,14 +159,17 @@ g <- function(u)
 }
 
 # Mixture of (partially) named and positional arguments in unusual order
-term <- call("integrate", low=-Inf, up=Inf, g)
-# mathout(canonical(term))
+term = call("integrate", lower=-Inf, upper=Inf, g)
+attributes(term)$name = quote(g)
+mathout(canonical(term))
 
-# term <- quote(2L * integrate(low=-Inf, up=Inf, g)$value)
-# mathout(canonical(term))
+# Even more complex
+term <- call("*", 2L, call("$", call("integrate", low=-Inf, up=Inf, g), "value"))
+attributes(term)$name = quote(g)
+mathout(canonical(term))
 
 # It is a bit of a mystery that R knows the result of this integral.
-# eval(term)
+eval(term)
 ```
 
 The extra R function `canonical()` applies `match.call()` to non-primitive R

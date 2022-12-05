@@ -929,7 +929,7 @@ math(Flags, cal(A), New, M)
 % Integrate over range
 %
 % extract value
-math(Flags, $(integrate(Fn, Lower, Upper), value), New, M)
+math(Flags, $(integrate(Fn, Lower, Upper), "value"), New, M)
  => Flags = New,
     M = integrate(Fn, Lower, Upper).
 
@@ -938,6 +938,20 @@ math(Flags, integrate(f=Fn, lower=Lower, upper=Upper), New, M)
     M = integrate(Fn, Lower, Upper).
 
 % No argument names
+math(Flags, integrate(Fn, Lower, Upper), New, M),
+    Fn = (Head :- _Body),
+    member(name-Name, Flags)
+ => Flags = New,
+    compound_name_arguments(Head, _, [DX | _]),
+    M = integrate(fn(Name, [DX]), Lower, Upper, DX).
+
+math(Flags, integrate(Fn, Lower, Upper), New, M),
+    r_eval('is.null'('$'('.GlobalEnv', Fn)), false)
+ => Flags = New,
+%    r_eval('['(formalArgs(args('$'('.GlobalEnv', Fn))), 1), Arg1),
+    atom_string(DX, "Arg1"),
+    M = integrate(fn(Fn, [DX]), Lower, Upper, DX).
+
 math(Flags, integrate(Fn, Lower, Upper), New, M)
  => Flags = New,
     r_eval('['(formalArgs(args(Fn)), 1), Arg1),
@@ -953,7 +967,6 @@ ml(Flags, integrate(Fn, From, To, DX), M)
     ml(Flags, space, Space),
     M = mrow([munderover([mo(&(int)), XFrom, XTo]), XFn, Space, mi(d), XDX]).
 
-% Internal
 jax(Flags, integrate(Fn, From, To, DX), M)
  => jax(Flags, Fn, XFn),
     jax(Flags, From, XFrom),
