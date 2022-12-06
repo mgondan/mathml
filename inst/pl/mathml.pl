@@ -1739,7 +1739,8 @@ denoting(Flags, with(A, Expr, Info), Den)
 % Expand abbreviations
 %
 ml(Flags, denoting(A, Expr, Info), X)
- => ml(Flags, list(space, [A = Expr, "denoting", Info]), X).
+ => ml(Flags, A = Expr, AExpr),
+    X = span([math(AExpr), " denoting ", Info]).
 
 type(Flags, denoting(A, _, _), Type)
  => type(Flags, A, Type).
@@ -1759,12 +1760,12 @@ ml(_Flags, with_([]), W)
 
 ml(Flags, with_([A]), W)
  => ml(Flags, A, X),
-    W = span([", with", &(nbsp), math(X)]).
+    W = span([", with", &(nbsp), X]).
 
 ml(Flags, with_([A, B | T]), W)
  => ml(Flags, A, X),
     ml(Flags, and([B | T]), Y),
-    W = span([", with", &(nbsp), math(X) | Y]).
+    W = span([", with", &(nbsp), X | Y]).
 
 ml(_Flags, and([]), W)
  => W = ".".
@@ -1772,7 +1773,7 @@ ml(_Flags, and([]), W)
 ml(Flags, and([A | T]), W)
  => ml(Flags, A, X),
     ml(Flags, and(T), Y),
-    W = span([", and", &(nbsp), math(X) | Y]).
+    W = span([", and", &(nbsp), X | Y]).
 
 jax(Flags, with(Abbreviations), X)
  => sort(Abbreviations, Sorted), % remove duplicates
