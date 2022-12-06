@@ -493,5 +493,23 @@ e1*e2
 '%dbldown%' <- function(x, y)
   x=y
 
+#' denote
+#' This is a function that allows the user to insert abbreviations in the formula,
+#' explain them and make the needed computations
+#'
+#' @param abbr
+#' Abbreviation used in the text to refer to the calculation, for example 's_p' for the pooled
+#' variance.
+#'
+#' @param expr
+#' Expression: calculations to be made in order to obtain the value to which the abbreviation
+#' refers to.
+#'
+#' @param info
+#' Information: Explanation of the formula used to provide the value of the abbreviation.
+#' e.g. 'the pooled variance'
+#'
+#' @return expr
+#'
 denote <- function(abbr, expr, info)
   return(expr)

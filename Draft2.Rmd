@@ -468,6 +468,39 @@ mat <- matrix(data = c(2L, 3L, 4L, 5L), nrow = 2, ncol = 2)
 mathout(canonical(mat))
 ```
 
+## Abbreviations
+
+\pkg{mathml} allows also for the use of abbreviations in formulas. Let us consider here the t-statistic for independent samples with equal variance assumed. 
+The procedure consists of three steps. The first one is to define the hooks to nicely print the variables. Second, we write the t-statistic specifying in the formula how to calculate the pooled variance with the function  `denote(abbr, expr, info)`.  Finally, since \pkg{mathml} also allows computation, we can directly compute the value of the t statistic with `eval()`.
+
+```{r, results='asis', echo=TRUE}
+
+hook(quote(x_1), quote(mean(x["1"])))
+hook(quote(x_2), quote(mean(x["2"])))
+hook(quote(n_1), quote(n["1"]))
+hook(quote(n_2), quote(n["2"]))
+hook(quote(s_1), quote(s["1"]))
+hook(quote(s_2), quote(s["2"]))
+hook(quote(s_p), quote(s["pool"]))
+
+
+t <- quote(dfrac(x_1 - x_2, sqrt(denote(s_p^2L, frac((n_1 - 1L)*s_1^2L + (n_2 - 1L)*s_2^2L, n_1+n_2-2L), "the pooled variance.") * (dfrac(1L, n_1)+dfrac(1L,n_2)))))
+  
+mathout(t)
+
+# An example
+
+x_1 = 20.5
+x_2 = 35.7
+n_1 = 150
+n_2 = 160
+s_1 = 3.4
+s_2 = 4.2
+
+eval(t)
+```
+
+
 # A case study
 
 For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented.
