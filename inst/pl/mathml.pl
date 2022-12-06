@@ -1716,22 +1716,22 @@ denoting(Flags, right(_, A), D)
 %
 % with s^2_pool denoting the pooled variance
 %
-ml(Flags, with(A, _, _), X)
+ml(Flags, denoting(A, _, _), X)
  => ml(Flags, A, X).
 
-jax(Flags, with(A, _, _), X)
+jax(Flags, denoting(A, _, _), X)
  => jax(Flags, A, X).
 
-paren(Flags, with(A, _, _), Paren)
+paren(Flags, denoting(A, _, _), Paren)
  => paren(Flags, A, Paren).
 
-prec(Flags, with(A, _, _), Prec)
+prec(Flags, denoting(A, _, _), Prec)
  => prec(Flags, A, Prec).
 
-type(Flags, with(A, _, _), Type)
+type(Flags, denoting(A, _, _), Type)
  => type(Flags, A, Type).
 
-denoting(Flags, with(A, Expr, Info), Den)
+denoting(Flags, denoting(A, Expr, Info), Den)
  => denoting(Flags, Expr, T),
     Den = [denoting(A, Expr, Info) | T].
 
@@ -1755,18 +1755,18 @@ denoting(_Flags, denoting(_, _, _), Den)
 %
 % Collect abbreviations
 %
-ml(Flags, with(Abbreviations), X)
+ml(Flags, denoting(Abbreviations), X)
  => sort(Abbreviations, Sorted), % remove duplicates
-    ml(Flags, with_(Sorted), X).
+    ml(Flags, denoting_(Sorted), X).
 
-ml(_Flags, with_([]), W)
+ml(_Flags, denoting_([]), W)
  => W = "".
 
-ml(Flags, with_([A]), W)
+ml(Flags, denoting_([A]), W)
  => ml(Flags, A, X),
     W = span([", with", &(nbsp), X]).
 
-ml(Flags, with_([A, B | T]), W)
+ml(Flags, denoting_([A, B | T]), W)
  => ml(Flags, A, X),
     ml(Flags, and([B | T]), Y),
     W = span([", with", &(nbsp), X | Y]).
@@ -1779,18 +1779,18 @@ ml(Flags, and([A | T]), W)
     ml(Flags, and(T), Y),
     W = span([", and", &(nbsp), X | Y]).
 
-jax(Flags, with(Abbreviations), X)
+jax(Flags, denoting(Abbreviations), X)
  => sort(Abbreviations, Sorted), % remove duplicates
-    jax(Flags, with_(Sorted), X).
+    jax(Flags, denoting_(Sorted), X).
 
-jax(_Flags, with_([]), W)
+jax(_Flags, denoting_([]), W)
  => W = "".
 
-jax(Flags, with_([A]), W)
+jax(Flags, denoting_([A]), W)
  => jax(Flags, A, X),
     format(string(W), ", with ~w", [X]).
 
-jax(Flags, with_([A, B | T]), W)
+jax(Flags, denoting_([A, B | T]), W)
  => jax(Flags, A, X),
     jax(Flags, and([B | T]), Y),
     format(string(W), ", with ~w~w", [X, Y]).
