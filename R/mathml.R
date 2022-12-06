@@ -492,3 +492,6 @@ e1*e2
 #'
 '%dbldown%' <- function(x, y)
   x=y
+
+denote <- function(abbr, expr, info)
+  return(expr)
