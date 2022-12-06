@@ -1742,6 +1742,10 @@ ml(Flags, denoting(A, Expr, Info), X)
  => ml(Flags, A = Expr, AExpr),
     X = span([math(AExpr), " denoting ", Info]).
 
+jax(Flags, denoting(A, Expr, Info), X)
+ => jax(Flags, A = Expr, AExpr),
+    format(string(X), "$~w$ denoting ~w", [AExpr, Info]).
+
 type(Flags, denoting(A, _, _), Type)
  => type(Flags, A, Type).
 
