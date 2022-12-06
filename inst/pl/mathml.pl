@@ -1742,6 +1742,10 @@ ml(Flags, denoting(A, Expr, Info), X)
  => ml(Flags, A = Expr, AExpr),
     X = span([math(AExpr), " denoting ", Info]).
 
+jax(Flags, denoting(A, Expr, Info), X)
+ => jax(Flags, A = Expr, AExpr),
+    format(string(X), "$~w$ denoting ~w", [AExpr, Info]).
+
 type(Flags, denoting(A, _, _), Type)
  => type(Flags, A, Type).
 
@@ -1784,12 +1788,12 @@ jax(_Flags, with_([]), W)
 
 jax(Flags, with_([A]), W)
  => jax(Flags, A, X),
-    format(string(W), ", with~~$~w$", [X]).
+    format(string(W), ", with~~~w", [X]).
 
 jax(Flags, with_([A, B | T]), W)
  => jax(Flags, A, X),
     jax(Flags, and([B | T]), Y),
-    format(string(W), ", with~~$~w$~w", [X, Y]).
+    format(string(W), ", with~~~w~w", [X, Y]).
 
 jax(_Flags, and([]), W)
  => W = ".".
@@ -1797,7 +1801,7 @@ jax(_Flags, and([]), W)
 jax(Flags, and([A | T]), W)
  => jax(Flags, A, X),
     jax(Flags, and(T), Y),
-    format(string(W), ", and~~$~w$~w", [X, Y]).
+    format(string(W), ", and~~~w~w", [X, Y]).
 
 %
 % Parentheses
