@@ -828,6 +828,11 @@ mathout(t)
 t <- list(quote(a), quote(b), quote(omit(c)))
 mathout(t)
 ```
+<<<<<<< HEAD
+
+```{r, results="asis"}
+t <- quote(add_left(a + b))
+=======
 
 ```{r, results="asis"}
 t <- quote(add_left(a + b))
@@ -841,10 +846,24 @@ mathout(t)
 
 ```{r, results="asis"}
 t <- list(quote(a), quote(b), quote(add(c)), quote(d))
+>>>>>>> bee8c74ec6ae5f913e6dbfaea74d694500704009
 mathout(t)
 ```
 
 ```{r, results="asis"}
+<<<<<<< HEAD
+t <- quote(add_right(a + b))
+mathout(t)
+```
+
+```{r, results="asis"}
+t <- list(quote(a), quote(b), quote(add(c)), quote(d))
+mathout(t)
+```
+
+```{r, results="asis"}
+=======
+>>>>>>> bee8c74ec6ae5f913e6dbfaea74d694500704009
 t <- quote(instead(a, b) + c)
 mathout(t)
 ```
