@@ -194,7 +194,7 @@ hook(quote(zn), quote(z[tau]))
 hook(quote(M), quote(overline(X)))
 ```
 
-The hooks reported here will be the one used in Section @ref[] to display the equations in the Case Study. On the right hand side of the parenthesis is reported the way that the variable, for instance
+The hooks reported here will be the one used in Section _ref_ to display the equations in the Case Study. On the right hand side of the parenthesis is reported the way that the variable, for instance
 
 
 ## Arithmetic operators
@@ -222,7 +222,6 @@ catmath(mean(m) %+-% {1.96 * s/sqrt(N)})
 ```
 
 _The following can be inserted in a table_
-
 
 ```{r, results='asis', echo=TRUE}
 
@@ -368,7 +367,7 @@ catmath(mean(xy))
 ## Symbolic names
 
 ```{r, results="asis", echo=TRUE}
-catmath(Alpha-Omega)
+catmath(A-Omega)
 
 catmath(alpha-omega)
 
@@ -427,20 +426,28 @@ catmath(tan(pi/2L))
 
 ## Grouping
 
-At first glance, converting operators may seem trivial enough. However, when you want to deal with, for example, exponentiation, things can get more complicated. We see here that if we want `x` to the power of `y + z`, following R\ notation we should add a parenthesis around the two terms:
+At first glance, grouping expressions may seem trivial enough. However, when you want to deal with, for instance, exponentiation or multiplication, things can get more complicated. Let us consider a trivial example. If we want to calculate and evaluate the expression `a * (b + c)`, we find that R\ automatically gives precedence to the addition even if we do not specify it in the text, as in the following.
 
 ```{r, results='asis', echo=TRUE}
 first <- quote(a)
 second <- quote(b + c)
 mathout(call("*", first, second))
 
+# precedence
+quote(a * (b + c))[[3]][[1]]
+```
+
+With exponentiation the situation can be less trivial. If we consider `x` to the power of `y + z`, following R\ notation we should add a parenthesis around the two terms. Otherwise R\ would consider only `y` as power of `x`.
+
+```{r, results='asis', echo=TRUE}
 catmath(x^y + z)
-mathout(call("+", call("^", as.symbol("x"), as.symbol("y")), as.symbol("z")))
+
+# mathout(call("+", call("^", as.symbol("x"), as.symbol("y")), as.symbol("z")))
 
 catmath(x^(y + z))
 ```
 
-As we can see, R\ automatically put `y + z` in parentheses even if, from a mathematical point of view, the brackets are not useful. To solve this issue two solutions are possible, the first one is cumbersome since it requires many specifications. The second, the shortcut, uses a syntax similar to LateX and puts the power in curly brackets. In both cases the output produced is consistent with the mathematical notation.
+Unfortunately, R\ automatically put `y + z` in parentheses even if, from a mathematical point of view, the brackets are not needed. To solve this issue two solutions are possible, the first one is cumbersome since it requires many specifications. The second, that can be considered a shortcut, uses a syntax similar to LateX and puts the power in curly brackets. In both cases the output produced is consistent with the mathematical notation.
 
 ```{r, results='asis', echo=TRUE}
 # without parenthesis
@@ -451,7 +458,6 @@ catmath(x^{y + z})
 ```
 
 
-blabla `quote(a * (b + c))[[3]][[1]]`
 ## Absolute value
 
 Is it also possible to calculate and represent the absolute value, as:
@@ -817,11 +823,15 @@ An additional feature that this package offers is related to its application in 
 ```{r, results="asis"}
 t <- quote(omit_left(a + b))
 mathout(t)
+
+catmath(omit_left(a + b))
 ```
 
 ```{r, results="asis"}
 t <- quote(omit_right(a + b))
 mathout(t)
+
+catmath(omit_right(a + b))
 ```
 
 ```{r, results="asis"}
@@ -832,11 +842,15 @@ mathout(t)
 ```{r, results="asis"}
 t <- quote(add_left(a + b))
 mathout(t)
+
+catmath(add_left(a + b))
 ```
 
 ```{r, results="asis"}
 t <- quote(add_right(a + b))
 mathout(t)
+
+catmath(add_right(a + b))
 ```
 
 ```{r, results="asis"}
@@ -847,6 +861,8 @@ mathout(t)
 ```{r, results="asis"}
 t <- quote(add_right(a + b))
 mathout(t)
+
+catmath(add_right(a + b))
 ```
 
 ```{r, results="asis"}
@@ -857,22 +873,60 @@ mathout(t)
 ```{r, results="asis"}
 t <- quote(instead(a, b) + c)
 mathout(t)
+
+catmath(instead(a, b) + c)
 ```
 
-also mention the use of these flags for context-dependent rendering
+It is also possible to use flags for context-dependent rendering. The highlight flag is the default one. It shows where the error is and what is its solution. The ignore flag allows the program to ignore the fact that there is an error and print the expression as if it were correct.  Finally, the third flag, fix, tells you what is the term that you are supposed to fix without giving the solution.  Below the code with its comment is provided.  
 
 ```{r, results="asis"}
+# It highlights what has been omitted
 t <- quote(omit_left(a + b))
 mathout(t, flags=quote(error(highlight))) # default
 ```
 
 ```{r, results="asis"}
+# It prints the correct version
 mathout(t, flags=quote(error(ignore)))
 ```
 
 ```{r, results="asis"}
+# It highlights the correct version by framing it
 mathout(t, flags=quote(error(fix)))
 ```
+
+```{r, results="asis"}
+# It frames the redundant term
+t <- quote(add_right(a + b))
+mathout(t, flags=quote(error(highlight))) # default
+```
+
+```{r, results="asis"}
+# It prints the correct expression without the redundant term
+mathout(t, flags=quote(error(ignore)))
+```
+
+```{r, results="asis"}
+# It strikes the redundant term 
+mathout(t, flags=quote(error(fix)))
+```
+
+```{r, results="asis"}
+# It highlights that a is wrong and b is correct
+t <- quote(instead(a, b) + c)
+mathout(t, flags=quote(error(highlight))) # default
+```
+
+```{r, results="asis"}
+# It provides the correct solution
+mathout(t, flags=quote(error(ignore)))
+```
+
+```{r, results="asis"}
+# It provides the correct solution framing the correct term
+mathout(t, flags=quote(error(fix)))
+```
+
 
 # Conclusions
 

@@ -519,3 +519,84 @@ e1*e2
 #'
 denote <- function(abbr, expr, info)
   return(expr)
+
+#' omit_left
+#'
+#' @param expr
+#'
+#' @eval  (substitute(expr)[[3]])
+#'
+omit_left <- function(expr)
+{
+# use third element of [-, A, B]
+  eval(substitute(expr)[[3]])
+}
+
+#' omit_right
+#'
+#' @param expr
+#'
+#' @eval  (substitute(expr)[[3]])
+#'
+omit_right <-  function(expr)
+{
+  eval(substitute(expr)[[2]])
+}
+
+#' omit
+#'
+#' @param expr
+#'
+#' @eval  (substitute(expr))
+#'
+omit<-  function(expr)
+{
+  eval(substitute(expr))
+}
+
+
+#' add_left
+#'
+#' @param expr
+#'
+#' @return expr
+#'
+add_left <- function(expr)
+{
+  return(expr)
+}
+
+#' add_right
+#'
+#' @param expr
+#'
+#' @return expr
+#'
+add_right <- function(expr)
+{
+  return(expr)
+}
+
+#' add
+#'
+#' @param expr
+#'
+#' @return expr
+#'
+add <- function(expr)
+{
+  return(expr)
+}
+
+#' instead
+#'
+#' @param inst
+#'
+#' @param of
+#'
+#' @return inst
+#'
+instead <- function(inst, of)
+{
+  return(inst)
+}
