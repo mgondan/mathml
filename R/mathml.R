@@ -12,6 +12,9 @@
 #' an R call or symbol/number. This function translates _term_ into a
 #' MathML string.
 #'
+#' @param flags (default NULL)
+#' list of flags that control the translation
+#'
 #' @return
 #' A string with the MathML representation or _term_.
 #'
@@ -22,9 +25,9 @@
 #' @examples
 #' mathml(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
-mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
-  flags = attributes(term)
+  flags = c(attributes(term), flags)
   t = rolog::once(call("r2mathml", flags, term, expression(X)),
     options=list(preproc=mathml_preproc))
   cat(paste(t$X, collapse=""))
@@ -80,6 +83,9 @@ mathml_preproc <- function(query=quote(2 != 2))
 #' an R call or symbol/number. This function translates _term_ into a
 #' LaTeX/MathJax string.
 #'
+#' @param flags (default NULL)
+#' list of flags that control the translation
+#'
 #' @return
 #' A string with the MathJax representation or _term_.
 #'
@@ -90,9 +96,9 @@ mathml_preproc <- function(query=quote(2 != 2))
 #' @examples
 #' mathjax(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
-mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
-  flags = attributes(term)
+  flags = c(attributes(term), flags)
   t = rolog::once(call("r2mathjax", flags, term, expression(X)),
     options=list(preproc=mathml_preproc))
   cat(paste(t$X, collapse=""))

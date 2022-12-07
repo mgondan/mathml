@@ -49,22 +49,22 @@ library(plotly)
 library(ggplot2)
 library(palmerpenguins)
 
-mathout <- function(term)
+mathout <- function(...)
 {
   if(knitr::is_html_output())
-    return(mathml(term))
+    return(mathml(...))
 
   if(knitr::is_latex_output())
-    return(mathjax(term))
+    return(mathjax(...))
 
   warning("no output specified")  
-  mathjax(term)
+  mathjax(...)
 }
 
-catmath <- function(term)
+catmath <- function(term, ...)
 {
   s <- substitute(term)
-  mathout(canonical(s))
+  mathout(canonical(s), ...)
 }
 ```
 
@@ -430,7 +430,12 @@ catmath(tan(pi/2L))
 At first glance, converting operators may seem trivial enough. However, when you want to deal with, for example, exponentiation, things can get more complicated. We see here that if we want `x` to the power of `y + z`, following R\ notation we should add a parenthesis around the two terms:
 
 ```{r, results='asis', echo=TRUE}
+first <- quote(a)
+second <- quote(b + c)
+mathout(call("*", first, second))
+
 catmath(x^y + z)
+mathout(call("+", call("^", as.symbol("x"), as.symbol("y")), as.symbol("z")))
 
 catmath(x^(y + z))
 ```
@@ -809,12 +814,54 @@ This example may seem trivial. However, as the reader well knows, a missed paren
 
 An additional feature that this package offers is related to its application in educational scenarios. The functions here reported are intended to identify and highlight possible errors that students make, as well as provide the correct answer for the task.
 
+```{r, results="asis"}
+t <- quote(omit_left(a + b))
+mathout(t)
+```
 
+```{r, results="asis"}
+t <- quote(omit_right(a + b))
+mathout(t)
+```
 
-```{r, results="asis", echo=FALSE}
+```{r, results="asis"}
+t <- list(quote(a), quote(b), quote(omit(c)))
+mathout(t)
+```
 
+```{r, results="asis"}
+t <- quote(add_left(a + b))
+mathout(t)
+```
 
+```{r, results="asis"}
+t <- quote(add_right(a + b))
+mathout(t)
+```
 
+```{r, results="asis"}
+t <- list(quote(a), quote(b), quote(add(c)), quote(d))
+mathout(t)
+```
+
+```{r, results="asis"}
+t <- quote(instead(a, b) + c)
+mathout(t)
+```
+
+also mention the use of these flags for context-dependent rendering
+
+```{r, results="asis"}
+t <- quote(omit_left(a + b))
+mathout(t, flags=quote(error(highlight))) # default
+```
+
+```{r, results="asis"}
+mathout(t, flags=quote(error(ignore)))
+```
+
+```{r, results="asis"}
+mathout(t, flags=quote(error(fix)))
 ```
 
 # Conclusions

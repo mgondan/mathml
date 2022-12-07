@@ -2122,6 +2122,87 @@ math(Flags, omit_right(Expr), New, M),
  => Flags = New,
     M = list(space, [L, cancel(list(space, [op(Op), R]))]).
 
+math(Flags, omit(Expr), New, M),
+    option(error(ignore), Flags, highlight)
+ => Flags = New,
+    M = Expr.
+
+math(Flags, omit(Expr), New, M),
+    option(error(fix), Flags, highlight)
+ => Flags = New,
+    M = box(Expr).
+
+math(Flags, omit(Expr), New, M),
+    option(error(highlight), Flags, highlight)
+ => Flags = New,
+    M = cancel(Expr).
+
+math(Flags, add_left(Expr), New, M),
+    option(error(ignore), Flags, highlight),
+    Expr =.. [_Op, _L, R]
+ => Flags = New,
+    M = R.
+
+math(Flags, add_left(Expr), New, M),
+    option(error(fix), Flags, highlight),
+    Expr =.. [Op, L, R]
+ => Flags = New,
+    M = list(space, [cancel(list(space, [L, op(Op)])), R]).
+
+math(Flags, add_left(Expr), New, M),
+    option(error(highlight), Flags, highlight),
+    Expr =.. [Op, L, R]
+ => Flags = New,
+    M = list(space, [box(list(space, [L, op(Op)])), R]).
+
+math(Flags, add_right(Expr), New, M),
+    option(error(ignore), Flags, highlight),
+    Expr =.. [_Op, L, _R]
+ => Flags = New,
+    M = L.
+
+math(Flags, add_right(Expr), New, M),
+    option(error(fix), Flags, highlight),
+    Expr =.. [Op, L, R]
+ => Flags = New,
+    M = list(space, [L, cancel(list(space, [op(Op), R]))]).
+
+math(Flags, add_right(Expr), New, M),
+    option(error(highlight), Flags, highlight),
+    Expr =.. [Op, L, R]
+ => Flags = New,
+    M = list(space, [L, box(list(space, [op(Op), R]))]).
+
+math(Flags, omit(Expr), New, M),
+    option(error(ignore), Flags, highlight)
+ => Flags = New,
+    M = Expr.
+
+math(Flags, omit(Expr), New, M),
+    option(error(fix), Flags, highlight)
+ => Flags = New,
+    M = box(Expr).
+
+math(Flags, omit(Expr), New, M),
+    option(error(highlight), Flags, highlight)
+ => Flags = New,
+    M = cancel(Expr).
+
+math(Flags, add(_Expr), New, M),
+    option(error(ignore), Flags, highlight)
+ => Flags = New,
+    M = "". % suppress at the next level, in the list
+
+math(Flags, add(Expr), New, M),
+    option(error(fix), Flags, highlight)
+ => Flags = New,
+    M = cancel(Expr).
+
+math(Flags, add(Expr), New, M),
+    option(error(highlight), Flags, highlight)
+ => Flags = New,
+    M = box(Expr).
+
 math(Flags, instead(_Wrong, Correct), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
@@ -2135,7 +2216,7 @@ math(Flags, instead(_Wrong, Correct), New, M),
 math(Flags, instead(Wrong, Correct), New, M),
     option(error(highlight), Flags, highlight)
  => Flags = New,
-    M = underbrace(list(space, ["instead of", Correct]), Wrong).
+    M = underbrace(Wrong, list(space, ["instead of", Correct])).
 
 %
 % Expert and buggy rules
