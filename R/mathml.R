@@ -521,6 +521,8 @@ denote <- function(abbr, expr, info)
   return(expr)
 
 #' omit_left
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the omissions in the left-hand side of the expression
 #'
 #' @param expr
 #'
@@ -533,6 +535,8 @@ omit_left <- function(expr)
 }
 
 #' omit_right
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the omissions in the right-hand side of the expression
 #'
 #' @param expr
 #'
@@ -544,6 +548,8 @@ omit_right <-  function(expr)
 }
 
 #' omit
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the omissions.
 #'
 #' @param expr
 #'
@@ -556,6 +562,8 @@ omit<-  function(expr)
 
 
 #' add_left
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the redundancies in the left-hand side of the expression.
 #'
 #' @param expr
 #'
@@ -567,6 +575,8 @@ add_left <- function(expr)
 }
 
 #' add_right
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the redundancies in the right-hand side of the expression.
 #'
 #' @param expr
 #'
@@ -578,6 +588,8 @@ add_right <- function(expr)
 }
 
 #' add
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular the redundancies.
 #'
 #' @param expr
 #'
@@ -589,6 +601,8 @@ add <- function(expr)
 }
 
 #' instead
+#' This is a function that allows the user to highlight the mistakes,
+#' in particular adds a curly bracket under the wrong term and it provides the correct solutions.
 #'
 #' @param inst
 #'
