@@ -2094,6 +2094,12 @@ math(Flags, omit_left(Expr), New, M),
     M = Expr.
 
 math(Flags, omit_left(Expr), New, M),
+    option(error(asis), Flags, highlight),
+    Expr =.. [_Op, _L, R]
+ => Flags = New,
+    M = R.
+
+math(Flags, omit_left(Expr), New, M),
     option(error(fix), Flags, highlight),
     Expr =.. [Op, L, R]
  => Flags = New,
@@ -2160,6 +2166,11 @@ math(Flags, add_right(Expr), New, M),
     Expr =.. [_Op, L, _R]
  => Flags = New,
     M = L.
+
+math(Flags, add_right(Expr), New, M),
+    option(error(asis), Flags, highlight)
+ => Flags = New,
+    M = Expr.
 
 math(Flags, add_right(Expr), New, M),
     option(error(fix), Flags, highlight),
