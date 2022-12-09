@@ -2248,9 +2248,8 @@ math(Flags, dbinom(K, N, Pi), New, X)
  => New = Flags,
     X = fn(subscript('P', "Bi"), (['X' = K] ; [N, Pi])).
 
-math(Flags, pbinom(K, N, Pi), New, X)
- => New = Flags,
-    X = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
+math(pbinom(K, N, Pi), M)
+ => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
 math(Flags, upbinom(K, N, Pi), New, X)
  => New = Flags,
@@ -2302,7 +2301,7 @@ math(pnorm(Z), M)
 %
 ml(Flags, fn(Name, (Args ; Params)), M)
  => ml(Flags, Name, F),
-    ml(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
+    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Params)])), X),
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, (Args ; Params)), M),

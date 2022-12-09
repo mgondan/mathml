@@ -56,6 +56,7 @@ bibliography: RJreferences.bib
 # Stylechanges
 # Phantoms
 
+library(mathml)
 library(plotly)
 library(ggplot2)
 
@@ -105,40 +106,108 @@ calculations and printing.
 The paper is organized as follows. Section\ 2 presents the background of the
 package, including Prolog and the R package \pkg{rolog} and the two main classes
 of rules for translating R\ objects to mathematical expressions. Section\ 3
-illustrates some important features of the \pkg{mathml} package, potential
-issues and workarounds using examples from the day-to-day perspective of the
-user. Sections\ 4 and\ 5 present two case studies for the use of the package in
-a scientific report and a ShinyApp web page. Section\ 6 concludes with a
+illustrates the main features of the \pkg{mathml} package, potential issues and
+workarounds using examples from the day-to-day perspective of the user.
+Sections\ 4 and\ 5 present two case studies for the use of the package in a
+scientific report and a ShinyApp web page. Section\ 6 concludes with a
 discussion and ideas for further development. A complete list of the R elements
 covered by the package is found in the Appendix.
 
 # Background
 
-## Prolog: the \pkg{rolog} package
+The translation of R expressions to mathematical output is achieved through a
+Prolog interpreter. Prolog is a classical logic programming language with many
+applications in expert systems, computer linguistics and symbolic artificial
+intelligence. The main strength of Prolog is its concise representation of facts
+and rules for the representation of knowledge and grammar, as well as its
+efficient built-in search engine for closed world domains. As it is well-known,
+R\ is a statistical programming language for data analysis and statistical
+modeling which is widely used in academia and industry. Besides the core
+library, a lot of packages have been developed for all kinds of statistical
+problems, including statistics-based artificial intelligence tools such as
+neural networks for machine learning and deep learning. Whereas Prolog is weak
+in statistical computation, but strong in symbolic manipulation, the converse
+may be said for the R language. The \pkg{rolog} package bridges this gap by
+providing an interface to a SWI-Prolog distribution in R. The communication
+between the two systems is mainly in the form of queries from R\ to Prolog, but
+two predicates allow Prolog to ring back and evaluate terms in R.
 
-The automatic translation of R expressions to mathematical output is achieved through a Prolog interpreter. Prolog is a classical logic programming language with many applications in expert systems, computer linguistics and traditional, that is, symbolic artificial intelligence. The main strength of Prolog is its concise representation of facts and rules for the representation of knowledge and grammar, as well as its efficient built-in search engine for closed world domains. R, as it is well-known, is a statistical programming language for data analysis and statistical modeling which is widely used in academia and industry. Besides the core library, a lot of packages have been developed for all kinds of statistical problems, including statistics-based artificial intelligence tools such as neural networks for machine learning and deep learning. Whereas Prolog is weak in statistical computation, but strong in symbolic manipulation, the converse may be said for the R language. The \pkg{rolog} package then bridges this gap by providing an interface to a SWI-Prolog distribution in R. The communication between the two systems is mainly in the form of queries from R to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R. 
-Here is reported a first trivial example. At the Prolog end, there is a handler for `pbinom/3` that translates the term into a pretty MathML syntax like P_bi(X <= k; N, pi).
+For a first illustration of the package, we consider the binomial probability.
 
-
-```{r, echo=TRUE, results='asis'}
-library(rolog)
-library(mathml)
-term = quote(pbinom(k, N, p))
-
-# Pretty print
-mathout(term)
+```{r}
+term <- quote(pbinom(k, N, p))
+term
 ```
 
-Beside the graphical rendition of the term, an important feature is that the package allows also for its calculation, for example:
+The term is quoted to avoid its immediate evaluation which would raise an error
+anyway since the variables `k`, `N`, `p` have not yet been defined. Experienced
+readers will remember that the quoted expression is a short form for
 
-```{r, results = 'asis', echo = TRUE}
-k = 10
-N = 22
-p = 0.4
+```r
+term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
+```
+
+As is seen from the output above, the variable `term` is not assigned the result
+of the calculation, but an R\ "call" that can eventually be evaluated
+[see, e.g., @Wickham2019, for more details on "non-standard evaluation"].
+
+```{r}
+k <- 10
+N <- 22
+p <- 0.4
 eval(term)
 ```
 
-Here we present a second less trivial example where Prolog needs to find out the name of
+The R package \pkg{mathml} can now be used to render the call in
+MathML, that is the math dialect for HTML webpages or in MathJax/LaTeX, as shown
+below (some of the curly braces are not really needed in this simple example,
+but are necessary in edge cases).
+
+```{r}
+library(mathml)
+mathjax(term)
+```
+
+We can include the output in a RMarkdown document by specifying `results='asis'`
+in the R code chunk, as has been done below. The R function mathout is just a
+wrapper that invokes `mathml(...)` for HTML output and `mathjax(...)` for
+LaTeX output.
+
+```{r, results='asis'}
+mathout(term)
+```
+
+At the Prolog end, there is a predicate `math/2` that translates the
+call `pbinom(K, N, Pi)` into a "function" `fn/2` with the name `P_Bi`, one
+argument `X =< K`, and the two parameters `N` and `Pi`.
+
+```prolog
+math(pbinom(K, N, Pi), M)
+ => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
+```
+
+Thus, the predicate `math/2` could be considered a "macro" that translates a
+mathematical element (here, `pbinom(K, N, Pi)`) to a different mathematical
+element, namely `fn(..., ...)`.
+
+The low-level predicates `ml/3` and `jax/3` are used to convert mathematical
+elements to MathML or LaTeX, respectively.
+
+```prolog
+ml(Flags, fn(Name, (Args ; Params)), M)
+ => ml(Flags, Name, N),
+    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Params)])), X),
+    M = mrow([N, mo(&(af)), X]).
+```
+
+The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
+with `N` representing the function's name and `X` its arguments and parameters,
+enclosed in parentheses. The flags can be used for context-sensitive
+translation (see, e.g., the errors below).
+
+# Package \pkg{mathml} in practice
+
+In the second example, Here we present a second less trivial example where Prolog needs to find out the name of
 the integration variable for `sin`. For that purpose, \pkg{rolog} provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
 
 ```{r,  results = 'asis', echo = TRUE}
