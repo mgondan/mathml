@@ -1,19 +1,19 @@
 ---
 title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
-date: "2022-11-09"
+date: "2022-12-09"
 abstract: >
-  This R package translates R objects to suitable entities in MathML or LaTeX,
-  thereby enabling pretty mathematical representation of R functions or
+  This R\ package translates R\ objects to suitable entities in MathML or LaTeX,
+  thereby enabling pretty mathematical representation of R\ functions or
   algorithms in data analysis, scientific reports and interactive web content.
-  R code text descriptions and mathematical content already coexist,
+  R\ code text descriptions and mathematical content already coexist,
   side-by-side, in the RMarkdown document rendering language. The present
   package allows to use the same R\ objects for both data analysis and
   typesetting in documents or web content. By tightening the link between the
-  statistical analysis and its verbal or symbolic description, this new feature
-  is a futher step towards reproducible science. The package can be extended by
-  user-defined hooks that allow to replace variable names and new R functions by
-  a suitable symbolic representation. We provide two working examples that
-  illustrate the use of the new package in a scientific article and in an
+  statistical analysis and its verbal or symbolic representation, this new
+  feature is a futher step towards reproducible science. User-defined hooks
+  allow to extend the package by mapping new variable names and functions to
+  new MathML and LaTeX entities. We provide a few working examples that
+  illustrate the use of the package in a little scientific report and in an
   interactive web page.
 draft: true
 author:  
@@ -40,14 +40,24 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
-
 ---
 
 ```{r setup, include=FALSE}
-# knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+# To do
+#
+# paste(x, y, z)
+# Spacing
+# Comma separated lists
+# Ellipsis
+# Radicals
+# Subsets
+# Greek letters in MathJax
+# Typeface
+# Stylechanges
+# Phantoms
+
 library(plotly)
 library(ggplot2)
-library(palmerpenguins)
 
 mathout <- function(...)
 {
@@ -68,40 +78,39 @@ catmath <- function(term, ...)
 }
 ```
 
-#### To do
-
-* paste(x, y, z)
-* Spacing
-* Comma separated lists
-* Ellipsis
-* Radicals
-* Subsets
-* Greek letters in MathJax
-* Typeface
-* Stylechanges
-* Phantoms
-
 # Introduction
 
 The R extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
-However, so far, R expressions such as `pbinom(k, N, p)` are printed as-is; 
-prettier mathematical expressions such as $P_\mathrm{Bi}(X \le k; N, p)$ require
-Latex commands like `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for
-minimalistic examples, these commands are tedious to type in and hard to read in
-the original code. Since recently [@R, version 4.2], manual pages include
-support for mathematical expressions [@Sarkar2022], which already is a big
-improvement. However, rules for the translation of R's built-in language elements to
-their mathematical representation are still lacking.
+Since recently [@R, version 4.2], R's manual pages include support for
+mathematical expressions [@Sarkar2022], which already is a big improvement.
+However, rules for the translation of R's built-in language elements to their
+mathematical representation are still lacking. So far, R expressions such
+as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
+like \(P_\mathrm{Bi}(X \le k; N, p)\) require explicit Latex commands, that
+is, `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for minimalistic examples,
+these commands are tedious to type in and hard to read in their source code. 
 
-In this R package, such rules are defined for the _automatic_ translation of R
-expressions mathematical output. The translation is done by an embedded
-Prolog interpreter that maps nested expressions recursively to MathML and
-LaTeX/MathJax, respectively, for typesetting of R Markdown documents in
-different formats or ShinyApp webpages. User-defined hooks enable to extend the
-set of rules and/or replace specific R elements by special mathematical signs.
+The present R package defines a set of rules for an _automatic_ translation of
+R expressions to mathematical output in RMarkdown documents [@Xie2020] and
+ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
+interpreter that maps nested expressions recursively to MathML and
+LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
+rules, for example, to represent specific R elements by custom mathematical
+signs.
 
-The paper is organized as follow. Section 2 presents the background of the mathml package, namely Prolog and the R package \pkg{rolog}. Section 3 illustrates the features of the \pkg{mathml} package, providing some examples. Section 4 embeds the Discussion and the presentation of a Case Study. Section 5 is devoted to Conclusions and Further Research. The reader may also find some additional characteristics of the package and its implementation in the Appendix. 
+*todo*: mention that the _same_ R expression is used for mathematical
+calculations and printing.
+
+The paper is organized as follows. Section\ 2 presents the background of the
+package, including Prolog and the R package \pkg{rolog} and the two main classes
+of rules for translating R\ objects to mathematical expressions. Section\ 3
+illustrates some important features of the \pkg{mathml} package, potential
+issues and workarounds using examples from the day-to-day perspective of the
+user. Sections\ 4 and\ 5 present two case studies for the use of the package in
+a scientific report and a ShinyApp web page. Section\ 6 concludes with a
+discussion and ideas for further development. A complete list of the R elements
+covered by the package is found in the Appendix.
 
 # Background
 
