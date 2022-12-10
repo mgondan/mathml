@@ -27,10 +27,14 @@
 #'
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
-  flags = c(attributes(term), flags)
-  t = rolog::once(call("r2mathml", flags, term, expression(X)),
+  flags <- c(attributes(term), flags, list(cat=FALSE))
+  t <- rolog::once(call("r2mathml", flags, term, expression(X)),
     options=list(preproc=mathml_preproc))
-  cat(paste(t$X, collapse=""))
+  r <- paste(t$X, collapse="")
+  if(flags$cat)
+    return(cat(r))
+
+  return(r)
 }
 
 # Prolog representation of not equal etc. (left: R, right: Prolog)
@@ -98,10 +102,14 @@ mathml_preproc <- function(query=quote(2 != 2))
 #'
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
-  flags = c(attributes(term), flags)
-  t = rolog::once(call("r2mathjax", flags, term, expression(X)),
+  flags <- c(attributes(term), flags, list(cat=FALSE))
+  t <- rolog::once(call("r2mathjax", flags, term, expression(X)),
     options=list(preproc=mathml_preproc))
-  cat(paste(t$X, collapse=""))
+  r <- paste(t$X, collapse="")
+  if(flags$cat)
+    return(cat(r))
+
+  return(r)
 }
 
 #' Calligraphic font

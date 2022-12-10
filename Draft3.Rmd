@@ -60,16 +60,16 @@ library(mathml)
 library(plotly)
 library(ggplot2)
 
-mathout <- function(...)
+mathout <- function(..., flags=NULL)
 {
   if(knitr::is_html_output())
-    return(mathml(...))
+    return(mathml(..., flags=c(flags, list(cat=TRUE))))
 
   if(knitr::is_latex_output())
-    return(mathjax(...))
+    return(mathjax(..., flags=c(flags, list(cat=TRUE))))
 
   warning("no output specified")  
-  mathjax(...)
+  mathjax(..., flags=c(flags, list(cat=TRUE)))
 }
 
 catmath <- function(term, ...)
@@ -267,25 +267,20 @@ operator or a curly brace to enforce the correct operator precedence.
 
 ```{r, results='asis'}
 term <- quote(`%+-%`(mean(X), 1.96 * s / sqrt(N)))
-term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})
+term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
-_The following can be inserted in a table_
+A few more custom operators are shown in Table\ 1.
 
-```{r, results='asis', echo=TRUE}
+```{r, echo=FALSE}
+op <- list(cross=quote(x %*% y), dot=quote(x %.% y), kronecker=quote(X %x% Y),
+  'integer division'=quote(x %/% y))
+m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
 
-catmath(x*y)
-
-catmath(x %*% y)
-
-catmath(x %.% y)
-
-catmath(X %x% Y)
-
-catmath(x/y)
-
-catmath(x %/% y)
+t <- cbind(Operator=as.character(op), Output=m)
+knitr::kable(t, caption = "Custom operators in \\pkg{mathml}", 
+             label="tab:custom")
 ```
 
 
