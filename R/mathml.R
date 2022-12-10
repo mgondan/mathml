@@ -261,6 +261,30 @@ hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
   invisible(r)
 }
 
+#' Multiplication
+#'
+#' @name dot
+#'
+#' @param e1
+#' numerator
+#'
+#' @param e2
+#' denominator
+#'
+#' @return
+#' e1 * e2
+#'
+dot <- function(e1, e2)
+  e1 * e2
+
+#' @rdname dot
+#' @export
+nodot <- dot
+
+#' @rdname dot
+#' @export
+times <- dot
+
 #' Division displayed as fraction
 #'
 #' @param e1
@@ -526,11 +550,11 @@ denote <- function(abbr, expr, info)
 #'
 #' @param expr
 #'
-#' @eval  (substitute(expr)[[3]])
+#' @return substitute(expr)[[3]], e.g., b from a + b
 #'
 omit_left <- function(expr)
 {
-# use third element of [-, A, B]
+  # use third element of [-, A, B]
   eval(substitute(expr)[[3]])
 }
 
@@ -540,28 +564,30 @@ omit_left <- function(expr)
 #'
 #' @param expr
 #'
-#' @eval  (substitute(expr)[[3]])
+#' @return substitute(expr)[[2]], e.g., a from a + b
 #'
-omit_right <-  function(expr)
+omit_right <- function(expr)
 {
   eval(substitute(expr)[[2]])
 }
 
 #' omit
+#'
 #' This is a function that allows the user to highlight the mistakes,
-#' in particular the omissions.
+#' in particular the omission of an element from a list.
 #'
 #' @param expr
 #'
-#' @eval  (substitute(expr))
+#' @return NULL
 #'
-omit<-  function(expr)
+omit <- function(expr)
 {
-  eval(substitute(expr))
+  NULL
 }
 
 
 #' add_left
+#'
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the redundancies in the left-hand side of the expression.
 #'
@@ -575,6 +601,7 @@ add_left <- function(expr)
 }
 
 #' add_right
+#'
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the redundancies in the right-hand side of the expression.
 #'
@@ -588,8 +615,9 @@ add_right <- function(expr)
 }
 
 #' add
+#'
 #' This is a function that allows the user to highlight the mistakes,
-#' in particular the redundancies.
+#' in particular an extra element in a list
 #'
 #' @param expr
 #'
@@ -601,8 +629,10 @@ add <- function(expr)
 }
 
 #' instead
+#'
 #' This is a function that allows the user to highlight the mistakes,
-#' in particular adds a curly bracket under the wrong term and it provides the correct solutions.
+#' in particular adds a curly bracket under the wrong term and it provides the
+#' correct solutions.
 #'
 #' @param inst
 #'

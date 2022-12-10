@@ -4,11 +4,14 @@
 \alias{mathjax}
 \title{Mathjax output}
 \usage{
-mathjax(term = quote((a + b)^2L == a^2L + 2L * a * b + b^2L))
+mathjax(term = quote((a + b)^2L == a^2L + 2L * a * b + b^2L), flags = NULL)
 }
 \arguments{
 \item{term}{an R call or symbol/number. This function translates \emph{term} into a
 LaTeX/MathJax string.}
+
+\item{flags}{(default NULL)
+list of flags that control the translation}
 }
 \value{
 A string with the MathJax representation or \emph{term}.

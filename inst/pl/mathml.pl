@@ -10,20 +10,20 @@
 %
 % R interface: Translate R expression to MathML string
 %
-r2mathml(R, S) :-
-    r2mathml([], R, S).
+r2mathml(R, S)
+ => r2mathml([], R, S).
 
-r2mathml(Flags, R, S) :-
-    mathml(Flags, R, M),
+r2mathml(Flags, R, S)
+ => mathml(Flags, R, M),
     html(M, H, []),
     maplist(atom_string, H, S).
 
 % Same for MathJax/LaTeX
-r2mathjax(R, S) :-
-    r2mathjax([], R, S).
+r2mathjax(R, S)
+ => r2mathjax([], R, S).
 
-r2mathjax(Flags, R, S) :-
-    mathjax(Flags, R, S).
+r2mathjax(Flags, R, S)
+ => mathjax(Flags, R, S).
 
 %
 % Translate R expression to HTML term
@@ -245,10 +245,28 @@ math(Flags, superscript(R, Idx), New, M)
 
 % Render
 ml(Flags, R, M),
+    select(superscript(Pwr), Flags, New),
+    prec(Flags, R, Prec),
+    current_op(P, xfy, ^),
+    Prec >= P
+ => ml(New, paren(R), X),
+    ml(New, Pwr, Y),
+    M = msup([X, Y]).
+
+ml(Flags, R, M),
     select(superscript(Pwr), Flags, New)
  => ml(New, R, X),
     ml(New, Pwr, Y),
     M = msup([X, Y]).
+
+jax(Flags, R, M),
+    prec(Flags, R, Prec),
+    current_op(P, xfy, ^),
+    Prec >= P,
+    select(superscript(Pwr), Flags, New)
+ => jax(New, paren(R), X),
+    jax(New, Pwr, Y),
+    format(string(M), "{{~w}^{~w}}", [X, Y]).
 
 jax(Flags, R, M),
     select(superscript(Pwr), Flags, New)
@@ -1501,6 +1519,10 @@ math(Flags, ~(A, B), New, X)
     current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
+math(Flags, dot(A, B), New, X)
+ => New = Flags,
+    X = cdot(A, B).
+
 math(Flags, cdot(A, B), New, X)
  => New = Flags,
     current_op(Prec, yfx, *),
@@ -1802,6 +1824,12 @@ jax(Flags, and([A | T]), W)
  => jax(Flags, A, X),
     jax(Flags, and(T), Y),
     format(string(W), ", and ~w~w", [X, Y]).
+
+%
+% No parentheses
+%
+math({}(A), M)
+ => M = A.
 
 %
 % Parentheses
