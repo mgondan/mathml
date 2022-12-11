@@ -283,27 +283,37 @@ t <- cbind(Operator=as.character(op), Output=m)
 knitr::kable(t, caption = "Custom operators in mathml")
 ```
 
-In the second example, Here we present a second less trivial example where Prolog needs to find out the name of
-the integration variable for `sin`. For that purpose, \pkg{rolog} provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
+## Ringing back to R
 
-```{r,  results = 'asis', echo = TRUE}
-term = quote(integrate(sin, 0L, 2L*pi))
+R's `integrate` function takes a number of arguments, the most important ones
+being the function to integrate, and the lower and the upper bound of the
+integration. For mathematical typesetting in the form
+of $\int f(x)\, dx$, \pkg{mathml} needs to find out the name of the integration
+variable. For that purpose, the underlying Prolog bridge provides a
+predicate `r_eval/2` that calls R from Prolog. In the example below, this
+predicate is used for a call of `formalArgs(args(sin))`, which returns the names
+of the function arguments of `sin`, namely, `x`.
+
+```{r, results='asis'}
+term <- quote(integrate(sin, 0L, 2L*pi))
 mathout(term)
-```
-
-```{r, echo = TRUE}
-eval(term)
 ```
 
 Note that, on the Prolog end, the handler for `integrate/3` is rather rigid; it
 accepts only these three arguments in that particular order, and without names,
-that is, `integrate(sin, lower=0L, upper=2L * pi)`, would not print the desired
+that is, `integrate(sin, lower=0L, upper=2L*pi)`, would not print the desired
 result.
 
-Therefore, `pl/mathml.pl` includes two handlers that accept terms with named
-arguments, `integrate(f=Fn, lower=Lower, upper=Upper)`, as well as terms of the
-form `$(integrate(Fn, Lower, Upper), value)` that are needed for the evaluation
-below.
+To "canonicalize" function calls with named arguments and arguments in unusual
+order, \pkg{mathml} provides an auxilliary function `canonical(f, drop)` that
+reorders the argument list of calls to known functions and, if `drop=TRUE`,
+drops the function names.
+
+```{r}
+term <- quote(integrate(lower=0L, upper=2L*pi, sin))
+canonical(term)
+```
+
 
 ```{r, echo=TRUE, results='asis'}
 # A custom function
