@@ -39,6 +39,7 @@ output:
   rjtools::rjournal_web_article:
     self_contained: yes
     toc: no
+    tables: yes
 bibliography: RJreferences.bib
 ---
 
@@ -59,6 +60,7 @@ bibliography: RJreferences.bib
 library(mathml)
 library(plotly)
 library(ggplot2)
+library(kableExtra)
 
 mathout <- function(..., flags=NULL)
 {
@@ -88,7 +90,7 @@ mathematical expressions [@Sarkar2022], which already is a big improvement.
 However, rules for the translation of R's built-in language elements to their
 mathematical representation are still lacking. So far, R expressions such
 as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
-like \(P_\mathrm{Bi}(X \le k; N, p)\) require explicit Latex commands, that
+like $P_\mathrm{Bi}(X \le k; N, p)$ require explicit Latex commands, that
 is, `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for minimalistic examples,
 these commands are tedious to type in and hard to read in their source code. 
 
@@ -271,18 +273,15 @@ term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
-A few more custom operators are shown in Table\ 1.
+A few more custom operators are shown in Table \@ref(tab:custom-operators).
 
-```{r, echo=FALSE}
+```{r custom-operators, echo=FALSE}
 op <- list(cross=quote(x %*% y), dot=quote(x %.% y), kronecker=quote(X %x% Y),
-  'integer division'=quote(x %/% y))
-m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
-
+  integerdivision=quote(x %/% y))
+m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 t <- cbind(Operator=as.character(op), Output=m)
-knitr::kable(t, caption = "Custom operators in \\pkg{mathml}", 
-             label="tab:custom")
+knitr::kable(t, caption = "Custom operators in mathml")
 ```
-
 
 In the second example, Here we present a second less trivial example where Prolog needs to find out the name of
 the integration variable for `sin`. For that purpose, \pkg{rolog} provides a predicate `r_eval/2` that calls R from Prolog. Here, the predicate is used for the  R\ function `formalArgs(args(sin))`, which returns the name of the function argument of `sin`, that is, `x`.
@@ -643,27 +642,27 @@ reader may refer to the original article.
 
 Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (redundant stimuli), with the redundant stimuli being
-presented either simultaneously or with onset asynchrony \(\tau\). The channel
+presented either simultaneously or with onset asynchrony $\tau$. The channel
 activation is described as a two-dimensional Wiener process with
-drifts \(\mu_\mathrm A\), \(\mu_\mathrm B\),
-variances \(\sigma^2_\mathrm A\), \(\sigma^2_\mathrm B\),
-correlation \(\rho_\mathrm{AB}\) and initial
-conditions \(X_i(t=0)=0, i=\mathrm{A, B}\). The response is elicited when the
-process reaches the absorbing barrier \(c > 0\) for the first time. In combined
+drifts $\mu_\mathrm A$, $\mu_\mathrm B$,
+variances $\sigma^2_\mathrm A$, $\sigma^2_\mathrm B$,
+correlation $\rho_\mathrm{AB}$ and initial
+conditions $X_i(t=0)=0, i=\mathrm{A, B}$. The response is elicited when the
+process reaches the absorbing barrier $c > 0$ for the first time. In combined
 stimuli ("redundant" stimuli), the overall diffusion process
-is \(X_\mathrm{AB}(t) = X_\mathrm A(t) + X_\mathrm B(t)\) , which is again a
-Wiener process with drift \(\mu_\mathrm A + \mu_\mathrm B\) and
-variance \(\sigma^2_\mathrm A + \sigma^2_\mathrm B
-  + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B\).
+is $X_\mathrm{AB}(t) = X_\mathrm A(t) + X_\mathrm B(t)$ , which is again a
+Wiener process with drift $\mu_\mathrm A + \mu_\mathrm B$ and
+variance $\sigma^2_\mathrm A + \sigma^2_\mathrm B
+  + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B$.
 
-In single-target trials, the first passages at \(c\) are expected at
-\(E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}\), whereas in synchronous
+In single-target trials, the first passages at $c$ are expected at
+$E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}$, whereas in synchronous
 redundant-target trials, we have
-\(E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}\).
+$E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}$.
 
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
-first-passage time \(E[D_{\mathrm A(\tau)\mathrm B}]\) as a function of the
-stimulus onset asyncrony \(\tau > 0\) (Eq.\ 10),
+first-passage time $E[D_{\mathrm A(\tau)\mathrm B}]$ as a function of the
+stimulus onset asyncrony $\tau > 0$ (Eq.\ 10),
 
 ```{r, results="asis", echo=TRUE}
 f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
@@ -677,23 +676,23 @@ mathout(f)
 ``` 
 
 
-The observable response time is assumed to be the sum of \(D\), the time
-employed to reach the threshold for the decision, and \(M\), denoting the of the
+The observable response time is assumed to be the sum of $D$, the time
+employed to reach the threshold for the decision, and $M$, denoting the of the
 other processes.
 
-\(E[T]= E[D + M] = E[D] + E[M] = E[D] + \mu_M\)
+$E[T]= E[D + M] = E[D] + E[M] = E[D] + \mu_M$
 
 ### Methods
 
 Schwarz [-@schwarz1994] applied the model to Miller’s [-@miller1986] data from
 a redundant signals task with 13 onset
-asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
-where 0 refers to synchronous AB, \(\infty\) refers to the single-target
-presentation, and negative \(\tau\) denote those conditions in which B is
+asynchronies $0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty$ ms,
+where 0 refers to synchronous AB, $\infty$ refers to the single-target
+presentation, and negative $\tau$ denote those conditions in which B is
 presented before A. Each condition was replicated 400 times. The 13 mean RTs and
 standard deviations are given in Table 2 below.
 
-Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective \(\tau\) and the parameters \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.43, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\)
+Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective $\tau$ and the parameters $\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.43, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161$
 
 
 ````{r, echo=FALSE}
@@ -722,7 +721,7 @@ g <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 mathout(g)
 ```
 
-For instance, we can see that with \(\tau = -167\) the expected first passage time is:
+For instance, we can see that with $\tau = -167$ the expected first passage time is:
 
 ```{r, echo=FALSE}
 mu_A = 0.53
@@ -736,13 +735,13 @@ mu_M = 161
 g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 ```
 
-To which we have to add \(\mu_M = 161\) (which represents the amount of time that the movement of providing the answer takes) and we obtain:
+To which we have to add $\mu_M = 161$ (which represents the amount of time that the movement of providing the answer takes) and we obtain:
 
 ```{r, echo=FALSE}
 g(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
 ```
 
-Similarly, we obtain the first-time passage for every \(\tau\):
+Similarly, we obtain the first-time passage for every $\tau$:
 
 ```{r, results="asis", echo=FALSE}
 
@@ -772,9 +771,9 @@ h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 
 ### Model fitting and Parameters Estimation
 
-Then we proceeded with the model fitting, using the data provided by Miller [-@miller1986] study in Schwarz [-@schwarz1994]. First, we calculated the predicted means RT as \(E[RT]=E[T]+\mu_M\).
+Then we proceeded with the model fitting, using the data provided by Miller [-@miller1986] study in Schwarz [-@schwarz1994]. First, we calculated the predicted means RT as $E[RT]=E[T]+\mu_M$.
 
-We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed [@ratcliff2008] with at the first passage of \(c\) \(X(t) \sim N(\mu t , \sigma^2 t)\). Where \(T\) is expressed as \(T= \arg \min_t X(t)\geq c\) with \(T \sim IG (c, \mu, \sigma^2)\) with mean \(E(T)=\displaystyle \frac{c}{\mu}\) and variance \(Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}\). Furthermore, for the Central Limit Theorem \(\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})\)
+We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed [@ratcliff2008] with at the first passage of $c$ $X(t) \sim N(\mu t , \sigma^2 t)$. Where $T$ is expressed as $T= \arg \min_t X(t)\geq c$ with $T \sim IG (c, \mu, \sigma^2)$ with mean $E(T)=\displaystyle \frac{c}{\mu}$ and variance $Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}$. Furthermore, for the Central Limit Theorem $\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})$
 
 For these reasons, in order to obtain the Goodness of Fit measure we proceeded with a z-standardisation.
 
@@ -802,7 +801,7 @@ zn
 
 Then, we calculated the Goodness of Fit as follows:
 
-\(X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)\).
+$X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)$.
 
 ```{r, results="asis", echo=FALSE}
 par <- c(mu_A = 0.53, sigma_A = 4.4, mu_B = 1.32, sigma_B = 18.3, mu_M = 161)
@@ -853,41 +852,45 @@ ciup = qnorm(0.975, est, se)
 
 ### Results
 
-The calculated Goodness of Fit value is \(X^2= 30.54\), \(p= 0.0002\). Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
+The calculated Goodness of Fit value is $X^2= 30.54$, $p= 0.0002$. Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
 
 The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz [-@schwarz1994].
 
-: Table 1: Estimated Model's Parameters
+```{r}
+# Table 1: Estimated Model's Parameters
+#
+# | Parameters | Estimate | 95% Confidence Interval
+# | :---: | :---: | :---:|
+# | $ \mu_ \mathrm A $| 0.53 | 0.51, 0.56
+# | $ \sigma_ \mathrm A $| 4.4 | 3.8, 5.1
+# | $ \mu_ \mathrm B $| 1.32 | 1.2, 1.4
+# | $ \sigma_ \mathrm B $| 18.3 | 11.6, 24.9
+# | $ \mu_ \mathrm M $| 161 | 157, 165
+```
 
-| Parameters | Estimate | 95% Confidence Interval
-| :---: | :---: | :---:|
-| \( \mu_ \mathrm A \)| 0.53 | 0.51, 0.56
-| \( \sigma_ \mathrm A \)| 4.4 | 3.8, 5.1
-| \( \mu_ \mathrm B \)| 1.32 | 1.2, 1.4
-| \( \sigma_ \mathrm B \)| 18.3 | 11.6, 24.9
-| \( \mu_ \mathrm M \)| 161 | 157, 165
+Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. $\tau= 100$) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data.
 
-Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. \(\tau= 100\)) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data.
-
-: Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's [-@miller1986] study in Schwarz [-@schwarz1994]
-
-| SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
-|:--------:|:-----------------:|:----------------:|:-----------:|
-\(-\infty\)| 237 | 231 | 56 |
-\(-167\)   | 231 | 234 | 58 |
-\(-133\)   | 230 | 230 | 40 |
-\(-100\)   | 228 | 227 | 40 |
-\(-67\)    | 226 | 228 | 32 |
-\(-33\)    | 222 | 221 | 28 |
-\(0\)      | 215 | 217 | 28 |
-\(33\)     | 239 | 238 | 28 |
-\(67\)     | 262 | 263 | 26 |
-\(100\)    | 283 | 277 | 30 |
-\(133\)    | 300 | 298 | 32 |
-\(167\)    | 313 | 316 | 34 |
-\(\infty\) | 350 | 348 | 92 |
-
- _Note_.  Parameters: \(\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161\)
+```{r}
+# : Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's [-@miller1986] study in Schwarz [-@schwarz1994]
+#
+# | SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
+# |:--------:|:-----------------:|:----------------:|:-----------:|
+# $-\infty$| 237 | 231 | 56 |
+# $-167$   | 231 | 234 | 58 |
+# $-133$   | 230 | 230 | 40 |
+# $-100$   | 228 | 227 | 40 |
+# $-67$    | 226 | 228 | 32 |
+# $-33$    | 222 | 221 | 28 |
+# $0$      | 215 | 217 | 28 |
+# $33$     | 239 | 238 | 28 |
+# $67$     | 262 | 263 | 26 |
+# $100$    | 283 | 277 | 30 |
+# $133$    | 300 | 298 | 32 |
+# $167$    | 313 | 316 | 34 |
+# $\infty$ | 350 | 348 | 92 |
+#
+# _Note_.  Parameters: $\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161$
+```
 
 ## Mistakes
 
