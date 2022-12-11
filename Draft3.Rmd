@@ -39,8 +39,8 @@ output:
   rjtools::rjournal_web_article:
     self_contained: yes
     toc: no
-    tables: yes
 bibliography: RJreferences.bib
+preamble: \usepackage{longtable}
 ---
 
 ```{r setup, include=FALSE}
@@ -277,13 +277,21 @@ A few more custom operators are shown in Table \@ref(tab:custom-operators).
 
 ```{r custom-operators, echo=FALSE}
 op <- list(cross=quote(x %*% y), dot=quote(x %.% y), kronecker=quote(X %x% Y),
-  integerdivision=quote(x %/% y))
+  'integer division'=quote(x %/% y))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
-t <- cbind(Operator=as.character(op), Output=m)
-knitr::kable(t, caption = "Custom operators in mathml")
+
+op <- as.character(op)
+if(knitr::is_latex_output())
+  op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op, Output=m)
+knitr::kable(t, caption="Custom operators in mathml", row.names=FALSE, escape=FALSE)
 ```
 
 ## Ringing back to R
+
 
 R's `integrate` function takes a number of arguments, the most important ones
 being the function to integrate, and the lower and the upper bound of the
@@ -364,11 +372,11 @@ mathout(term)
 ```
 
 More complex hooks are possible. In the example below, `dnorm(X, M, S)` is
-translated to the form `varphi(X; M, S)`.
+translated to the form `phi(X; M, S)` (instead of the default `varphi`).
 
 ```{r, results='asis'}
 hook(call("dnorm", expression(X), expression(M), expression(S)), 
-     call("fn", quote(varphi),
+     call("fn", quote(phi),
        call(";", list(expression(X)), list(expression(M), expression(S)))))
 term <- quote(dnorm(x, mu, sigma^2L))
 mathout(term)
