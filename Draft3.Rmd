@@ -299,10 +299,13 @@ term <- quote(integrate(sin, 0L, 2L*pi))
 mathout(term)
 ```
 
-Note that, on the Prolog end, the handler for `integrate/3` is rather rigid; it
-accepts only these three arguments in that particular order, and without names,
-that is, `integrate(sin, lower=0L, upper=2L*pi)`, would not print the desired
-result.
+## Names and order of arguments
+
+One of R's great features is the possibility to refer to function arguments by
+by their names, not only by their position in the list of arguments.
+Unfortunately, the prolog-powered handler for `integrate/3` is rather rigid; it
+accepts only three arguments in that particular order and without names, that
+is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print the desired result.
 
 To "canonicalize" function calls with named arguments and arguments in unusual
 order, \pkg{mathml} provides an auxilliary function `canonical(f, drop)` that
@@ -340,25 +343,39 @@ The extra R function `canonical()` applies `match.call()` to non-primitive R
 calls, basically cleaning up the arguments and bringing them into the correct
 order.
 
-# Package capabilities
+## Customizing the package
 
+In typical R\ functions, variable names are typically longer than just single
+letters, which may yield unsatisfactory results in the mathematical output.
 
-## Hooks
-Before start listing all the possible operations with \pkg{mathml},  we mention here that \pkg{mathml} also allows the user to create hooks for specific functions. As an example:
-
-```{r, echo=TRUE}
-# Improve display
-hook(quote(mu_A), quote(mu["A"]))
-hook(quote(mu_B), quote(mu["B"]))
-hook(quote(sigma_A), quote(sigma["A"]))
-hook(quote(sigma_B), quote(sigma["B"]))
-hook(quote(mu_M), quote(mu["M"]))
-hook(quote(zn), quote(z[tau]))
-hook(quote(M), quote(overline(X)))
+```{r, results='asis'}
+term <- quote(pbinom(successes, Ntotal, prob))
+mathout(term)
 ```
 
-The hooks reported here will be the one used in Section _ref_ to display the equations in the Case Study. On the right hand side of the parenthesis is reported the way that the variable, for instance
+To improve the situation, \pkg{mathml} provides a simple hook into the prolog
+predicate `math/2` described in the previous section.
 
+```{r, results='asis'}
+hook(quote(successes), quote(k))
+hook(quote(Ntotal), quote(N))
+hook(quote(prob), quote(pi))
+mathout(term)
+```
+
+More complex hooks are possible. In the example below, `dnorm(X, M, S)` is
+translated to the form `varphi(X; M, S)`.
+
+```{r, results='asis'}
+hook(call("dnorm", expression(X), expression(M), expression(S)), 
+     call("fn", quote(varphi),
+       call(";", list(expression(X)), list(expression(M), expression(S)))))
+term <- quote(dnorm(x, mu, sigma^2L))
+mathout(term)
+```
+
+R's expressions are a bit misused to represent variables in the underlying
+prolog engine.
 
 ## Subscripts and Superscripts
 Secondly, \pkg{mathml} allows also for the display of subscripts, superscripts and their combination. 
