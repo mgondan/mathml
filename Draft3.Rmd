@@ -100,10 +100,7 @@ ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
 rules, for example, to represent specific R elements by custom mathematical
-signs.
-
-*todo*: mention that the _same_ R expression is used for mathematical
-calculations and printing.
+signs. Moreover, in addition to graphical rendering, the same R expression provides its calculation or evaluation. This feature of the package saves the user's time and allows faster detection of errors.
 
 The paper is organized as follows. Section\ 2 presents the background of the
 package, including Prolog and the R package \pkg{rolog} and the two main classes
@@ -990,6 +987,20 @@ mathout(t)
 ```
 
 
+```{r omit, echo=FALSE}
+op <- list(left=quote(omit_left(a + b)), right=quote(omit_right(a + b)), list=quote(omit(c)))
+m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+
+op <- as.character(op)
+if(knitr::is_latex_output())
+  op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op, Output=m)
+knitr::kable(t, caption="Omit", row.names=FALSE, escape=FALSE)
+```
+
 The functions `add_left()`, `add_right()`, `add()` reported below follow the same way of reasoning, but they account for the mistakes made in adding incorrect elements in the expression. They highlight the redundant element placing it in a box. 
 
 ```{r, results="asis"}
@@ -1005,6 +1016,21 @@ mathout(t)
 ```{r, results="asis"}
 t <- list(quote(a), quote(b), quote(add(c)), quote(d))
 mathout(t)
+```
+
+
+```{r add, echo=FALSE}
+op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)), list=quote(add(c)))
+m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+
+op <- as.character(op)
+if(knitr::is_latex_output())
+  op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op, Output=m)
+knitr::kable(t, caption="Add", row.names=FALSE, escape=FALSE)
 ```
 
 Finally the function `instead( , )` place a curly bracket under the incorrect element  and provides its correct version under the curly bracket. In order to provide the correction with this function one must fill it with its wrong and correct terms in this order: `instead(wrong, correct)`. An example of its use its provided below.
