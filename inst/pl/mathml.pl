@@ -2143,6 +2143,12 @@ math(Flags, omit_right(Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Expr.
+    
+math(Flags, omit_right(Expr), New, M),
+    option(error(asis), Flags, highlight),
+    Expr =.. [_Op, L, _R]
+ => Flags = New,
+    M = L.
 
 math(Flags, omit_right(Expr), New, M),
     option(error(fix), Flags, highlight),
@@ -2176,6 +2182,11 @@ math(Flags, add_left(Expr), New, M),
     Expr =.. [_Op, _L, R]
  => Flags = New,
     M = R.
+    
+math(Flags, add_left(Expr), New, M),
+    option(error(asis), Flags, highlight)
+ => Flags = New,
+    M = Expr.
 
 math(Flags, add_left(Expr), New, M),
     option(error(fix), Flags, highlight),
@@ -2231,7 +2242,12 @@ math(Flags, add(_Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = "". % suppress at the next level, in the list
-
+    
+math(Flags, add(Expr), New, M),
+    option(error(asis), Flags, highlight)
+ => Flags = New,
+    M = Expr.    
+  
 math(Flags, add(Expr), New, M),
     option(error(fix), Flags, highlight)
  => Flags = New,
@@ -2246,6 +2262,11 @@ math(Flags, instead(_Wrong, Correct), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Correct.
+    
+math(Flags, instead(Wrong, _Correct), New, M),
+    option(error(asis), Flags, highlight)
+ => Flags = New,
+    M = Wrong.
 
 math(Flags, instead(_Wrong, Correct), New, M),
     option(error(fix), Flags, highlight)

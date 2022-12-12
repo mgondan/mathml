@@ -1014,62 +1014,38 @@ t <- quote(instead(a, b) + c)
 mathout(t)
 ```
 
-It is also possible to use flags for context-dependent rendering. The highlight flag is the default one. It shows where the error is and what is its solution. The ignore flag allows the program to ignore the fact that there is an error and print the expression as if it were correct.  Finally, the third flag, fix, tells you what is the term that you are supposed to fix without giving the solution.  Below the code with its comment is provided.  
+It is also possible to use flags for context-dependent rendering. The `highlight` flag is the default one. It shows where the error is and what is its solution. The `ignore` flag allows the program to ignore the fact that there is an error and print the expression as if it were correct. The third flag, `fix`, tells you what is the term that you are supposed to fix without giving the solution. Finally, the last flag `asis` returns the incorrect expression as the student wrote it, without providing any solutions or corrections.  Below is provided the code with its comment and an example of use.
+
+Let us consider for example a student that instead of writing `b + c` wrote `a+c`. 
+
+With the `asis` flag we report the incorrect expression provided by the student: 
 
 ```{r, results="asis"}
-# It highlights what has been omitted
-t <- quote(omit_left(a + b))
+# It prints the incorrect version
+t <- quote(instead(a, b) + c)
+mathout(t, flags=quote(error(asis)))
+```
+
+Then, we may want underline the incorrect term and provide the correct solution.
+
+```{r, results="asis"}
+# It underlines what has been incorrect
 mathout(t, flags=quote(error(highlight))) # default
 ```
+
+Alternatively, we can put the correct solution in a box to let the student focus  on the correction.
+
+```{r, results="asis"}
+# It highlights what has been corrected
+mathout(t, flags=quote(error(fix))) 
+```
+
+Finally, we can simply provide the correct solution to the problem with the flag `ignore`. 
 
 ```{r, results="asis"}
 # It prints the correct version
 mathout(t, flags=quote(error(ignore)))
 ```
-
-```{r, results="asis"}
-# It prints the incorrect version
-mathout(t, flags=quote(error(asis)))
-```
-
-
-```{r, results="asis"}
-# It highlights the correct version by framing it
-mathout(t, flags=quote(error(fix)))
-```
-
-```{r, results="asis"}
-# It frames the redundant term
-t <- quote(add_right(a + b))
-mathout(t, flags=quote(error(highlight))) # default
-```
-
-```{r, results="asis"}
-# It prints the correct expression without the redundant term
-mathout(t, flags=quote(error(ignore)))
-```
-
-```{r, results="asis"}
-# It strikes the redundant term 
-mathout(t, flags=quote(error(fix)))
-```
-
-```{r, results="asis"}
-# It highlights that a is wrong and b is correct
-t <- quote(instead(a, b) + c)
-mathout(t, flags=quote(error(highlight))) # default
-```
-
-```{r, results="asis"}
-# It provides the correct solution
-mathout(t, flags=quote(error(ignore)))
-```
-
-```{r, results="asis"}
-# It provides the correct solution framing the correct term
-mathout(t, flags=quote(error(fix)))
-```
-
 
 # Conclusions
 
