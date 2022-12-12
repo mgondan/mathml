@@ -99,7 +99,7 @@ R expressions to mathematical output in RMarkdown documents [@Xie2020] and
 ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
-rules, for example, to represent specific R elements by custom mathematical
+rules, for example, to represent specific R elements by custom mathematical signs. Moreover, in addition to graphical rendering, the same R expression provides its calculation or evaluation. This feature of the package saves the user's time and allows faster detection of errors.
 
 The paper is organized as follows. Section\ 2 presents the background of the
 package, including Prolog and the R package \pkg{rolog} and the two main classes
