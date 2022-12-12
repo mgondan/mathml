@@ -210,6 +210,35 @@ R\ functions and objects in data analysis, scientific reports and interactive
 web content. The features currently supported are listed below, roughly following
 the order proposed by [@murrell2000].
 
+## Basic elements
+
+`mathml` contains several basic elements used in everyday mathematical expressions. For example it is possible to print the function for the linear regression as:
+
+```{r, results='asis'}
+
+term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x)
+mathout(term)
+
+# or with greek letters as:
+
+term <- quote(y == beta["0"] + beta["1"]*x + ... + varepsilon["i"])
+mathout(term)
+```
+
+```{r, results='asis'}
+
+f <- function(x, a)
+{
+    if(a == 0) return(+Inf);
+    if(a == 0) return(-Inf);
+    if(a > 1L ) return(frac(1L,2L))
+}
+mathout(f)
+
+
+```
+
+
 ## Basic calculations
 
 Basic arithmetic operators and parentheses are translated as they are, as
