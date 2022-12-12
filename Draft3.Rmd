@@ -986,7 +986,6 @@ mathout(t)
 ```
 
 
-<<<<<<< HEAD
 ```{r omit, echo=FALSE}
 op <- list(left=quote(omit_left(a + b)), right=quote(omit_right(a + b)), list=quote(omit(c)))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
@@ -1001,8 +1000,6 @@ t <- cbind(Operator=op, Output=m)
 knitr::kable(t, caption="Omit", row.names=FALSE, escape=FALSE)
 ```
 
-=======
->>>>>>> d6b1bec3b266394c48c81c3efcddad814ae9d071
 The functions `add_left()`, `add_right()`, `add()` reported below follow the same way of reasoning, but they account for the mistakes made in adding incorrect elements in the expression. They highlight the redundant element placing it in a box. 
 
 ```{r, results="asis"}
@@ -1020,10 +1017,8 @@ t <- list(quote(a), quote(b), quote(add(c)), quote(d))
 mathout(t)
 ```
 
-<<<<<<< HEAD
-
 ```{r add, echo=FALSE}
-op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)), list=quote(add(c)))
+op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
 op <- as.character(op)
@@ -1036,8 +1031,6 @@ t <- cbind(Operator=op, Output=m)
 knitr::kable(t, caption="Add", row.names=FALSE, escape=FALSE)
 ```
 
-=======
->>>>>>> d6b1bec3b266394c48c81c3efcddad814ae9d071
 Finally the function `instead( , )` place a curly bracket under the incorrect element  and provides its correct version under the curly bracket. In order to provide the correction with this function one must fill it with its wrong and correct terms in this order: `instead(wrong, correct)`. An example of its use its provided below.
 
 ```{r, results="asis"}
@@ -1064,11 +1057,7 @@ Then, we may want underline the incorrect term and provide the correct solution.
 mathout(t, flags=quote(error(highlight))) # default
 ```
 
-<<<<<<< HEAD
 Alternatively, we can put the correct solution in a box to let the student focus on its correction.
-=======
-Alternatively, we can put the correct solution in a box to let the student focus  on the correction.
->>>>>>> d6b1bec3b266394c48c81c3efcddad814ae9d071
 
 ```{r, results="asis"}
 # It highlights what has been corrected
