@@ -2227,11 +2227,6 @@ math(Flags, omit(Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Expr.
-    
-math(Flags, omit(_Expr), New, M),
-    option(error(asis), Flags, highlight)
- => Flags = New,
-    M = "". % suppress at the next level, in the list
 
 math(Flags, omit(Expr), New, M),
     option(error(fix), Flags, highlight)
