@@ -211,33 +211,39 @@ web content. The features currently supported are listed below, roughly followin
 the order proposed by [@murrell2000].
 
 ## Basic elements
-
+214
+ 
+215
+ 
 `mathml` contains several basic elements used in everyday mathematical expressions. For example it is possible to print the function for the linear regression as:
-
+216
+ 
+217
+ 
 ```{r, results='asis'}
-
 term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x)
 mathout(term)
 
 # or with greek letters as:
-
 term <- quote(y == beta["0"] + beta["1"]*x + ... + varepsilon["i"])
+ 
 mathout(term)
 ```
 
 ```{r, results='asis'}
-
 f <- function(x, a)
 {
     if(a == 0) return(+Inf);
     if(a == 0) return(-Inf);
     if(a > 1L ) return(frac(1L,2L))
 }
+ 
 mathout(f)
 
+ 
 
+ 
 ```
-
 
 ## Basic calculations
 
@@ -1014,20 +1020,20 @@ t <- list(quote(a), quote(b), quote(omit(c)))
 mathout(t)
 ```
 
-
 ```{r omit, echo=FALSE}
 op <- list(left=quote(omit_left(a + b)), right=quote(omit_right(a + b)), list=quote(omit(c)))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
 op <- as.character(op)
 if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
+op <- sapply(op, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
 
+op <- sapply(op, FUN=knitr:::escape_html)
 t <- cbind(Operator=op, Output=m)
 knitr::kable(t, caption="Omit", row.names=FALSE, escape=FALSE)
 ```
+
 
 The functions `add_left()`, `add_right()`, `add()` reported below follow the same way of reasoning, but they account for the mistakes made in adding incorrect elements in the expression. They highlight the redundant element placing it in a box. 
 
@@ -1051,12 +1057,14 @@ op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
 op <- as.character(op)
-if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
 
+if(knitr::is_latex_output())
+op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+
+op <- sapply(op, FUN=knitr:::escape_html)
 t <- cbind(Operator=op, Output=m)
+
 knitr::kable(t, caption="Add", row.names=FALSE, escape=FALSE)
 ```
 
@@ -1079,10 +1087,10 @@ t <- quote(instead(a, b) + c)
 mathout(t, flags=quote(error(asis)))
 ```
 
-Then, we may want underline the incorrect term and provide the correct solution.
+Then, we may want to underline the incorrect term and provide the correct solution. 
 
 ```{r, results="asis"}
-# It underlines what has been incorrect
+# It highlights what has been mistakenly inserted
 mathout(t, flags=quote(error(highlight))) # default
 ```
 
@@ -1090,15 +1098,16 @@ Alternatively, we can put the correct solution in a box to let the student focus
 
 ```{r, results="asis"}
 # It highlights what has been corrected
-mathout(t, flags=quote(error(fix))) 
+mathout(t, flags=quote(error(fix)))
 ```
 
-Finally, we can simply provide the correct solution to the problem with the flag `ignore`. 
+Finally, we can simply provide the correct solution to the problem wit the flag `ignore`. 
 
 ```{r, results="asis"}
 # It prints the correct version
 mathout(t, flags=quote(error(ignore)))
 ```
+
 
 # Conclusions
 
