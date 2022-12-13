@@ -40,7 +40,9 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
-preamble: \usepackage{longtable}
+preamble:
+- \usepackage{longtable}
+- \usepackage{cancel}
 ---
 
 ```{r setup, include=FALSE}
@@ -1023,18 +1025,17 @@ mathout(t)
 
 ```{r omit, echo=FALSE}
 op <- list(left=quote(omit_left(a + b)), right=quote(omit_right(a + b)), list=quote(omit(c)))
-m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
 
 op <- as.character(op)
 if(knitr::is_latex_output())
-op <- sapply(op, FUN=knitr:::escape_latex)
+  op <- sapply(op, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
 
-op <- sapply(op, FUN=knitr:::escape_html)
 t <- cbind(Operator=op, Output=m)
 knitr::kable(t, caption="Omit", row.names=FALSE, escape=FALSE)
 ```
-
 
 The functions `add_left()`, `add_right()`, `add()` reported below follow the same way of reasoning, but they account for the mistakes made in adding incorrect elements in the expression. They highlight the redundant element placing it in a box. 
 

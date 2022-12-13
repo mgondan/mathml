@@ -2070,6 +2070,10 @@ ml(Flags, cancel(A), M)
  => ml(Flags, A, X),
     M = menclose(notation(updiagonalstrike), X).
 
+jax(Flags, cancel(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\cancel{~w}", [X]).
+
 paren(Flags, cancel(A), Paren)
  => paren(Flags, A, Paren).
 
