@@ -1056,15 +1056,13 @@ mathout(t)
 
 ```{r add, echo=FALSE}
 op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)))
-m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
 
 op <- as.character(op)
-
 if(knitr::is_latex_output())
-op <- sapply(op, FUN=knitr:::escape_latex)
+  op <- sapply(op, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-
-op <- sapply(op, FUN=knitr:::escape_html)
+  op <- sapply(op, FUN=knitr:::escape_html)
 t <- cbind(Operator=op, Output=m)
 
 knitr::kable(t, caption="Add", row.names=FALSE, escape=FALSE)

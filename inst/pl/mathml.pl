@@ -2090,6 +2090,10 @@ ml(Flags, box(A), M)
  => ml(Flags, A, X),
     M = menclose(notation(roundedbox), X).
 
+jax(Flags, box(A), M)
+ => jax(Flags, A, X),
+    format(string(M), "\\boxed{~w}", [X]).
+
 paren(Flags, box(A), Paren)
  => paren(Flags, A, Paren).
 
