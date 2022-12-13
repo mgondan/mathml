@@ -211,15 +211,10 @@ web content. The features currently supported are listed below, roughly followin
 the order proposed by [@murrell2000].
 
 ## Basic elements
-214
- 
-215
- 
-`mathml` contains several basic elements used in everyday mathematical expressions. For example it is possible to print the function for the linear regression as:
-216
- 
-217
- 
+
+`mathml` contains several basic elements used in everyday mathematical expressions. 
+For example it is possible to print the function for the linear regression as:
+
 ```{r, results='asis'}
 term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x)
 mathout(term)
@@ -230,19 +225,25 @@ term <- quote(y == beta["0"] + beta["1"]*x + ... + varepsilon["i"])
 mathout(term)
 ```
 
+
+_I also wanted to add a condition like 1 < a < 2, but apparently it's not possible_ 
+It is also possible to represent a system of equations with different relations. Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
+
+
+
 ```{r, results='asis'}
 f <- function(x, a)
 {
-    if(a == 0) return(+Inf);
-    if(a == 0) return(-Inf);
-    if(a > 1L ) return(frac(1L,2L))
+    if(a == 0L) return( 0L );
+    if(a <= 1L) return(-Inf);
+    if(a > 1L) return(+Inf)
 }
- 
+
 mathout(f)
 
- 
+attributes(f)$name = quote(f)
+mathout(f)
 
- 
 ```
 
 ## Basic calculations
