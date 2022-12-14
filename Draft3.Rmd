@@ -220,11 +220,11 @@ Let us start with the function for the linear regression. As the reader may noti
 
 
 ```{r, results='asis'}
-term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x["1"])
+term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*X["1"])
 mathout(term)
 
 # or with greek letters as:
-term <- quote(y == beta["0"] + beta["1"]*x["1"] + beta["2"]*x["2"] + ... + beta["i"]*x["i"] + varepsilon["i"])
+term <- quote(y== beta["0"] + beta["1"]*x["1"] + beta["2"]*x["2"] + ... + beta["i"]*x["i"] + varepsilon["i"])
  
 mathout(term)
 ```
@@ -253,31 +253,24 @@ mathout(f)
 op <- list(subsup=quote(x["a"]^b), lchoose=quote(lchoose(n, k)), sqrt=quote(sqrt(x)), not=quote(!x), different=quote(x != y), mean=quote(mean(xy)), absolute=quote(abs(x)), tilde=quote(X ~ Y), approx=quote(x %~~% y), equiv=quote(x %==% y), congr=quote(x %=~% y), prop=quote(x %prop% y), 'in'=quote(a %in% A), intersect=quote(intersect(A, B)), union=quote(union(A, B)), intersect=quote(is.null(intersect(A, B))))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
+op2 <- list(twosidearrow=quote(x%<->%b), rightarrow=quote(x%->%y), leftarrow=quote(x%<-%y), uparrow=quote(x%up%y), down=quote(x%down%y), iff=quote(x%<=>%y), rArr=quote(x %=>% y), lArr=quote(x %<=% y), dblup=quote(x %dblup% y), dbldown=quote(x %dbldown% y))
+m2 <- lapply(op2, FUN=mathjax, flags=list(cat=FALSE))
+
+op2 <- as.character(op2)
+if(knitr::is_latex_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_html)
+
 op <- as.character(op)
 if(knitr::is_latex_output())
   op <- sapply(op, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
   op <- sapply(op, FUN=knitr:::escape_html)
 
-t <- cbind(Operator=op, Output=m)
+t <- cbind(Operator=op, Output=m, Operator=op2, Output=m2)
 knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
 ```
-
-
-```{r arrows, echo=FALSE}
-op <- list(twosidearrow=quote(x%<->%b), rightarrow=quote(x%->%y), leftarrow=quote(x%<-%y), uparrow=quote(x%up%y), down=quote(x%down%y), iff=quote(x%<=>%y), rArr=quote(x %=>% y), lArr=quote(x %<=% y), dblup=quote(x %dblup% y), dbldown=quote(x %dbldown% y))
-m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
-
-op <- as.character(op)
-if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
-
-t <- cbind(Operator=op, Output=m)
-knitr::kable(t, caption="Arrows in mathml", row.names=FALSE, escape=FALSE)
-```
-
 
 
 ## Basic calculations
