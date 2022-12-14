@@ -214,24 +214,22 @@ the order proposed by [@murrell2000].
 
 ## Basic elements
 
-`mathml` contains several basic elements used in everyday mathematical expressions. 
-For example it is possible to print the function for the linear regression as:
+\pkg{mathml} contains several basic elements used in everyday mathematical expressions, such as superscripts, subscripts, hat, relation and set signs, accents and arrows. Below we provide some examples of their application with commented code. The other basic elements will be displayed in Table \@ref(tab:basic-elements) and Table \@ref(tab:arrows). 
+ 
+Let us start with the function for the linear regression. As the reader may notice, \pkg{mathml} displays Greek letters, accents and superscripts. 
+
 
 ```{r, results='asis'}
-term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x)
+term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*x["1"])
 mathout(term)
 
 # or with greek letters as:
-term <- quote(y == beta["0"] + beta["1"]*x + ... + varepsilon["i"])
+term <- quote(y == beta["0"] + beta["1"]*x["1"] + beta["2"]*x["2"] + ... + beta["i"]*x["i"] + varepsilon["i"])
  
 mathout(term)
 ```
 
-
-_I also wanted to add a condition like 1 < a < 2, but apparently it's not possible_ 
-It is also possible to represent a system of equations with different relations. Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
-
-
+The second example may be particularly of use when we deal with multiple conditions (see \@ref(case-study)). Here, for instance, we present a trivial one with different relation signs. 
 
 ```{r, results='asis'}
 f <- function(x, a)
@@ -242,11 +240,45 @@ f <- function(x, a)
 }
 
 mathout(f)
+```
 
+Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
+
+```{r, results='asis'}
 attributes(f)$name = quote(f)
 mathout(f)
-
 ```
+
+```{r basic-elements, echo=FALSE}
+op <- list(subsup=quote(x["a"]^b), lchoose=quote(lchoose(n, k)), sqrt=quote(sqrt(x)), not=quote(!x), different=quote(x != y), mean=quote(mean(xy)), absolute=quote(abs(x)), tilde=quote(X ~ Y), approx=quote(x %~~% y), equiv=quote(x %==% y), congr=quote(x %=~% y), prop=quote(x %prop% y), 'in'=quote(a %in% A), intersect=quote(intersect(A, B)), union=quote(union(A, B)), intersect=quote(is.null(intersect(A, B))))
+m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+
+op <- as.character(op)
+if(knitr::is_latex_output())
+  op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op, Output=m)
+knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
+```
+
+
+```{r arrows, echo=FALSE}
+op <- list(twosidearrow=quote(x%<->%b), rightarrow=quote(x%->%y), leftarrow=quote(x%<-%y), uparrow=quote(x%up%y), down=quote(x%down%y), iff=quote(x%<=>%y), rArr=quote(x %=>% y), lArr=quote(x %<=% y), dblup=quote(x %dblup% y), dbldown=quote(x %dbldown% y))
+m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+
+op <- as.character(op)
+if(knitr::is_latex_output())
+  op <- sapply(op, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op <- sapply(op, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op, Output=m)
+knitr::kable(t, caption="Arrows in mathml", row.names=FALSE, escape=FALSE)
+```
+
+
 
 ## Basic calculations
 
@@ -325,7 +357,6 @@ knitr::kable(t, caption="Custom operators in mathml", row.names=FALSE, escape=FA
 ```
 
 ## Ringing back to R
-
 
 R's `integrate` function takes a number of arguments, the most important ones
 being the function to integrate, and the lower and the upper bound of the
@@ -419,143 +450,6 @@ mathout(term)
 R's expressions are a bit misused to represent variables in the underlying
 prolog engine.
 
-## Subscripts and Superscripts
-Secondly, \pkg{mathml} allows also for the display of subscripts, superscripts and their combination. 
-
-```{r, results="asis", echo=TRUE}
-catmath(a["x"])
-
-catmath(a^x)
-
-catmath(x["b"]^"a")
-```
-
-
-## Fractions
-As in [@murrell2000] the `frac` and `over` functions aim to represent fractions. `choose` and `lchoose`, as in R\ \pkg{base}, display the binomial coefficient. 
-
-```{r, results="asis", echo=TRUE}
-catmath(frac(x, y))
-
-catmath(over(x, y))
-
-catmath(choose(n, k))
-
-catmath(lchoose(n, k))
-```
-
-## Radicals
-
-```{r, results="asis", echo=TRUE}
-catmath(sqrt(x))
-```
-
-
-## Relations
-
-Among the possible relational operators, following [@murrell2000], we included:
-
-```{r, results="asis", echo=TRUE}
-catmath(x==y)
-
-catmath(x < y)
-
-catmath(x <= y)
-
-catmath(x >= y)
-
-catmath(!x)
-
-catmath(x != y)
-
-catmath(X ~ Y)
-
-catmath(x %~~% y)
-
-catmath(x %==% y)
-
-catmath(x %=~% y)
-
-catmath(x %prop% y)
-```
-
-## Set relations
-
-Here is provided a series of useful set relations.
-
-_Still to be implemented_
-
-```{r, results="asis", echo=TRUE}
-catmath(a %in% A)
-
-catmath(intersect(A, B))
-
-catmath(union(A, B))
-
-catmath(is.null(intersect(A, B)))
-```
-
-
-
-## Arrows
-
-Following once again [@murrell2000], we provide here a list of useful arrows
-
-```{r, results="asis", echo=TRUE}
-# x %<->% y
-catmath(x %<->% y)
-
-# x %->% y
-catmath(x %->% y)
-
-# x %<-% y
-catmath(x %<-% y)
-
-# x %up% y:
-catmath(x %up% y)
-
-# x %down% y:
-catmath(x %down% y)
-
-# x %<=>% y: solved it using iff
-catmath(x %<=>% y)
-
-# x %=>% y: solved using rArr
-catmath(x %=>% y)
-
-# x %<=% y: solved using lArr
-catmath(x %<=% y)
-
-# x %dblup% y:
-catmath(x %dblup% y)
-
-# x %dbldown% y:
-catmath(x %dbldown% y)
-```
-
-## Accents
-
-```{r, results="asis", echo=TRUE}
-catmath(hat(x))
-
-catmath(hat(xy))
-
-catmath(mean(x))
-
-catmath(mean(xy))
-```
-
-## Symbolic names
-
-```{r, results="asis", echo=TRUE}
-catmath(A-Omega)
-
-catmath(alpha-omega)
-
-catmath(pi-Pi)
-
-catmath(Inf)
-```
 
 ## Operators
 
@@ -639,14 +533,6 @@ catmath(x^{y + z})
 ```
 
 
-## Absolute value
-
-Is it also possible to calculate and represent the absolute value, as:
-
-```{r, results='asis', echo=TRUE}
-catmath(abs(x))
-```
-
 ## Matrix and Vectors
 
 Since also Matrices and Vectors are important elements in R\, we decided to implement them and render them graphically in the following ways.
@@ -693,7 +579,7 @@ eval(t)
 ```
 
 
-# A case study
+# A case study {#case-study}
 
 For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented.
 
