@@ -124,25 +124,26 @@ mathjax(R) :-
 % Summation sign from to (subscript and superscript)
 math(Flags, Sum, New, M),
     compound(Sum),
-    compound_name_arguments(Sum, sum, Arg),
+    compound_name_arguments(Sum, sum, [Arg]),
     select(subscript(From), Flags, New0),
     select(superscript(To), New0, New1)
  => New = New1,
-    M = fn(subsupscript(sum, From, To), Arg).
+    M = fn(subsupscript(sum, From, To), [Arg]).
 
 % Summation sign from (only subscript)
 math(Flags, Sum, New, M),
     compound(Sum),
-    compound_name_arguments(Sum, sum, Arg),
+    compound_name_arguments(Sum, sum, [Arg]),
     select(subscript(Idx), Flags, New0)
  => New = New0,
-    M = fn(subscript(sum, Idx), Arg).
+    M = fn(subscript(sum, Idx), [Arg]).
 
 math(Flags, Sum, New, M),
     compound(Sum),
-    compound_name_arguments(Sum, sum, Arg)
+    compound_name_arguments(Sum, sum, [Arg]),
+    type(Flags, Arg, subscript(Idx))
  => New = Flags,
-    M = fn(sum, Arg).
+    M = fn(subscript(sum, Idx), [Arg]).
 
 mathml :-
     mathml(sum('['(x, i))).
@@ -207,6 +208,11 @@ jax(Flags, R, M),
     jax(New, Pwr, Z),
     format(string(M), "{~w_~w^~w}", [X, Y, Z]).
 
+type(Flags, _R, Type),
+    member(subscript(Idx), Flags),
+    member(superscript(Pwr), Flags)
+ => Type = subsupscript(Idx, Pwr).
+
 mathml :-
     mathml(subsupscript(x, i, 2)).
 
@@ -232,6 +238,10 @@ jax(Flags, R, M),
  => jax(New, R, X),
     jax(New, Idx, Y),
     format(string(M), "{~w_~w}", [X, Y]).
+
+type(Flags, _R, Type),
+    member(subscript(Idx), Flags)
+ => Type = subscript(Idx).
 
 mathml :-
     mathml(subscript(x, i)).
@@ -273,6 +283,10 @@ jax(Flags, R, M),
  => jax(New, R, X),
     jax(New, Pwr, Y),
     format(string(M), "{{~w}^{~w}}", [X, Y]).
+
+type(Flags, _R, Type),
+    member(superscript(Pwr), Flags)
+ => Type = superscript(Pwr).
 
 mathml :-
     mathml(superscript(x, 2)).
@@ -2151,7 +2165,7 @@ math(Flags, omit_right(Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Expr.
-    
+
 math(Flags, omit_right(Expr), New, M),
     option(error(asis), Flags, highlight),
     Expr =.. [_Op, L, _R]
@@ -2190,7 +2204,7 @@ math(Flags, add_left(Expr), New, M),
     Expr =.. [_Op, _L, R]
  => Flags = New,
     M = R.
-    
+
 math(Flags, add_left(Expr), New, M),
     option(error(asis), Flags, highlight)
  => Flags = New,
@@ -2235,7 +2249,7 @@ math(Flags, omit(Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Expr.
-    
+
 math(Flags, omit(_Expr), New, M),
     option(error(asis), Flags, highlight)
  => Flags = New,
@@ -2255,12 +2269,12 @@ math(Flags, add(_Expr), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = "". % suppress at the next level, in the list
-    
+
 math(Flags, add(Expr), New, M),
     option(error(asis), Flags, highlight)
  => Flags = New,
-    M = Expr.    
-  
+    M = Expr.
+
 math(Flags, add(Expr), New, M),
     option(error(fix), Flags, highlight)
  => Flags = New,
@@ -2275,7 +2289,7 @@ math(Flags, instead(_Wrong, Correct), New, M),
     option(error(ignore), Flags, highlight)
  => Flags = New,
     M = Correct.
-    
+
 math(Flags, instead(Wrong, _Correct), New, M),
     option(error(asis), Flags, highlight)
  => Flags = New,
@@ -2403,36 +2417,36 @@ jax(Flags, fn(Name, [Arg]), M),
 
 % Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
-%    type(Flags, Arg, function),
-    type(Flags, Name, special),
+    type(Flags, Name, Type),
+    member(Type, [special, subscript(_)]),
     prec(Flags, Name, P),
     prec(Flags, Arg, Prec),
-%    writeln(P-Prec),
     P > Prec
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, [Arg]), M),
-%    type(Flags, Arg, function)
-    type(Flags, Name, special),
+    type(Flags, Name, Type),
+    member(Type, [special, subscript(_)]),
     prec(Flags, Name, P),
     prec(Flags, Arg, Prec),
-%    writeln(P-Prec),
     P > Prec
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
     format(string(M), "{~w~w}", [F, X]).
 
 ml(Flags, fn(Name, [Arg]), M),
-    type(Flags, Name, special),
+    type(Flags, Name, Type),
+    member(Type, [special, subscript(_)]),
     prec(Flags, Arg, 0)
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
     M = mrow([F, mo(&(af)), X]).
 
 jax(Flags, fn(Name, [Arg]), M),
-    type(Flags, Name, special),
+    type(Flags, Name, Type),
+    member(Type, [special, subscript(_)]),
     prec(Flags, Arg, 0)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),

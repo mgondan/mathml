@@ -565,10 +565,10 @@ A list of possible operators is available here.
 catmath(sum(x[i], i==1L, n))
 
 # fixme: braces not needed when right to *
-catmath(a * sum(b))
+catmath(a * sum(b[i]))
 
 # Multiplication (capital Pi) is missing
-catmath(a * prod(b))
+catmath(a * prod(b[i]))
 
 catmath(integrate(sin, 0L, 2L*pi))
 
