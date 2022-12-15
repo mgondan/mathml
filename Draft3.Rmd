@@ -336,7 +336,7 @@ A few more custom operators are shown in Table \@ref(tab:custom-operators).
 
 ```{r custom-operators, echo=FALSE}
 op <- list(cross=quote(x %*% y), dot=quote(x %.% y), kronecker=quote(X %x% Y),
-  'integer division'=quote(x %/% y))
+  'integer division'=quote(x %/% y), and=quote(A & B), vel=quote(A | B), xor=quote(xor(A, B)), not=quote(!A))
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
 op <- as.character(op)
