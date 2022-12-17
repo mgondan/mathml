@@ -148,8 +148,9 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 ```
 
 As is seen from the output above, the variable `term` is not assigned the result
-of the calculation, but an R\ "call" that can eventually be evaluated
-[see, e.g., @Wickham2019, for more details on "non-standard evaluation"].
+of the calculation, but an R\ "call"
+[see, e.g., @Wickham2019, for more details on "non-standard evaluation"]. This
+call can eventually be evaluated with `eval(...)`,
 
 ```{r}
 k <- 10
@@ -169,9 +170,9 @@ mathjax(term)
 ```
 
 We can include the output in a RMarkdown document by specifying `results='asis'`
-in the R code chunk, as has been done below. The R function mathout is just a
-wrapper that invokes `mathml(...)` for HTML output and `mathjax(...)` for
-LaTeX output.
+in the R code chunk, as is done in the next example. The
+R\ function `mathout(...)` is just a wrapper that invokes `mathml(...)` for HTML
+output and `mathjax(...)` for LaTeX output.
 
 ```{r, results='asis'}
 mathout(term)
@@ -188,10 +189,8 @@ math(pbinom(K, N, Pi), M)
 
 Thus, the predicate `math/2` could be considered a "macro" that translates a
 mathematical element (here, `pbinom(K, N, Pi)`) to a different mathematical
-element, namely `fn(..., ...)`.
-
-The low-level predicates `ml/3` and `jax/3` are used to convert mathematical
-elements to MathML or LaTeX, respectively.
+element, namely `fn(..., ...)`. The low-level predicates `ml/3` and `jax/3`
+convert mathematical elements to MathML or LaTeX, respectively.
 
 ```prolog
 ml(Flags, fn(Name, (Args ; Params)), M)
@@ -209,12 +208,16 @@ translation (see, e.g., the errors below).
 
 \pkg{mathml} is an R\ package for pretty mathematical representation of
 R\ functions and objects in data analysis, scientific reports and interactive
-web content. The features currently supported are listed below, roughly following
-the order proposed by [@murrell2000].
+web content. The currently supported features are listed below, roughly
+following the order proposed by [@murrell2000].
 
 ## Basic elements
 
-\pkg{mathml} contains several basic elements used in everyday mathematical expressions, such as superscripts, subscripts, hat, relation and set signs, accents and arrows. Below we provide some examples of their application with commented code. The other basic elements will be displayed in Table \@ref(tab:basic-elements) and Table \@ref(tab:arrows). 
+\pkg{mathml} contains several basic elements used in everyday mathematical
+expressions, such as superscripts, subscripts, hat, relation and set signs,
+accents and arrows. Below we provide some examples of their application with
+commented code. The other basic elements will be displayed in
+Table \@ref(tab:basic-elements) and Table \@ref(tab:arrows). 
  
 Let us start with the function for the linear regression. As the reader may notice, \pkg{mathml} displays Greek letters, accents and superscripts. 
 

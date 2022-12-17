@@ -69,7 +69,7 @@ mathml_preproc <- function(query=quote(2 != 2))
 
     index <- which(args[[1]] == names(mathml_operators))
     if(length(index) == 1)
-      args[[1]] <- mathml_operators[index]
+      args[[1]] <- as.name(mathml_operators[index])
 
     args[-1] <- lapply(args[-1], FUN=mathml_preproc)
     return(as.call(args))

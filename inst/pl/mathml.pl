@@ -787,12 +787,19 @@ math(Curly, M),
     compound_name_arguments(Curly, '{', Args)
  => M = body(Args).
 
-math(body([R]), M)
- => M = R.
+ml(Flags, body([R]), M)
+ => ml(Flags, R, M).
 
-math(body(Body), M)
- => findall([A], member(A, Body), List),
-    M = rbind(List).
+ml(Flags, body(Body), M)
+ => maplist(ml(Flags), Body, R),
+    M = mrow([mo('{'), mtable(columnalign(left), R)]).
+
+jax(Flags, body([R]), M)
+ => jax(Flags, R, M).
+
+jax(Flags, body(Body), M)
+ => maplist(jax(Flags), Body, Rows),
+    format(string(M), "\\left\\{\\begin{array}{l}~w\\end{array}\\right.", [Rows]).
 
 % Vectors
 math(Hash, M),
