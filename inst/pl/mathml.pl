@@ -219,8 +219,10 @@ mathml :-
 %
 % Subscript like s_D
 %
-math('['(R, Idx), M)
- => M = subscript(R, Idx).
+math(Sub, M),
+    compound(Sub),
+    compound_name_arguments(Sub, '[', [R | Idx])
+ => M = subscript(R, list("", Idx)).
 
 math(Flags, subscript(R, Idx), New, M)
  => New = [subscript(Idx) | Flags],

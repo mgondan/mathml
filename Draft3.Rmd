@@ -101,7 +101,12 @@ R expressions to mathematical output in RMarkdown documents [@Xie2020] and
 ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
-rules, for example, to represent specific R elements by custom mathematical signs. Moreover, in addition to graphical rendering, the same R expression provides its calculation or evaluation. This feature of the package saves the user's time and allows faster detection of errors.
+rules, for example, to represent specific R elements by custom mathematical
+signs.
+
+The main feature of the package that the same R expressions and equations are
+used for both mathematical typesetting and calculations. This saves time and
+reduces mistakes, as well be illustrated below.
 
 The paper is organized as follows. Section\ 2 presents the background of the
 package, including Prolog and the R package \pkg{rolog} and the two main classes
@@ -149,8 +154,8 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 
 As is seen from the output above, the variable `term` is not assigned the result
 of the calculation, but an R\ "call"
-[see, e.g., @Wickham2019, for more details on "non-standard evaluation"]. This
-call can eventually be evaluated with `eval(...)`,
+[see, e.g., @Wickham2019, for details on "non-standard evaluation"]. This call
+can eventually be evaluated with `eval(...)`,
 
 ```{r}
 k <- 10
@@ -159,8 +164,8 @@ p <- 0.4
 eval(term)
 ```
 
-The R package \pkg{mathml} can now be used to render the call in
-MathML, that is the math dialect for HTML webpages or in MathJax/LaTeX, as shown
+The R package \pkg{mathml} can now be used to render the call in MathML, that
+is the math dialect for HTML webpages or in MathJax/LaTeX, as shown
 below (some of the curly braces are not really needed in this simple example,
 but are necessary in edge cases).
 
@@ -214,69 +219,18 @@ following the order proposed by [@murrell2000].
 ## Basic elements
 
 \pkg{mathml} contains several basic elements used in everyday mathematical
-expressions, such as superscripts, subscripts, hat, relation and set signs,
-accents and arrows. Below we provide some examples of their application with
-commented code. The other basic elements will be displayed in
-Table \@ref(tab:basic-elements) and Table \@ref(tab:arrows). 
+expressions, such as numbers, Latin and Greek letters, multi-letter identifiers,
+accents, subscripts, and superscripts. 
  
-Let us start with the function for the linear regression. As the reader may notice, \pkg{mathml} displays Greek letters, accents and superscripts. 
-
-
 ```{r, results='asis'}
-term <- quote(hat(y) == hat(b)["0"] + hat(b)["1"]*X["1"])
-mathout(term)
-
-# or with greek letters as:
-term <- quote(y== beta["0"] + beta["1"]*x["1"] + beta["2"]*x["2"] + ... + beta["i"]*x["i"] + varepsilon["i"])
- 
+term <- quote(1 + 2L + "a" + a + abc + phi + Phi + varphi + hat(b)[i, j]^2L
+              + NaN + NA + TRUE + FALSE + Inf + -Inf)
 mathout(term)
 ```
 
-The second example may be particularly of use when we deal with multiple conditions (see \@ref(case-study)). Here, for instance, we present a trivial one with different relation signs. 
+todo: parentheses around -infty, see also $(no)^{p+q}$ below.
 
-```{r, results='asis'}
-f <- function(x, a)
-{
-    if(a == 0L) return( 0L );
-    if(a <= 1L) return(-Inf);
-    if(a > 1L) return(+Inf)
-}
-
-mathout(f)
-```
-
-Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
-
-```{r, results='asis'}
-attributes(f)$name = quote(f)
-mathout(f)
-```
-
-```{r basic-elements, echo=FALSE}
-op <- list(subsup=quote(x["a"]^b), lchoose=quote(lchoose(n, k)), sqrt=quote(sqrt(x)), not=quote(!x), different=quote(x != y), mean=quote(mean(xy)), absolute=quote(abs(x)), tilde=quote(X ~ Y), approx=quote(x %~~% y), equiv=quote(x %==% y), congr=quote(x %=~% y), prop=quote(x %prop% y), 'in'=quote(a %in% A), intersect=quote(intersect(A, B)), union=quote(union(A, B)), intersect=quote(is.null(intersect(A, B))))
-m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
-
-op2 <- list(twosidearrow=quote(x%<->%b), rightarrow=quote(x%->%y), leftarrow=quote(x%<-%y), uparrow=quote(x%up%y), down=quote(x%down%y), iff=quote(x%<=>%y), rArr=quote(x %=>% y), lArr=quote(x %<=% y), dblup=quote(x %dblup% y), dbldown=quote(x %dbldown% y))
-m2 <- lapply(op2, FUN=mathjax, flags=list(cat=FALSE))
-
-op2 <- as.character(op2)
-if(knitr::is_latex_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
-
-op <- as.character(op)
-if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
-
-t <- cbind(Operator=op, Output=m, Operator=op2, Output=m2)
-knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
-```
-
-
-## Basic calculations
+## Operators and parentheses
 
 Basic arithmetic operators and parentheses are translated as they are, as
 illustrated below.
@@ -335,11 +289,31 @@ term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
-A few more custom operators are shown in Table \@ref(tab:custom-operators).
+More operators are shown in Table \@ref(tab:custom-operators).
 
 ```{r custom-operators, echo=FALSE}
-op <- list(cross=quote(x %*% y), dot=quote(x %.% y), kronecker=quote(X %x% Y),
-  'integer division'=quote(x %/% y), and=quote(A & B), vel=quote(A | B), xor=quote(xor(A, B)), not=quote(!A))
+op <- list(
+  cross=quote(x %*% y),
+  dot=quote(x %.% y),
+  kronecker=quote(X %x% Y),
+  'integer division'=quote(x %/% y),
+  and=quote(A & B),
+  vel=quote(A | B),
+  xor=quote(xor(A, B)),
+  not=quote(!A),
+  equal=quote(X == Y),
+  assign=quote(X <- Y),
+  different=quote(x != y),
+  tilde=quote(X ~ Y),
+  approx=quote(x %~~% y),
+  equiv=quote(x %==% y),
+  congr=quote(x %=~% y),
+  prop=quote(x %prop% y),
+  'in'=quote(a %in% A),
+  intersect=quote(intersect(A, B)),
+  union=quote(union(A, B)),
+  intersect=quote(is.null(intersect(A, B)))) # todo: check if duplicate
+
 m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
 
 op <- as.character(op)
@@ -351,6 +325,69 @@ if(knitr::is_html_output())
 t <- cbind(Operator=op, Output=m)
 knitr::kable(t, caption="Custom operators in mathml", row.names=FALSE, escape=FALSE)
 ```
+
+## R functions
+
+The second example may be particularly of use when we deal with multiple conditions (see \@ref(case-study)). Here, for instance, we present a trivial one with different relation signs. 
+
+```{r, results='asis'}
+f <- function(x, a)
+{
+    if(a == 0L) return( 0L );
+    if(a <= 1L) return(-Inf);
+    if(a > 1L) return(+Inf)
+}
+
+mathout(f)
+```
+
+Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
+
+```{r, results='asis'}
+attributes(f)$name = quote(f)
+mathout(f)
+```
+
+A few more elements are displayed in
+Tables \@ref(tab:basic-elements) and \@ref(tab:arrows). 
+
+```{r basic-elements, echo=FALSE}
+op1 <- list(
+  lchoose=quote(lchoose(n, k)),
+  sqrt=quote(sqrt(x)),
+  mean=quote(mean(xy)),
+  absolute=quote(abs(x))) # todo: check if duplicate
+m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
+
+op1 <- as.character(op1)
+if(knitr::is_latex_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_html)
+
+op2 <- list(
+  twosidearrow=quote(x%<->%b),
+  rightarrow=quote(x%->%y),
+  leftarrow=quote(x%<-%y),
+  uparrow=quote(x%up%y),
+  down=quote(x%down%y),
+  iff=quote(x%<=>%y),
+  rArr=quote(x %=>% y),
+  lArr=quote(x %<=% y),
+  dblup=quote(x %dblup% y),
+  dbldown=quote(x %dbldown% y))
+m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
+
+op2 <- as.character(op2)
+if(knitr::is_latex_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2)
+knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
+```
+
 
 ## Ringing back to R
 
