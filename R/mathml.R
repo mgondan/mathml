@@ -78,6 +78,9 @@ mathml_preproc <- function(query=quote(2 != 2))
   if(is.list(query))
     return(lapply(query, FUN=mathml_preproc))
 
+  if(is.function(query))
+    body(query) <- mathml_preproc(body(query))
+
   return(query)
 }
 
