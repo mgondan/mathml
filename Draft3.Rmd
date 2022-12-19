@@ -85,42 +85,42 @@ catmath <- function(term, ...)
 
 # Introduction
 
-The R extension of the markdown language [@Xie2020] enables reproducible
+The R\ extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
-Since recently [@R, version 4.2], R's manual pages include support for
+Since recently [@R, version 4.2], R\'s manual pages include support for
 mathematical expressions [@Sarkar2022], which already is a big improvement.
-However, rules for the translation of R's built-in language elements to their
-mathematical representation are still lacking. So far, R expressions such
+However, rules for the translation of R\'s built-in language elements to their
+mathematical representation are still lacking. So far, R\ expressions such
 as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
 like $P_\mathrm{Bi}(X \le k; N, p)$ require explicit Latex commands, that
 is, `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for minimalistic examples,
 these commands are tedious to type in and hard to read in their source code. 
 
-The present R package defines a set of rules for an _automatic_ translation of
-R expressions to mathematical output in RMarkdown documents [@Xie2020] and
+The present R\ package defines a set of rules for an _automatic_ translation of
+R\ expressions to mathematical output in RMarkdown documents [@Xie2020] and
 ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
-rules, for example, to represent specific R elements by custom mathematical
+rules, for example, to represent specific R\ elements by custom mathematical
 signs.
 
-The main feature of the package that the same R expressions and equations are
+The main feature of the package that the same R\ expressions and equations are
 used for both mathematical typesetting and calculations. This saves time and
 reduces mistakes, as well be illustrated below.
 
 The paper is organized as follows. Section\ 2 presents the background of the
-package, including Prolog and the R package \pkg{rolog} and the two main classes
+package, including Prolog and the R\ package \pkg{rolog} and the two main classes
 of rules for translating R\ objects to mathematical expressions. Section\ 3
 illustrates the main features of the \pkg{mathml} package, potential issues and
 workarounds using examples from the day-to-day perspective of the user.
 Sections\ 4 and\ 5 present two case studies for the use of the package in a
 scientific report and a ShinyApp web page. Section\ 6 concludes with a
-discussion and ideas for further development. A complete list of the R elements
+discussion and ideas for further development. A complete list of the R\ elements
 covered by the package is found in the Appendix.
 
 # Background
 
-The translation of R expressions to mathematical output is achieved through a
+The translation of R\ expressions to mathematical output is achieved through a
 Prolog interpreter. Prolog is a classical logic programming language with many
 applications in expert systems, computer linguistics and symbolic artificial
 intelligence. The main strength of Prolog is its concise representation of facts
@@ -132,7 +132,7 @@ library, a lot of packages have been developed for all kinds of statistical
 problems, including statistics-based artificial intelligence tools such as
 neural networks for machine learning and deep learning. Whereas Prolog is weak
 in statistical computation, but strong in symbolic manipulation, the converse
-may be said for the R language. The \pkg{rolog} package bridges this gap by
+may be said for the R\ language. The \pkg{rolog} package bridges this gap by
 providing an interface to a SWI-Prolog distribution in R. The communication
 between the two systems is mainly in the form of queries from R\ to Prolog, but
 two predicates allow Prolog to ring back and evaluate terms in R.
@@ -164,7 +164,7 @@ p <- 0.4
 eval(term)
 ```
 
-The R package \pkg{mathml} can now be used to render the call in MathML, that
+The R\ package \pkg{mathml} can now be used to render the call in MathML, that
 is the math dialect for HTML webpages or in MathJax/LaTeX, as shown
 below (some of the curly braces are not really needed in this simple example,
 but are necessary in edge cases).
@@ -175,7 +175,7 @@ mathjax(term)
 ```
 
 We can include the output in a RMarkdown document by specifying `results='asis'`
-in the R code chunk, as is done in the next example. The
+in the R\code chunk, as is done in the next example. The
 R\ function `mathout(...)` is just a wrapper that invokes `mathml(...)` for HTML
 output and `mathjax(...)` for LaTeX output.
 
@@ -278,7 +278,7 @@ mathout(term)
 ```
 
 As can be seen, \pkg{mathml} reminds the user that it is not possible to change
-the precedence of custom operators in R, and that expressions with such
+the precedence of custom operators in R\, and that expressions with such
 operators are evaluated strictly from left to right. As in the
 previous example, the solution is to either use the functional form of the
 operator or a curly brace to enforce the correct operator precedence.
@@ -391,12 +391,12 @@ knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALS
 
 ## Ringing back to R
 
-R's `integrate` function takes a number of arguments, the most important ones
+R\'s `integrate` function takes a number of arguments, the most important ones
 being the function to integrate, and the lower and the upper bound of the
 integration. For mathematical typesetting in the form
 of $\int f(x)\, dx$, \pkg{mathml} needs to find out the name of the integration
 variable. For that purpose, the underlying Prolog bridge provides a
-predicate `r_eval/2` that calls R from Prolog. In the example below, this
+predicate `r_eval/2` that calls R\ from Prolog. In the example below, this
 predicate is used for a call of `formalArgs(args(sin))`, which returns the names
 of the function arguments of `sin`, namely, `x`.
 
@@ -445,7 +445,7 @@ mathout(canonical(term))
 eval(term)
 ```
 
-The extra R function `canonical()` applies `match.call()` to non-primitive R
+The extra R\ function `canonical()` applies `match.call()` to non-primitive R\
 calls, basically cleaning up the arguments and bringing them into the correct
 order.
 
@@ -885,7 +885,7 @@ Furthermore, we can observe from the values reported in the Table below that, wi
 The case study presented above displays several possible ways of how \pkg{mathml} can be a useful tool in data representation and calculation. Furthermore, the careful reader might have also noticed that \pkg{mathml} allows also for a more smoothly detection of possible mistakes in writing. 
 
 An interesting use case of the package is in this sense the readability of self-written
-functions in R code. R code is notoriously hard to read, as are most programming
+functions in R\ code. R\ code is notoriously hard to read, as are most programming
 languages [@green1977]. The poor legibility of the language is one of the main
 sources of mistakes. For illustration, we consider Equation 10 in
 Schwarz [-@schwarz1994], namely the same equation reported above. The first version has a wrong parenthesis, which is barely visible in the R code.
