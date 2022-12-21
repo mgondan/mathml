@@ -1748,7 +1748,8 @@ math(_Flags, left(_, A), M)
  => M = A.
 
 math(right(Prec, A), M)
- => M = left(Prec+1, A).
+ => P is Prec - 1,
+    M = left(P, A).
 
 denoting(Flags, left(_, A), D)
  => denoting(Flags, A, D).

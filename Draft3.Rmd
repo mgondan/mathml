@@ -223,12 +223,12 @@ expressions, such as numbers, Latin and Greek letters, multi-letter identifiers,
 accents, subscripts, and superscripts. 
  
 ```{r, results='asis'}
-term <- quote(1 + 2L + "a" + a + abc + phi + Phi + varphi + hat(b)[i, j]^2L
-              + NaN + NA + TRUE + FALSE + Inf + -Inf)
+term <- quote(1 + 2L + "a" + a + abc + phi + Phi + varphi + hat(b)[i, j]^2L)
+mathout(term)
+
+term <- quote(NaN + NA + TRUE + FALSE + Inf + -Inf)
 mathout(term)
 ```
-
-todo: parentheses around -infty, see also $(no)^{p+q}$ below.
 
 ## Operators and parentheses
 
@@ -239,6 +239,8 @@ illustrated below.
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + {n*o}^{p + q})
 mathout(term)
 ```
+
+todo: parentheses around -infty, see also $(no)^{p+q}$ below.
 
 For multiplications involving only numbers and symbols, the multiplication sign
 is omitted. This heuristic does not always produce the desired result;
