@@ -11,7 +11,7 @@
 % R interface: Translate R expression to MathML string
 %
 r2mathml(R, S)
- => r2mathml([], R, S).
+=> r2mathml([], R, S).
 
 r2mathml(Flags, R, S)
  => mathml(Flags, R, M),

@@ -236,11 +236,9 @@ Basic arithmetic operators and parentheses are translated as they are, as
 illustrated below.
 
 ```{r, results="asis"}
-term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + {n*o}^{p + q})
+term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
 mathout(term)
 ```
-
-todo: parentheses around -infty, see also $(no)^{p+q}$ below.
 
 For multiplications involving only numbers and symbols, the multiplication sign
 is omitted. This heuristic does not always produce the desired result;
@@ -254,10 +252,10 @@ mathout(term)
 
 Note that for the standard operators with known precedence, \pkg{mathml} is able
 to detect if parentheses are needed; for example, a parenthesis is automatically
-put around `g + h` in the `nodot`-example and around `n*o` above. However, we
-also note an unecessary parenthesis around `l + m` above. This parenthesis
-results is a consequence of `quote(a^(b + c))` actually producing a nested
-R\ call of the form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
+put around `g + h` in the `nodot`-example. However, we also note an unecessary
+parenthesis around `l + m` above. This parenthesis is a consequence
+of `quote(a^(b + c))` actually producing a nested R\ call of the
+form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
 
 ```{r}
 term <- quote(a^(b + c))
@@ -266,8 +264,8 @@ paste(term)
 
 This feature is unfortunate because the extra parenthesis around `b + c` is not
 needed and yields to the extra parenthesis. The preferred result is obtained by
-using the functional representation `quote('^'(k, l + m))` of the power, or, as
-a workaround, curly braces (see last summand above).
+using the functional representation `quote('^'(k + l, m + n))` of the power, or,
+as a workaround, curly braces (see last summand above).
 
 ## Custom operators
 
@@ -279,11 +277,11 @@ term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
 mathout(term)
 ```
 
-As can be seen, \pkg{mathml} reminds the user that it is not possible to change
-the precedence of custom operators in R\, and that expressions with such
-operators are evaluated strictly from left to right. As in the
-previous example, the solution is to either use the functional form of the
-operator or a curly brace to enforce the correct operator precedence.
+This is a reminder that it is not possible to change the precedence of custom
+operators in R\, and that expressions with such operators are evaluated strictly
+from left to right. As in the previous example, the solution is to either use
+the functional form of the operator or a curly brace to enforce the correct
+operator precedence.
 
 ```{r, results='asis'}
 term <- quote(`%+-%`(mean(X), 1.96 * s / sqrt(N)))
@@ -291,10 +289,11 @@ term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
-More operators are shown in Table \@ref(tab:custom-operators).
+More operators are shown in Table \@ref(tab:custom-operators), following the
+suggestions by Murrell and Ihaka [-@murrell2000].
 
 ```{r custom-operators, echo=FALSE}
-op <- list(
+op1 <- list(
   cross=quote(x %*% y),
   dot=quote(x %.% y),
   kronecker=quote(X %x% Y),
@@ -304,7 +303,17 @@ op <- list(
   xor=quote(xor(A, B)),
   not=quote(!A),
   equal=quote(X == Y),
-  assign=quote(X <- Y),
+  assign=quote(X <- Y))
+
+m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
+
+op1 <- as.character(op1)
+if(knitr::is_latex_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_html)
+
+op2 <- list(
   different=quote(x != y),
   tilde=quote(X ~ Y),
   approx=quote(x %~~% y),
@@ -314,51 +323,39 @@ op <- list(
   'in'=quote(a %in% A),
   intersect=quote(intersect(A, B)),
   union=quote(union(A, B)),
-  intersect=quote(is.null(intersect(A, B)))) # todo: check if duplicate
+  intersect=quote(is.null(A)))
 
-m <- lapply(op, FUN=mathjax, flags=list(cat=FALSE))
+m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
-op <- as.character(op)
+op2 <- as.character(op2)
 if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
+  op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
+  op2 <- sapply(op2, FUN=knitr:::escape_html)
 
-t <- cbind(Operator=op, Output=m)
-knitr::kable(t, caption="Custom operators in mathml", row.names=FALSE, escape=FALSE)
+t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2)
+knitr::kable(t, caption="Custom operators in mathml", 
+             row.names=FALSE, escape=FALSE)
 ```
 
 ## R functions
 
-The second example may be particularly of use when we deal with multiple conditions (see \@ref(case-study)). Here, for instance, we present a trivial one with different relation signs. 
-
-```{r, results='asis'}
-f <- function(x, a)
-{
-    if(a == 0L) return( 0L );
-    if(a <= 1L) return(-Inf);
-    if(a > 1L) return(+Inf)
-}
-
-mathout(f)
-```
-
-Note that you may also assign a name to the function. The default name is in fact the greek letter lambda, but with `attributes()$name` the name costumization is performed smoothly.
-
-```{r, results='asis'}
-attributes(f)$name = quote(f)
-mathout(f)
-```
-
-A few more elements are displayed in
-Tables \@ref(tab:basic-elements) and \@ref(tab:arrows). 
+All functions from R::base are supported, a subset is shown in 
+Tables \@ref(tab:basic-elements). 
 
 ```{r basic-elements, echo=FALSE}
 op1 <- list(
+  sin=quote(sin(x)),
+  cosh=quote(cosh(x)),
+  tanpi=quote(tanpi(alpha)),
+  log=quote(log(p)),
+  log1p=quote(log1p(x)),
+  exp=quote(exp(x)),
+  expm1=quote(expm1(x)),
   lchoose=quote(lchoose(n, k)),
   sqrt=quote(sqrt(x)),
   mean=quote(mean(xy)),
-  absolute=quote(abs(x))) # todo: check if duplicate
+  absolute=quote(abs(x)))
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
 op1 <- as.character(op1)
@@ -390,6 +387,27 @@ t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2)
 knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
 ```
 
+For self-written functions, matters are a bit more complicated because the
+underlying R package `rolog` [@rolog] cannot easily access the function name,
+hence a default is chosen.
+
+```{r, results='asis'}
+f <- function(x)
+{
+  if(x == 0) return(0L);
+  if(x <= 0) return(-1L);
+  if(x > 0) return(1L)
+}
+
+mathout(f)
+```
+
+Custom names can be given via attributes.
+
+```{r, results='asis'}
+attributes(f)$name = quote(sgn)
+mathout(f)
+```
 
 ## Ringing back to R
 
