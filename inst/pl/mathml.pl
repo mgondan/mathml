@@ -989,8 +989,8 @@ math(Flags, integrate(Fn, Lower, Upper), New, M),
 math(Flags, integrate(Fn, Lower, Upper), New, M),
     r_eval('is.null'('$'('.GlobalEnv', Fn)), false)
  => Flags = New,
-%    r_eval('['(formalArgs(args('$'('.GlobalEnv', Fn))), 1), Arg1),
-    atom_string(DX, "Arg1"),
+    r_eval('['(formalArgs(args('$'('.GlobalEnv', Fn))), 1), Arg1),
+    atom_string(DX, Arg1),
     M = integrate(fn(Fn, [DX]), Lower, Upper, DX).
 
 math(Flags, integrate(Fn, Lower, Upper), New, M)
@@ -1748,7 +1748,7 @@ math(_Flags, left(_, A), M)
  => M = A.
 
 math(right(Prec, A), M)
- => P is Prec - 1,
+ => P is Prec, % - 1,
     M = left(P, A).
 
 denoting(Flags, left(_, A), D)

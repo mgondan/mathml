@@ -226,7 +226,7 @@ accents, subscripts, and superscripts.
 term <- quote(1 + 2L + "a" + a + abc + phi + Phi + varphi + hat(b)[i, j]^2L)
 mathout(term)
 
-term <- quote(NaN + NA + TRUE + FALSE + Inf + -Inf)
+term <- quote(NaN + NA + TRUE + FALSE + Inf + (-Inf))
 mathout(term)
 ```
 
@@ -250,10 +250,10 @@ term <- quote(dot(d, e) + nodot(f, g + h) + times(X, Y))
 mathout(term)
 ```
 
-Note that for the standard operators with known precedence, \pkg{mathml} is able
-to detect if parentheses are needed; for example, a parenthesis is automatically
-put around `g + h` in the `nodot`-example. However, we also note an unecessary
-parenthesis around `l + m` above. This parenthesis is a consequence
+For the standard operators with known precedence, \pkg{mathml} is generally able
+to detect if parentheses are needed; for example, parentheses are automatically
+put around `g + h` in the `nodot`-example. However, we note unecessary
+parentheses around `l + m` above. This is parenthesis is a consequence
 of `quote(a^(b + c))` actually producing a nested R\ call of the
 form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
 
@@ -389,22 +389,16 @@ knitr::kable(t, caption="Arithmetic functions", row.names=FALSE, escape=FALSE)
 
 For self-written functions, matters are a bit more complicated because the
 underlying R package `rolog` [@rolog] cannot easily access the function name,
-hence a default is chosen.
+hence a default is chosen. The function name can be given as an attribute.
 
 ```{r, results='asis'}
 f <- function(x)
 {
   if(x == 0L) return(0L);
-  if(x <= 0L) return(-1L);
+  if(x < 0L) return(-1L);
   if(x > 0L) return(1L)
 }
 
-mathout(f)
-```
-
-Custom names can be given via attributes.
-
-```{r, results='asis'}
 attributes(f)$name = quote(sgn)
 mathout(f)
 ```
@@ -428,35 +422,36 @@ mathout(term)
 ## Names and order of arguments
 
 One of R's great features is the possibility to refer to function arguments by
-by their names, not only by their position in the list of arguments.
-Unfortunately, the prolog-powered handler for `integrate/3` is rather rigid; it
-accepts only three arguments in that particular order and without names, that
+their names, not only by their position in a list of arguments. Unfortunately, 
+the Prolog-powered handler for `integrate/3` is rather rigid; it accepts only
+three arguments in that particular order and without names, that
 is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print the desired result.
 
 To "canonicalize" function calls with named arguments and arguments in unusual
 order, \pkg{mathml} provides an auxilliary function `canonical(f, drop)` that
-reorders the argument list of calls to known functions and, if `drop=TRUE`,
-drops the function names.
+reorders the argument list of calls to known functions and, if `drop=TRUE`, also
+removes the names of the arguments.
 
 ```{r}
 term <- quote(integrate(lower=0L, upper=2L*pi, sin))
 canonical(term)
 ```
 
+We can then easily feed mixtures of partially named and positional arguments in
+unusual order into the renderer.
 
 ```{r, echo=TRUE, results='asis'}
-# A custom function
 g <- function(u)
 {
   sin(u)
 }
 
-# Mixture of (partially) named and positional arguments in unusual order
-term = call("integrate", lower=-Inf, upper=Inf, g)
+# 
+term <- call("integrate", lower=-Inf, upper=Inf, g)
 attributes(term)$name = quote(g)
 mathout(canonical(term))
 
-# Even more complex
+# 2
 term <- call("*", 2L, call("$", call("integrate", low=-Inf, up=Inf, g), "value"))
 attributes(term)$name = quote(g)
 mathout(canonical(term))
