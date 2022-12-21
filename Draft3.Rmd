@@ -333,7 +333,26 @@ if(knitr::is_latex_output())
 if(knitr::is_html_output())
   op2 <- sapply(op2, FUN=knitr:::escape_html)
 
-t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2)
+op3 <- list(
+  twosidearrow=quote(x%<->%b),
+  rightarrow=quote(x%->%y),
+  leftarrow=quote(x%<-%y),
+  uparrow=quote(x%up%y),
+  down=quote(x%down%y),
+  iff=quote(x%<=>%y),
+  rArr=quote(x %=>% y),
+  lArr=quote(x %<=% y),
+  dblup=quote(x %dblup% y),
+  dbldown=quote(x %dbldown% y))
+m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
+
+op3 <- as.character(op3)
+if(knitr::is_latex_output())
+  op3 <- sapply(op3, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op3 <- sapply(op3, FUN=knitr:::escape_html)
+
+t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2, Operator=op3, Arrow=m3)
 knitr::kable(t, caption="Custom operators in mathml", 
              row.names=FALSE, escape=FALSE)
 ```
@@ -364,27 +383,8 @@ if(knitr::is_latex_output())
 if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
-op2 <- list(
-  twosidearrow=quote(x%<->%b),
-  rightarrow=quote(x%->%y),
-  leftarrow=quote(x%<-%y),
-  uparrow=quote(x%up%y),
-  down=quote(x%down%y),
-  iff=quote(x%<=>%y),
-  rArr=quote(x %=>% y),
-  lArr=quote(x %<=% y),
-  dblup=quote(x %dblup% y),
-  dbldown=quote(x %dbldown% y))
-m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
-
-op2 <- as.character(op2)
-if(knitr::is_latex_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
-
-t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2)
-knitr::kable(t, caption="Basic elements in mathml", row.names=FALSE, escape=FALSE)
+t <- cbind(Function=op1, Output=m1)
+knitr::kable(t, caption="Arithmetic functions", row.names=FALSE, escape=FALSE)
 ```
 
 For self-written functions, matters are a bit more complicated because the
@@ -394,9 +394,9 @@ hence a default is chosen.
 ```{r, results='asis'}
 f <- function(x)
 {
-  if(x == 0) return(0L);
-  if(x <= 0) return(-1L);
-  if(x > 0) return(1L)
+  if(x == 0L) return(0L);
+  if(x <= 0L) return(-1L);
+  if(x > 0L) return(1L)
 }
 
 mathout(f)
