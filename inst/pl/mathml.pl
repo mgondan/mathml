@@ -2376,55 +2376,18 @@ math(Flags, buggy(Flags, _, B), New, X)
     X = B.
 
 %
-% Binomial distribution
+% Probability distributions
 %
-% Density, distribution etc.
-math(Flags, dbinom(K, N, Pi), New, X)
- => New = Flags,
-    X = fn(subscript('P', "Bi"), (['X' = K] ; [N, Pi])).
+math(dbinom(K, N, Pi), M)
+ => M = fn(subscript('P', "Bi"), (['X' = K] ; [N, Pi])).
 
 math(pbinom(K, N, Pi), M)
  => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
-math(Flags, upbinom(K, N, Pi), New, X)
- => New = Flags,
-    X = fn(subscript('P', "Bi"), (['X' >= K] ; [N, Pi])).
+math(qbinom(Alpha, N, Pi), M)
+ => M = fn(subscript("arg min", k),
+          [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
 
-math(Flags, cbinom(Alpha, N, Pi, Tail, Dist), New, X)
- => New = Flags,
-    X = fn(Tail, [fn(subscript('P', "Bi"), ([Dist] ; [N, Pi])) =< Alpha]).
-
-math(Flags, tail("upper"), New, X)
- => New = Flags,
-    X = subscript("argmin", k).
-
-math(Flags, tail("lower"), New, X)
- => New = Flags,
-    X = subscript("argmax", k).
-
-math(Flags, tail("upperdens"), New, X)
- => New = Flags,
-    X = subscript("argmin", k > 'N' * pi).
-
-math(Flags, tail("lowerdens"), New, X)
- => New = Flags,
-    X = subscript("argmax", k < 'N' * pi).
-
-math(Flags, dist("upper"), New, X)
- => New = Flags,
-    X = ('X' >= k).
-
-math(Flags, dist("lower"), New, X)
- => New = Flags,
-    X = ('X' =< k).
-
-math(Flags, dist("density"), New, X)
- => New = Flags,
-    X = ('X' = k).
-
-%
-% Normal distribution
-%
 math(pnorm(X, Mu, Sigma2), M)
  => M = fn('Phi', ([X] ; [Mu, Sigma2])).
 
