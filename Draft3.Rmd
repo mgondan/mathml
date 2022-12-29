@@ -394,7 +394,7 @@ op1 <- list(
   expm1=quote(expm1(x)),
   lchoose=quote(lchoose(n, k)),
   sqrt=quote(sqrt(x)),
-  mean=quote(mean(X)["A"]),
+  mean=quote(mean(X)),
   absolute=quote(abs(x)))
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
@@ -410,13 +410,13 @@ op2 <- list(
   qbinom=quote(qbinom(p, N, pi)),
   dnorm=quote(dnorm(x)),
   dnorm=quote(dnorm(x, mu, sigma)),
+  pnorm=quote(pnorm(x)),
   pnorm=quote(pnorm(x, mu, sigma)),
-  qnorm=quote(qnorm(alpha/2L, mu, sigma)),
-  pchisq=quote(pchisq(x, df)),
-  qchisq=quote(qchisq(p, df)),
-  dt=quote(dt(x, df)),
-  pt=quote(pt(x, df)),
-  qt=quote(qt(p, df)))
+  qnorm=quote(qnorm(alpha/2L)),
+  pchisq=quote(1-pchisq(x, df)),
+  qchisq=quote(qchisq(1L-alpha, df)),
+  pt=quote(pt(t, N-1L)),
+  qt=quote(qt(alpha/2L, N-1L)))
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
 op2 <- as.character(op2)
