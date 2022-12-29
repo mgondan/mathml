@@ -376,7 +376,7 @@ of parentheses.
 ```{r, results='asis'}
 term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
 mathout(term)
-term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + ceiling(x) + round(X))
+term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + ceiling(x))
 mathout(term)
 ```
 

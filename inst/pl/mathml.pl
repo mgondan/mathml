@@ -53,17 +53,17 @@ macro(Flags, R, New, M) :-
     !, New = Flags,
     M = M0.
 
-macro(Flags, R, Flags, M) :-
-    math(R, M),
-    dif(R, M).
+macro(Flags, R, New, M) :-
+    math(Flags, R, New, M),
+    dif(Flags-R, New-M).
 
 macro(Flags, R, Flags, M) :-
     math(Flags, R, M),
     dif(R, M).
 
-macro(Flags, R, New, M) :-
-    math(Flags, R, New, M),
-    dif(Flags-R, New-M).
+macro(Flags, R, Flags, M) :-
+    math(R, M),
+    dif(R, M).
 
 %
 % Main MathML translation
@@ -386,6 +386,14 @@ type(_Flags, set(empty), T)
  => T = atomic.
 
 %
+% sin^2(x) etc.
+%
+math(Flags, sin(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(sin^Pwr, [A]).
+
+%
 % Special functions
 %
 special(R) :-
@@ -405,7 +413,7 @@ prec(_Flags, special(sum), Prec)
     Prec is P + 1.
 
 prec(_Flags, special(_), Prec)
- => current(Prec, yfx, *).
+ => Prec = 0. % current(Prec, yfx, *).
 
 ml(_Flags, special(prod), M)
  => M = mo(&(prod)).
@@ -2444,7 +2452,7 @@ jax(Flags, fn(Name, [Arg]), M),
 % Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
     type(Flags, Name, Type),
-    member(Type, [special, subscript(_)]),
+    member(Type, [special, subscript(_), superscript(_)]),
     prec(Flags, Name, P),
     prec(Flags, Arg, Prec),
     P > Prec
@@ -2454,7 +2462,7 @@ ml(Flags, fn(Name, [Arg]), M),
 
 jax(Flags, fn(Name, [Arg]), M),
     type(Flags, Name, Type),
-    member(Type, [special, subscript(_)]),
+    member(Type, [special, subscript(_), superscript(_)]),
     prec(Flags, Name, P),
     prec(Flags, Arg, Prec),
     P > Prec
@@ -2464,7 +2472,7 @@ jax(Flags, fn(Name, [Arg]), M),
 
 ml(Flags, fn(Name, [Arg]), M),
     type(Flags, Name, Type),
-    member(Type, [special, subscript(_)]),
+    member(Type, [special, subscript(_), superscript(_)]),
     prec(Flags, Arg, 0)
  => ml(Flags, Name, F),
     ml(Flags, Arg, X),
@@ -2472,7 +2480,7 @@ ml(Flags, fn(Name, [Arg]), M),
 
 jax(Flags, fn(Name, [Arg]), M),
     type(Flags, Name, Type),
-    member(Type, [special, subscript(_)]),
+    member(Type, [special, subscript(_), superscript(_)]),
     prec(Flags, Arg, 0)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
