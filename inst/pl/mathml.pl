@@ -393,6 +393,31 @@ math(Flags, sin(A), New, M),
  => New = Flags1,
     M = fn(sin^Pwr, [A]).
 
+math(Flags, sinpi(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(sinpi^Pwr, [A]).
+
+math(Flags, cos(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(cos^Pwr, [A]).
+
+math(Flags, cospi(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(cospi^Pwr, [A]).
+
+math(Flags, tan(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(tan^Pwr, [A]).
+
+math(Flags, tanpi(A), New, M),
+    select(superscript(Pwr), Flags, Flags1)
+ => New = Flags1,
+    M = fn(tanpi^Pwr, [A]).
+
 %
 % Special functions
 %
