@@ -467,22 +467,21 @@ integration.
 ```{r, results='asis'}
 term <- quote(integrate(sin, 0L, 2L*pi))
 mathout(term)
+eval(term)
 ```
 
-In the above example, `sin` is an R symbol, not an R function. For mathematical
-typesetting in the form of $\int f(x)\, dx$, \pkg{mathml} needs to find out the
-name of the integration variable. For that purpose, the underlying Prolog bridge
-provides a predicate `r_eval/2` that calls R\ from Prolog. In the example above,
-this predicate is used for a call of `formalArgs(args(sin))`, which returns the
-names of the arguments of `sin`, namely, `x`.
+For mathematical typesetting in the form
+of \(\int f(x)\, dx\), \pkg{mathml} needs to find out the name of the
+integration variable. For that purpose, the underlying Prolog bridge provides a
+predicate `r_eval/2` that calls R\ from Prolog. In the example above, this
+predicate evaluates `formalArgs(args(sin))`, which returns the names of the
+arguments of `sin`, namely, `x`.
 
-If integrand points to an R function as in `call("integrate", sin, 0, 2L*pi)`,
-mathml would be unable to find out the function name:
-
-```{r}
-g <- function(x) {sin(x)}
-print(g)
-```
+Note that in the example above, the quoted term is an abbreviation
+for `call("integrate", quote(sin), ...)`, with `sin` being an R\ symbol, not a
+function. R's `integrate()` can handle both. However, as already mentioned in
+the previous subsection, \pkg{mathml} would be unable to find out the function
+name, it needs the symbol.
 
 ## Names and order of arguments
 
