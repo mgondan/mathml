@@ -413,8 +413,8 @@ op2 <- list(
   pnorm=quote(pnorm(x)),
   pnorm=quote(pnorm(x, mu, sigma)),
   qnorm=quote(qnorm(alpha/2L)),
-  pchisq=quote(1-pchisq(x, df)),
-  qchisq=quote(qchisq(1L-alpha, df)),
+  pchisq=quote(1L-pchisq(x, 1L)),
+  qchisq=quote(qchisq(1L-alpha, 1L)),
   pt=quote(pt(t, N-1L)),
   qt=quote(qt(alpha/2L, N-1L)))
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
@@ -432,21 +432,31 @@ knitr::kable(t, caption="R functions from base and stats",
 
 ## Custom functions
 
-For self-written functions, matters are a bit more complicated because the
-underlying R package `rolog` [@rolog] cannot easily access the function name,
-hence a default is chosen. The function name can be given as an attribute.
+For self-written functions, matters are a bit more complicated. The name of a
+self-written function is not transparent in R, since only the function body is
+represented, as illustrated by the redefinition of `sign` below. The function is
+often a nested R "call" of the form `'{'(L)`, with `L` being a list of
+commands. \pkg{mathml} provides very limited support for typical control
+structures.
 
 ```{r, results='asis'}
-f <- function(x)
+sgn <- function(x)
 {
-  if(x == 0L) return(0L);
-  if(x < 0L) return(-1L);
+  if(x == 0L) return(0L)
+  if(x < 0L) return(-1L)
   if(x > 0L) return(1L)
 }
 
-attributes(f)$name = quote(sgn)
-mathout(f)
+term <- quote(s <- sgn(x))
+mathout(term)
+
+hook(quote(s), quote(sg(x)))
+term <- call("<-", quote(s), sgn)
+mathout(term)
 ```
+
+The hook (see below) is used to display \(\mathrm{sg}(x) = \{\ldots\) instead
+of just \(s = \{\).
 
 ## Ringing back to R
 

@@ -784,12 +784,12 @@ jax(Flags, floor(A), M)
 paren(_Flags, floor(_), P)
  => P is 0.
 
-math(_Flags, (F :- Body), M)
- => M = (F == Body).
+math(_Flags, (_F :- Body), M)
+ => M = Body.
 
 math(_Flags, Function, M),
     compound(Function),
-    compound_name_arguments(Function, '$function', Args)
+    compound_name_arguments(Function, function, Args)
  => M = lambda(Args).
 
 math(Flags, lambda(Args), M),
