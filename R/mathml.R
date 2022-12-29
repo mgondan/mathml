@@ -29,7 +29,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathml", flags, term, expression(X)),
-    options=list(preproc=mathml_preproc))
+    options=list(preproc=list(rolog::preproc, mathml_preproc)))
   r <- paste(t$X, collapse="")
   if(flags$cat)
     return(cat(r))
@@ -39,8 +39,6 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 
 # Prolog representation of not equal etc. (left: R, right: Prolog)
 mathml_operators = c(
-  "!=" = "\\=",
-  "<=" = "=<",
   "%.%" = "cdot",
   "%/%" = "div",
   "%+-%" = "pm",
@@ -66,17 +64,16 @@ mathml_preproc <- function(query=quote(2 != 2))
   if(is.call(query))
   {
     args <- as.list(query)
-
-    index <- which(args[[1]] == names(mathml_operators))
-    if(length(index) == 1)
-      args[[1]] <- as.name(mathml_operators[index])
+    index <- (args[[1]] == names(mathml_operators))
+    if(any(index))
+      args[[1]] <- as.symbol(mathml_operators[index])
 
     args[-1] <- lapply(args[-1], FUN=mathml_preproc)
     return(as.call(args))
   }
 
   if(is.list(query))
-    return(lapply(query, FUN=mathml_preproc))
+    query[] <- lapply(query, FUN=mathml_preproc)
 
   if(is.function(query))
     body(query) <- mathml_preproc(body(query))
@@ -107,12 +104,35 @@ mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathjax", flags, term, expression(X)),
-    options=list(preproc=mathml_preproc))
+    options=list(preproc=list(rolog::preproc, mathml_preproc)))
   r <- paste(t$X, collapse="")
   if(flags$cat)
     return(cat(r))
 
   return(r)
+}
+
+#' Add a name attribute to an element (most often, an R function)
+#'
+#' @param x
+#' an R object, e.g., an R function
+#'
+#' @param name
+#' the name of the object/function
+#'
+#' @return
+#' The object with the name attribute
+#'
+#' @md
+#'
+#' @examples
+#' f <- function(x) {sin(x)}
+#' mathjax(call("integrate", name(f, "sin"), 0L, 2L*pi))
+#'
+name <- function(x, name)
+{
+  attributes(x)$name <- name
+  return(x)
 }
 
 #' Calligraphic font

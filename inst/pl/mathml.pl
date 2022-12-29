@@ -967,33 +967,42 @@ math(Flags, cal(A), New, M)
     M = A.
 
 %
+% Extract value from a result (e.g., integrate)
+%
+math(Flags, $(Fn, "value"), New, M)
+ => Flags = New,
+    M = Fn.
+
+%
 % Integrate over range
 %
-% extract value
-math(Flags, $(integrate(Fn, Lower, Upper), "value"), New, M)
- => Flags = New,
-    M = integrate(Fn, Lower, Upper).
-
-math(Flags, integrate(f=Fn, lower=Lower, upper=Upper), New, M)
- => Flags = New,
-    M = integrate(Fn, Lower, Upper).
-
-% No argument names
+% Case A: Fn is a function
 math(Flags, integrate(Fn, Lower, Upper), New, M),
     Fn = (Head :- _Body),
+    compound(Head),
+    compound_name_arguments(Head, 'function', [DX | _]),
     member(name-Name, Flags)
  => Flags = New,
-    compound_name_arguments(Head, _, [DX | _]),
     M = integrate(fn(Name, [DX]), Lower, Upper, DX).
 
 math(Flags, integrate(Fn, Lower, Upper), New, M),
+    Fn = (Head :- _Body),
+    compound(Head),
+    compound_name_arguments(Head, 'function', [DX | _])
+ => Flags = New,
+    M = integrate(fn(lambda, [DX]), Lower, Upper, DX).
+
+% Case B: Fn is an atom
+math(Flags, integrate(Fn, Lower, Upper), New, M),
+    atom(Fn),
     r_eval('is.null'('$'('.GlobalEnv', Fn)), false)
  => Flags = New,
     r_eval('['(formalArgs(args('$'('.GlobalEnv', Fn))), 1), Arg1),
     atom_string(DX, Arg1),
     M = integrate(fn(Fn, [DX]), Lower, Upper, DX).
 
-math(Flags, integrate(Fn, Lower, Upper), New, M)
+math(Flags, integrate(Fn, Lower, Upper), New, M),
+    atom(Fn)
  => Flags = New,
     r_eval('['(formalArgs(args(Fn)), 1), Arg1),
     atom_string(DX, Arg1),
@@ -1758,6 +1767,13 @@ denoting(Flags, right(_, A), D)
  => denoting(Flags, A, D).
 
 %
+% Named elements (see, e.g., integrate)
+%
+math(Flags, name(A, Name), New, M)
+ => New = [name(Name) | Flags],
+    M = A.
+
+%
 % Abbreviations
 %
 % with s^2_pool denoting the pooled variance
@@ -2385,32 +2401,32 @@ math(pnorm(Z), M)
 %
 % Functions like f(x) and f(x; a, b)
 %
-ml(Flags, fn(Name, (Args ; Params)), M)
+ml(Flags, fn(Name, (Args ; Pars)), M)
  => ml(Flags, Name, F),
-    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Params)])), X),
+    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X),
     M = mrow([F, mo(&(af)), X]).
 
-jax(Flags, fn(Name, (Args ; Params)), M),
+jax(Flags, fn(Name, (Args ; Pars)), M),
     string(Name)
  => jax(Flags, Name, F),
-    jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
+    jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X),
     format(string(M), "{~w\\,~w}", [F, X]).
 
-jax(Flags, fn(Name, (Args ; Params)), M)
+jax(Flags, fn(Name, (Args ; Pars)), M)
  => jax(Flags, Name, F),
-    jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Params)])), X),
+    jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X),
     format(string(M), "{~w~w}", [F, X]).
 
-paren(Flags, fn(_Name, (Args ; Params)), Paren)
+paren(Flags, fn(_Name, (Args ; Pars)), Paren)
  => paren(Flags, list(op(','), Args), X),
-    paren(Flags, list(op(','), Params), Y),
+    paren(Flags, list(op(','), Pars), Y),
     Paren is max(X, Y) + 1.
 
-prec(Flags, fn(_Name, (_Args ; _Params)), Prec)
+prec(Flags, fn(_Name, (_Args ; _Pars)), Prec)
  => prec(Flags, a * b, P0),
     Prec is P0 - 1.
 
-type(_Flags, fn(_Name, (_Args ; _Params)), Type)
+type(_Flags, fn(_Name, (_Args ; _Pars)), Type)
  => Type = paren.
 
 ml(Flags, fn(Name, [Arg]), M),

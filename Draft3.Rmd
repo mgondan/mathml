@@ -2,19 +2,18 @@
 title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
 date: "2022-12-09"
 abstract: >
-  This R\ package translates R\ objects to suitable entities in MathML or LaTeX,
-  thereby enabling pretty mathematical representation of R\ functions or
-  algorithms in data analysis, scientific reports and interactive web content.
-  R\ code text descriptions and mathematical content already coexist,
-  side-by-side, in the RMarkdown document rendering language. The present
-  package allows to use the same R\ objects for both data analysis and
-  typesetting in documents or web content. By tightening the link between the
-  statistical analysis and its verbal or symbolic representation, this new
-  feature is a futher step towards reproducible science. User-defined hooks
-  allow to extend the package by mapping new variable names and functions to
-  new MathML and LaTeX entities. We provide a few working examples that
-  illustrate the use of the package in a little scientific report and in an
-  interactive web page.
+  This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
+  thereby allowing for a pretty mathematical representation of R\ objects and
+  functions in data analyses, scientific reports and interactive web content. In
+  the RMarkdown document rendering language, R\ code and mathematical content
+  already exist side-by-side. The present package allows to use the same
+  R\ objects for both data analysis and typesetting in documents or web content.
+  This tightens the link between the statistical analysis and its verbal
+  description or symbolic representation, which is another step towards
+  reproducible science. User-defined hooks allow to extend the package by
+  mapping specific variables or functions to new MathML and LaTeX entities. A
+  few working examples illustrate the use of the package in a scientific report
+  and in on an interactive web page.
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -89,14 +88,14 @@ The R\ extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
 Since recently [@R, version 4.2], R\'s manual pages include support for
 mathematical expressions [@Sarkar2022], which already is a big improvement.
-However, rules for the translation of R\'s built-in language elements to their
+However, rules for the mapping of built-in language elements to their
 mathematical representation are still lacking. So far, R\ expressions such
 as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
-like $P_\mathrm{Bi}(X \le k; N, p)$ require explicit Latex commands, that
+such as \(P_\mathrm{Bi}(X \le k; N, p)\) require explicit Latex commands, that
 is, `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for minimalistic examples,
-these commands are tedious to type in and hard to read in their source code. 
+these commands are tedious to type in and their source code is hard to read.
 
-The present R\ package defines a set of rules for an _automatic_ translation of
+The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in RMarkdown documents [@Xie2020] and
 ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
@@ -104,19 +103,19 @@ LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
 rules, for example, to represent specific R\ elements by custom mathematical
 signs.
 
-The main feature of the package that the same R\ expressions and equations are
-used for both mathematical typesetting and calculations. This saves time and
-reduces mistakes, as well be illustrated below.
+The main feature of the package is that the same R\ expressions and equations
+can be used for both mathematical typesetting and calculations. This saves time
+and reduces mistakes, as will be illustrated below.
 
-The paper is organized as follows. Section\ 2 presents the background of the
-package, including Prolog and the R\ package \pkg{rolog} and the two main classes
-of rules for translating R\ objects to mathematical expressions. Section\ 3
-illustrates the main features of the \pkg{mathml} package, potential issues and
-workarounds using examples from the day-to-day perspective of the user.
-Sections\ 4 and\ 5 present two case studies for the use of the package in a
-scientific report and a ShinyApp web page. Section\ 6 concludes with a
-discussion and ideas for further development. A complete list of the R\ elements
-covered by the package is found in the Appendix.
+The paper is organized as follows. Section\ 2 presents the technical background
+of the package, including the two main classes of Prolog rules for translating
+R\ objects to mathematical expressions. Section\ 3 illustrates the main features
+of the \pkg{mathml} package, potential issues and workarounds using examples
+from the day-to-day perspective of a user. Sections\ 4 and\ 5 present two case
+studies for the use of the package in a scientific report and a ShinyApp web
+page. Section\ 6 concludes with a discussion and ideas for further development.
+A complete list of the R\ elements covered by the package is found in the
+Appendix.
 
 # Background
 
@@ -132,21 +131,23 @@ library, a lot of packages have been developed for all kinds of statistical
 problems, including statistics-based artificial intelligence tools such as
 neural networks for machine learning and deep learning. Whereas Prolog is weak
 in statistical computation, but strong in symbolic manipulation, the converse
-may be said for the R\ language. The \pkg{rolog} package bridges this gap by
-providing an interface to a SWI-Prolog distribution in R. The communication
-between the two systems is mainly in the form of queries from R\ to Prolog, but
-two predicates allow Prolog to ring back and evaluate terms in R.
+may be said for the R\ language. The \pkg{rolog} package [@rolog] bridges this
+gap by providing an interface to a SWI-Prolog distribution in R. The
+communication between the two systems is mainly in the form of queries from
+R\ to Prolog, but two predicates allow Prolog to ring back and evaluate terms in
+R.
 
-For a first illustration of the package, we consider the binomial probability.
+For a first illustration of the \pkg{mathml} package, we consider the binomial
+probability.
 
 ```{r}
 term <- quote(pbinom(k, N, p))
 term
 ```
 
-The term is quoted to avoid its immediate evaluation which would raise an error
-anyway since the variables `k`, `N`, `p` have not yet been defined. Experienced
-readers will remember that the quoted expression is a short form for
+The term is quoted to avoid its immediate evaluation (which would raise an error
+anyway since the variables `k`, `N`, `p` have not yet been defined). Experienced
+readers will remember that the quoted expression above is a short form for
 
 ```r
 term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
@@ -155,7 +156,7 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 As is seen from the output above, the variable `term` is not assigned the result
 of the calculation, but an R\ "call"
 [see, e.g., @Wickham2019, for details on "non-standard evaluation"]. This call
-can eventually be evaluated with `eval(...)`,
+can eventually be evaluated with `eval()`,
 
 ```{r}
 k <- 10
@@ -165,9 +166,9 @@ eval(term)
 ```
 
 The R\ package \pkg{mathml} can now be used to render the call in MathML, that
-is the math dialect for HTML webpages or in MathJax/LaTeX, as shown
-below (some of the curly braces are not really needed in this simple example,
-but are necessary in edge cases).
+is the dialect for mathematical elements on HTML webpages or in MathJax/LaTeX,
+as shown below (some of the curly braces are not really needed in this simple
+example, but are necessary in edge cases).
 
 ```{r}
 library(mathml)
@@ -175,17 +176,17 @@ mathjax(term)
 ```
 
 We can include the output in a RMarkdown document by specifying `results='asis'`
-in the R\code chunk, as is done in the next example. The
-R\ function `mathout(...)` is just a wrapper that invokes `mathml(...)` for HTML
-output and `mathjax(...)` for LaTeX output.
+in the R\ code chunk, as is done in the next example. The
+R\ function `mathout()` is a wrapper that invokes `mathml()` for HTML output
+and `mathjax()` for LaTeX output.
 
 ```{r, results='asis'}
 mathout(term)
 ```
 
-At the Prolog end, there is a predicate `math/2` that translates the
-call `pbinom(K, N, Pi)` into a "function" `fn/2` with the name `P_Bi`, one
-argument `X =< K`, and the two parameters `N` and `Pi`.
+At the Prolog end, a predicate `math/2` translates the call `pbinom(K, N, Pi)`
+into a "function" `fn/2` with the name `P_Bi`, one argument `X =< K`, and the
+two parameters `N` and `Pi`.
 
 ```prolog
 math(pbinom(K, N, Pi), M)
@@ -194,19 +195,20 @@ math(pbinom(K, N, Pi), M)
 
 Thus, the predicate `math/2` could be considered a "macro" that translates a
 mathematical element (here, `pbinom(K, N, Pi)`) to a different mathematical
-element, namely `fn(..., ...)`. The low-level predicates `ml/3` and `jax/3`
-convert mathematical elements to MathML or LaTeX, respectively.
+element, namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is
+used to convert these basic elements to MathML.
 
 ```prolog
-ml(Flags, fn(Name, (Args ; Params)), M)
+ml(Flags, fn(Name, (Args ; Pars)), M)
  => ml(Flags, Name, N),
-    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Params)])), X),
+    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X),
     M = mrow([N, mo(&(af)), X]).
 ```
 
 The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
-with `N` representing the function's name and `X` its arguments and parameters,
-enclosed in parentheses. The flags can be used for context-sensitive
+with `N` representing the name of the function and `X` its arguments and
+parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
+for MathJax/LaTeX. A list of flags can be used for context-sensitive
 translation (see, e.g., the errors below).
 
 # Package \pkg{mathml} in practice
@@ -218,42 +220,49 @@ following the order proposed by [@murrell2000].
 
 ## Basic elements
 
-\pkg{mathml} contains several basic elements used in everyday mathematical
-expressions, such as numbers, Latin and Greek letters, multi-letter identifiers,
-accents, subscripts, and superscripts. 
+\pkg{mathml} handles the basic elements of everyday mathematical expressions,
+such as numbers, Latin and Greek letters, multi-letter identifiers, accents,
+subscripts, and superscripts. 
  
 ```{r, results='asis'}
-term <- quote(1 + 2L + "a" + a + abc + phi + Phi + varphi + hat(b)[i, j]^2L)
+term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + hat(b)[i, j]^2L)
 mathout(term)
 
 term <- quote(NaN + NA + TRUE + FALSE + Inf + (-Inf))
 mathout(term)
 ```
 
+An expression such as `1 + -2` may be considered unsatisfactory from an
+aesthetical perspective. It is correct R\ syntax, though, and is reproduced
+accordingly, without the parentheses. Parentheses around negated numbers or
+symbols can be added as shown for `-Inf`.
+
+Note that an R function `hat()` does not exist in base R, it is provided by the
+package for convenience and points to the identity function.
+
 ## Operators and parentheses
 
-Basic arithmetic operators and parentheses are translated as they are, as
-illustrated below.
+Arithmetic operators and parentheses are translated as they are, as illustrated
+below.
 
 ```{r, results="asis"}
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
+mathout(term)
+
+term <- quote(dot(d, e) + nodot(f, g + h) + times(X, Y))
 mathout(term)
 ```
 
 For multiplications involving only numbers and symbols, the multiplication sign
 is omitted. This heuristic does not always produce the desired result;
-therefore, \pkg{mathml} defines the extra functions `dot/2`, `nodot/2`,
-and `times/2` that produce the respective multiplication signs.
+therefore, \pkg{mathml} defines alternative multiplication
+functions `dot()`, `nodot()`, and `times()` that produce the respective
+multiplication signs.
 
-```{r, results="asis"}
-term <- quote(dot(d, e) + nodot(f, g + h) + times(X, Y))
-mathout(term)
-```
-
-For the standard operators with known precedence, \pkg{mathml} is generally able
-to detect if parentheses are needed; for example, parentheses are automatically
-put around `g + h` in the `nodot`-example. However, we note unecessary
-parentheses around `l + m` above. This is parenthesis is a consequence
+For standard operators with known precedence, \pkg{mathml} is generally able to
+detect if parentheses are needed; for example, parentheses are automatically
+placed around `g + h` in the `nodot`-example. However, we note unecessary
+parentheses around `l + m` above. Thes parentheses are a consequence
 of `quote(a^(b + c))` actually producing a nested R\ call of the
 form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
 
@@ -262,48 +271,46 @@ term <- quote(a^(b + c))
 paste(term)
 ```
 
-This feature is unfortunate because the extra parenthesis around `b + c` is not
-needed and yields to the extra parenthesis. The preferred result is obtained by
-using the functional representation `quote('^'(k + l, m + n))` of the power, or,
-as a workaround, curly braces (see last summand above).
+For the present purpose, this feature is unfortunate because extra parentheses
+around `b + c` are not needed. The preferred result is obtained by using the
+functional form `quote('^'(k, l + m))` of the power, or curly braces as a
+workaround (see `p + q` above).
 
 ## Custom operators
 
-While the parentheses typically follow the precedence in standard infix
-operators, undesirable results may be obtained in custom operators.
+Whereas in standard infix operators, the parentheses typically follow the rules
+for precedence, undesirable results may be obtained in custom operators.
 
 ```{r, results='asis'}
 term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
 mathout(term)
-```
-
-This is a reminder that it is not possible to change the precedence of custom
-operators in R\, and that expressions with such operators are evaluated strictly
-from left to right. As in the previous example, the solution is to either use
-the functional form of the operator or a curly brace to enforce the correct
-operator precedence.
-
-```{r, results='asis'}
-term <- quote(`%+-%`(mean(X), 1.96 * s / sqrt(N)))
+term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N)))
 term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
-More operators are shown in Table \@ref(tab:custom-operators), following the
-suggestions by Murrell and Ihaka [-@murrell2000].
+The example is a reminder that it is not possible to define the precedence of
+custom operators in R, and that expressions with such operators are evaluated
+strictly from left to right. As in the previous example, the solution is to
+either use the functional form of the operator or a curly brace to enforce the
+correct operator precedence.
+
+More operators are shown in Table \@ref(tab:custom-operators), including the
+suggestions by Murrell and Ihaka [-@murrell2000] for graphical annotations and
+arrows in R\ figures.
 
 ```{r custom-operators, echo=FALSE}
 op1 <- list(
-  cross=quote(x %*% y),
-  dot=quote(x %.% y),
-  kronecker=quote(X %x% Y),
-  'integer division'=quote(x %/% y),
+  cross=quote(A %*% B),
+  dot=quote(A %.% B),
+  kronecker=quote(A %x% B),
+  'integer division'=quote(A %/% B),
   and=quote(A & B),
   vel=quote(A | B),
   xor=quote(xor(A, B)),
   not=quote(!A),
-  equal=quote(X == Y),
-  assign=quote(X <- Y))
+  equal=quote(A == B),
+  assign=quote(A <- B))
 
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
@@ -314,13 +321,13 @@ if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
 op2 <- list(
-  different=quote(x != y),
-  tilde=quote(X ~ Y),
-  approx=quote(x %~~% y),
-  equiv=quote(x %==% y),
-  congr=quote(x %=~% y),
-  prop=quote(x %prop% y),
-  'in'=quote(a %in% A),
+  different=quote(A != B),
+  tilde=quote(A ~ B),
+  approx=quote(A %~~% B),
+  equiv=quote(A %==% B),
+  congr=quote(A %=~% B),
+  prop=quote(A %prop% B),
+  'in'=quote(A %in% B),
   intersect=quote(intersect(A, B)),
   union=quote(union(A, B)),
   intersect=quote(is.null(A)))
@@ -334,16 +341,17 @@ if(knitr::is_html_output())
   op2 <- sapply(op2, FUN=knitr:::escape_html)
 
 op3 <- list(
-  twosidearrow=quote(x%<->%b),
-  rightarrow=quote(x%->%y),
-  leftarrow=quote(x%<-%y),
-  uparrow=quote(x%up%y),
-  down=quote(x%down%y),
-  iff=quote(x%<=>%y),
-  rArr=quote(x %=>% y),
-  lArr=quote(x %<=% y),
-  dblup=quote(x %dblup% y),
-  dbldown=quote(x %dbldown% y))
+  twosidearrow=quote(A %<->% B),
+  rightarrow=quote(A %->% B),
+  leftarrow=quote(A %<-% B),
+  uparrow=quote(A %up% B),
+  down=quote(A %down% B),
+  iff=quote(A %<=>% B),
+  rArr=quote(A %=>% B),
+  lArr=quote(A %<=% B),
+  dblup=quote(A %dblup% B),
+  dbldown=quote(A %dbldown% B))
+
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
 
 op3 <- as.character(op3)
@@ -352,17 +360,30 @@ if(knitr::is_latex_output())
 if(knitr::is_html_output())
   op3 <- sapply(op3, FUN=knitr:::escape_html)
 
-t <- cbind(Operator=op1, Output=m1, Operator=op2, Output=m2, Operator=op3, Arrow=m3)
-knitr::kable(t, caption="Custom operators in mathml", 
-             row.names=FALSE, escape=FALSE)
+t <- cbind(Operator=op1, Output=m1,
+  Operator=op2, Output=m2,
+  Operator=op3, Arrow=m3)
+
+knitr::kable(t, caption="Custom operators in mathml",
+  row.names=FALSE, escape=FALSE)
 ```
 
-## R functions
+## Builtin functions
 
-All functions from R::base are supported, a subset is shown in 
-Tables \@ref(tab:basic-elements). 
+There is support for most functions from \pkg{base}, with adequate use and omission
+of parentheses.
 
-```{r basic-elements, echo=FALSE}
+```{r, results='asis'}
+term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
+mathout(term)
+term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + ceiling(x) + round(X))
+mathout(term)
+```
+
+A few more examples are shown in Table \@ref(tab:base-stats), including
+functions from \pkg{stats}. 
+
+```{r base-stats, echo=FALSE}
 op1 <- list(
   sin=quote(sin(x)),
   cosh=quote(cosh(x)),
@@ -373,7 +394,7 @@ op1 <- list(
   expm1=quote(expm1(x)),
   lchoose=quote(lchoose(n, k)),
   sqrt=quote(sqrt(x)),
-  mean=quote(mean(xy)),
+  mean=quote(mean(X)["A"]),
   absolute=quote(abs(x)))
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
@@ -383,9 +404,32 @@ if(knitr::is_latex_output())
 if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
-t <- cbind(Function=op1, Output=m1)
-knitr::kable(t, caption="Arithmetic functions", row.names=FALSE, escape=FALSE)
+op2 <- list(
+  sin=quote(sin(x)),
+  cosh=quote(cosh(x)),
+  tanpi=quote(tanpi(alpha)),
+  log=quote(log(p)),
+  log1p=quote(log1p(x)),
+  exp=quote(exp(x)),
+  expm1=quote(expm1(x)),
+  lchoose=quote(lchoose(n, k)),
+  sqrt=quote(sqrt(x)),
+  mean=quote(mean(X)["A"]),
+  absolute=quote(abs(x)))
+m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
+
+op2 <- as.character(op2)
+if(knitr::is_latex_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op2 <- sapply(op2, FUN=knitr:::escape_html)
+
+t <- cbind(Function=op1, Output=m1, Function=op2, Output=m2)
+knitr::kable(t, caption="R functions from base and stats",
+  row.names=FALSE, escape=FALSE)
 ```
+
+## Custom functions
 
 For self-written functions, matters are a bit more complicated because the
 underlying R package `rolog` [@rolog] cannot easily access the function name,
@@ -407,16 +451,26 @@ mathout(f)
 
 R\'s `integrate` function takes a number of arguments, the most important ones
 being the function to integrate, and the lower and the upper bound of the
-integration. For mathematical typesetting in the form
-of $\int f(x)\, dx$, \pkg{mathml} needs to find out the name of the integration
-variable. For that purpose, the underlying Prolog bridge provides a
-predicate `r_eval/2` that calls R\ from Prolog. In the example below, this
-predicate is used for a call of `formalArgs(args(sin))`, which returns the names
-of the function arguments of `sin`, namely, `x`.
+integration.
 
 ```{r, results='asis'}
 term <- quote(integrate(sin, 0L, 2L*pi))
 mathout(term)
+```
+
+In the above example, `sin` is an R symbol, not an R function. For mathematical
+typesetting in the form of $\int f(x)\, dx$, \pkg{mathml} needs to find out the
+name of the integration variable. For that purpose, the underlying Prolog bridge
+provides a predicate `r_eval/2` that calls R\ from Prolog. In the example above,
+this predicate is used for a call of `formalArgs(args(sin))`, which returns the
+names of the arguments of `sin`, namely, `x`.
+
+If integrand points to an R function as in `call("integrate", sin, 0, 2L*pi)`,
+mathml would be unable to find out the function name:
+
+```{r}
+g <- function(x) {sin(x)}
+print(g)
 ```
 
 ## Names and order of arguments
@@ -437,10 +491,10 @@ term <- quote(integrate(lower=0L, upper=2L*pi, sin))
 canonical(term)
 ```
 
-We can then easily feed mixtures of partially named and positional arguments in
-unusual order into the renderer.
+This function can be used to feed mixtures of partially named and positional
+arguments into the renderer.
 
-```{r, echo=TRUE, results='asis'}
+```{r, results='asis'}
 g <- function(u)
 {
   sin(u)
@@ -448,7 +502,7 @@ g <- function(u)
 
 # 
 term <- call("integrate", lower=-Inf, upper=Inf, g)
-attributes(term)$name = quote(g)
+attributes(term)$name <- quote(g)
 mathout(canonical(term))
 
 # 2
