@@ -42,6 +42,10 @@ bibliography: RJreferences.bib
 preamble:
 - \usepackage{longtable}
 - \usepackage{cancel}
+Vignette: >
+  %\VignetteIndexEntry{mathml}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
