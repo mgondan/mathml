@@ -2388,11 +2388,23 @@ math(qbinom(Alpha, N, Pi), M)
  => M = fn(subscript("arg min", k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
 
-math(pnorm(X, Mu, Sigma2), M)
- => M = fn('Phi', ([X] ; [Mu, Sigma2])).
+math(dnorm(Z), M)
+ => M = fn(phi, [Z]).
+
+math(dnorm(X, Mu, Sigma2), M)
+ => M = fn(phi, ([X] ; [Mu, Sigma2])).
 
 math(pnorm(Z), M)
  => M = fn('Phi', [Z]).
+
+math(pnorm(X, Mu, Sigma2), M)
+ => M = fn('Phi', ([X] ; [Mu, Sigma2])).
+
+math(qnorm(Alpha), M)
+ => M = fn('Phi' ^ -1, [Alpha]).
+
+math(qnorm(Alpha, Mu, Sigma2), M)
+ => M = fn('Phi' ^ -1, ([Alpha] ; [Mu, Sigma2])).
 
 %
 % Functions like f(x) and f(x; a, b)
