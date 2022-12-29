@@ -19,3 +19,5 @@ VignetteBuilder:
     rmarkdown
 RoxygenNote: 7.2.2
 Config/testthat/edition: 3
+VignetteBuilder: knitr, rmarkdown
+
