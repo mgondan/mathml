@@ -138,13 +138,6 @@ math(Flags, Sum, New, M),
  => New = New0,
     M = fn(subscript(sum, Idx), [Arg]).
 
-math(Flags, Sum, New, M),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, [Arg]),
-    type(Flags, Arg, subscript(_, Idx))
- => New = Flags,
-    M = fn(subscript(sum, Idx), [Arg]).
-
 mathml :-
     mathml(sum('['(x, i))).
 

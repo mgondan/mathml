@@ -253,15 +253,16 @@ below.
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
 mathout(term)
 
-term <- quote(dot(d, e) + nodot(f, g + h) + times(X, Y))
+term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
 mathout(term)
 ```
 
 For multiplications involving only numbers and symbols, the multiplication sign
 is omitted. This heuristic does not always produce the desired result;
 therefore, \pkg{mathml} defines alternative multiplication
-functions `dot()`, `nodot()`, and `times()` that produce the respective
-multiplication signs.
+functions `dot()`, `nodot()`, and `times()` that calculate the product and
+produce the respective multiplication signs. Similarly, `frac()` and `dfrac()`
+can be used for small and large fractions.
 
 For standard operators with known precedence, \pkg{mathml} is generally able to
 detect if parentheses are needed; for example, parentheses are automatically
@@ -462,6 +463,23 @@ mathout(term)
 The hook (see below) is used to display \(\mathrm{sg}(x) = \{\ldots\) instead
 of just \(s = \{\).
 
+## Indices and powers
+
+Indices in square brackets are rendered as subscripts, powers are rendered as
+superscript. Moreover, \pkg{mathml} defines the
+functions `subscript()`, `superscript()` and `subsuperscript()` that simply
+return their first argument. The other arguments serve as decorations, for
+example, for summation and product signs.
+
+```{r, results='asis'}
+term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
+mathout(term)
+
+term <- quote(log(subsupscript(prod(L[i]), i==1L, N)) <- 
+          subsupscript(sum(log(L[i])), i==1L, N))
+mathout(term)
+```
+
 ## Ringing back to R
 
 R\'s `integrate` function takes a number of arguments, the most important ones
@@ -557,8 +575,6 @@ in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 A list of possible operators is available here.
 
 ```{r, results='asis', echo=TRUE}
-catmath(sum(x[i], i==1L, n))
-
 # fixme: braces not needed when right to *
 catmath(a * sum(b[i]))
 
