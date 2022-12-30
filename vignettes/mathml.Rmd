@@ -67,16 +67,16 @@ library(plotly)
 library(ggplot2)
 library(kableExtra)
 
-mathout <- function(..., flags=NULL)
+mathout <- function(..., flags=NULL, env=parent.frame())
 {
   if(knitr::is_html_output())
-    return(mathml(..., flags=c(flags, list(cat=TRUE))))
+    return(mathml(..., flags=c(flags, list(cat=TRUE)), env=env))
 
   if(knitr::is_latex_output())
-    return(mathjax(..., flags=c(flags, list(cat=TRUE))))
+    return(mathjax(..., flags=c(flags, list(cat=TRUE)), env=env))
 
-  warning("no output specified")  
-  mathjax(..., flags=c(flags, list(cat=TRUE)))
+  warning("mathout: no knitr output specified")  
+  mathjax(..., flags=c(flags, list(cat=TRUE)), env=env)
 }
 
 catmath <- function(term, ...)
@@ -487,20 +487,6 @@ function. R's `integrate()` can handle both. However, as already mentioned in
 the previous subsection, \pkg{mathml} would be unable to find out the function
 name, it needs the symbol.
 
-```{r, results='asis'}
-g <- function(x)
-  sin(x)
-
-term <- quote(integrate(g, 0L, 2L*pi))
-mathout(term, env=environment())
-```
-
-By default, `r_eval/2` evaluates the R call in the global environment. In some
-situations, this may not be desired. For example, PDF articles for the
-R\ Journal are generated in a separate environment, such that the function `g()`
-defined above is not found. In the above example, the option `env=` explicitly
-indicates the path to `g(x)`.
-
 ## Names and order of arguments
 
 One of R's great features is the possibility to refer to function arguments by
@@ -552,32 +538,19 @@ letters, which may yield unsatisfactory results in the mathematical output.
 ```{r, results='asis'}
 term <- quote(pbinom(successes, Ntotal, prob))
 mathout(term)
-```
 
-To improve the situation, \pkg{mathml} provides a simple hook into the prolog
-predicate `math/2` described in the previous section.
-
-```{r, results='asis'}
 hook(quote(successes), quote(k))
 hook(quote(Ntotal), quote(N))
 hook(quote(prob), quote(pi))
 mathout(term)
 ```
 
-More complex hooks are possible. In the example below, `dnorm(X, M, S)` is
-translated to the form `phi(X; M, S)` (instead of the default `varphi`).
-
-```{r, results='asis'}
-hook(call("dnorm", expression(X), expression(M), expression(S)), 
-     call("fn", quote(phi),
-       call(";", list(expression(X)), list(expression(M), expression(S)))))
-term <- quote(dnorm(x, mu, sigma^2L))
-mathout(term)
-```
-
-R's expressions are a bit misused to represent variables in the underlying
-prolog engine.
-
+To improve the situation, \pkg{mathml} provides a simple hook that can be used
+to replace elements (e.g., verbose variable names) of the code by concise
+mathematical symbols, as illustrated in the example. Care should be taken to
+avoid recursive hooks such as `hook(quote(s), quote(s["A"]))` that endlessly
+replace the \(s\) from \(s_\mathrm{A}\) as
+in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
 ## Operators
 
