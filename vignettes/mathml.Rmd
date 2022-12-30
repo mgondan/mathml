@@ -490,47 +490,41 @@ name, it needs the symbol.
 ## Names and order of arguments
 
 One of R's great features is the possibility to refer to function arguments by
-their names, not only by their position in a list of arguments. Unfortunately, 
-the Prolog-powered handler for `integrate/3` is rather rigid; it accepts only
-three arguments in that particular order and without names, that
-is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print the desired result.
+their names, not only by their position in the list of arguments. At the other
+end, most Prolog-powered handlers for the R\ calls are rather rigid, for
+example, `integrate/3` accepts exactly three arguments in a particular order and
+without names, that is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print
+the desired result.
 
 To "canonicalize" function calls with named arguments and arguments in unusual
-order, \pkg{mathml} provides an auxilliary function `canonical(f, drop)` that
-reorders the argument list of calls to known functions and, if `drop=TRUE`, also
-removes the names of the arguments.
+order, \pkg{mathml} provides an auxilliary R\ function `canonical(f, drop)` that
+reorders the argument list of calls to known R\ functions and, 
+if `drop=TRUE` (which is the default), also removes the names of the arguments.
 
 ```{r}
 term <- quote(integrate(lower=0L, upper=2L*pi, sin))
 canonical(term)
 ```
 
-This function can be used to feed mixtures of partially named and positional
-arguments into the renderer.
-
 ```{r, results='asis'}
-g <- function(u)
-{
-  sin(u)
-}
-
-# 
-term <- call("integrate", lower=-Inf, upper=Inf, g)
-attributes(term)$name <- quote(g)
 mathout(canonical(term))
-
-# 2
-term <- call("*", 2L, call("$", call("integrate", low=-Inf, up=Inf, g), "value"))
-attributes(term)$name = quote(g)
-mathout(canonical(term))
-
-# It is a bit of a mystery that R knows the result of this integral.
-eval(term)
 ```
 
-The extra R\ function `canonical()` applies `match.call()` to non-primitive R\
-calls, basically cleaning up the arguments and bringing them into the correct
-order.
+This function can be used to feed mixtures of partially named and positional
+arguments into the renderer. For details, see the R\ function `match.call()`.
+
+## Issues
+
+Unclear why we need to point at .GlobalEnv. Without, there is an error message
+stating that gg is not found in r_eval.
+
+```{r, results='asis'}
+.GlobalEnv$g <- function(x, u)
+  sin(x)
+
+term <- quote(integrate(lower=0L, upper=2L*pi, g))
+mathout(canonical(term))
+```
 
 ## Customizing the package
 

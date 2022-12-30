@@ -1013,7 +1013,7 @@ math(Flags, $(Fn, "value"), New, M)
 math(Flags, integrate(Fn, Lower, Upper), New, M),
     Fn = (Head :- _Body),
     compound(Head),
-    compound_name_arguments(Head, 'function', [DX | _]),
+    compound_name_arguments(Head, function, [DX | _]),
     member(name-Name, Flags)
  => Flags = New,
     M = integrate(fn(Name, [DX]), Lower, Upper, DX).
@@ -1021,19 +1021,11 @@ math(Flags, integrate(Fn, Lower, Upper), New, M),
 math(Flags, integrate(Fn, Lower, Upper), New, M),
     Fn = (Head :- _Body),
     compound(Head),
-    compound_name_arguments(Head, 'function', [DX | _])
+    compound_name_arguments(Head, function, [DX | _])
  => Flags = New,
     M = integrate(fn(lambda, [DX]), Lower, Upper, DX).
 
 % Case B: Fn is an atom
-math(Flags, integrate(Fn, Lower, Upper), New, M),
-    atom(Fn),
-    r_eval('is.null'('$'('.GlobalEnv', Fn)), false)
- => Flags = New,
-    r_eval('['(formalArgs(args('$'('.GlobalEnv', Fn))), 1), Arg1),
-    atom_string(DX, Arg1),
-    M = integrate(fn(Fn, [DX]), Lower, Upper, DX).
-
 math(Flags, integrate(Fn, Lower, Upper), New, M),
     atom(Fn)
  => Flags = New,
