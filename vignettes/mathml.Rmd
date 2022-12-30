@@ -487,6 +487,20 @@ function. R's `integrate()` can handle both. However, as already mentioned in
 the previous subsection, \pkg{mathml} would be unable to find out the function
 name, it needs the symbol.
 
+```{r, results='asis'}
+g <- function(x)
+  sin(x)
+
+term <- quote(integrate(g, 0L, 2L*pi))
+mathout(term, env=environment())
+```
+
+By default, `r_eval/2` evaluates the R call in the global environment. In some
+situations, this may not be desired. For example, PDF articles for the
+R\ Journal are generated in a separate environment, such that the function `g()`
+defined above is not found. In the above example, the option `env=` explicitly
+indicates the path to `g(x)`.
+
 ## Names and order of arguments
 
 One of R's great features is the possibility to refer to function arguments by
@@ -529,19 +543,6 @@ mathout(term)
 
 Note that the seemingly more convient `term <- quote(A + B)` yields \(A + B\) in
 the output---instead of the desired matrix representation.
-
-## Issues
-
-Unclear why we need to point at .GlobalEnv. Without, there is an error message
-stating that gg is not found in r_eval.
-
-```{r, results='asis'}
-.GlobalEnv$g <- function(x, u)
-  sin(x)
-
-term <- quote(integrate(lower=0L, upper=2L*pi, g))
-mathout(canonical(term))
-```
 
 ## Customizing the package
 

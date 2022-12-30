@@ -25,11 +25,13 @@
 #' @examples
 #' mathml(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
-mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
+mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
+  env=globalenv())
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathml", flags, term, expression(X)),
-    options=list(preproc=list(rolog::preproc, mathml_preproc)))
+    options=list(preproc=list(rolog::preproc, mathml_preproc)),
+    env=env)
   r <- paste(t$X, collapse="")
   if(flags$cat)
     return(cat(r))
@@ -100,11 +102,13 @@ mathml_preproc <- function(query=quote(2 != 2))
 #' @examples
 #' mathjax(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 #'
-mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL)
+mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
+  env=globalenv())
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathjax", flags, term, expression(X)),
-    options=list(preproc=list(rolog::preproc, mathml_preproc)))
+    options=list(preproc=list(rolog::preproc, mathml_preproc)),
+    env=env)
   r <- paste(t$X, collapse="")
   if(flags$cat)
     return(cat(r))
