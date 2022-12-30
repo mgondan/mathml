@@ -157,19 +157,6 @@ math(Flags, Prod, New, M),
  => New = New0,
     M = fn(subscript(prod, Idx), Arg).
 
-math(Flags, Prod, New, M),
-    compound(Prod),
-    compound_name_arguments(Prod, prod, Arg),
-    select(superscript(Pwr), Flags, New1)
- => New = New1,
-    M = fn(superscript(prod, Pwr), Arg).
-
-math(Flags, Prod, New, M),
-    compound(Prod),
-    compound_name_arguments(Prod, prod, Arg)
- => New = Flags,
-    M = fn(prod, Arg).
-
 mathml :-
     mathml(prod('['(x, i))).
 
@@ -430,11 +417,12 @@ prec(_Flags, special(sum), Prec)
  => current(P, yfx, *),
     Prec is P + 1.
 
-prec(_Flags, special(_), Prec)
- => Prec = 0. % current(Prec, yfx, *).
-
 ml(_Flags, special(prod), M)
  => M = mo(&(prod)).
+
+prec(_Flags, special(prod), Prec)
+ => current(P, yfx, *),
+    Prec is P + 1.
 
 ml(_Flags, special(R), M)
  => M = mi(R).
@@ -454,7 +442,10 @@ jax(_Flags, special(R), M)
 type(_Flags, special(_), T)
  => T = special.
 
-mathml :-
+prec(_Flags, special(_), Prec)
+ => Prec = 0. % current(Prec, yfx, *).
+
+pmathml :-
     mathml(exp(x)),
     mathml(exp(x + y)).
 
