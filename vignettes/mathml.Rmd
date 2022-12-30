@@ -513,6 +513,23 @@ mathout(canonical(term))
 This function can be used to feed mixtures of partially named and positional
 arguments into the renderer. For details, see the R\ function `match.call()`.
 
+## Matrices and Vectors
+
+Of course, \pkg{mathml} also supports matrices and vectors.
+
+```{r, results='asis'}
+v <- 1:3
+mathout(call("t", v))
+
+A <- matrix(data=11:16, nrow=2, ncol=3)
+B <- matrix(data=21:26, nrow=2, ncol=3)
+term <- call("+", A, B)
+mathout(term)
+```
+
+Note that the seemingly more convient `term <- quote(A + B)` yields \(A + B\) in
+the output---instead of the desired matrix representation.
+
 ## Issues
 
 Unclear why we need to point at .GlobalEnv. Without, there is an error message
@@ -642,19 +659,6 @@ mathout(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol(
 catmath(x^{y + z})
 ```
 
-
-## Matrix and Vectors
-
-Since also Matrices and Vectors are important elements in R\, we decided to implement them and render them graphically in the following ways.
-
-```{r, results='asis', echo=TRUE}
-vec <- 1:3
-mathout(canonical(vec))
-mathout(vec)
-
-mat <- matrix(data = c(2L, 3L, 4L, 5L), nrow = 2, ncol = 2)
-mathout(canonical(mat))
-```
 
 ## Abbreviations
 
