@@ -452,11 +452,11 @@ sgn <- function(x)
   if(x > 0L) return(1L)
 }
 
-term <- quote(s <- sgn(x))
+term <- quote(mysign <- sgn(x))
 mathout(term)
 
-hook(quote(s), quote(sg(x)))
-term <- call("<-", quote(s), sgn)
+hook(quote(mysign), quote(sg(x)))
+term <- call("<-", quote(mysign), sgn)
 mathout(term)
 ```
 
@@ -548,6 +548,36 @@ mathout(term)
 Note that the seemingly more convient `term <- quote(A + B)` yields \(A + B\) in
 the output---instead of the desired matrix representation.
 
+## Abbreviations
+
+We consider the \(t\)-statistic for independent samples with equal variance. To
+avoid clutter in the equation, the pooled variance \(s^2_\mathrm{pool}\) is
+abbreviated, and a comment is given with the expression
+for \(s^2_\mathrm{pool}\). For this purpose, \pkg{mathml} provides a
+function `denote(abbr, expr, info)`, with `expr` actually being
+evaluated, `abbr` being rendered, plus a comment of the
+form "with `expr` denoting `info`". The hooks are described in the next section.
+
+```{r, results='asis'}
+hook(quote(m_A), quote(mean(X)["A"])); hook(quote(s2_A), quote(s["A"]^2L));
+hook(quote(n_A), quote(n["A"]))
+hook(quote(m_B), quote(mean(X)["B"])); hook(quote(s2_B), quote(s["B"]^2L))
+hook(quote(n_B), quote(n["B"])); hook(quote(s2_p), quote(s["pool"]^2L))
+
+term <- quote(t <- dfrac(m_A - m_B, 
+    sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
+                "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
+mathout(term)
+```
+
+The term is evaluated below. `print()` is needed because the return value of the
+assignment in the term `t <- dfrac(...)` is invisible.
+
+```{r}
+m_A <- 1.5; s2_A <- 2.4^2; n_A <- 27; m_B <- 3.9; s2_B <- 2.8^2; n_B <- 20
+print(eval(term))
+```
+
 ## Customizing the package
 
 In typical R\ functions, variable names are typically longer than just single
@@ -570,118 +600,9 @@ avoid recursive hooks such as `hook(quote(s), quote(s["A"]))` that endlessly
 replace the \(s\) from \(s_\mathrm{A}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
-## Operators
+## more stuff
 
-A list of possible operators is available here.
-
-```{r, results='asis', echo=TRUE}
-# fixme: braces not needed when right to *
-catmath(a * sum(b[i]))
-
-# Multiplication (capital Pi) is missing
-catmath(a * prod(b[i]))
-
-catmath(integrate(sin, 0L, 2L*pi))
-
-catmath(A & B)
-
-catmath(A | B)
-
-catmath(!A)
-
-catmath(xor(A, B))
-
-catmath(exp(2L*pi*i))
-
-catmath(expm1(2L*pi*i))
-
-catmath(log(x))
-
-catmath(log10(x))
-
-catmath(log2(x))
-
-catmath(logb(x, e))
-
-catmath(log1p(x))
-
-catmath(ceiling(pi))
-
-catmath(floor(pi))
-
-catmath(sin(pi/2L))
-
-catmath(cos(pi/2L))
-
-catmath(tan(pi/2L))
-```
-
-## Grouping
-
-At first glance, grouping expressions may seem trivial enough. However, when you want to deal with, for instance, exponentiation or multiplication, things can get more complicated. Let us consider a trivial example. If we want to calculate and evaluate the expression `a * (b + c)`, we find that R\ automatically gives precedence to the addition even if we do not specify it in the text, as in the following.
-
-```{r, results='asis', echo=TRUE}
-first <- quote(a)
-second <- quote(b + c)
-mathout(call("*", first, second))
-
-# precedence
-quote(a * (b + c))[[3]][[1]]
-```
-
-With exponentiation the situation can be less trivial. If we consider `x` to the power of `y + z`, following R\ notation we should add a parenthesis around the two terms. Otherwise R\ would consider only `y` as power of `x`.
-
-```{r, results='asis', echo=TRUE}
-catmath(x^y + z)
-
-# mathout(call("+", call("^", as.symbol("x"), as.symbol("y")), as.symbol("z")))
-
-catmath(x^(y + z))
-```
-
-Unfortunately, R\ automatically put `y + z` in parentheses even if, from a mathematical point of view, the brackets are not needed. To solve this issue two solutions are possible, the first one is cumbersome since it requires many specifications. The second, that can be considered a shortcut, uses a syntax similar to LateX and puts the power in curly brackets. In both cases the output produced is consistent with the mathematical notation.
-
-```{r, results='asis', echo=TRUE}
-# without parenthesis
-mathout(canonical(call("^", as.symbol("x"), call("+", as.symbol("y"), as.symbol("z")))))
-
-# shortcut
-catmath(x^{y + z})
-```
-
-
-## Abbreviations
-
-\pkg{mathml} allows also for the use of abbreviations in formulas. Let us consider here the t-statistic for independent samples with equal variance assumed. 
-The procedure consists of three steps. The first one is to define the hooks to nicely print the variables. Second, we write the t-statistic specifying in the formula how to calculate the pooled variance with the function  `denote(abbr, expr, info)`.  Finally, since \pkg{mathml} also allows computation, we can directly compute the value of the t statistic with `eval()`.
-
-```{r, results='asis', echo=TRUE}
-
-hook(quote(x_1), quote(mean(x["1"])))
-hook(quote(x_2), quote(mean(x["2"])))
-hook(quote(n_1), quote(n["1"]))
-hook(quote(n_2), quote(n["2"]))
-hook(quote(s_1), quote(s["1"]))
-hook(quote(s_2), quote(s["2"]))
-hook(quote(s_p), quote(s["pool"]))
-
-
-t <- quote(dfrac(x_1 - x_2, sqrt(denote(s_p^2L, frac((n_1 - 1L)*s_1^2L + (n_2 - 1L)*s_2^2L, n_1+n_2-2L), "the pooled variance.") * (dfrac(1L, n_1)+dfrac(1L,n_2)))))
-  
-mathout(t)
-
-# An example
-
-x_1 = 20.5
-x_2 = 35.7
-n_1 = 150
-n_2 = 160
-s_1 = 3.4
-s_2 = 4.2
-
-eval(t)
-```
-
+math/2, ml/3, jax/3
 
 # A case study {#case-study}
 
@@ -1113,3 +1034,53 @@ In its current version \pkg{mathml} has some limitations. For example, it is sti
 
 # Acknowledgments
  
+## Appendix
+
+Please check if the examples below
+
+* are already presented somewhere
+* can be added to one of the tables
+* or if they should go into a separate appendix
+
+```{r, results='asis', echo=TRUE}
+# fixme: braces not needed when right to *
+catmath(a * sum(b[i]))
+
+# Multiplication (capital Pi) is missing
+catmath(a * prod(b[i]))
+
+catmath(integrate(sin, 0L, 2L*pi))
+
+catmath(A & B)
+
+catmath(A | B)
+
+catmath(!A)
+
+catmath(xor(A, B))
+
+catmath(exp(2L*pi*i))
+
+catmath(expm1(2L*pi*i))
+
+catmath(log(x))
+
+catmath(log10(x))
+
+catmath(log2(x))
+
+catmath(logb(x, e))
+
+catmath(log1p(x))
+
+catmath(ceiling(pi))
+
+catmath(floor(pi))
+
+catmath(sin(pi/2L))
+
+catmath(cos(pi/2L))
+
+catmath(tan(pi/2L))
+```
+
