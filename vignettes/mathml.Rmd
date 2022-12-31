@@ -600,9 +600,7 @@ avoid recursive hooks such as `hook(quote(s), quote(s["A"]))` that endlessly
 replace the \(s\) from \(s_\mathrm{A}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
-## more stuff
-
-math/2, ml/3, jax/3
+more stuff: math/2, ml/3, jax/3
 
 # A case study {#case-study}
 
@@ -872,46 +870,6 @@ Furthermore, we can observe from the values reported in the Table below that, wi
 # _Note_.  Parameters: $\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161$
 ```
 
-## Mistakes
-
-The case study presented above displays several possible ways of how \pkg{mathml} can be a useful tool in data representation and calculation. Furthermore, the careful reader might have also noticed that \pkg{mathml} allows also for a more smoothly detection of possible mistakes in writing. 
-
-An interesting use case of the package is in this sense the readability of self-written
-functions in R\ code. R\ code is notoriously hard to read, as are most programming
-languages [@green1977]. The poor legibility of the language is one of the main
-sources of mistakes. For illustration, we consider Equation 10 in
-Schwarz [-@schwarz1994], namely the same equation reported above. The first version has a wrong parenthesis, which is barely visible in the R code.
-
-````{r, results="asis", echo=TRUE}
-f <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
-}
-
-attributes(f)$name = quote(f)
-mathout(f)
-````
-
-But, if the function is rendered in MathML, the wrong parenthesis appears as a curly
-brace, and we immediately see the mistake. The correct version is shown below
-for comparison.
-
-````{r, results="asis", echo=TRUE}
-f <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
-}
-
-attributes(f)$name = quote(f)
-mathout(f)
-````
-
-This example may seem trivial. However, as the reader well knows, a missed parenthesis is often the cause of untraceable errors and contradictory results. Thus, rendering the expression in MathMl improves the readability of the text, allowing better identification of the sources of possible errors. 
-
 ## Errors
 
 An additional feature that this package offers is related to its application in educational scenarios. The functions here reported are intended to identify and highlight possible errors that students make, as well as provide the correct answer for the task.
@@ -1031,6 +989,49 @@ In its current version \pkg{mathml} has some limitations. For example, it is sti
 
 
 \pkg{mathml} is available for R\ version (…) and later, and can be easily installed using the usual `install.packages("mathml")`. The source code of the package is found at (…) including installation instructions for Unix, Windows and macOS.
+
+## Mistakes
+
+The case study presented above shows that \pkg{mathml} can help to improve
+data analyses and statistical reports from an aesthetical perspective, as well
+as regarding reproducibility of research. Furthermore, the package may also
+allow for a better detection of possible mistakes in R programs.
+
+Similar to most programming languages [@green1977], R\ code is notoriously hard
+to read, and the poor legibility of the language is one of the main sources of
+mistakes. For illustration, we consider again Equation 10 in
+Schwarz [-@schwarz1994].
+
+````{r, results="asis"}
+f1 <- function(tau)
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
+}
+
+mathout(f1)
+````
+
+The first version has a wrong parenthesis, which is barely visible in the code,
+whereas the wrong curly brace in the mathematical representation is immediately
+obvious. The correct version is shown below for comparison.
+
+````{r, results="asis"}
+f2 <- function(tau)
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
+}
+
+mathout(f2)
+````
+
+As the reader may know from own experience, missed parentheses are frequent
+causes of wrong results and errors that are hard to locate in programming code.
+In this particular example, the MathML version can help to substantially
+reduce the amount of careless errors in programming.
 
 # Acknowledgments
  
