@@ -317,7 +317,7 @@ ml(_Flags, greek(R), M)
  => M = mi(&(R)).
 
 jax(_Flags, greek(R), M)
- => format(string(M), "\\~w", [R]).
+ => format(string(M), "{\\~w}", [R]).
 
 type(_Flags, greek(_), T)
  => T = atomic.
