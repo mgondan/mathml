@@ -1030,8 +1030,8 @@ mathout(f2)
 
 As the reader may know from own experience, missed parentheses are frequent
 causes of wrong results and errors that are hard to locate in programming code.
-In this particular example, the MathML version can help to substantially
-reduce the amount of careless errors in programming.
+This particular example shows that mathematical rendering can help to
+substantially reduce the amount of careless errors in programming.
 
 # Acknowledgments
  
