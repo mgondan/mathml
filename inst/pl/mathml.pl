@@ -186,7 +186,7 @@ jax(Flags, R, M),
  => jax(New, R, X),
     jax(New, Idx, Y),
     jax(New, Pwr, Z),
-    format(string(M), "{~w_~w^~w}", [X, Y, Z]).
+    format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
 
 type(Flags, R, Type),
     member(subscript(Idx), Flags),
@@ -219,7 +219,7 @@ jax(Flags, R, M),
     select(subscript(Idx), Flags, New)
  => jax(New, R, X),
     jax(New, Idx, Y),
-    format(string(M), "{~w_~w}", [X, Y]).
+    format(string(M), "{~w}_{~w}", [X, Y]).
 
 type(Flags, R, Type),
     member(subscript(Idx), Flags)
@@ -258,13 +258,13 @@ jax(Flags, R, M),
     select(superscript(Pwr), Flags, New)
  => jax(New, paren(R), X),
     jax(New, Pwr, Y),
-    format(string(M), "{{~w}^{~w}}", [X, Y]).
+    format(string(M), "{~w}^{~w}", [X, Y]).
 
 jax(Flags, R, M),
     select(superscript(Pwr), Flags, New)
  => jax(New, R, X),
     jax(New, Pwr, Y),
-    format(string(M), "{{~w}^{~w}}", [X, Y]).
+    format(string(M), "{~w}^{~w}", [X, Y]).
 
 type(Flags, R, Type),
     member(superscript(Pwr), Flags)
@@ -317,7 +317,7 @@ ml(_Flags, greek(R), M)
  => M = mi(&(R)).
 
 jax(_Flags, greek(R), M)
- => format(string(M), "{\\~w}", [R]).
+ => format(string(M), "\\~w", [R]).
 
 type(_Flags, greek(_), T)
  => T = atomic.
@@ -338,7 +338,7 @@ ml(_Flags, boolean(R), M)
  => M = mi(R).
 
 jax(_Flags, boolean(R), M)
- => format(string(M), "{~w}", [R]).
+ => format(string(M), "~w", [R]).
 
 type(_Flags, boolean(_), T)
  => T = atomic.
@@ -483,7 +483,7 @@ jax(Flags, ident(R), M),
  => format(string(M), "\\mathcal{~w}", [R]).
 
 jax(_Flags, ident(R), M)
- => format(string(M), "{~w}", [R]).
+ => format(string(M), "~w", [R]).
 
 type(_Flags, ident(_), T)
  => T = atomic.
@@ -509,7 +509,7 @@ ml(Flags, abs(R), M)
 
 jax(Flags, abs(R), M)
  => jax(Flags, R, X),
-    format(string(M), "\\left|{~w}\\right|", [X]).
+    format(string(M), "\\left|~w\\right|", [X]).
 
 paren(_Flags, abs(_), P)
  => P = 0.
@@ -752,7 +752,7 @@ ml(Flags, ceiling(A), M)
 
 jax(Flags, ceiling(A), M)
  => jax(Flags, A, X),
-    format(string(M), "{\\lceil~w\\rceil}", [X]).
+    format(string(M), "\\lceil{~w}\\rceil", [X]).
 
 paren(_Flags, ceiling(_), P)
  => P is 0.
@@ -763,7 +763,7 @@ ml(Flags, floor(A), M)
 
 jax(Flags, floor(A), M)
  => jax(Flags, A, X),
-    format(string(M), "{\\lfloor~w\\rfloor}", [X]).
+    format(string(M), "\\lfloor{~w}\\rfloor", [X]).
 
 paren(_Flags, floor(_), P)
  => P is 0.
@@ -889,7 +889,7 @@ jax(Flags, ifelse(T, Y, N), M)
     jax(Flags, Y, Yes),
     jax(Flags, N, No),
     format(string(M),
-      "\\left\\{\\begin{array}{ll} ~w & \\mathrm{if}~~~w\\\\ ~w & \\mathrm{otherwise}\\end{array}\\right.",
+      "\\left\\{\\begin{array}{ll} {~w} & \\mathrm{if}~~{~w}\\\\ {~w} & \\mathrm{otherwise}\\end{array}\\right.",
       [Yes, Test, No]).
 
 paren(_Flags, ifelse(_, _, _), P)
@@ -904,7 +904,7 @@ ml(Flags, if(T, Y), M)
 jax(Flags, if(T, Y), M)
  => jax(Flags, T, Test),
     jax(Flags, Y, Yes),
-    format(string(M), "~w,\\ \\mathrm{if}\\ ~w", [Yes, Test]).
+    format(string(M), "{~w},\\ \\mathrm{if}\\ {~w}", [Yes, Test]).
 
 paren(_Flags, if(_, _), P)
  => P is 0.
@@ -1031,7 +1031,7 @@ jax(Flags, integrate(Fn, From, To, DX), M)
     jax(Flags, From, XFrom),
     jax(Flags, To, XTo),
     jax(Flags, DX, XDX),
-    format(string(M), "\\int_{~w}^{~w}{~w}\\,{d~w}", [XFrom, XTo, XFn, XDX]).
+    format(string(M), "\\int_{~w}^{~w}{~w}\\,{d{~w}}", [XFrom, XTo, XFn, XDX]).
 
 paren(Flags, integrate(_, _, _, A), Paren)
  => paren(Flags, A, Paren).
@@ -1342,14 +1342,14 @@ ml(Flags, pos(A), M)
     M = mn(X).
 
 jax(_Flags, posint(A), M)
- => format(string(M), "{~w}", [A]).
+ => format(string(M), "~w", [A]).
 
 jax(_Flags, pos(1.0Inf), M)
  => M = "\\infty".
 
 jax(Flags, pos(A), M)
  => option(round(D), Flags, 2),
-    format(atom(Mask), '{~~~wf}', [D]),
+    format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
 
 type(_Flags, pos(_), Type)
@@ -1637,36 +1637,36 @@ ml(Flags, yfy(Prec, Op, A, B), M)
 jax(Flags, fy(Prec, Op, A), M)
  => jax(Flags, op(Op), S),
     jax(Flags, right(Prec, A), X),
-    format(string(M), "{~w~w}", [S, X]).
+    format(string(M), "{~w}{~w}", [S, X]).
 
 jax(Flags, yf(Prec, Op, A), M)
  => jax(Flags, op(Op), S),
     jax(Flags, left(Prec, A), X),
-    format(string(M), "{~w~w}", [X, S]).
+    format(string(M), "{~w}{~w}", [X, S]).
 
 jax(Flags, xfx(Prec, Op, A, B), M)
  => jax(Flags, left(Prec-1, A), X),
     jax(Flags, op(Op), S),
     jax(Flags, right(Prec-1, B), Y),
-    format(string(M), "{~w~w~w}", [X, S, Y]).
+    format(string(M), "{~w}{~w}{~w}", [X, S, Y]).
 
 jax(Flags, yfx(Prec, Op, A, B), M)
  => jax(Flags, left(Prec, A), X),
     jax(Flags, op(Op), S),
     jax(Flags, right(Prec-1, B), Y),
-    format(string(M), "{~w~w~w}", [X, S, Y]).
+    format(string(M), "{~w}{~w}{~w}", [X, S, Y]).
 
 jax(Flags, xfy(Prec, Op, A, B), M)
  => jax(Flags, left(Prec-1, A), X),
     jax(Flags, op(Op), S),
     jax(Flags, right(Prec, B), Y),
-    format(string(M), "{~w~w~w}", [X, S, Y]).
+    format(string(M), "{~w}{~w}{~w}", [X, S, Y]).
 
 jax(Flags, yfy(Prec, Op, A, B), M)
  => jax(Flags, left(Prec, A), X),
     jax(Flags, op(Op), S),
     jax(Flags, right(Prec, B), Y),
-    format(string(M), "{~w~w~w}", [X, S, Y]).
+    format(string(M), "{~w}{~w}{~w}", [X, S, Y]).
 
 denoting(Flags, fy(_, _, A), D)
  => denoting(Flags, A, D).
@@ -1993,18 +1993,18 @@ jax(Flags, list(_, [A]), M)
 jax(Flags, list(Sep, [A, B | T]), M)
  => jax(Flags, A, X),
     jax(Flags, tail(Sep, [B | T]), Y),
-    format(string(M), "{~w~w}", [X, Y]).
+    format(string(M), "{~w}{~w}", [X, Y]).
 
 jax(Flags, tail(Sep, [A]), M)
  => jax(Flags, Sep, S),
     jax(Flags, A, X),
-    format(string(M), "{~w~w}", [S, X]).
+    format(string(M), "{~w}{~w}", [S, X]).
 
 jax(Flags, tail(Sep, [A, B | T]), M)
  => jax(Flags, Sep, S),
     jax(Flags, A, X),
     jax(Flags, tail(Sep, [B | T]), Y),
-    format(string(M), "{~w~w~w}", [S, X, Y]).
+    format(string(M), "{~w}{~w}{~w}", [S, X, Y]).
 
 paren(Flags, list(_, List), P)
  => maplist(paren(Flags), List, P0),
@@ -2406,12 +2406,12 @@ jax(Flags, fn(Name, (Args ; Pars)), M),
     string(Name)
  => jax(Flags, Name, F),
     jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X),
-    format(string(M), "{~w\\,~w}", [F, X]).
+    format(string(M), "{~w}\\,{~w}", [F, X]).
 
 jax(Flags, fn(Name, (Args ; Pars)), M)
  => jax(Flags, Name, F),
     jax(Flags, paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X),
-    format(string(M), "{~w~w}", [F, X]).
+    format(string(M), "{~w}{~w}", [F, X]).
 
 paren(Flags, fn(_Name, (Args ; Pars)), Paren)
  => paren(Flags, list(op(','), Args), X),
@@ -2435,7 +2435,7 @@ jax(Flags, fn(Name, [Arg]), M),
     type(Flags, Arg, paren)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
-    format(string(M), "{~w~w}", [F, X]).
+    format(string(M), "{~w}{~w}", [F, X]).
 
 % Omit parenthesis in special functions
 ml(Flags, fn(Name, [Arg]), M),
@@ -2462,7 +2462,7 @@ jax(Flags, fn(Name, [Arg]), M),
     P > Prec
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
-    format(string(M), "{~w~w}", [F, X]).
+    format(string(M), "{~w}{~w}", [F, X]).
 
 ml(Flags, fn(Name, [Arg]), M),
     type(Flags, Name, Type),
@@ -2478,7 +2478,7 @@ jax(Flags, fn(Name, [Arg]), M),
     prec(Flags, Arg, 0)
  => jax(Flags, Name, F),
     jax(Flags, Arg, X),
-    format(string(M), "{~w~w}", [F, X]).
+    format(string(M), "{~w}{~w}", [F, X]).
 
 ml(Flags, fn(Name, Args), M)
  => ml(Flags, Name, F),
@@ -2488,7 +2488,7 @@ ml(Flags, fn(Name, Args), M)
 jax(Flags, fn(Name, Args), M)
  => jax(Flags, Name, F),
     jax(Flags, paren(list(op(','), Args)), X),
-    format(string(M), "{~w~w}", [F, X]).
+    format(string(M), "{~w}{~w}", [F, X]).
 
 paren(Flags, fn(_Name, [Arg]), P),
     type(Flags, Arg, paren)

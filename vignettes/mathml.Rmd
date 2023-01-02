@@ -42,6 +42,7 @@ bibliography: RJreferences.bib
 preamble:
 - \usepackage{longtable}
 - \usepackage{cancel}
+- \usepackage{amsmath}
 Vignette: >
   %\VignetteIndexEntry{mathml}
   %\VignetteEngine{knitr::rmarkdown}
@@ -95,9 +96,10 @@ mathematical expressions [@Sarkar2022], which already is a big improvement.
 However, rules for the mapping of built-in language elements to their
 mathematical representation are still lacking. So far, R\ expressions such
 as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
-such as \(P_\mathrm{Bi}(X \le k; N, p)\) require explicit Latex commands, that
-is, `P_\mathrm{Bi}\left(X \le k; N, p\right)`. Except for minimalistic examples,
-these commands are tedious to type in and their source code is hard to read.
+such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit Latex commands, that
+is, `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for minimalistic use
+cases, these commands are tedious to type in and their source code is hard to
+read.
 
 The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in RMarkdown documents [@Xie2020] and
@@ -120,6 +122,14 @@ studies for the use of the package in a scientific report and a ShinyApp web
 page. Section\ 6 concludes with a discussion and ideas for further development.
 A complete list of the R\ elements covered by the package is found in the
 Appendix.
+
+playing around with multiline equations, please leave it here.
+
+\begin{align*}
+\log(\text{employed}) & = \beta_0 + \beta_1 \cdot \log( adult\_wage )\\  
+  & + \beta_2 \cdot jobs\_created + \beta_3 \cdot jobs\_destroyed + \beta_4 \cdot mw\\  
+  & + \beta_5 \cdot teen\_pop + \beta_6 \cdot teen\_wage \cdot \mu_i + \delta_{it} + \alpha_{it} + \kappa_{ir} 
+\end{align*}
 
 # Background
 
@@ -552,9 +562,9 @@ the output---instead of the desired matrix representation.
 ## Abbreviations
 
 We consider the \(t\)-statistic for independent samples with equal variance. To
-avoid clutter in the equation, the pooled variance \(s^2_\mathrm{pool}\) is
+avoid clutter in the equation, the pooled variance \(s^2_{\mathrm{pool}}\) is
 abbreviated, and a comment is given with the expression
-for \(s^2_\mathrm{pool}\). For this purpose, \pkg{mathml} provides a
+for \(s^2_{\mathrm{pool}}\). For this purpose, \pkg{mathml} provides a
 function `denote(abbr, expr, info)`, with `expr` actually being
 evaluated, `abbr` being rendered, plus a comment of the
 form "with `expr` denoting `info`". The hooks are described in the next section.
@@ -598,7 +608,7 @@ To improve the situation, \pkg{mathml} provides a simple hook that can be used
 to replace elements (e.g., verbose variable names) of the code by concise
 mathematical symbols, as illustrated in the example. Care should be taken to
 avoid recursive hooks such as `hook(quote(s), quote(s["A"]))` that endlessly
-replace the \(s\) from \(s_\mathrm{A}\) as
+replace the \(s\) from \(s_{\mathrm{A}}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
 more stuff: math/2, ml/3, jax/3
@@ -623,21 +633,20 @@ Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (redundant stimuli), with the redundant stimuli being
 presented either simultaneously or with onset asynchrony $\tau$. The channel
 activation is described as a two-dimensional Wiener process with
-drifts $\mu_\mathrm A$, $\mu_\mathrm B$,
-variances $\sigma^2_\mathrm A$, $\sigma^2_\mathrm B$,
-correlation $\rho_\mathrm{AB}$ and initial
+drifts $\mu_{\mathrm A}$, $\mu_{\mathrm B}$,
+variances $\sigma^2_{\mathrm A}$, $\sigma^2_{\mathrm B}$,
+correlation $\rho_{\mathrm{AB}}$ and initial
 conditions $X_i(t=0)=0, i=\mathrm{A, B}$. The response is elicited when the
 process reaches the absorbing barrier $c > 0$ for the first time. In combined
 stimuli ("redundant" stimuli), the overall diffusion process
-is $X_\mathrm{AB}(t) = X_\mathrm A(t) + X_\mathrm B(t)$ , which is again a
-Wiener process with drift $\mu_\mathrm A + \mu_\mathrm B$ and
-variance $\sigma^2_\mathrm A + \sigma^2_\mathrm B
-  + 2\rho_\mathrm{AB}\sigma_\mathrm A\sigma_\mathrm B$.
+is $X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)$ , which is again a
+Wiener process with drift $\mu_{\mathrm A} + \mu_{\mathrm B}$ and
+variance $\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B} + 2\rho_{\mathrm{AB}}\sigma_{\mathrm A}\sigma_{\mathrm B}$.
 
 In single-target trials, the first passages at $c$ are expected at
 $E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}$, whereas in synchronous
 redundant-target trials, we have
-$E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}$.
+$E[D_{\mathrm{AB}}]= \frac{c}{\mu_{\mathrm A} + \mu_{\mathrm B}}$.
 
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
 first-passage time $E[D_{\mathrm A(\tau)\mathrm B}]$ as a function of the
@@ -681,7 +690,8 @@ presentation, and negative $\tau$ denote those conditions in which B is
 presented before A. Each condition was replicated 400 times. The 13 mean RTs and
 standard deviations are given in Table 2 below.
 
-Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective $\tau$ and the parameters $\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.43, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161$
+Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective $\tau$ and the 
+parameters $\mu_{\mathrm A} = 0.53, \mu_{\mathrm B} = 1.32, \sigma_{\mathrm A} = 4.43, \sigma_{\mathrm B} = 18.3, c = 100, \mu_{\mathrm M} = 161$
 
 
 ````{r, echo=FALSE}
