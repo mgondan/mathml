@@ -395,6 +395,7 @@ op1 <- list(
   tanpi=quote(tanpi(alpha)),
   log=quote(log(p)),
   log1p=quote(log1p(x)),
+  logb=quote(logb(x, e)),
   exp=quote(exp(x)),
   expm1=quote(expm1(x)),
   lchoose=quote(lchoose(n, k)),
@@ -641,6 +642,16 @@ $E[D_\mathrm{AB}]= \frac{c}{\mu_\mathrm A + \mu_\mathrm B}$.
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
 first-passage time $E[D_{\mathrm A(\tau)\mathrm B}]$ as a function of the
 stimulus onset asyncrony $\tau > 0$ (Eq.\ 10),
+
+```{r, echo=FALSE}
+hook(quote(mu_A), quote(mu["A"]))
+hook(quote(mu_B), quote(mu["B"]))
+hook(quote(sigma_A), quote(sigma["A"]))
+hook(quote(sigma_B), quote(sigma["B"]))
+hook(quote(mu_M), quote(mu["M"]))
+hook(quote(zn), quote(z[tau]))
+hook(quote(M), quote(overline(X)))
+```
 
 ```{r, results="asis", echo=TRUE}
 f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
@@ -1043,45 +1054,4 @@ Please check if the examples below
 * can be added to one of the tables
 * or if they should go into a separate appendix
 
-```{r, results='asis', echo=TRUE}
-# fixme: braces not needed when right to *
-catmath(a * sum(b[i]))
-
-# Multiplication (capital Pi) is missing
-catmath(a * prod(b[i]))
-
-catmath(integrate(sin, 0L, 2L*pi))
-
-catmath(A & B)
-
-catmath(A | B)
-
-catmath(!A)
-
-catmath(xor(A, B))
-
-catmath(exp(2L*pi*i))
-
-catmath(expm1(2L*pi*i))
-
-catmath(log(x))
-
-catmath(log10(x))
-
-catmath(log2(x))
-
-catmath(logb(x, e))
-
-catmath(log1p(x))
-
-catmath(ceiling(pi))
-
-catmath(floor(pi))
-
-catmath(sin(pi/2L))
-
-catmath(cos(pi/2L))
-
-catmath(tan(pi/2L))
-```
-
+_I removed the examples since they were already present._
