@@ -2364,6 +2364,25 @@ math(qbinom(Alpha, N, Pi), M)
  => M = fn(subscript("arg min", k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
 
+math(dpois(K, Rate), M) 
+  => M = fn(subscript('P', "Po"), (['X' = K] ; [Rate])).
+  
+math(ppois(K, Rate), M) 
+  => M = fn(subscript('P', "Po"), (['X' =< K] ; [Rate])).
+  
+math(qpois(Alpha, Rate), M)
+ => M = fn(subscript("arg max", k),
+          [fn(subscript('P', "Po"), (['X' =< k] ; [Rate])) > Alpha]).
+
+math(dexp(X, Rate), M) 
+  => M = fn(subscript('f', "Exp"), ([X] ; [Rate])).
+
+math(pexp(X, Rate), M) 
+  => M = fn(subscript('F', "Exp"), ([X] ; [Rate])).
+  
+math(qexp(P, Rate), M) 
+  => M = fn(subscript('F' ^ -1, "Exp"), ([P] ; [Rate])).
+
 math(dnorm(Z), M)
  => M = fn(phi, [Z]).
 

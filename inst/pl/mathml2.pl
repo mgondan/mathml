@@ -2363,7 +2363,6 @@ math(pbinom(K, N, Pi), M)
 math(qbinom(Alpha, N, Pi), M)
  => M = fn(subscript("arg min", k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
-
 math(dnorm(Z), M)
  => M = fn(phi, [Z]).
 
