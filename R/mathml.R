@@ -3,7 +3,7 @@
   if(!requireNamespace("rolog", quietly=TRUE))
     stop("Could not attach library rolog.")
 
-  rolog::consult(system.file("pl/mathml.pl", package=pkgname))
+  rolog::consult(system.file("pl/mathml3.pl", package=pkgname))
 }
 
 #' MathML output
@@ -29,7 +29,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   env=globalenv())
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
-  t <- rolog::once(call("r2mathml", flags, term, expression(X)),
+  t <- rolog::once(call("r2mathml", term, expression(X), flags),
     options=list(preproc=list(rolog::preproc, mathml_preproc)),
     env=env)
   r <- paste(t$X, collapse="")
@@ -106,7 +106,7 @@ mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   env=globalenv())
 {
   flags <- c(attributes(term), flags, list(cat=FALSE))
-  t <- rolog::once(call("r2mathjax", flags, term, expression(X)),
+  t <- rolog::once(call("r2mathjax", term, expression(X), flags),
     options=list(preproc=list(rolog::preproc, mathml_preproc)),
     env=env)
   r <- paste(t$X, collapse="")
