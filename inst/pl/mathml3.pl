@@ -2244,23 +2244,23 @@ math(qbinom(Alpha, N, Pi), M)
  => M = fn(subscript("arg min", k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
 
-math(dpois(K, Rate), M) 
+math(dpois(K, Rate), M)
   => M = fn(subscript('P', "Po"), (['X' = K] ; [Rate])).
-  
-math(ppois(K, Rate), M) 
+
+math(ppois(K, Rate), M)
   => M = fn(subscript('P', "Po"), (['X' =< K] ; [Rate])).
-  
+
 math(qpois(Alpha, Rate), M)
  => M = fn(subscript("arg max", k),
           [fn(subscript('P', "Po"), (['X' =< k] ; [Rate])) > Alpha]).
 
-math(dexp(X, Rate), M) 
+math(dexp(X, Rate), M)
   => M = fn(subscript('f', "Exp"), ([X] ; [Rate])).
 
-math(pexp(X, Rate), M) 
+math(pexp(X, Rate), M)
   => M = fn(subscript('F', "Exp"), ([X] ; [Rate])).
-  
-math(qexp(P, Rate), M) 
+
+math(qexp(P, Rate), M)
   => M = fn(subscript('F' ^ -1, "Exp"), ([P] ; [Rate])).
 
 math(dnorm(Z), M)
@@ -2459,7 +2459,7 @@ paren(A, P, Flags),
     dif(Flags-A, New-M)
  => paren(M, P, New).
 
-paren(_, _, P)
+paren(_A, P, _Flags)
  => P = 0.
 
 prec(A, Den, Flags),
@@ -2467,7 +2467,7 @@ prec(A, Den, Flags),
     dif(Flags-A, New-M)
  => prec(M, Den, New).
 
-prec(_, _, P)
+prec(_A, P, _Flags)
  => P = 0.
 
 type(A, Type, Flags),
