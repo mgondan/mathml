@@ -162,7 +162,7 @@ mathml :-
 % Same for product sign
 math(Prod, M, Flags, New),
     compound(Prod),
-    compound_name_arguments(Prod, sum, [Arg]),
+    compound_name_arguments(Prod, prod, [Arg]),
     select(subscript(From), Flags, Flags1),
     select(superscript(To), Flags1, Flags2)
  => New = Flags2,
@@ -170,7 +170,7 @@ math(Prod, M, Flags, New),
 
 math(Prod, M, Flags, New),
     compound(Prod),
-    compound_name_arguments(Prod, sum, [Arg]),
+    compound_name_arguments(Prod, prod, [Arg]),
     select(subscript(Index), Flags, Flags1)
  => New = Flags1,
     M = fn(subscript(prod, Index), [Arg]).
