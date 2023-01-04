@@ -1674,111 +1674,111 @@ denoting(fy(_, _, A), D, Flags)
 denoting(yf(_, _, A), D, Flags)
  => denoting(A, D, Flags).
 
-denoting(Flags, xfx(_, _, A, B), D)
- => denoting(Flags, A, DA),
-    denoting(Flags, B, DB),
+denoting(xfx(_, _, A, B), D, Flags)
+ => denoting(A, DA, Flags),
+    denoting(B, DB, Flags),
     append(DA, DB, D).
 
-denoting(Flags, xfy(_, _, A, B), D)
- => denoting(Flags, A, DA),
-    denoting(Flags, B, DB),
+denoting(xfy(_, _, A, B), D, Flags)
+ => denoting(A, DA, Flags),
+    denoting(B, DB, Flags),
     append(DA, DB, D).
 
-denoting(Flags, yfx(_, _, A, B), D)
- => denoting(Flags, A, DA),
-    denoting(Flags, B, DB),
+denoting(yfx(_, _, A, B), D, Flags)
+ => denoting(A, DA, Flags),
+    denoting(B, DB, Flags),
     append(DA, DB, D).
 
-denoting(Flags, yfy(_, _, A, B), D)
- => denoting(Flags, A, DA),
-    denoting(Flags, B, DB),
+denoting(yfy(_, _, A, B), D, Flags)
+ => denoting(A, DA, Flags),
+    denoting(B, DB, Flags),
     append(DA, DB, D).
 
-paren(Flags, fy(_, _, A), P)
- => paren(Flags, A, P).
+paren(fy(_, _, A), P, Flags)
+ => paren(A, P, Flags).
 
-paren(Flags, yf(_, _, A), P)
- => paren(Flags, A, P).
+paren(yf(_, _, A), P, Flags)
+ => paren(A, P, Flags).
 
-paren(Flags, xfx(_, _, A, B), P)
- => paren(Flags, A, PA),
-    paren(Flags, B, PB),
+paren(xfx(_, _, A, B), P, Flags)
+ => paren(A, PA, Flags),
+    paren(B, PB, Flags),
     P is max(PA, PB).
 
-paren(Flags, yfx(_, _, A, B), P)
- => paren(Flags, A, PA),
-    paren(Flags, B, PB),
+paren(yfx(_, _, A, B), P, Flags)
+ => paren(A, PA, Flags),
+    paren(B, PB, Flags),
     P is max(PA, PB).
 
-paren(Flags, xfy(_, _, A, B), P)
- => paren(Flags, A, PA),
-    paren(Flags, B, PB),
+paren(xfy(_, _, A, B), P, Flags)
+ => paren(A, PA, Flags),
+    paren(B, PB, Flags),
     P is max(PA, PB).
 
-paren(Flags, yfy(_, _, A, B), P)
- => paren(Flags, A, PA),
-    paren(Flags, B, PB),
+paren(yfy(_, _, A, B), P, Flags)
+ => paren(A, PA, Flags),
+    paren(B, PB, Flags),
     P is max(PA, PB).
 
-prec(_Flags, fy(Prec, _, _), P)
+prec(fy(Prec, _, _), P, _Flags)
  => P = Prec.
 
-prec(_Flags, yf(Prec, _, _), P)
+prec(yf(Prec, _, _), P, _Flags)
  => P = Prec.
 
-prec(_Flags, xfx(Prec, _, _, _), P)
+prec(xfx(Prec, _, _, _), P, _Flags)
  => P = Prec.
 
-prec(_Flags, yfx(Prec, _, _, _), P)
+prec(yfx(Prec, _, _, _), P, _Flags)
  => P = Prec.
 
-prec(_Flags, xfy(Prec, _, _, _), P)
+prec(xfy(Prec, _, _, _), P, _Flags)
  => P = Prec.
 
-prec(_Flags, yfy(Prec, _, _, _), P)
+prec(yfy(Prec, _, _, _), P, _Flags)
  => P = Prec.
 
-type(_Flags, fy(_, _, _), Type)
+type(fy(_, _, _), Type, _Flags)
  => Type = op.
 
-type(_Flags, yf(_, _, _), Type)
+type(yf(_, _, _), Type, _Flags)
  => Type = op.
 
-type(_Flags, xfx(_, _, _, _), Type)
+type(xfx(_, _, _, _), Type, _Flags)
  => Type = op.
 
-type(_Flags, yfx(_, _, _, _), Type)
+type(yfx(_, _, _, _), Type, _Flags)
  => Type = op.
 
-type(_Flags, xfy(_, _, _, _), Type)
+type(xfy(_, _, _, _), Type, _Flags, )
  => Type = op.
 
-type(_Flags, yfy(_, _, _, _), Type)
+type(yfy(_, _, _, _), Type, _Flags)
  => Type = op.
 
 
-math(Flags, left(Prec, A), M),
-    prec(Flags, A, P),
+math(left(Prec, A), M, Flags),
+    prec(A, P, Flags),
     P > Prec
  => M = paren(A).
 
-math(_Flags, left(_, A), M)
+math(left(_, A), M, _Flags)
  => M = A.
 
 math(right(Prec, A), M)
  => P is Prec, % - 1,
     M = left(P, A).
 
-denoting(Flags, left(_, A), D)
- => denoting(Flags, A, D).
+denoting(left(_, A), D, Flags)
+ => denoting(A, D, Flags).
 
-denoting(Flags, right(_, A), D)
- => denoting(Flags, A, D).
+denoting(right(_, A), D, Flags)
+ => denoting(A, D, Flags).
 
 %
 % Named elements (see, e.g., integrate)
 %
-math(Flags, name(A, Name), New, M)
+math(name(A, Name), New, M, Flags)
  => New = [name(Name) | Flags],
     M = A.
 
@@ -1790,20 +1790,20 @@ math(Flags, name(A, Name), New, M)
 ml(denote(A, _, _), X, Flags)
  => ml(A, X, Flags).
 
-jax(Flags, denote(A, _, _), X)
- => jax(Flags, A, X).
+jax(denote(A, _, _), X, Flags)
+ => jax(A, X, Flags).
 
-paren(Flags, denote(A, _, _), Paren)
- => paren(Flags, A, Paren).
+paren(denote(A, _, _), Paren, Flags)
+ => paren(A, Paren, Flags).
 
-prec(Flags, denote(A, _, _), Prec)
- => prec(Flags, A, Prec).
+prec(denote(A, _, _), Prec, Flags)
+ => prec(A, Prec, Flags).
 
-type(Flags, denote(A, _, _), Type)
- => type(Flags, A, Type).
+type(denote(A, _, _), Type, Flags)
+ => type(A, Type, Flags).
 
-denoting(Flags, denote(A, Expr, Info), Den)
- => denoting(Flags, Expr, T),
+denoting(denote(A, Expr, Info), Den, Flags)
+ => denoting(Expr, T, Flags),
     Den = [denoting(A, Expr, Info) | T].
 
 %
@@ -1813,14 +1813,14 @@ ml(denoting(A, Expr, Info), X, Flags)
  => ml(A = Expr, AExpr, Flags),
     X = span([math(AExpr), " denoting ", Info]).
 
-jax(Flags, denoting(A, Expr, Info), X)
- => jax(Flags, A = Expr, AExpr),
+jax(denoting(A, Expr, Info), X, Flags)
+ => jax(A = Expr, AExpr, Flags),
     format(string(X), "$~w$ denoting ~w", [AExpr, Info]).
 
-type(Flags, denoting(A, _, _), Type)
- => type(Flags, A, Type).
+type(denoting(A, _, _), Type, Flags)
+ => type(A, Type, Flags).
 
-denoting(_Flags, denoting(_, _, _), Den)
+denoting(denoting(_, _, _), Den, _Flags)
  => Den = [].
 
 %
@@ -1850,28 +1850,28 @@ ml(and([A | T]), W, Flags)
     ml(and(T), Y, Flags),
     W = span([", and", &(nbsp), X | Y]).
 
-jax(Flags, with(Abbreviations), X)
+jax(with(Abbreviations), X, Flags)
  => sort(Abbreviations, Sorted), % remove duplicates
-    jax(Flags, with_(Sorted), X).
+    jax(with_(Sorted), X, Flags).
 
-jax(_Flags, with_([]), W)
+jax(with_([]), W, _Flags)
  => W = "".
 
-jax(Flags, with_([A]), W)
- => jax(Flags, A, X),
+jax(with_([A]), W, Flags)
+ => jax(A, X, Flags),
     format(string(W), ", with ~w", [X]).
 
-jax(Flags, with_([A, B | T]), W)
- => jax(Flags, A, X),
-    jax(Flags, and([B | T]), Y),
+jax(with_([A, B | T]), W, Flags)
+ => jax(A, X, Flags),
+    jax(and([B | T]), Y, Flags),
     format(string(W), ", with ~w~w", [X, Y]).
 
-jax(_Flags, and([]), W)
+jax(and([]), W, _Flags)
  => W = ".".
 
-jax(Flags, and([A | T]), W)
- => jax(Flags, A, X),
-    jax(Flags, and(T), Y),
+jax(and([A | T]), W, Flags)
+ => jax(A, X, Flags),
+    jax(and(T), Y, Flags),
     format(string(W), ", and ~w~w", [X, Y]).
 
 %
@@ -1887,84 +1887,84 @@ math('('(A), M)
  => M = paren(A).
 
 ml(paren(A), M, Flags),
-    paren(Flags, A, P),
+    paren(A, P, Flags),
     2 is P mod 3
  => ml(braces(A), M, Flags).
 
 ml(paren(A), M, Flags),
-    paren(Flags, A, P),
+    paren(A, P, Flags),
     1 is P mod 3
  => ml(brackets(A), M, Flags).
 
 ml(paren(A), M, Flags)
  => ml(parentheses(A), M, Flags).
 
-jax(Flags, paren(A), M),
-    paren(Flags, A, P),
+jax(paren(A), M, Flags),
+    paren(A, P, Flags),
     2 is P mod 3
- => jax(Flags, braces(A), M).
+ => jax(braces(A), M, Flags).
 
-jax(Flags, paren(A), M),
-    paren(Flags, A, P),
+jax(paren(A), M, Flags),
+    paren(A, P, Flags),
     1 is P mod 3
- => jax(Flags, brackets(A), M).
+ => jax(brackets(A), M, Flags).
 
-jax(Flags, paren(A), M)
- => jax(Flags, parentheses(A), M).
+jax(paren(A), M, Flags)
+ => jax(parentheses(A), M, Flags).
 
-paren(Flags, paren(A), P)
- => paren(Flags, A, P0),
+paren(paren(A), P, Flags)
+ => paren(A, P0, Flags),
     succ(P0, P).
 
-type(_Flags, paren(_), T)
+type(paren(_), T, _Flags)
  => T = paren.
 
 ml(parentheses(A), M, Flags)
  => ml(A, X, Flags),
     M = mrow([mo('('), X, mo(')')]).
 
-jax(Flags, parentheses(A), M)
- => jax(Flags, A, X),
+jax(parentheses(A), M, Flags)
+ => jax(A, X, Flags),
     format(string(M), "\\left(~w\\right)", [X]).
 
-paren(_Flags, parentheses(_), P)
+paren(parentheses(_), P, _Flags)
  => P = 1.
 
-type(_Flags, parentheses(_), T)
+type(parentheses(_), T, _Flags)
  => T = paren.
 
 ml(brackets(A), M, Flags)
  => ml(A, X, Flags),
     M = mrow([mo('['), X, mo(']')]).
 
-jax(Flags, brackets(A), M)
- => jax(Flags, A, X),
+jax(brackets(A), M, Flags)
+ => jax(A, X, Flags),
     format(string(M), "\\left[~w\\right]", [X]).
 
-paren(_Flags, brackets(_), P)
+paren(brackets(_), P, _Flags)
  => P = 2.
 
-type(_Flags, brackets(_), T)
+type(brackets(_), T, _Flags)
  => T = paren.
 
 ml(braces(A), M, Flags)
  => ml(A, X, Flags),
     M = mrow([mo('{'), X, mo('}')]).
 
-jax(Flags, braces(A), M)
- => jax(Flags, A, X),
+jax(braces(A), M, Flags)
+ => jax(A, X, Flags),
     format(string(M), "\\left\\{~w\\right\\}", [X]).
 
-paren(_Flags, braces(_), P)
+paren(braces(_), P, _Flags)
  => P = 3.
 
-type(_Flags, braces(_), T)
+type(braces(_), T, _Flags)
  => T = paren.
 
 %
 % Lists of things
 %
-math(Flags, [H | T], New, M)
+math([H | T], New, M, Flags)
  => Flags = New,
     M = list(space, [H | T]).
 
