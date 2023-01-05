@@ -559,13 +559,13 @@ math(acos(A), M)
  => M = fn(superscript(cos, -1), [A]).
  
 math(arccos(A), M)
- => M = fn(acos, [A]).
+ => M = fn(superscript(cos, -1), [A]).
 
 math(atan(A), M)
  => M = fn(superscript(tan, -1), [A]).
 
 math(arctan(A), M)
- => M = fn(atan, [A]).
+ => M = fn(superscript(tan, -1), [A]).
 
 math(atan2(A, B), M)
  => M = fn(superscript(tan, -1), [A, B]).
