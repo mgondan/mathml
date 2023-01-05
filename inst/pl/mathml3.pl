@@ -2418,6 +2418,12 @@ prec(fn(Name, _Args), Prec, Flags)
 type(fn(_Name, _Args), Type, _Flags)
  => Type = function.
 
+% Comma-separated list
+math(R, M),
+    compound(R),
+    compound_name_arguments(R, ',', Args)
+ => M = list(',', Args).
+
 % Default compounds
 %
 % Can't use the macros here because of left recursion

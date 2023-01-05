@@ -619,42 +619,17 @@ more stuff: math/2, ml/3, jax/3
 
 # A case study {#case-study}
 
-For a more clear representation of what the \pkg{mathml} package is supposed to do, we provide here a case study, based on the work by Schwarz [-@schwarz1994], in which the features of \pkg{mathml} are implemented.
+This case study describes a model by Schwarz [-@schwarz1994] from mathematical
+Psychology using the features of package \pkg{mathml}. Schwarz presents a new
+explanation of redundancy gains that occur when observers respond to stimuli of
+different sources, and the same information is presented on two or more
+channels. In Schwarz' model, decision-making builds on a process of noisy
+accumulation of information over time [e.g., @ratcliff2016]. In redundant
+stimuli, the model assumes a superposition of channel-specific diffusion
+processes that eventually reach an absorbing barrier to elicit the response. For
+a detailed description the reader may refer to the original article.
 
-The reader may recognize that Schwarz' [-@schwarz1994] study can be traced back to the strand of decision-making models, where decision-making is assumed to be a process of
-noisy accumulation of information over time [e.g., @ratcliff2016]. The aim of
-Schwarz' [-@schwarz1994] study is to present a new explanation of redundancy gains when
-observers make speeded responses to stimuli of different sources, and the same
-information is presented on two channels. Schwarz [-@schwarz1994] describes a model that assumes
-the superposition of channel-specific diffusion processes that eventually reach
-an absorbing barrier to elicit the response. For a detailed description the
-reader may refer to the original article.
-
-
-### The model 
-
-Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
-alone or in combination (redundant stimuli), with the redundant stimuli being
-presented either simultaneously or with onset asynchrony $\tau$. The channel
-activation is described as a two-dimensional Wiener process with
-drifts $\mu_{\mathrm A}$, $\mu_{\mathrm B}$,
-variances $\sigma^2_{\mathrm A}$, $\sigma^2_{\mathrm B}$,
-correlation $\rho_{\mathrm{AB}}$ and initial
-conditions $X_i(t=0)=0, i=\mathrm{A, B}$. The response is elicited when the
-process reaches the absorbing barrier $c > 0$ for the first time. In combined
-stimuli ("redundant" stimuli), the overall diffusion process
-is $X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)$ , which is again a
-Wiener process with drift $\mu_{\mathrm A} + \mu_{\mathrm B}$ and
-variance $\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B} + 2\rho_{\mathrm{AB}}\sigma_{\mathrm A}\sigma_{\mathrm B}$.
-
-In single-target trials, the first passages at $c$ are expected at
-$E\left[D_i\right] = \frac{c}{\mu_i}, i = \mathrm{A, B}$, whereas in synchronous
-redundant-target trials, we have
-$E[D_{\mathrm{AB}}]= \frac{c}{\mu_{\mathrm A} + \mu_{\mathrm B}}$.
-
-For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
-first-passage time $E[D_{\mathrm A(\tau)\mathrm B}]$ as a function of the
-stimulus onset asyncrony $\tau > 0$ (Eq.\ 10),
+## The model 
 
 ```{r, echo=FALSE}
 hook(quote(mu_A), quote(mu["A"]))
@@ -666,23 +641,102 @@ hook(quote(zn), quote(z[tau]))
 hook(quote(M), quote(overline(X)))
 ```
 
-```{r, results="asis", echo=TRUE}
-f <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
+alone or in combination (AB, redundant stimuli), with the redundant stimuli
+being presented either simultaneously or with onset asynchrony \(\tau\). The
+channel activation is described as a two-dimensional Wiener process with
+drifts \(\mu_i\), variances \(\sigma^2_i\), and initial
+conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The channels may be correlated
+with \(\rho_{\mathrm{AB}}\), but we assume \(\rho_{\mathrm{AB}} = 0\) for
+simplicity.
+
+A response is elicited when the process reaches an absorbing barrier \(c > 0\)
+for the first time. In single-target trials, the first passages at \(c\) are
+expected at
+
+```{r, results='asis'}
+hook(quote(mu_i), quote(mu[i]))
+hook(call("ED_single", expression(c), expression(mu)), 
+     call("E", call(";", quote(D), call(",", expression(c), expression(mu)))))
+
+ED_single <- function(c, mu_i)
+  dfrac(c, mu_i)
+
+mathout(call("=", quote(E(`;`(D[i], `,`(c, mu_i)))),
+        ED_single))
+```
+
+with \(i = \mathrm{A, B}\).
+
+In redundant stimuli, the activation of the channel-specific diffusion processes
+adds up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\), hence
+the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process with
+drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
+variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
+first-passage time, we have
+
+```{r, results='asis'}
+hook(call("ED_sync", expression(c), expression(mu_A), expression(mu_B)), 
+     call("E", call(";", quote(D["AB"]), call(",", expression(c), expression(mu_A), expression(mu_B)))))
+
+ED_sync <- function(c, mu_A, mu_B)
+  dfrac(c, mu_A + mu_B)
+
+mathout(call("=", quote(E(`;`(D["AB"], `,`(c, mu_A, mu_B)))), ED_sync))
+```
+
+For asynchronous stimuli, Schwarz [-@schwarz1994; Eq. 10] derived the expected
+first-passage time \(E[D_{\mathrm A(\tau)\mathrm B}]\) as a function of the
+stimulus onset asyncrony \(\tau > 0\),
+
+```{r, results="asis"}
+hook(call("ED_async", expression(tau), expression(c), expression(mu_A), expression(sigma_A), expression(mu_B)), 
+     call("E", call(";", call("[", quote(D), expression(tau)), 
+                    call(",", expression(c), expression(mu_A), expression(sigma_A), expression(mu_B)))))
+
+ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
       - (mu_A*tau + c) * exp(dfrac(2L*mu_A*c, sigma_A^2L))
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
-mathout(f)
-``` 
+mathout(call("=", quote(E(`;`(D[tau > 0L], `,`(c, mu_A, sigma_A, mu_B)))),
+             ED_async))
+```
 
+For negative onset asynchrony (i.e., B before A), the parameters need to be
+switched.
 
-The observable response time is assumed to be the sum of $D$, the time
-employed to reach the threshold for the decision, and $M$, denoting the of the
-other processes.
+```{r, results='asis'}
+hook(call("ED", expression(tau), expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B)), 
+     call("E", call(";", call("[", quote(D), expression(tau)), 
+                    call(",", expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B)))))
 
-$E[T]= E[D + M] = E[D] + E[M] = E[D] + \mu_M$
+ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+{
+  if(tau == Inf) return(ED_single(c, mu_A)) ;
+  if(tau == -Inf) return(ED_single(c, mu_B)) ;
+  if(tau == 0L) return(ED_sync(c, mu_A, mu_B)) ;
+  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B)) ;
+  if(tau < 0L) return(ED_async(-tau, c, mu_B, sigma_B, mu_A))
+}
+
+mathout(call("=", quote(E(`;`(D[tau], `,`(c, mu_A, sigma_A, mu_B, sigma_B)))),
+             ED))
+```
+
+The observable response time is assumed to be the sum of \(D\), the time
+employed to reach the threshold for the decision, and a residual \(M\) denoting
+other processes such a motor preparation and execution. Correspondingly, the
+expected response time amounts to
+
+```{r, results='asis'}
+ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+  ED(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+
+mathout(call("=", quote(E(T[tau])), ET))
+```
 
 ### Methods
 
@@ -709,22 +763,7 @@ mu_M = 161
 ````
 
 
-```{r, results="asis", echo=FALSE}
-# Conditions
-
-g <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
-{
-    if( tau == Inf) return(dfrac(c, mu_A));
-    if( tau == -Inf) return(dfrac(c, mu_B));
-    if( tau > 0L)  return(f(tau, c, mu_A, sigma_A, mu_B, sigma_B));
-    if( tau == 0L) return(dfrac(c, mu_A + mu_B));
-    if( tau < 0L) return(f(-tau, c,  mu_B, sigma_B, mu_A, sigma_A))
-}
-
-mathout(g)
-```
-
-For instance, we can see that with $\tau = -167$ the expected first passage time is:
+For instance, we can see that with $\tau = -167$ the expected decision time is:
 
 ```{r, echo=FALSE}
 mu_A = 0.53
@@ -733,26 +772,26 @@ sigma_A = 4.4
 sigma_B = 18.3
 tau = -167
 c = 100
-mu_M = 161
 
-g(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 ```
 
 To which we have to add $\mu_M = 161$ (which represents the amount of time that the movement of providing the answer takes) and we obtain:
 
 ```{r, echo=FALSE}
-g(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+mu_M = 161
+ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 ```
 
 Similarly, we obtain the first-time passage for every $\tau$:
 
 ```{r, results="asis", echo=FALSE}
 
-G <- Vectorize(g, vectorize.args = 'tau')
+G <- Vectorize(ET, vectorize.args = 'tau')
 
 h <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 {
-  G(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
+  G(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 }
 
 mathout(h)
