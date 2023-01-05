@@ -553,7 +553,7 @@ math(asin(A), M)
  => M = fn(superscript(sin, -1), [A]).
 
 math(arcsin(A), M)
- => M = fn(asin, [A]).
+ => M = fn(superscript(sin, -1), [A]).
 
 math(acos(A), M)
  => M = fn(superscript(cos, -1), [A]).
