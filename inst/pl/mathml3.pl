@@ -408,7 +408,7 @@ math(tanpi(A), M, Flags, Flags2),
 %
 special(R) :-
     atom(R),
-    memberchk(R, [sgn, sin, cos, tan, asin, acos, atan, arctan2, sinh, cosh, tanh,
+    memberchk(R, [sgn, sin, cos, tan, asin, arcsin, acos, arccos, atan, arctan, arctan2, sinh, cosh, tanh,
                arsinh, arcosh, artanh, log, exp, sum, prod, min, max]).
 
 math(R, M),
@@ -552,11 +552,20 @@ math(tan(A), M)
 math(asin(A), M)
  => M = fn(superscript(sin, -1), [A]).
 
+math(arcsin(A), M)
+ => M = fn(asin, [A]).
+
 math(acos(A), M)
  => M = fn(superscript(cos, -1), [A]).
+ 
+math(arccos(A), M)
+ => M = fn(acos, [A]).
 
 math(atan(A), M)
  => M = fn(superscript(tan, -1), [A]).
+
+math(arctan(A), M)
+ => M = fn(atan, [A]).
 
 math(atan2(A, B), M)
  => M = fn(superscript(tan, -1), [A, B]).
