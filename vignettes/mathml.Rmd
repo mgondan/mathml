@@ -655,18 +655,14 @@ for the first time. In single-target trials, the first passages at \(c\) are
 expected at
 
 ```{r, results='asis'}
-hook(quote(mu_i), quote(mu[i]))
 hook(call("ED_single", expression(c), expression(mu)), 
      call("E", call(";", quote(D), call(",", expression(c), expression(mu)))))
 
-ED_single <- function(c, mu_i)
-  dfrac(c, mu_i)
+ED_single <- function(c, mu)
+  dfrac(c, mu)
 
-mathout(call("=", quote(E(`;`(D[i], `,`(c, mu_i)))),
-        ED_single))
+mathout(call("=", quote(ED_single(c, mu)), ED_single))
 ```
-
-with \(i = \mathrm{A, B}\).
 
 In redundant stimuli, the activation of the channel-specific diffusion processes
 adds up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\), hence
@@ -676,18 +672,11 @@ variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
 first-passage time, we have
 
 ```{r, results='asis'}
-hook(call("ED_sync", expression(c), expression(mu_A), expression(mu_B)), 
-     call("E", call(";", quote(D["AB"]), call(",", expression(c), expression(mu_A), expression(mu_B)))))
-
-ED_sync <- function(c, mu_A, mu_B)
-  dfrac(c, mu_A + mu_B)
-
-mathout(call("=", quote(E(`;`(D["AB"], `,`(c, mu_A, mu_B)))), ED_sync))
+mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
 For asynchronous stimuli, Schwarz [-@schwarz1994; Eq. 10] derived the expected
-first-passage time \(E[D_{\mathrm A(\tau)\mathrm B}]\) as a function of the
-stimulus onset asyncrony \(\tau > 0\),
+first-passage time as a function of the stimulus onset asyncrony \(\tau\),
 
 ```{r, results="asis"}
 hook(call("ED_async", expression(tau), expression(c), expression(mu_A), expression(sigma_A), expression(mu_B)), 
@@ -701,8 +690,7 @@ ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
-mathout(call("=", quote(E(`;`(D[tau > 0L], `,`(c, mu_A, sigma_A, mu_B)))),
-             ED_async))
+mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
 For negative onset asynchrony (i.e., B before A), the parameters need to be
@@ -717,13 +705,12 @@ ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 {
   if(tau == Inf) return(ED_single(c, mu_A)) ;
   if(tau == -Inf) return(ED_single(c, mu_B)) ;
-  if(tau == 0L) return(ED_sync(c, mu_A, mu_B)) ;
+  if(tau == 0L) return(ED_single(c, mu_A + mu_B)) ;
   if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B)) ;
-  if(tau < 0L) return(ED_async(-tau, c, mu_B, sigma_B, mu_A))
+  if(tau < 0L) return(ED_async(abs(tau), c, mu_B, sigma_B, mu_A))
 }
 
-mathout(call("=", quote(E(`;`(D[tau], `,`(c, mu_A, sigma_A, mu_B, sigma_B)))),
-             ED))
+mathout(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
 ```
 
 The observable response time is assumed to be the sum of \(D\), the time
@@ -738,15 +725,30 @@ ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 mathout(call("=", quote(E(T[tau])), ET))
 ```
 
-### Methods
+## Methods
 
-Schwarz [-@schwarz1994] applied the model to Miller’s [-@miller1986] data from
-a redundant signals task with 13 onset
-asynchronies $0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty$ ms,
-where 0 refers to synchronous AB, $\infty$ refers to the single-target
-presentation, and negative $\tau$ denote those conditions in which B is
-presented before A. Each condition was replicated 400 times. The 13 mean RTs and
-standard deviations are given in Table 2 below.
+Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
+with 13 onset
+asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
+where \(0\) refers to the synchronous condition, and \(\pm\infty\) to the
+single-target presentations. Each condition was replicated 400 times. The
+observed mean response times and their standard deviations are given in
+Table \@ref(tab:miller-data) below.
+
+```{r miller-data, echo=FALSE}
+tau  <- list(-Inf, -167L, -133L, -100L, -67L, -33L, 0L, 33L, 67L, 100L, 133L, 167L, Inf)
+m    <- c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
+s    <- c( 56,  58,  40,  40,  32,  28,  28,  28,  26,  30,  32,  34,  92)
+n    <- c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
+
+ttau <- lapply(tau, FUN=mathout, flags=list(cat=FALSE))
+tm   <- lapply(as.integer(m), FUN=mathout, flags=list(cat=FALSE))
+ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
+tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
+
+t <- cbind('$\\tau$'=ttau, '$m$'=tm, '$s$'=ts, '$n$'=tn)
+knitr::kable(t, caption="Miller data", row.names=FALSE, escape=FALSE)
+```
 
 Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective $\tau$ and the 
 parameters $\mu_{\mathrm A} = 0.53, \mu_{\mathrm B} = 1.32, \sigma_{\mathrm A} = 4.43, \sigma_{\mathrm B} = 18.3, c = 100, \mu_{\mathrm M} = 161$
