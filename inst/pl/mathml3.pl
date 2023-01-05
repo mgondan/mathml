@@ -553,19 +553,19 @@ math(asin(A), M)
  => M = fn(superscript(sin, -1), [A]).
 
 math(arcsin(A), M)
- => M = fn(superscript(sin, -1), [A]).
+ => M = fn(asin, [A]).
 
 math(acos(A), M)
  => M = fn(superscript(cos, -1), [A]).
  
 math(arccos(A), M)
- => M = fn(superscript(cos, -1), [A]).
+ => M = fn(acos, [A]).
 
 math(atan(A), M)
  => M = fn(superscript(tan, -1), [A]).
 
 math(arctan(A), M)
- => M = fn(superscript(tan, -1), [A]).
+ => M = fn(atan, [A]).
 
 math(atan2(A, B), M)
  => M = fn(superscript(tan, -1), [A, B]).
