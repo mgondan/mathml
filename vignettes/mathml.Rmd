@@ -314,6 +314,7 @@ op1 <- list(
   dot=quote(A %.% B),
   kronecker=quote(A %x% B),
   'integer division'=quote(A %/% B),
+  modulo=quote(A %% B),
   and=quote(A & B),
   vel=quote(A | B),
   xor=quote(xor(A, B)),
@@ -339,6 +340,7 @@ op2 <- list(
   'in'=quote(A %in% B),
   intersect=quote(intersect(A, B)),
   union=quote(union(A, B)),
+  crossprod=quote(crossprod(A, B)),
   intersect=quote(is.null(A)))
 
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))

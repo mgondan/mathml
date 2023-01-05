@@ -1986,6 +1986,11 @@ math(over(Num, Den), M)
 math(div(Num, Den), M)
  => M = floor(Num / Den).
 
+% Modulo
+math(rem(Num, Den), M)
+ => M = ceiling(Num / Den).
+
+
 %
 % Large font ("displaystyle")
 %

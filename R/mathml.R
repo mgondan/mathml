@@ -43,6 +43,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
 mathml_operators = c(
   "%.%" = "cdot",
   "%/%" = "div",
+  "%%"="rem",
   "%+-%" = "pm",
   "%*%" = "times",
   "%~~%" = "approx",
@@ -557,6 +558,7 @@ e1*e2
 #'
 '%dbldown%' <- function(x, y)
   x=y
+
 
 #' denote
 #' This is a function that allows the user to insert abbreviations in the formula,
