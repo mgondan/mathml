@@ -604,5 +604,154 @@ test_that("qtalpha2nm1",
   expect_equal(q, "<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>2.00</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>1.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>")
 })
 
+test_that("AXB",
+{
+  q <- tml(quote(A %*% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&times;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AdotB",
+{
+  q <- tml(quote(A %.% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&sdot;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AxB",
+{
+  q <- tml(quote(A %x% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&CircleTimes;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("A/B",
+{
+  q <- tml(quote(A %/% B))
+  expect_equal(q, "<math><mrow><mo>&lfloor;</mo><mrow><mi>A</mi><mo>/</mo><mi>B</mi></mrow><mo>&rfloor;</mo></mrow></math>")
+})
+
+test_that("AmodB",
+{
+  q <- tml(quote(A%%B))
+  expect_equal(q, "<math><mrow><mo>&lceil;</mo><mrow><mi>A</mi><mo>/</mo><mi>B</mi></mrow><mo>&rceil;</mo></mrow></math>")
+})
+
+test_that("A&B",
+{
+  q <- tml(quote(A & B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&and;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AvelB",
+{
+  q <- tml(quote(A | B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&or;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AeqeqB",
+{
+  q <- tml(quote(A == B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>=</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AarroweqB",
+{
+  q <- tml(quote(A <- B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>=</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AdiffB",
+{
+  q <- tml(quote(A != B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&ne;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AtildetildeB",
+{
+  q <- tml(quote(A %~~% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&approx;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AequivB",
+{
+  q <- tml(quote(A %==% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&equiv;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AcongB",
+{
+  q <- tml(quote(A %=~% B))
+  expect_equal(q,  "<math><mrow><mi>A</mi><mo>&cong;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("ApropB",
+{
+  q <- tml(quote(A %prop% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&prop;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AisinB",
+{
+  q <- tml(quote(A %in% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&isin;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AlrarrowB",
+{
+  q <- tml(quote(A %<->% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&leftrightarrow;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("ArarrowB",
+{
+  q <- tml(quote(A %->% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&rightarrow;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AlarrowB",
+{
+  q <- tml(quote(A %<-% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&leftarrow;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AuparrowB",
+{
+  q <- tml(quote(A %up% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&leftarrow;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AdownarrowB",
+{
+  q <- tml(quote(A %down% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&downarrow;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AlrdoublearrowB",
+{
+  q <- tml(quote(A %<=>% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&iff;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AldoublearrowB",
+{
+  q <- tml(quote(A %<=% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&lArr;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("ArdoublearrowB",
+{
+  q <- tml(quote(A %=>% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&rArr;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AupdoublearrowB",
+{
+  q <- tml(quote(A %dblup%  B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&uArr;</mo><mi>B</mi></mrow></math>")
+})
+
+test_that("AdowndoublearrowB",
+{
+  q <- tml(quote(A %dbldown%  B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&dArr;</mo><mi>B</mi></mrow></math>")
+})
 
 
