@@ -386,6 +386,7 @@ fname <- function(fname, body)
 #' @param y
 #'
 #' @return c(x - y, x + y)
+#' x plus min y
 #'
 '%+-%' <- function(x, y)
 {
@@ -399,7 +400,7 @@ fname <- function(fname, body)
 #'
 #' @param y
 #'
-#' @return e1*e2
+#' @return e1*e2 , e.g. x dot y
 #'
 '%.%' <- function(e1, e2)
 e1*e2
@@ -410,7 +411,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , that is double tilde
 #'
 '%~~%' <- function(x, y)
   isTRUE(all.equal(x, y))
@@ -421,7 +422,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , e.g., a = b
 #'
 '%==%' <- function(x, y)
   x=y
@@ -433,7 +434,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , e.g., a cong b
 #'
 '%=~%' <- function(x, y)
   x=y
@@ -445,6 +446,7 @@ e1*e2
 #' @param y
 #'
 #' @return x=y
+#' e.g, x prop y
 #'
 '%prop%' <- function(x, y)
   x=y
@@ -456,6 +458,8 @@ e1*e2
 #' @param y
 #'
 #' @return x=y
+#' it produces a doublrsides arrow
+#'
 #'
 '%<->%' <- function(x, y)
   x=y
@@ -466,7 +470,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces a right arrow
 #'
 '%->%' <- function(x, y)
   x=y
@@ -477,7 +481,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces a left arrow
 #'
 '%<-%' <- function(x, y)
   x=y
@@ -488,7 +492,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces an upward arrow
 #'
 '%up%' <- function(x, y)
   x=y
@@ -499,7 +503,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces a downward arrow
 #'
 '%down%' <- function(x, y)
   x=y
@@ -510,7 +514,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces a double arrow double-sided
 #'
 '%<=>%' <- function(x, y)
   x=y
@@ -521,7 +525,7 @@ e1*e2
 #'
 #' @param y
 #'
-#' @return x=y
+#' @return x=y , it produces a right double arrow
 #'
 '%<=%' <- function(x, y)
   x=y
@@ -533,6 +537,7 @@ e1*e2
 #' @param y
 #'
 #' @return x=y
+#' it produces a left doublearrow
 #'
 '%=>%' <- function(x, y)
   x=y
@@ -544,6 +549,7 @@ e1*e2
 #' @param y
 #'
 #' @return e1=e2
+#' it produces a upward double arrow
 #'
 '%dblup%' <- function(x, y)
   x=y
@@ -555,6 +561,7 @@ e1*e2
 #' @param y
 #'
 #' @return x=y
+#' it produces a downward double arrow
 #'
 '%dbldown%' <- function(x, y)
   x=y
@@ -577,6 +584,7 @@ e1*e2
 #' e.g. 'the pooled variance'
 #'
 #' @return expr
+#' e.g., x denotes a^2 + b
 #'
 denote <- function(abbr, expr, info)
   return(expr)
@@ -617,6 +625,7 @@ omit_right <- function(expr)
 #' @param expr
 #'
 #' @return NULL
+#' e.g., remove a + b from a + b
 #'
 omit <- function(expr)
 {
@@ -631,7 +640,8 @@ omit <- function(expr)
 #'
 #' @param expr
 #'
-#' @return expr
+#' @return expr 
+#' e.g., highlights a + from a + b
 #'
 add_left <- function(expr)
 {
@@ -645,7 +655,7 @@ add_left <- function(expr)
 #'
 #' @param expr
 #'
-#' @return expr
+#' @return expr , e.g., highlights + b from a + b
 #'
 add_right <- function(expr)
 {
@@ -659,7 +669,7 @@ add_right <- function(expr)
 #'
 #' @param expr
 #'
-#' @return expr
+#' @return expr ,  e.g., highlights a + b from a + b
 #'
 add <- function(expr)
 {
@@ -676,7 +686,7 @@ add <- function(expr)
 #'
 #' @param of
 #'
-#' @return inst
+#' @return inst , e.g. a + c instead of a + b
 #'
 instead <- function(inst, of)
 {
