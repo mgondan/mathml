@@ -517,7 +517,113 @@ test_that("tilde",
   expect_equal(q,"<math><mrow><mi>A</mi><mo>&Tilde;</mo><mi>B</mi></mrow></math>")
 })
 
+test_that("expx",
+{
+  q <- tml(quote(exp(x)))
+  expect_equal(q,"<math><mrow><mi>exp</mi><mo>&af;</mo><mi>x</mi></mrow></math>")
+})
 
+test_that("expm1x",
+{
+  q <- tml(quote(expm1(x)))
+  expect_equal(q,"<math><mrow><mrow><mi>exp</mi><mo>&af;</mo><mi>x</mi></mrow><mo>-</mo><mn>1</mn></mrow></math>")
+})
+
+test_that("dbinom",
+{
+  q <- tml(quote(dbinom(k, N, pi)))
+  expect_equal(q,"<math><mrow><msub><mi>P</mi><mtext>Bi</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>=</mo><mi>k</mi></mrow><mo>;</mo><mrow><mi>N</mi><mo>,</mo><mi>&pi;</mi></mrow></mrow><mo>)</mo></mrow></mrow></math>")
+})
+
+test_that("pbinom",
+{
+  q <- tml(quote(pbinom(k, N, pi)))
+  expect_equal(q,"<math><mrow><msub><mi>P</mi><mtext>Bi</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>&le;</mo><mi>k</mi></mrow><mo>;</mo><mrow><mi>N</mi><mo>,</mo><mi>&pi;</mi></mrow></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("qbinom",
+{
+  q <- tml(quote(qbinom(k, N, pi)))
+  expect_equal(q,"<math><mrow><msub><mtext>arg min</mtext><mi>k</mi></msub><mo>&af;</mo><mrow><mo>[</mo><mrow><mrow><msub><mi>P</mi><mtext>Bi</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>&le;</mo><mi>k</mi></mrow><mo>;</mo><mrow><mi>N</mi><mo>,</mo><mi>&pi;</mi></mrow></mrow><mo>)</mo></mrow></mrow><mo>&gt;</mo><mi>k</mi></mrow><mo>]</mo></mrow></mrow></math>")  
+})
+
+test_that("dpois",
+{
+  q <- tml(quote(dpois(k, lambda)))
+  expect_equal(q,"<math><mrow><msub><mi>P</mi><mtext>Po</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>=</mo><mi>k</mi></mrow><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("ppois",
+{
+  q <- tml(quote(ppois(k, lambda)))
+  expect_equal(q,"<math><mrow><msub><mi>P</mi><mtext>Po</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>&le;</mo><mi>k</mi></mrow><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("qpois",
+{
+  q <- tml(quote(qpois(k, lambda)))
+  expect_equal(q,"<math><mrow><msub><mtext>arg max</mtext><mi>k</mi></msub><mo>&af;</mo><mrow><mo>[</mo><mrow><mrow><msub><mi>P</mi><mtext>Po</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>X</mi><mo>&le;</mo><mi>k</mi></mrow><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow><mo>&gt;</mo><mi>k</mi></mrow><mo>]</mo></mrow></mrow></math>")  
+})
+
+test_that("dexp",
+{
+  q <- tml(quote(dexp(x, lambda)))
+  expect_equal(q,"<math><mrow><msub><mi>f</mi><mtext>Exp</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("pexp",
+{
+  q <- tml(quote(pexp(x, lambda)))
+  expect_equal(q,"<math><mrow><msub><mi>F</mi><mtext>Exp</mtext></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("qexp",
+{
+  q <- tml(quote(qexp(x, lambda)))
+  expect_equal(q,"<math><mrow><msubsup><mi>F</mi><mtext>Exp</mtext><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><mi>&lambda;</mi></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("dnorm",
+{
+  q <- tml(quote(dnorm(x, mu, sigma)))
+  expect_equal(q,"<math><mrow><mi>&phi;</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><mrow><mi>&mu;</mi><mo>,</mo><mi>&sigma;</mi></mrow></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("pnorm",
+{
+  q <- tml(quote(pnorm(x, mu, sigma)))
+  expect_equal(q,"<math><mrow><mi>&Phi;</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><mrow><mi>&mu;</mi><mo>,</mo><mi>&sigma;</mi></mrow></mrow><mo>)</mo></mrow></mrow></math>")  
+})
+
+test_that("qnorm",
+{
+  q <- tml(quote(qnorm(alpha/2)))
+  expect_equal(q,"<math><mrow><msup><mi>&Phi;</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&alpha;</mi><mo>/</mo><mn>2.00</mn></mrow><mo>)</mo></mrow></mrow></math>")
+})
+
+test_that("1mpchisq",
+{
+  q <- tml(quote(1 - pchisq(x, 1)))
+  expect_equal(q,"<math><mrow><mn>1.00</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>")
+})
+
+test_that("pchisq1malpha",
+{
+  q <- tml(quote(qchisq(1 - alpha, 1)))
+  expect_equal(q,"<math><mrow><msubsup><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mo>-</mo><mi>&alpha;</mi></mrow><mo>)</mo></mrow></mrow></math>")
+})
+
+test_that("ptnm1",
+{
+  q <- tml(quote(pt(t, N - 1)))
+  expect_equal(q, "<math><mrow><mi>P</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>T</mi><mo>&le;</mo><mi>t</mi></mrow><mo>;</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>1.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow></mrow><mo>)</mo></mrow></mrow></math>")
+})
+
+test_that("qtalpha2nm1",
+{
+  q <- tml(quote(qt(alpha/2, N - 1)))
+  expect_equal(q, "<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>2.00</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>1.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>")
+})
 
 
 
