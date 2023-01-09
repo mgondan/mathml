@@ -356,7 +356,7 @@ mathml :-
 % Set
 %
 math('is.null'(R), M)
- => M = (R == 'NULL').
+ => M = (R == null).
 
 math(null, M)
  => M = set(empty).
