@@ -4,7 +4,11 @@
 \alias{mathml}
 \title{MathML output}
 \usage{
-mathml(term = quote((a + b)^2L == a^2L + 2L * a * b + b^2L), flags = NULL)
+mathml(
+  term = quote((a + b)^2L == a^2L + 2L * a * b + b^2L),
+  flags = NULL,
+  env = globalenv()
+)
 }
 \arguments{
 \item{term}{an R call or symbol/number. This function translates \emph{term} into a

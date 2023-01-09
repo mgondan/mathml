@@ -3,7 +3,7 @@
   if(!requireNamespace("rolog", quietly=TRUE))
     stop("Could not attach library rolog.")
 
-  rolog::consult(system.file("pl/mathml3.pl", package=pkgname))
+  rolog::consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
 #' MathML output
@@ -586,6 +586,7 @@ denote <- function(abbr, expr, info)
 #' in particular the omissions in the left-hand side of the expression
 #'
 #' @param expr
+#' The expression, e.g. a + b
 #'
 #' @return substitute(expr)[[3]], e.g., b from a + b
 #'
