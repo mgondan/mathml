@@ -1,9 +1,43 @@
 ---
 title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
-author: "Matthias Gondan and Irene Alfarone
-         (Department of Psychology, Universität Innsbruck, Austria)"
-date: "2023-01-09"
-output: rmarkdown::html_vignette
+date: "2022-12-09"
+abstract: >
+  This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
+  thereby allowing for a pretty mathematical representation of R\ objects and
+  functions in data analyses, scientific reports and interactive web content. In
+  the RMarkdown document rendering language, R\ code and mathematical content
+  already exist side-by-side. The present package allows to use the same
+  R\ objects for both data analysis and typesetting in documents or web content.
+  This tightens the link between the statistical analysis and its verbal
+  description or symbolic representation, which is another step towards
+  reproducible science. User-defined hooks allow to extend the package by
+  mapping specific variables or functions to new MathML and LaTeX entities. A
+  few working examples illustrate the use of the package in a scientific report
+  and in on an interactive web page.
+draft: true
+author:  
+  # see ?rjournal_article for more information
+  - name: Matthias Gondan
+    affiliation: University of Innsbruck
+    address:
+    - Department of Psychology
+    - Innsbruck, Austria
+    url: https://www.uibk.ac.at/psychologie/mitarbeiter/gondan-rochon/index.html.en
+    orcid: 0000-0001-9974-0057
+    email:  Matthias.Gondan-Rochon@uibk.ac.at
+  - name: Irene Alfarone
+    url: https://www.uibk.ac.at/psychologie/mitarbeiter/alfarone/index.html.en
+    email: Irene.Alfarone@uibk.ac.at
+    orcid: 0000-0002-8409-8900
+    affiliation: University of Innsbruck
+    address:
+    - Department of Psychology
+    - Innsbruck, Austria
+type: package
+output: 
+  rjtools::rjournal_web_article:
+    self_contained: yes
+    toc: no
 bibliography: RJreferences.bib
 preamble:
 - \usepackage{longtable}
@@ -30,7 +64,9 @@ Vignette: >
 # Phantoms
 
 library(mathml)
+library(plotly)
 library(ggplot2)
+library(kableExtra)
 
 mathout <- function(..., flags=NULL, env=parent.frame())
 {
@@ -50,19 +86,6 @@ catmath <- function(term, ...)
   mathout(canonical(s), ...)
 }
 ```
-
-This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
-thereby allowing for a pretty mathematical representation of R\ objects and
-functions in data analyses, scientific reports and interactive web content. In
-the RMarkdown document rendering language, R\ code and mathematical content
-already exist side-by-side. The present package allows to use the same
-R\ objects for both data analysis and typesetting in documents or web content.
-This tightens the link between the statistical analysis and its verbal
-description or symbolic representation, which is another step towards
-reproducible science. User-defined hooks allow to extend the package by
-mapping specific variables or functions to new MathML and LaTeX entities. A
-few working examples illustrate the use of the package in a scientific report
-and in on an interactive web page.
 
 # Introduction
 
