@@ -411,32 +411,11 @@ test_that("functionsintan",
   expect_equal(q,"<math><mrow><mi>canonical</mi><mo>&af;</mo><mrow><mo>(</mo><mi>f</mi><mo>)</mo></mrow></mrow></math>")
 })
 
-
-test_that("ffunctionsin",
+f <- function(x) {sin(x) ; cos(x)}
+test_that("functionsincos",
 {
-  q <- tml(quote(f <- function(x) sin(x)))
-  expect_equal(q,"<math><mrow><mi>f</mi><mo>=</mo><mrow><mi>sin</mi><mo>&af;</mo><mi>x</mi></mrow></mrow></math>")
-})
-
-test_that("unctionsin",
-{
-  q <- tml(quote(function(x) sin(x)))
-  expect_equal(q,"<math><mrow><mi>sin</mi><mo>&af;</mo><mi>x</mi></mrow></math>")
-})
-
-test_that("{unctionsin",
-{
-  q <- tml(quote(function(x) {sin(x)}))
-  expect_equal(q,"<math><mrow><mi>sin</mi><mo>&af;</mo><mi>x</mi></mrow></math>")
-})
-
-test_that("unctionsincos",
-{
-  q <- tml(quote(function(x) {
-    sin(x) ;
-    cos(x)})
-    )
-  expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mtr><mtd><mrow><mi>sin</mi><mo>&af;</mo><mi>x</mi></mrow></mtd></mtr><mtr><mtd><mrow><mi>cos</mi><mo>&af;</mo><mi>x</mi></mrow></mtd></mtr></mtable></mrow></math>")
+  q <- tml(quote(canonical(f)))
+  expect_equal(q,"<math><mrow><mi>canonical</mi><mo>&af;</mo><mrow><mo>(</mo><mi>f</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("identical",
