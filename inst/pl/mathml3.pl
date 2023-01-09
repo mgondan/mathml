@@ -1723,6 +1723,12 @@ math(name(A, Name), M, Flags, New)
     M = A.
 
 %
+% Suppress Vectorize
+%
+math('Vectorize'(A, _Args), M)
+ => M = A.
+
+%
 % Abbreviations
 %
 % with s^2_pool denoting the pooled variance

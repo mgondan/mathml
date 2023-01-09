@@ -750,136 +750,50 @@ t <- cbind('$\\tau$'=ttau, '$m$'=tm, '$s$'=ts, '$n$'=tn)
 knitr::kable(t, caption="Miller data", row.names=FALSE, escape=FALSE)
 ```
 
-Then, from Schwarz' [-@schwarz1994] Equations [2] [3] and [10], we calculated the expected first time passage for the respective $\tau$ and the 
-parameters $\mu_{\mathrm A} = 0.53, \mu_{\mathrm B} = 1.32, \sigma_{\mathrm A} = 4.43, \sigma_{\mathrm B} = 18.3, c = 100, \mu_{\mathrm M} = 161$
+Assuming that the model is correct, the observable mean reaction times follow an
+approximate Normal distribution around the model prediction \(E(T)\). We can,
+therefore, use a standard goodness-of-fit measure by \(z\)-standardisation.
 
+```{r, results='asis'}
+z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+  dfrac(m - denote(E, ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
+              "the expected mean response time"),
+    s / sqrt(n))
 
-````{r, echo=FALSE}
-mu_A = 0.53
-mu_B = 1.32
-sigma_A = 4.4
-sigma_B = 18.3
-tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
-c = 100
-mu_M = 161
-````
-
-
-For instance, we can see that with $\tau = -167$ the expected decision time is:
-
-```{r, echo=FALSE}
-mu_A = 0.53
-mu_B = 1.32
-sigma_A = 4.4
-sigma_B = 18.3
-tau = -167
-c = 100
-
-ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)
+mathout(call("=", quote(z[tau]), z))
 ```
 
-To which we have to add $\mu_M = 161$ (which represents the amount of time that the movement of providing the answer takes) and we obtain:
+The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
+onset asynchrony. Assuming again that the architecture of the model is correct,
+but the parameters are adjusted to the data, it follows
+a \(\chi^2(8~\mathrm{df})\)-distribution. The degrees of freedom result from
+the 13 predicted mean response times, minus 5 free parameters.
 
-```{r, echo=FALSE}
-mu_M = 161
-ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-```
+$X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\ df)$.
 
-Similarly, we obtain the first-time passage for every $\tau$:
-
-```{r, results="asis", echo=FALSE}
-
-G <- Vectorize(ET, vectorize.args = 'tau')
-
-h <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+```{r, results='asis'}
+gof <- function(par, tau, m, s, n)
 {
-  G(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-}
-
-mathout(h)
-```
-
-```{r, echo=FALSE}
-
-mu_M = 161
-mu_A = 0.53
-mu_B = 1.32
-sigma_A = 4.4
-sigma_B = 18.3
-tau = c(-Inf, -167, -133, -100, -67, -33, 0, 33, 67, 100, 133, 167, Inf)
-c = 100
-
-h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-```
-
-
-### Model fitting and Parameters Estimation
-
-Then we proceeded with the model fitting, using the data provided by Miller [-@miller1986] study in Schwarz [-@schwarz1994]. First, we calculated the predicted means RT as $E[RT]=E[T]+\mu_M$.
-
-We briefly remind that in diffusion models there is across-trial variability, and the drift rates are assumed to be normally distributed [@ratcliff2008] with at the first passage of $c$ $X(t) \sim N(\mu t , \sigma^2 t)$. Where $T$ is expressed as $T= \arg \min_t X(t)\geq c$ with $T \sim IG (c, \mu, \sigma^2)$ with mean $E(T)=\displaystyle \frac{c}{\mu}$ and variance $Var(T)=\displaystyle \frac{c\sigma^2}{\mu^3}$. Furthermore, for the Central Limit Theorem $\bar{T} = \displaystyle \frac{\Sigma_iT_i}{N} \dot\sim N (\displaystyle \frac{c}{\mu} , \displaystyle \frac{c\sigma^2}{\mu^3})$
-
-For these reasons, in order to obtain the Goodness of Fit measure we proceeded with a z-standardisation.
-
-```{r, results="asis", echo=FALSE}
-zf <-  function(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-{
-  E <- h(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-  dfrac(M-E, s/sqrt(N))
-}
-
-mathout(zf)
-```
-
-
-```{r, echo=FALSE}
-# The vector X contains the observed values, the vector s their observed standard deviation and N = 400 are the number of trials.
-
-M = c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
-s = c(56, 58, 40, 40, 32, 28, 28, 28, 26, 30, 32, 34, 92)
-N = c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
-
-zn <- zf(M, s, N, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-zn
-```
-
-Then, we calculated the Goodness of Fit as follows:
-
-$X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\  dgf)$.
-
-```{r, results="asis", echo=FALSE}
-par <- c(mu_A = 0.53, sigma_A = 4.4, mu_B = 1.32, sigma_B = 18.3, mu_M = 161)
-
-# Goodness of Fit
-
-gof <- function(par, tau, M, s, N)
-{
-  zn <- zf(M, s, N, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])
-  sum(zn^2L)
+  zn <- Vectorize(z, vectorize.args='tau')
+  zi <- zn(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])
+  sum(zi^2L)
 }
 
 mathout(gof)
 ```
 
 ```{r, results="asis", echo=FALSE}
-n <- gof(par, tau, M, s, N)
-n
-pchisq(n, 8, lower.tail = FALSE, log.p = FALSE)
-```
-
-
-```{r, results="asis", echo=FALSE}
 lsq = function(tau, M, s, N)
 {
   start = c(mu_A = 0.3, sigma_A = 2, mu_B = 1 , sigma_B = 5, mu_M = 200)
   optim(start, fn = gof,
-    tau = tau, M = M, s = s, N = N, hessian = TRUE, control = list(fnscale = 1))
+    tau = tau, m = M, s = s, n = N, hessian = TRUE, control = list(fnscale = 1))
 }
 
 mathout(lsq)
 
 # Parameters' estimates
-fit <-  lsq(tau, M, s, N)
+fit <-  lsq(tau, m, s, n)
 
 est = fit$par
 se = sqrt(diag(solve(fit$hessian)))
@@ -900,41 +814,8 @@ The calculated Goodness of Fit value is $X^2= 30.54$, $p= 0.0002$. Additionally,
 
 The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz [-@schwarz1994].
 
-```{r}
-# Table 1: Estimated Model's Parameters
-#
-# | Parameters | Estimate | 95% Confidence Interval
-# | :---: | :---: | :---:|
-# | $ \mu_ \mathrm A $| 0.53 | 0.51, 0.56
-# | $ \sigma_ \mathrm A $| 4.4 | 3.8, 5.1
-# | $ \mu_ \mathrm B $| 1.32 | 1.2, 1.4
-# | $ \sigma_ \mathrm B $| 18.3 | 11.6, 24.9
-# | $ \mu_ \mathrm M $| 161 | 157, 165
-```
-
 Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. $\tau= 100$) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data.
 
-```{r}
-# : Table 2: Predicted Means RT and Observed Means RT and SDs from Miller's [-@miller1986] study in Schwarz [-@schwarz1994]
-#
-# | SOA      | Predicted Mean RT | Observed Mean RT | Observed SD |
-# |:--------:|:-----------------:|:----------------:|:-----------:|
-# $-\infty$| 237 | 231 | 56 |
-# $-167$   | 231 | 234 | 58 |
-# $-133$   | 230 | 230 | 40 |
-# $-100$   | 228 | 227 | 40 |
-# $-67$    | 226 | 228 | 32 |
-# $-33$    | 222 | 221 | 28 |
-# $0$      | 215 | 217 | 28 |
-# $33$     | 239 | 238 | 28 |
-# $67$     | 262 | 263 | 26 |
-# $100$    | 283 | 277 | 30 |
-# $133$    | 300 | 298 | 32 |
-# $167$    | 313 | 316 | 34 |
-# $\infty$ | 350 | 348 | 92 |
-#
-# _Note_.  Parameters: $\mu_ \mathrm A = 0.53, \mu_ \mathrm B = 1.32, \sigma_ \mathrm A = 4.4, \sigma_ \mathrm B = 18.3, c = 100, \mu_\mathrm M = 161$
-```
 
 ## Errors
 
