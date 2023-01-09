@@ -153,19 +153,19 @@ test_that("tanhx",
 test_that("asinhx",
 {
   q <- tml(quote(asinh(x)))
-  expect_equal(q, "<math><mrow><msup><mi>sinh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msup><mi>sinh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("acoshx",
 {
   q <- tml(quote(acosh(x)))
-  expect_equal(q, "<math><mrow><msup><mi>cosh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msup><mi>cosh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("atanhx",
 {
   q <- tml(quote(atanh(x)))
-  expect_equal(q, "<math><mrow><msup><mi>tanh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msup><mi>tanh</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("allx",
@@ -219,7 +219,7 @@ test_that("beta(a,b)",
 test_that("lbeta(a,b)",
 {
   q <- tml(quote(lbeta(a, b)))
-  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>B</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>a</mi><mo>,</mo><mi>b</mi></mrow><mo>)</mo></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>B</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>a</mi><mo>,</mo><mi>b</mi></mrow><mo>)</mo></mrow></mrow><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("gammax",
@@ -231,19 +231,19 @@ test_that("gammax",
 test_that("lgammax",
 {
   q <- tml(quote(lgamma(x)))
-  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>[</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow></math>")
 })
 
 test_that("digammax",
 {
   q <- tml(quote(digamma(x)))
-  expect_equal(q, "<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>[</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mrow></math>")
 })
 
 test_that("psigammax",
 {
   q <- tml(quote(psigamma(x, deriv=psi)))
-  expect_equal(q, "<math><mrow><mfrac><msup><mi>d</mi><mrow><mrow><mo>(</mo><mrow><mi>deriv</mi><mo>=</mo><mi>&psi;</mi></mrow><mo>)</mo></mrow><mo>+</mo><mn>2</mn></mrow></msup><msup><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow><mrow><mrow><mo>(</mo><mrow><mi>deriv</mi><mo>=</mo><mi>&psi;</mi></mrow><mo>)</mo></mrow><mo>+</mo><mn>2</mn></mrow></msup></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mfrac><msup><mi>d</mi><mrow><mrow><mo>(</mo><mrow><mi>deriv</mi><mo>=</mo><mi>&psi;</mi></mrow><mo>)</mo></mrow><mo>+</mo><mn>2</mn></mrow></msup><msup><mrow><mo>(</mo><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow><mo>)</mo></mrow><mrow><mrow><mo>(</mo><mrow><mi>deriv</mi><mo>=</mo><mi>&psi;</mi></mrow><mo>)</mo></mrow><mo>+</mo><mn>2</mn></mrow></msup></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>[</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mrow></math>")
 })
 
 test_that("alogb",
@@ -267,19 +267,19 @@ test_that("sumab",
 test_that("sumba",
 {
   q <- tml(quote(sum(b)*a))
-  expect_equal(q, "<math><mrow><mrow><mo>(</mo><mrow><mo>&sum;</mo><mo>&af;</mo><mi>b</mi></mrow><mo>)</mo></mrow><mo>&sdot;</mo><mi>a</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><mrow><mo>&sum;</mo><mo>&af;</mo><mi>b</mi></mrow><mo>&sdot;</mo><mi>a</mi></mrow></math>")
 })
 
 test_that("digammax",
 {
   q <- tml(quote(digamma(x)))
-  expect_equal(q, "<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>[</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mrow></math>")
 })
 
 test_that("trigammax",
 {
   q <- tml(quote(trigamma(x)))
-  expect_equal(q, "<math><mrow><mfrac><msup><mi>d</mi><mn>2</mn></msup><msup><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow><mn>2</mn></msup></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mfrac><msup><mi>d</mi><mn>2</mn></msup><msup><mrow><mo>(</mo><mrow><mi>d</mi><mo>&#x2062;</mo><mi>x</mi></mrow><mo>)</mo></mrow><mn>2</mn></msup></mfrac><mo>&sdot;</mo><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>[</mo><mrow><mi>&Gamma;</mi><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow></mrow></math>")
 })
 
 test_that("bincoef",
@@ -309,7 +309,7 @@ test_that("factorial",
 test_that("lfactorial",
 {
   q <- tml(quote(lfactorial(x)))
-  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mi>x</mi><mo>!</mo></mrow></mrow></math>")
+  expect_equal(q, "<math><mrow><mi>log</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>!</mo></mrow><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("AND",
@@ -357,19 +357,19 @@ test_that("logx",
 test_that("log10x",
 {
   q <- tml(quote(log10(x)))
-  expect_equal(q, "<math><mrow><msub><mi>log</mi><mn>10</mn></msub><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msub><mi>log</mi><mn>10</mn></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("log2x",
 {
   q <- tml(quote(log2(x)))
-  expect_equal(q, "<math><mrow><msub><mi>log</mi><mn>2</mn></msub><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msub><mi>log</mi><mn>2</mn></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("logex",
 {
   q <- tml(quote(logb(x, e)))
-  expect_equal(q, "<math><mrow><msub><mi>log</mi><mi>e</mi></msub><mo>&af;</mo><mi>x</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><msub><mi>log</mi><mi>e</mi></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("log1px",
@@ -516,9 +516,6 @@ test_that("tilde",
   q <- tml(quote(A ~ B))
   expect_equal(q,"<math><mrow><mi>A</mi><mo>&Tilde;</mo><mi>B</mi></mrow></math>")
 })
-
-
-
 
 
 
