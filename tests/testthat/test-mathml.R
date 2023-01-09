@@ -628,9 +628,9 @@ test_that("A/B",
   expect_equal(q, "<math><mrow><mo>&lfloor;</mo><mrow><mi>A</mi><mo>/</mo><mi>B</mi></mrow><mo>&rfloor;</mo></mrow></math>")
 })
 
-test_that("AmodB",
+test_that("A mod B",
 {
-  q <- tml(quote(A%%B))
+  q <- tml(quote(A %% B))
   expect_equal(q, "<math><mrow><mo>&lceil;</mo><mrow><mi>A</mi><mo>/</mo><mi>B</mi></mrow><mo>&rceil;</mo></mrow></math>")
 })
 

@@ -43,7 +43,7 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
 mathml_operators = c(
   "%.%" = "cdot",
   "%/%" = "div",
-  "%%"="rem",
+  "%%" = "mod",
   "%+-%" = "pm",
   "%*%" = "times",
   "%~~%" = "approx",
