@@ -1482,9 +1482,9 @@ math(A - B, X)
 % Use dot or no dot instead of asterisk
 math(A * B, X, Flags),
     type(A, TypeA, Flags),
-    member(TypeA, [atomic, subscript(_, _), superscript(_, _)]),
+    member(TypeA, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)]),
     type(B, TypeB, Flags),
-    member(TypeB, [atomic, subscript(_, _), superscript(_, _)])
+    member(TypeB, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)])
  => X = nodot(A, B).
 
 math(A * B, M)
