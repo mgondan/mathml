@@ -441,6 +441,12 @@ jax(special(prod), M, _Flags)
 jax(special(sgn), M, _Flags)
  => M = "{\\mathrm{sgn}\\,}".
 
+jax(special(argmin), M, _Flags)
+ => M = "{\\arg\\min}".
+
+jax(special(argmax), M, _Flags)
+ => M = "{\\arg\\max}".
+
 jax(special(R), M, _Flags)
  => format(string(M), "\\~w", [R]).
 
