@@ -447,8 +447,25 @@ jax(special(R), M, _Flags)
 type(special(_), T, _Flags)
  => T = special.
 
+prec(special(sin), Prec, _Flags)
+ => Prec = 0.
+
+prec(special(cos), Prec, _Flags)
+ => Prec = 0.
+
+prec(special(tan), Prec, _Flags)
+ => Prec = 0.
+
+prec(special(sinh), Prec, _Flags)
+ => Prec = 0.
+
+prec(special(cosh), Prec, _Flags)
+ => Prec = 0.
+
+prec(special(tanh), Prec, _Flags)
+ => Prec = 0.
+
 prec(special(_), Prec, _Flags)
-% => Prec = 0. % current(Prec, yfx, *).
  => current(Prec, yfx, *).
 
 mathml :-
@@ -2389,7 +2406,7 @@ ml(fn(Name, [Arg]), M, Flags),
     ),
     prec(Name, P, Flags),
     prec(Arg, Prec, Flags),
-    P > Prec
+    P >= Prec
  => ml(Name, F, Flags),
     ml(Arg, X, Flags),
     M = mrow([F, mo(&(af)), X]).
@@ -2402,7 +2419,7 @@ jax(fn(Name, [Arg]), M, Flags),
     ),
     prec(Name, P, Flags),
     prec(Arg, Prec, Flags),
-    P > Prec
+    P >= Prec
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
     format(string(M), "~w{~w}", [F, X]).
