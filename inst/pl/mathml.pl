@@ -409,7 +409,7 @@ math(tanpi(A), M, Flags, Flags2),
 special(R) :-
     atom(R),
     memberchk(R, [sgn, sin, cos, tan, asin, arcsin, acos, arccos, atan, arctan, arctan2, sinh, cosh, tanh,
-               arsinh, arcosh, artanh, log, exp, sum, prod, min, max]).
+               arsinh, arcosh, artanh, log, exp, sum, prod, min, max, argmin, argmax]).
 
 math(R, M),
     special(R)
@@ -448,7 +448,8 @@ type(special(_), T, _Flags)
  => T = special.
 
 prec(special(_), Prec, _Flags)
- => Prec = 0. % current(Prec, yfx, *).
+% => Prec = 0. % current(Prec, yfx, *).
+ => current(Prec, yfx, *).
 
 mathml :-
     mathml(exp(x)),
@@ -557,7 +558,7 @@ math(arcsin(A), M)
 
 math(acos(A), M)
  => M = fn(superscript(cos, -1), [A]).
- 
+
 math(arccos(A), M)
  => M = fn(superscript(cos, -1), [A]).
 
@@ -972,10 +973,10 @@ math(Which, M),
  => M = subscript("I", Args).
 
 math('which.max'(A), M)
- => M = fn("argmax", [A]).
+ => M = argmax(A).
 
 math('which.min'(A), M)
- => M = fn("argmin", [A]).
+ => M = argmin(A).
 
 % calligraphic letters
 math(cal(A), M, Flags, New)
@@ -2272,7 +2273,7 @@ math(buggy(_, _, B), X, _Flags)
 math(Optim, M),
     compound(Optim),
     compound_name_arguments(Optim, optim, [Par, Fn | _])
- => M = fn(subscript("arg min", Par), [Fn]).
+ => M = argmin(fn(Fn, [Par])).
 
 %
 % Probability distributions
@@ -2284,7 +2285,7 @@ math(pbinom(K, N, Pi), M)
  => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
 math(qbinom(Alpha, N, Pi), M)
- => M = fn(subscript("arg min", k),
+ => M = fn(subscript(argmin, k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
 
 math(dpois(K, Rate), M)
@@ -2294,7 +2295,7 @@ math(ppois(K, Rate), M)
   => M = fn(subscript('P', "Po"), (['X' =< K] ; [Rate])).
 
 math(qpois(Alpha, Rate), M)
- => M = fn(subscript("arg max", k),
+ => M = fn(subscript(argmax, k),
           [fn(subscript('P', "Po"), (['X' =< k] ; [Rate])) > Alpha]).
 
 math(dexp(X, Rate), M)
@@ -2461,6 +2462,11 @@ math(R, M),
     compound(R),
     compound_name_arguments(R, ',', Args)
  => M = list(',', Args).
+
+math(R, M),
+    compound(R),
+    compound_name_arguments(R, c, Args)
+ => M = paren(list(',', Args)).
 
 % Default compounds
 %
