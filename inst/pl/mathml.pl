@@ -757,7 +757,7 @@ math(logb(X, B), M)
  => M = fn(subscript(log, B), [X]).
 
 math(log1p(A), M)
- => M = 1 + log(A).
+ => M = log(1 + A).
 
 ml(ceiling(A), M, Flags)
  => ml(A, X, Flags),
