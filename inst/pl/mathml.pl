@@ -334,10 +334,10 @@ mathml :-
 % Booleans
 %
 math(true, M)
- => M = boolean('T').
+ => M = boolean("T").
 
 math(false, M)
- => M = boolean('F').
+ => M = boolean("F").
 
 ml(boolean(R), M, _Flags)
  => M = mi(R).
