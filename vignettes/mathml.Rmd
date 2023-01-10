@@ -373,50 +373,50 @@ functions from \pkg{stats}.
 
 ```{r base-stats, echo=FALSE}
 op1 <- list(
-  sin=quote(sin(x)),
-  cosh=quote(cosh(x)),
-  tanpi=quote(tanpi(alpha)),
-  asinh=quote(asinh(alpha)),
-  log=quote(log(p)),
-  log1p=quote(log1p(x)),
-  logb=quote(logb(x, e)),
-  exp=quote(exp(x)),
-  expm1=quote(expm1(x)),
-  choose=quote(choose(n,k)),
-  lchoose=quote(lchoose(n, k)),
-  factorial=quote(factorial(n)), 
-  lfactorial=quote(lfactorial(n)),
-  sqrt=quote(sqrt(x)),
-  mean=quote(mean(X)),
-  absolute=quote(abs(x)))
+  "sin(x)"=quote(sin(x)),
+  "cosh(x)"=quote(cosh(x)),
+  "tanpi(alpha)"=quote(tanpi(alpha)),
+  "asinh(alpha)"=quote(asinh(alpha)),
+  "log(p)"=quote(log(p)),
+  "log1p(x)"=quote(log1p(x)),
+  "logb(x,\\ e)"=quote(logb(x, e)),
+  "exp(x)"=quote(exp(x)),
+  "expm1(x)"=quote(expm1(x)),
+  "choose(n,\\ k)"=quote(choose(n, k)),
+  "lchoose(n,\\ k)"=quote(lchoose(n, k)),
+  "factorial(n)"=quote(factorial(n)), 
+  "lfactorial(n)"=quote(lfactorial(n)),
+  "sqrt(x)"=quote(sqrt(x)),
+  "mean(X)"=quote(mean(X)),
+  "abs(x)"=quote(abs(x)))
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
-op1 <- as.character(op1)
+op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
 op2 <- list(
-  dbinom=quote(dbinom(k, N, pi)),
-  pbinom=quote(pbinom(k, N, pi)),
-  qbinom=quote(qbinom(p, N, pi)),
-  dpois=quote(dpois(k, lambda)),
-  ppois=quote(ppois(k, lambda)),
-  qpois=quote(qpois(p, lambda)),
-  dexp=quote(dexp(x, lambda)),
-  pexp=quote(pexp(x, lambda)),
-  qexp=quote(qexp(p, lambda)),
-  dnorm=quote(dnorm(x, mu, sigma)),
-  pnorm=quote(pnorm(x, mu, sigma)),
-  qnorm=quote(qnorm(alpha/2L)),
-  pchisq=quote(1L-pchisq(x, 1L)),
-  qchisq=quote(qchisq(1L-alpha, 1L)),
-  pt=quote(pt(t, N-1L)),
-  qt=quote(qt(alpha/2L, N-1L)))
+  "dbinom(k,\\ N,\\ pi)"=quote(dbinom(k, N, pi)),
+  "pbinom(k,\\ N,\\ pi)"=quote(pbinom(k, N, pi)),
+  "qbinom(p,\\ N,\\ pi)"=quote(qbinom(p, N, pi)),
+  "dpois(k,\\ lambda)"=quote(dpois(k, lambda)),
+  "ppois(k,\\ lambda)"=quote(ppois(k, lambda)),
+  "qpois(p,\\ lambda)"=quote(qpois(p, lambda)),
+  "dexp(x,\\ lambda)"=quote(dexp(x, lambda)),
+  "pexp(x,\\ lambda)"=quote(pexp(x, lambda)),
+  "qexp(p,\\ lambda)"=quote(qexp(p, lambda)),
+  "dnorm(x,\\ mu,\\ sigma)"=quote(dnorm(x, mu, sigma)),
+  "pnorm(x,\\ mu,\\ sigma)"=quote(pnorm(x, mu, sigma)),
+  "qnorm(alpha/2L)"=quote(qnorm(alpha/2L)),
+  "1L\\ -\\ pchisq(x,\\ 1L)"=quote(1L - pchisq(x, 1L)),
+  "qchisq(1L\\ -\\ alpha,\\ 1L)"=quote(qchisq(1L-alpha, 1L)),
+  "pt(t,\\ N\\ -\\ 1L)"=quote(pt(t, N-1L)),
+  "qt(alpha/2L,\\ N\\ -\\ 1L)"=quote(qt(alpha/2L, N-1L)))
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
-op2 <- as.character(op2)
+op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
