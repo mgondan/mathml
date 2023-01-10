@@ -358,7 +358,8 @@ op3 <- list(
   rArr=quote(A %=>% B),
   lArr=quote(A %<=% B),
   dblup=quote(A %dblup% B),
-  dbldown=quote(A %dbldown% B))
+  dbldown=quote(A %dbldown% B),
+  " "="")
 
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
 
@@ -763,21 +764,23 @@ mathout(call("=", quote(z[tau]), z))
 The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
 onset asynchrony. Assuming again that the architecture of the model is correct,
 but the parameters are adjusted to the data, it follows
-a \(\chi^2(8~\mathrm{df})\)-distribution. The degrees of freedom result from
-the 13 predicted mean response times, minus 5 free parameters.
-
-$X^2=\Sigma_\tau z^2_\tau \sim\chi^2(13-5\ df)$.
+a \(\chi^2(8~\mathrm{df})\)-distribution. 
 
 ```{r, results='asis'}
-gof <- function(par, tau, m, s, n)
-{
-  zn <- Vectorize(z, vectorize.args='tau')
-  zi <- zn(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])
-  sum(zi^2L)
-}
+zv <- Vectorize(z, vectorize.args='tau')
 
-mathout(gof)
+hook(call("zv", expression(m), expression(s), expression(n), expression(tau), 
+        expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B), expression(mu_M)), quote(z[tau]))
+
+gof <- function(par, tau, m, s, n)
+  sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
+         mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
+
+mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
+
+The degrees of freedom result from the 13 predicted mean response times,
+minus 5 free parameters (\(c\) is a redundant scaling parameter).
 
 ```{r, results="asis", echo=FALSE}
 lsq = function(tau, M, s, N)

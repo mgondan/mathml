@@ -793,10 +793,13 @@ math(function(na, Body, _), M),
 math(function(na, Body, _), M)
  => M = body([[Body]]).
 
-math(Curly, M),
+math(Curly, M, Flags),
     compound(Curly),
     compound_name_arguments(Curly, '{', Args)
- => M = body(Args).
+ => exclude(invisible_(Flags), Args, Args1),
+    M = body(Args1).
+
+invisible_(_Flags, invisible(_)).
 
 ml(body([R]), M, Flags)
  => ml(R, M, Flags).
@@ -811,6 +814,10 @@ jax(body([R]), M, Flags)
 jax(body(Body), M, Flags)
  => maplist(jax_(Flags), Body, Rows),
     format(string(M), "\\left\\{\\begin{array}{l}~w\\end{array}\\right.", [Rows]).
+
+% Hide
+math(invisible(_), M, _Flags)
+ => M = ''.
 
 % Vectors
 math(Hash, M),
