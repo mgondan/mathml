@@ -286,63 +286,63 @@ arrows in R\ figures.
 
 ```{r custom-operators, echo=FALSE}
 op1 <- list(
-  cross=quote(A %*% B),
-  dot=quote(A %.% B),
-  kronecker=quote(A %x% B),
-  'integer division'=quote(A %/% B),
-  modulo=quote(A %% B),
-  and=quote(A & B),
-  vel=quote(A | B),
-  xor=quote(xor(A, B)),
-  not=quote(!A),
-  equal=quote(A == B),
-  assign=quote(A <- B))
+  "A\\ %*%\\ B"=quote(A %*% B),
+  "A\\ %.%\\ B"=quote(A %.% B),
+  "A\\ %x%\\ B"=quote(A %x% B),
+  "A\\ %/%\\ B"=quote(A %/% B),
+  "A\\ %%\\ B"=quote(A %% B),
+  "A\\ &\\ B"=quote(A & B),
+  "A\\ |\\ B"=quote(A | B),
+  "xor(A,\\ B)"=quote(xor(A, B)),
+  "!A"=quote(!A),
+  "A\\ ==\\ B"=quote(A == B),
+  "A\\ <-\\ B"=quote(A <- B))
 
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
-op1 <- as.character(op1)
+op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
 op2 <- list(
-  different=quote(A != B),
-  tilde=quote(A ~ B),
-  approx=quote(A %~~% B),
-  equiv=quote(A %==% B),
-  congr=quote(A %=~% B),
-  prop=quote(A %prop% B),
-  'in'=quote(A %in% B),
-  intersect=quote(intersect(A, B)),
-  union=quote(union(A, B)),
-  crossprod=quote(crossprod(A, B)),
-  intersect=quote(is.null(A)))
+  "A\\ !=\\ B"=quote(A != B),
+  "A\\ ~ B"=quote(A ~ B),
+  "A\\ %~~%\\ B"=quote(A %~~% B),
+  "A\\ %==%\\ B"=quote(A %==% B),
+  "A\\ %=~%\\ B"=quote(A %=~% B),
+  "A\\ %prop%\\ B"=quote(A %prop% B),
+  "A\\ %in%\\ B"=quote(A %in% B),
+  "intersect(A,\\ B)"=quote(intersect(A, B)),
+  "union(A,\\ B)"=quote(union(A, B)),
+  "crossprod(A,\\ B)"=quote(crossprod(A, B)),
+  "is.null(A)"=quote(is.null(A)))
 
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
-op2 <- as.character(op2)
+op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
   op2 <- sapply(op2, FUN=knitr:::escape_html)
 
 op3 <- list(
-  twosidearrow=quote(A %<->% B),
-  rightarrow=quote(A %->% B),
-  leftarrow=quote(A %<-% B),
-  uparrow=quote(A %up% B),
-  down=quote(A %down% B),
-  iff=quote(A %<=>% B),
-  rArr=quote(A %=>% B),
-  lArr=quote(A %<=% B),
-  dblup=quote(A %dblup% B),
-  dbldown=quote(A %dbldown% B),
+  "A\\ %<->%\\ B"=quote(A %<->% B),
+  "A\\ %->%\\ B"=quote(A %->% B),
+  "A\\ %<-%\\ B"=quote(A %<-% B),
+  "A\\ %up%\\ B"=quote(A %up% B),
+  "A\\ %down%\\ B"=quote(A %down% B),
+  "A\\ %<=>%\\ B"=quote(A %<=>% B),
+  "A\\ %=>%\\ B"=quote(A %=>% B),
+  "A\\ %<=%\\ B"=quote(A %<=% B),
+  "A\\ %dblup%\\ B"=quote(A %dblup% B),
+  "A\\ %dbldown%\\ B"=quote(A %dbldown% B),
   " "="")
 
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
 
-op3 <- as.character(op3)
+op3 <- names(names(op3))
 if(knitr::is_latex_output())
   op3 <- sapply(op3, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
@@ -606,8 +606,6 @@ stimuli, the model assumes a superposition of channel-specific diffusion
 processes that eventually reach an absorbing barrier to elicit the response. For
 a detailed description the reader may refer to the original article.
 
-## The model 
-
 ```{r, echo=FALSE}
 hook(quote(mu_A), quote(mu["A"]))
 hook(quote(mu_B), quote(mu["B"]))
@@ -702,8 +700,6 @@ ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 mathout(call("=", quote(E(T[tau])), ET))
 ```
 
-## Methods
-
 Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
 with 13 onset
 asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
@@ -746,7 +742,7 @@ but the parameters are adjusted to the data, it follows
 a \(\chi^2(8~\mathrm{df})\)-distribution.
 
 ```{r, results='asis'}
-zv <- Vectorize(z, vectorize.args='tau')
+zv <- Vectorize(z, vectorize.args = c('tau', 'm', 's', 'n'))
 
 hook(call("zv", expression(m), expression(s), expression(n), expression(tau), 
         expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B), expression(mu_M)), quote(z[tau]))
@@ -759,41 +755,44 @@ mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 
 The degrees of freedom result from the 13 predicted mean response times, 
-minus 5 free parameters (\(c\) is a redundant scaling parameter).
+minus 5 free parameters
+\(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A}, \mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\)
+(\(c\) is a redundant scaling parameter).
 
 ```{r, results="asis", echo=FALSE}
-lsq = function(tau, M, s, N)
+lsq = function(tau, m, s, n)
 {
-  start = c(mu_A = 0.3, sigma_A = 2, mu_B = 1 , sigma_B = 5, mu_M = 200)
-  optim(start, fn = gof,
-    tau = tau, m = M, s = s, n = N, hessian = TRUE, control = list(fnscale = 1))
+  invisible(theta <- c(mu_A=0.53, sigma_A=4.3, mu_B=1.34, sigma_B=11.7, mu_M=160))
+  optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
 }
 
-mathout(lsq)
-
-# Parameters' estimates
-fit <-  lsq(tau, m, s, n)
-
-est = fit$par
-se = sqrt(diag(solve(fit$hessian)))
-cilo = qnorm(0.025, est, se)
-ciup = qnorm(0.975, est, se)
-
-# Lower bound
-#cilo
-
-# Upper bound
-#ciup
-
+mathout(call("=", quote(hat(theta)), lsq))
 ```
 
-### Results
+The best fitting parameter values and their confidence intervals are given in
+Table \@ref(tab:params) below.
 
-The calculated Goodness of Fit value is $X^2= 30.54$, $p= 0.0002$. Additionally, we proceeded with the parameters' estimation with the Least Squares Method.
+```{r params, echo=FALSE}
+fit <- lsq(tau, m, s, n)
+theta <- fit$par
+se = sqrt(diag(solve(fit$hessian)))
+cilo = qnorm(0.025, theta, se)
+ciup = qnorm(0.975, theta, se)
 
-The values of the estimated parameters reported in the table below are consistent with those reported by Schwarz [-@schwarz1994].
+ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout, flags=list(cat=FALSE))
+ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
+tcilo <- lapply(cilo, FUN=mathout, flags=list(cat=FALSE))
+tciup <- lapply(ciup, FUN=mathout, flags=list(cat=FALSE))
 
-Furthermore, we can observe from the values reported in the Table below that, with few exceptions (e.i. $\tau= 100$) Miller's [-@miller1986] observed values are quite similar to the one predicted by Schwarz' [-@schwarz1994] model. Showing that, despite the calculated Goodness of Fit measure, the model proposed by Schwarz [-@schwarz1994] sufficiently fit the data.
+t <- cbind(Parameter=ntheta, Estimate=ttheta, Lo=tcilo, Up=tciup)
+knitr::kable(t, caption="Model fit", row.names=FALSE, escape=FALSE)
+```
+
+The statistic goodness-of-fit value is \(X^2(8) = 30.54\), \(p = .0002\), 
+indicating some lack of fit. Given the large trial numbers in the original
+study, some lack of fit is expected. For more detail, especially on fitting the
+observed standard deviations, the reader is referred to the original
+paper [@schwarz1994].
 
 
 ## Errors
