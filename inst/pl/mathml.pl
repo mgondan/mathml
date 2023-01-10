@@ -2267,6 +2267,14 @@ math(buggy(_, _, B), X, _Flags)
  => X = B.
 
 %
+% Minimization
+%
+math(Optim, M),
+    compound(Optim),
+    compound_name_arguments(Optim, optim, [Par, Fn | _])
+ => M = fn(subscript("arg min", Par), [Fn]).
+
+%
 % Probability distributions
 %
 math(dbinom(K, N, Pi), M)
