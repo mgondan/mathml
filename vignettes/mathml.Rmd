@@ -30,7 +30,6 @@ Vignette: >
 # Phantoms
 
 library(mathml)
-library(ggplot2)
 
 mathout <- function(..., flags=NULL, env=parent.frame())
 {
