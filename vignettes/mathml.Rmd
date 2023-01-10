@@ -909,6 +909,7 @@ This package expands the possibilities of R\ by allowing calculations and graphi
 
 The article and Appendix show examples of how the package can be used and what operations are currently possible. Additionally, \pkg{mathml} allows for user's custom hooks to provide a better definition of the needed functions.
 
+Another, not-yet-mentioned use of \pkg{mathml} can be found in presentations  made using R Markdown. By adopting \pkg{mathml} researchers or teachers can use a single interface to conduct analysis and show results, without having to move parts of code or figures from one file to another. This contributes in making the process smoother and the graphical output more coherent.   
 
 In its current version \pkg{mathml} has some limitations. For example, it is still not possible to use the functions of \pkg{mathml} for writing intratextual formulas, while it is still more convenient to adopt the usual LateX notation. However, we do not consider this to be a serious limitation, since the most productive use of \pkg{mathml} still comes from more complicated calculations. Nevertheless, in the future versions of this package we will address this issue, to broaden its spectrum of possible applications. 
 
