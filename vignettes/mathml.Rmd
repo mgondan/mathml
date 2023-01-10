@@ -662,7 +662,7 @@ hook(call("ED_async", expression(tau), expression(c), expression(mu_A), expressi
 ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
-      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*c, sigma_A^2L))
+      - (mu_A*tau + c) * exp(dfrac(2L*c*mu_A, sigma_A^2L))
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
