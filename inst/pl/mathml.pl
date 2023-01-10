@@ -1487,6 +1487,14 @@ math(A * B, X, Flags),
     member(TypeB, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)])
  => X = nodot(A, B).
 
+% Todo: This should be checked
+math(A * B, X, Flags),
+    current_op(Prec, yfx, *),
+    prec(A, Prec, Flags),
+    type(B, TypeB, Flags),
+    member(TypeB, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)])
+ => X = nodot(A, B).
+
 math(A * B, M)
  => M = cdot(A, B).
 
