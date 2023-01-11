@@ -709,7 +709,7 @@ test_that("AlarrowB",
 test_that("AuparrowB",
 {
   q <- mathml(quote(A %up% B))
-  expect_equal(q, "<math><mrow><mi>A</mi><mo>&leftarrow;</mo><mi>B</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&uparrow;</mo><mi>B</mi></mrow></math>")
 })
 
 test_that("AdownarrowB",
@@ -748,4 +748,119 @@ test_that("AdowndoublearrowB",
   expect_equal(q, "<math><mrow><mi>A</mi><mo>&dArr;</mo><mi>B</mi></mrow></math>")
 })
 
+test_that("meanx",
+{
+  q <- mathml(quote(mean(X)))
+  expect_equal(q, "<math><mover accent=\"true\"><mi>X</mi><mo>&macr;</mo></mover></math>")
+})
 
+test_that("AplusminusB",
+{
+  q <- mathml(quote(A %+-% B))
+  expect_equal(q, "<math><mrow><mi>A</mi><mo>&pm;</mo><mi>B</mi></mrow></math>")
+})
+
+f <- function(x)
+{
+  if(x == 0L) return(0L)
+  if(x < 0L) return(-1L)
+  if(x > 0L) return(1L)
+}
+test_that("functionifelse",
+{
+  q <- mathml(canonical(f))
+  expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mrow><mn>0</mn><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow></mrow><mrow><mrow><mo>-</mo><mn>1</mn></mrow><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>&lt;</mo><mn>0</mn></mrow></mrow><mrow><mn>1</mn><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow></mrow></mtable></mrow></math>")
+})
+
+test_that("integrate",
+{
+  q <- mathml(canonical(integrate(lower=0L, upper=2L*pi, sin)))
+  expect_equal(q, "<math><mrow><mrow><mi>value</mi><mo>-</mo><mn>0.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>abs.error</mi><mo>-</mo><mn>0.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>subdivisions</mi><mo>-</mo><mn>1</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>message</mi><mo>-</mo><mtext>OK</mtext></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>call</mi><mo>-</mo><mrow><mi>integrate</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>f</mi><mo>=</mo><mi>sin</mi></mrow><mo>,</mo><mrow><mi>lower</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mi>upper</mi><mo>=</mo><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+})
+
+v <- 1:3
+test_that("vector",
+{
+  q <- mathml(call("t", v))
+  expect_equal(q, "<math><msup><mrow><mo>(</mo><mrow><mn>1</mn><mspace width=\"thinmathspace\"></mspace><mn>2</mn><mspace width=\"thinmathspace\"></mspace><mn>3</mn></mrow><mo>)</mo></mrow><mtext>T</mtext></msup></math>")
+})
+
+A <- matrix(data=11:16, nrow=2, ncol=3)
+B <- matrix(data=21:26, nrow=2, ncol=3)
+test_that("summatrix",
+{
+  q <- mathml(call("+", A, B))
+  expect_equal(q, "<math><mrow><mrow><mo>(</mo><mtable columnalign=\"left\"><mtr><mtd><mn>11</mn></mtd><mtd><mn>13</mn></mtd><mtd><mn>15</mn></mtd></mtr><mtr><mtd><mn>12</mn></mtd><mtd><mn>14</mn></mtd><mtd><mn>16</mn></mtd></mtr></mtable><mo>)</mo></mrow><mo>+</mo><mrow><mo>(</mo><mtable columnalign=\"left\"><mtr><mtd><mn>21</mn></mtd><mtd><mn>23</mn></mtd><mtd><mn>25</mn></mtd></mtr><mtr><mtd><mn>22</mn></mtd><mtd><mn>24</mn></mtd><mtd><mn>26</mn></mtd></mtr></mtable><mo>)</mo></mrow></mrow></math>")
+})
+
+z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
+  dfrac(m - denote(E, ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
+  "the expected mean response time"), s / sqrt(n))
+test_that("denoting",
+{
+  q <- mathml(call("=", quote(z[tau]), z))
+  expect_equal(q, "<math><mrow><msub><mi>z</mi><mi>&tau;</mi></msub><mo>=</mo><mstyle displaystyle=\"true\"><mfrac><mrow><mi>m</mi><mo>-</mo><mi>E</mi></mrow><mrow><mi>s</mi><mo>/</mo><msqrt><mi>n</mi></msqrt></mrow></mfrac></mstyle></mrow></math><span>, with&nbsp;<span><math><mrow><mi>E</mi><mo>=</mo><mrow><mi>ET</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&tau;</mi><mo>,</mo><mi>c</mi><mo>,</mo><mi>mu_A</mi><mo>,</mo><mi>sigma_A</mi><mo>,</mo><mi>mu_B</mi><mo>,</mo><mi>sigma_B</mi><mo>,</mo><mi>mu_M</mi></mrow><mo>)</mo></mrow></mrow></mrow></math> denoting the expected mean response time</span></span>")
+})
+
+
+term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
+test_that("expressionmolt",
+{
+  q <- mathml(term)
+  expect_equal(q, "<math><mrow><mrow><mrow><mi>a</mi><mo>&sdot;</mo><mi>b</mi></mrow><mo>+</mo><mfrac><mn>1</mn><mrow><mi>c</mi><mo>&#x2062;</mo><mrow><mo>(</mo><mrow><mi>d</mi><mo>+</mo><mi>e</mi></mrow><mo>)</mo></mrow></mrow></mfrac></mrow><mo>+</mo><mstyle displaystyle=\"true\"><mfrac><mn>1</mn><mrow><mi>g</mi><mo>&times;</mo><mi>h</mi></mrow></mfrac></mstyle></mrow></math>")
+})
+
+t <- quote(omit_left(a + b))
+test_that("omitleft",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><menclose notation=\"updiagonalstrike\"><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></math>")
+})
+
+t <- quote(omit_right(a + b))
+test_that("omitright",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"updiagonalstrike\"><mrow><mo>+</mo><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
+})
+
+t <- list(quote(a), quote(b), quote(omit(c)))
+test_that("omit",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mi>b</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"updiagonalstrike\"><mi>c</mi></menclose></mrow></math>")
+})
+
+t <- quote(add_left(a + b))
+test_that("addleft",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><menclose notation=\"roundedbox\"><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></math>")
+})
+
+t <- quote(add_right(a + b))
+test_that("addright",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"roundedbox\"><mrow><mo>+</mo><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
+})
+
+t <- list(quote(a), quote(b), quote(add(c)))
+test_that("add",
+{
+  q <- mathml(t)
+  expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mi>b</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"roundedbox\"><mi>c</mi></menclose></mrow></math>")
+})
+
+t <- quote(instead(a, b) + c)
+test_that("instead",
+{
+  q <- mathml(t)
+  expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead of</mtext><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
+})
+
+test_that("Tdiamond",
+{
+  q <- mathml(quote(T^diamond))
+  expect_equal(q, "<math><msup><mi>T</mi><mi>&diamond;</mi></msup></math>")
+})

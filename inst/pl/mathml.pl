@@ -348,7 +348,6 @@ type(symbol(_), T, _Flags)
  => T = atomic.
 
 
-
 %
 % Booleans
 %
