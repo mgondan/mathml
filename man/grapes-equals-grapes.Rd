@@ -12,7 +12,7 @@ x \%==\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , e.g., a = b
 }
 \description{
 x equiv y

@@ -12,7 +12,7 @@ x \%=~\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , e.g., a cong b
 }
 \description{
 x cong y

@@ -13,6 +13,7 @@ x \%prop\% y
 }
 \value{
 x=y
+e.g, x prop y
 }
 \description{
 x propto y

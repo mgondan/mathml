@@ -9,6 +9,10 @@ omit(expr)
 \arguments{
 \item{expr}{}
 }
+\value{
+NULL
+e.g., remove a + b from a + b
+}
 \description{
 This is a function that allows the user to highlight the mistakes,
 in particular the omission of an element from a list.

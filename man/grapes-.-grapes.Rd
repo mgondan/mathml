@@ -12,7 +12,7 @@ e1 \%.\% e2
 \item{y}{}
 }
 \value{
-e1*e2
+e1*e2 , e.g. x dot y
 }
 \description{
 x dot y

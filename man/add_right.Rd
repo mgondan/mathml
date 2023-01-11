@@ -10,7 +10,7 @@ add_right(expr)
 \item{expr}{}
 }
 \value{
-expr
+expr , e.g., highlights + b from a + b
 }
 \description{
 This is a function that allows the user to highlight the mistakes,

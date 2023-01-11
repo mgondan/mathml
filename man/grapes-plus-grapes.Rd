@@ -13,6 +13,7 @@ x \%+-\% y
 }
 \value{
 c(x - y, x + y)
+x plus min y
 }
 \description{
 Plus Minus

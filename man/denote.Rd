@@ -20,6 +20,7 @@ e.g. 'the pooled variance'}
 }
 \value{
 expr
+e.g., x denotes a^2 + b
 }
 \description{
 denote

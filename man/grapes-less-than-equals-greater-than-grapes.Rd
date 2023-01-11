@@ -12,7 +12,7 @@ x \%<=>\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , it produces a double arrow double-sided
 }
 \description{
 x iff y

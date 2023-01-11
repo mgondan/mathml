@@ -12,7 +12,7 @@ instead(inst, of)
 \item{of}{}
 }
 \value{
-inst
+inst , e.g. a + c instead of a + b
 }
 \description{
 This is a function that allows the user to highlight the mistakes,

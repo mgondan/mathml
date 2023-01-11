@@ -12,7 +12,7 @@ x \%<=\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , it produces a right double arrow
 }
 \description{
 x rArr y

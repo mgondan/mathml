@@ -13,6 +13,7 @@ x \%dbldown\% y
 }
 \value{
 x=y
+it produces a downward double arrow
 }
 \description{
 x dArr y

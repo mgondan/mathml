@@ -12,7 +12,7 @@ x \%<-\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , it produces a left arrow
 }
 \description{
 x leftarrow y

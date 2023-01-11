@@ -13,6 +13,7 @@ x \%=>\% y
 }
 \value{
 x=y
+it produces a left doublearrow
 }
 \description{
 x lArr y

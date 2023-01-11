@@ -12,7 +12,7 @@ x \%~~\% y
 \item{y}{}
 }
 \value{
-x=y
+x=y , that is double tilde
 }
 \description{
 x approx y

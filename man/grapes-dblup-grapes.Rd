@@ -13,6 +13,7 @@ x \%dblup\% y
 }
 \value{
 e1=e2
+it produces a upward double arrow
 }
 \description{
 x uArr y

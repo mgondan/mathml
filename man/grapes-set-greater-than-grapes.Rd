@@ -13,6 +13,7 @@ x \%<->\% y
 }
 \value{
 x=y
+it produces a doublrsides arrow
 }
 \description{
 x leftrightarrow y
