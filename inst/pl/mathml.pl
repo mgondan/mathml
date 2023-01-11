@@ -331,6 +331,25 @@ mathml :-
     mathml(alpha).
 
 %
+% Symbols
+%
+math(R, M),
+    atom(R),
+    memberchk(R, [diamond])
+ => M = symbol(R).
+
+ml(symbol(R), M, _Flags)
+ => M = mi(&(R)).
+
+jax(symbol(R), M, _Flags)
+ => format(string(M), "\\~w", [R]).
+
+type(symbol(_), T, _Flags)
+ => T = atomic.
+
+
+
+%
 % Booleans
 %
 math(true, M)

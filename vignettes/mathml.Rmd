@@ -972,3 +972,7 @@ Please check if the examples below
 * or if they should go into a separate appendix
 
 _I removed the examples since they were already present._
+```{r, results='asis', echo=TRUE}
+mathout(quote(T^diamond))
+mathout(quote(sinpi(alpha)))
+```
