@@ -1141,10 +1141,10 @@ ml(op('%+-%'), M, _Flags)
 jax(op('%+-%'), M, _Flags)
  => M = "\\pm".
 
-ml(op(times), M, _Flags)
+ml(op('%*%'), M, _Flags)
  => M = mo(&(times)).
 
-jax(op(times), M, _Flags)
+jax(op('%*%'), M, _Flags)
  => M = "\\times".
 
 ml(op(sum), M, _Flags)
@@ -1189,88 +1189,88 @@ ml(op('Tilde'), M, _Flags)
 jax(op('Tilde'), M, _Flags)
  => M = "\\sim".
 
-ml(op(leftrightarrow), M, _Flags)
+ml(op('%<->%'), M, _Flags)
  => M = mo(&(leftrightarrow)).
 
-jax(op(leftrightarrow), M, _Flags)
+jax(op('%<->%'), M, _Flags)
  => M = "\\leftrightarrow".
 
-ml(op(iff), M, _Flags)
+ml(op('%<=>%'), M, _Flags)
  => M = mo(&(iff)).
 
-jax(op(iff), M, _Flags)
+jax(op('%<=>%'), M, _Flags)
  => M = "\\iff".
 
-ml(op(rightarrow), M, _Flags)
+ml(op('%->%'), M, _Flags)
  => M = mo(&(rightarrow)).
 
-jax(op(rightarrow), M, _Flags)
+jax(op('%->%'), M, _Flags)
  => M = "\\rightarrow".
 
-ml(op(rArr), M, _Flags)
+ml(op('%=>%'), M, _Flags)
  => M = mo(&(rArr)).
 
-jax(op(rArr), M, _Flags)
+jax(op('%=>%'), M, _Flags)
  => M = "\\Rightarrow".
 
-ml(op(leftarrow), M, _Flags)
+ml(op('%<-%'), M, _Flags)
  => M = mo(&(leftarrow)).
 
-jax(op(leftarrow), M, _Flags)
+jax(op('%<-%'), M, _Flags)
  => M = "\\leftarrow".
 
-ml(op(lArr), M, _Flags)
+ml(op('%<=%'), M, _Flags)
  => M = mo(&(lArr)).
 
-jax(op(lArr), M, _Flags)
+jax(op('%<=%'), M, _Flags)
  => M = "\\Leftarrow".
 
-ml(op(uparrow), M, _Flags)
+ml(op('%up%'), M, _Flags)
  => M = mo(&(uparrow)).
 
-jax(op(uparrow), M, _Flags)
+jax(op('%up%'), M, _Flags)
  => M = "\\uparrow".
 
-ml(op(uArr), M, _Flags)
+ml(op('%dblup%'), M, _Flags)
  => M = mo(&(uArr)).
 
-jax(op(uArr), M, _Flags)
+jax(op('%dblup%'), M, _Flags)
  => M = "\\Uparrow".
 
-ml(op(downarrow), M, _Flags)
+ml(op('%down%'), M, _Flags)
  => M = mo(&(downarrow)).
 
-jax(op(downarrow), M, _Flags)
+jax(op('%down%'), M, _Flags)
  => M = "\\downarrow".
 
-ml(op(dArr), M, _Flags)
+ml(op('%dbldown%'), M, _Flags)
  => M = mo(&(dArr)).
 
-jax(op(dArr), M, _Flags)
+jax(op('%dbldown%'), M, _Flags)
  => M = "\\Downarrow".
 
-ml(op(approx), M, _Flags)
+ml(op('%~~%'), M, _Flags)
  => M = mo(&(approx)).
 
-jax(op(approx), M, _Flags)
+jax(op('%~~%'), M, _Flags)
  => M = "\\approx".
 
-ml(op(equiv), M, _Flags)
+ml(op('%==%'), M, _Flags)
  => M = mo(&(equiv)).
 
-jax(op(equiv), M, _Flags)
+jax(op('%==%'), M, _Flags)
  => M = "\\equiv".
 
-ml(op(cong), M, _Flags)
+ml(op('%=~%'), M, _Flags)
  => M = mo(&(cong)).
 
-jax(op(cong), M, _Flags)
+jax(op('%=~%'), M, _Flags)
  => M = "\\cong".
 
-ml(op(propto), M, _Flags)
+ml(op('%prop%'), M, _Flags)
  => M = mo(&(prop)).
 
-jax(op(propto), M, _Flags)
+jax(op('%prop%'), M, _Flags)
  => M = "\\propto".
 
 ml(op(and), M, _Flags)
@@ -1452,57 +1452,57 @@ math(~(A, B), X)
  => current_op(Prec, xfx, =),
     X = yfy(Prec, 'Tilde', A, B).
 
-math(leftrightarrow(A, B), X)
+math('%<->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, leftrightarrow, A, B).
+    X = yfy(Prec, '%<->%', A, B).
 
-math(iff(A, B), X)
+math('%<=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, iff, A, B).
+    X = yfy(Prec, '%<=>%', A, B).
 
-math(rightarrow(A, B), X)
+math('%->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, rightarrow, A, B).
+    X = yfy(Prec, '%->%', A, B).
 
-math(rArr(A, B), X)
+math('%=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, rArr, A, B).
+    X = yfy(Prec, '%=>%', A, B).
 
-math(leftarrow(A, B), X)
+math('%<-%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, leftarrow, A, B).
+    X = yfy(Prec, '%<-%', A, B).
 
-math(lArr(A, B), X)
+math('%<=%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, lArr, A, B).
+    X = yfy(Prec, '%<=%', A, B).
 
-math(uparrow(A, B), X)
+math('%up%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, uparrow, A, B).
+    X = yfy(Prec, '%up%', A, B).
 
-math(uArr(A, B), X)
+math('%dblup%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, uArr, A, B).
+    X = yfy(Prec, '%dblup%', A, B).
 
-math(downarrow(A, B), X)
+math('%down%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, downarrow, A, B).
+    X = yfy(Prec, '%down%', A, B).
 
-math(dArr(A, B), X)
+math('%dbldown%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, dArr, A, B).
+    X = yfy(Prec, '%dbldown%', A, B).
 
-math(equiv(A, B), X)
+math('%==%'(A, B), X)
  => current_op(Prec, xfx, =),
-    X = yfy(Prec, equiv, A, B).
+    X = yfy(Prec, '%==%', A, B).
 
-math(cong(A, B), X)
+math('%=~%'(A, B), X)
  => current_op(Prec, xfx, =),
-    X = yfy(Prec, cong, A, B).
+    X = yfy(Prec, '%=~%', A, B).
 
-math(propto(A, B), X)
+math('%prop%'(A, B), X)
  => current_op(Prec, xfx, =),
-    X = yfy(Prec, propto, A, B).
+    X = yfy(Prec, '%prop%', A, B).
 
 math(A > B, X)
  => current_op(Prec, xfx, >),
@@ -1551,14 +1551,14 @@ math('%*%'(A, B), M)
  => M = times(A, B).
 
 math(crossprod(A, B), M)
- => M = '%*%'(t(A), B).
+ => M = times(t(A), B).
 
 math(tcrossprod(A, B), M)
- => M = '%*%'(A, t(B)).
+ => M = times(A, t(B)).
 
-math(approx(A, B), X)
+math('%~~%'(A, B), X)
  => current_op(Prec, xfx, =),
-    X = yfy(Prec, approx, A, B).
+    X = yfy(Prec, '%~~%', A, B).
 
 math(~(A, B), X)
  => current_op(Prec, xfx, =),
@@ -1579,9 +1579,9 @@ math(nodot(A, B), X)
  => current_op(Prec, yfx, *),
     X = yfy(Prec, '#x2062', A, B).
 
-math(times(A, B), M)
+math('%*%'(A, B), M)
  => current_op(Prec, yfx, *),
-    M = yfy(Prec, times, A, B).
+    M = yfy(Prec, '%*%', A, B).
 
 math(A / B, X)
  => current_op(Prec, yfx, /),

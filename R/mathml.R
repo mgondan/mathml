@@ -48,22 +48,6 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   "%%" = "mod",
   "%/%" = "div")
 
-#  "%*%" = "times",
-#  "%~~%" = "approx",
-#  "%==%" = "equiv",
-#  "%=~%" = "cong",
-#  "%prop%" = "propto",
-#  "%<->%" = "leftrightarrow",
-#  "%->%" = "rightarrow",
-#  "%<-%" = "leftarrow",
-#  "%up%" = "uparrow",
-#  "%down%" = "downarrow",
-#  "%<=>%" = "iff",
-#  "%=>%" = "rArr",
-#  "%<=%" = "lArr",
-#  "%dblup%" = "uArr",
-#  "%dbldown%" = "dArr"
-
 #' Map R operators to their respective Prolog counterparts
 #'
 #' @param query
