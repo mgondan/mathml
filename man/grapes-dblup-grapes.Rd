@@ -7,12 +7,12 @@
 x \%dblup\% y
 }
 \arguments{
-\item{x}{}
+\item{x}{first element}
 
-\item{y}{}
+\item{y}{second element}
 }
 \value{
-e1=e2
+x=y
 it produces a upward double arrow
 }
 \description{

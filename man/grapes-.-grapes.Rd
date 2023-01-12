@@ -4,15 +4,15 @@
 \alias{\%.\%}
 \title{x dot y}
 \usage{
-e1 \%.\% e2
+ \%.\% 
 }
 \arguments{
-\item{x}{}
+\item{e1}{first factor}
 
-\item{y}{}
+\item{e2}{second factor}
 }
 \value{
-e1*e2 , e.g. x dot y
+e1*e2
 }
 \description{
 x dot y

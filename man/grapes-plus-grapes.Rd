@@ -7,9 +7,9 @@
 x \%+-\% y
 }
 \arguments{
-\item{x}{}
+\item{x}{first operator}
 
-\item{y}{}
+\item{y}{second operator}
 }
 \value{
 c(x - y, x + y)

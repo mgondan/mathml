@@ -7,7 +7,7 @@
 omit(expr)
 }
 \arguments{
-\item{expr}{}
+\item{expr}{expression}
 }
 \value{
 NULL

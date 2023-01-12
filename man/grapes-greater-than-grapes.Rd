@@ -7,9 +7,9 @@
 x \%->\% y
 }
 \arguments{
-\item{x}{}
+\item{x}{first element}
 
-\item{y}{}
+\item{y}{second element}
 }
 \value{
 x=y , it produces a right arrow

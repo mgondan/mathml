@@ -7,11 +7,10 @@
 add_left(expr)
 }
 \arguments{
-\item{expr}{}
+\item{expr}{expression}
 }
 \value{
-expr 
-e.g., highlights a + from a + b
+expr  e.g., highlights a + from a + b
 }
 \description{
 This is a function that allows the user to highlight the mistakes,

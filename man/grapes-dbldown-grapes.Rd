@@ -7,9 +7,9 @@
 x \%dbldown\% y
 }
 \arguments{
-\item{x}{}
+\item{x}{first element}
 
-\item{y}{}
+\item{y}{second element}
 }
 \value{
 x=y

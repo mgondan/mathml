@@ -7,9 +7,9 @@
 instead(inst, of)
 }
 \arguments{
-\item{inst}{}
+\item{inst}{instead}
 
-\item{of}{}
+\item{of}{of}
 }
 \value{
 inst , e.g. a + c instead of a + b

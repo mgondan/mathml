@@ -7,9 +7,9 @@
 x \%~~\% y
 }
 \arguments{
-\item{x}{}
+\item{x}{x}
 
-\item{y}{}
+\item{y}{y}
 }
 \value{
 x=y , that is double tilde

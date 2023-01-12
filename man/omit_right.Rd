@@ -9,7 +9,7 @@ in particular the omissions in the right-hand side of the expression}
 omit_right(expr)
 }
 \arguments{
-\item{expr}{}
+\item{expr}{expression}
 }
 \value{
 substitute(expr)[[2]], e.g., a from a + b

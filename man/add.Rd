@@ -7,7 +7,7 @@
 add(expr)
 }
 \arguments{
-\item{expr}{}
+\item{expr}{expression}
 }
 \value{
 expr ,  e.g., highlights a + b from a + b
