@@ -15,6 +15,10 @@
 #' @param flags (default NULL)
 #' list of flags that control the translation
 #'
+#' @param env (default globalenv())
+#' The R environment in which r_eval is being executed (see vignette for
+#' details, "Ringing back to R").
+#'
 #' @return
 #' A string with the MathML representation or _term_.
 #'
@@ -92,6 +96,10 @@ mathml_preproc <- function(query=quote(2 != 2))
 #'
 #' @param flags (default NULL)
 #' list of flags that control the translation
+#'
+#' @param env (default globalenv())
+#' The R environment in which r_eval is being executed (see vignette for
+#' details, "Ringing back to R").
 #'
 #' @return
 #' A string with the MathJax representation or _term_.

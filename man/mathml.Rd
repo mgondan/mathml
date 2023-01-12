@@ -16,6 +16,10 @@ MathML string.}
 
 \item{flags}{(default NULL)
 list of flags that control the translation}
+
+\item{env}{(default globalenv())
+The R environment in which r_eval is being executed (see vignette for
+details, "Ringing back to R").}
 }
 \value{
 A string with the MathML representation or \emph{term}.
