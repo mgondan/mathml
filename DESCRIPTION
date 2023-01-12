@@ -1,6 +1,6 @@
 Package: mathml
 Type: Package
-Title: Translate R expressions to MathML and LaTeX/MathJax
+Title: Translate R Expressions to MathML and LaTeX/MathJax
 Version: 0.4
 Date: 2023-01-12
 Author: Matthias Gondan
