@@ -2,18 +2,18 @@
 % Please edit documentation in R/mathml.R
 \name{\%.\%}
 \alias{\%.\%}
-\title{x dot y}
+\title{Product x * y, shown as x dot y}
 \usage{
- \%.\% 
+x \%.\% y
 }
 \arguments{
-\item{e1}{first factor}
+\item{x}{first factor}
 
-\item{e2}{second factor}
+\item{y}{second factor}
 }
 \value{
-e1*e2
+x * y
 }
 \description{
-x dot y
+Product x * y, shown as x dot y
 }

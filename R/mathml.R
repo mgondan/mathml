@@ -44,36 +44,50 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
 }
 
 # Prolog representation of not equal etc. (left: R, right: Prolog)
-mathml_operators = c(
-  "%.%" = "cdot",
-  "%/%" = "div",
+.mathml_operators = c(
   "%%" = "mod",
-  "%+-%" = "pm",
-  "%*%" = "times",
-  "%~~%" = "approx",
-  "%==%" = "equiv",
-  "%=~%" = "cong",
-  "%prop%" = "propto",
-  "%<->%" = "leftrightarrow",
-  "%->%" = "rightarrow",
-  "%<-%" = "leftarrow",
-  "%up%" = "uparrow",
-  "%down%" = "downarrow",
-  "%<=>%" = "iff",
-  "%=>%" = "rArr",
-  "%<=%" = "lArr",
-  "%dblup%" = "uArr",
-  "%dbldown%" = "dArr"
-)
+  "%/%" = "div")
 
-mathml_preproc <- function(query=quote(2 != 2))
+#  "%*%" = "times",
+#  "%~~%" = "approx",
+#  "%==%" = "equiv",
+#  "%=~%" = "cong",
+#  "%prop%" = "propto",
+#  "%<->%" = "leftrightarrow",
+#  "%->%" = "rightarrow",
+#  "%<-%" = "leftarrow",
+#  "%up%" = "uparrow",
+#  "%down%" = "downarrow",
+#  "%<=>%" = "iff",
+#  "%=>%" = "rArr",
+#  "%<=%" = "lArr",
+#  "%dblup%" = "uArr",
+#  "%dbldown%" = "dArr"
+
+#' Map R operators to their respective Prolog counterparts
+#'
+#' @param query
+#' an R call or symbol/number. This function translates components of _query_
+#' into their respective counterparts from Prolog
+#'
+#' @return
+#' The translated query
+#'
+#' @md
+#'
+#' @seealso [mathjax()], [mathml()]
+#'
+#' @examples
+#' mathml_preproc(quote(5 %% 2))
+#'
+mathml_preproc <- function(query=quote(5 %% 2))
 {
   if(is.call(query))
   {
     args <- as.list(query)
-    index <- (args[[1]] == names(mathml_operators))
+    index <- (args[[1]] == names(.mathml_operators))
     if(any(index))
-      args[[1]] <- as.symbol(mathml_operators[index])
+      args[[1]] <- as.symbol(.mathml_operators[index])
 
     args[-1] <- lapply(args[-1], FUN=mathml_preproc)
     return(as.call(args))
@@ -402,23 +416,30 @@ fname <- function(fname, body)
 }
 
 
-#'x dot y
+#'Product x * y, shown as x dot y
 #'
-#' @param e1 first factor
+#' @param x
+#' first factor
 #'
-#' @param e2 second factor
+#' @param y
+#' second factor
 #'
-#' @return e1*e2 
+#' @return
+#' x * y 
 #'
-'%.%' <- `*`
+'%.%' <- function(x, y)
+  x * y
 
-#'x approx y
+#'Approximate equality, shown as x ~~ y
 #'
-#' @param x x
+#' @param x
+#' first argument
 #'
-#' @param y y
+#' @param y
+#' second argument
 #'
-#' @return x=y , that is double tilde
+#' @return
+#' The result of isTRUE(all.equal(x, y))
 #'
 '%~~%' <- function(x, y)
   isTRUE(all.equal(x, y))

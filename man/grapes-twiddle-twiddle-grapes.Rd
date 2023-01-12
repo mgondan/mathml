@@ -2,18 +2,18 @@
 % Please edit documentation in R/mathml.R
 \name{\%~~\%}
 \alias{\%~~\%}
-\title{x approx y}
+\title{Approximate equality, shown as x ~~ y}
 \usage{
 x \%~~\% y
 }
 \arguments{
-\item{x}{x}
+\item{x}{first argument}
 
-\item{y}{y}
+\item{y}{second argument}
 }
 \value{
-x=y , that is double tilde
+The result of isTRUE(all.equal(x, y))
 }
 \description{
-x approx y
+Approximate equality, shown as x ~~ y
 }

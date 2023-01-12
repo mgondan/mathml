@@ -1129,16 +1129,16 @@ ml(op(ne), M, _Flags)
 jax(op(ne), M, _Flags)
  => M = "\\ne".
 
-ml(op(cdot), M, _Flags)
+ml(op('%.%'), M, _Flags)
  => M = mo(&(sdot)).
 
-jax(op(cdot), M, _Flags)
+jax(op('%.%'), M, _Flags)
  => M = "\\cdot".
 
-ml(op(pm), M, _Flags)
+ml(op('%+-%'), M, _Flags)
  => M = mo(&(pm)).
 
-jax(op(pm), M, _Flags)
+jax(op('%+-%'), M, _Flags)
  => M = "\\pm".
 
 ml(op(times), M, _Flags)
@@ -1545,7 +1545,7 @@ math(A * B, X, Flags),
  => X = nodot(A, B).
 
 math(A * B, M)
- => M = cdot(A, B).
+ => M = '%.%'(A, B).
 
 math('%*%'(A, B), M)
  => M = times(A, B).
@@ -1565,15 +1565,15 @@ math(~(A, B), X)
     X = yfy(Prec, 'Tilde', A, B).
 
 math(dot(A, B), X)
- => X = cdot(A, B).
+ => X = '%.%'(A, B).
 
-math(cdot(A, B), X)
+math('%.%'(A, B), X)
  => current_op(Prec, yfx, *),
-    X = yfy(Prec, cdot, A, B).
+    X = yfy(Prec, '%.%', A, B).
 
-math(pm(A, B), X)
+math('%+-%'(A, B), X)
  => current_op(Prec, yfx, +),
-    X = yfy(Prec, pm, A, B).
+    X = yfy(Prec, '%+-%', A, B).
 
 math(nodot(A, B), X)
  => current_op(Prec, yfx, *),
