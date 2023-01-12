@@ -381,9 +381,9 @@ fname <- function(fname, body)
 
 #' Plus Minus
 #'
-#' @param x
+#' @param x first operator
 #'
-#' @param y
+#' @param y second operator
 #'
 #' @return c(x - y, x + y)
 #' x plus min y
@@ -396,20 +396,19 @@ fname <- function(fname, body)
 
 #'x dot y
 #'
-#' @param x
+#' @param e1 first factor
 #'
-#' @param y
+#' @param e2 second factor
 #'
-#' @return e1*e2 , e.g. x dot y
+#' @return e1*e2 
 #'
-'%.%' <- function(e1, e2)
-e1*e2
+'%.%' <- `*`
 
 #'x approx y
 #'
-#' @param x
+#' @param x x
 #'
-#' @param y
+#' @param y y
 #'
 #' @return x=y , that is double tilde
 #'
@@ -418,9 +417,9 @@ e1*e2
 
 #'x equiv y
 #'
-#' @param x
+#' @param x x
 #'
-#' @param y
+#' @param y y
 #'
 #' @return x=y , e.g., a = b
 #'
@@ -430,9 +429,9 @@ e1*e2
 
 #'x cong y
 #'
-#' @param x
+#' @param x x
 #'
-#' @param y
+#' @param y y
 #'
 #' @return x=y , e.g., a cong b
 #'
@@ -441,9 +440,9 @@ e1*e2
 
 #'x propto y
 #'
-#' @param x
+#' @param x x
 #'
-#' @param y
+#' @param y y
 #'
 #' @return x=y
 #' e.g, x prop y
@@ -453,9 +452,9 @@ e1*e2
 
 #'x leftrightarrow y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y
 #' it produces a doublrsides arrow
@@ -466,9 +465,9 @@ e1*e2
 
 #'x rightarrow y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces a right arrow
 #'
@@ -477,9 +476,9 @@ e1*e2
 
 #'x leftarrow y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces a left arrow
 #'
@@ -488,9 +487,9 @@ e1*e2
 
 #'x uparrow y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces an upward arrow
 #'
@@ -499,9 +498,9 @@ e1*e2
 
 #'x downarrow y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces a downward arrow
 #'
@@ -510,9 +509,9 @@ e1*e2
 
 #'x iff y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces a double arrow double-sided
 #'
@@ -521,9 +520,9 @@ e1*e2
 
 #'x rArr y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y , it produces a right double arrow
 #'
@@ -532,9 +531,9 @@ e1*e2
 
 #'x lArr y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y
 #' it produces a left doublearrow
@@ -544,11 +543,11 @@ e1*e2
 
 #'x uArr y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
-#' @return e1=e2
+#' @return x=y
 #' it produces a upward double arrow
 #'
 '%dblup%' <- function(x, y)
@@ -556,9 +555,9 @@ e1*e2
 
 #'x dArr y
 #'
-#' @param x
+#' @param x first element
 #'
-#' @param y
+#' @param y second element
 #'
 #' @return x=y
 #' it produces a downward double arrow
@@ -593,7 +592,7 @@ denote <- function(abbr, expr, info)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the omissions in the left-hand side of the expression
 #'
-#' @param expr
+#' @param expr 
 #' The expression, e.g. a + b
 #'
 #' @return substitute(expr)[[3]], e.g., b from a + b
@@ -608,7 +607,7 @@ omit_left <- function(expr)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the omissions in the right-hand side of the expression
 #'
-#' @param expr
+#' @param expr expression
 #'
 #' @return substitute(expr)[[2]], e.g., a from a + b
 #'
@@ -622,7 +621,7 @@ omit_right <- function(expr)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the omission of an element from a list.
 #'
-#' @param expr
+#' @param expr expression
 #'
 #' @return NULL
 #' e.g., remove a + b from a + b
@@ -638,10 +637,9 @@ omit <- function(expr)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the redundancies in the left-hand side of the expression.
 #'
-#' @param expr
+#' @param expr expression
 #'
-#' @return expr 
-#' e.g., highlights a + from a + b
+#' @return expr  e.g., highlights a + from a + b
 #'
 add_left <- function(expr)
 {
@@ -653,7 +651,7 @@ add_left <- function(expr)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular the redundancies in the right-hand side of the expression.
 #'
-#' @param expr
+#' @param expr expression
 #'
 #' @return expr , e.g., highlights + b from a + b
 #'
@@ -667,7 +665,7 @@ add_right <- function(expr)
 #' This is a function that allows the user to highlight the mistakes,
 #' in particular an extra element in a list
 #'
-#' @param expr
+#' @param expr expression
 #'
 #' @return expr ,  e.g., highlights a + b from a + b
 #'
@@ -682,9 +680,9 @@ add <- function(expr)
 #' in particular adds a curly bracket under the wrong term and it provides the
 #' correct solutions.
 #'
-#' @param inst
+#' @param inst instead
 #'
-#' @param of
+#' @param of of
 #'
 #' @return inst , e.g. a + c instead of a + b
 #'
