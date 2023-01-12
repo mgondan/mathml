@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%dblup\%}
 \alias{\%dblup\%}
-\title{x uArr y}
+\title{Up double arrow, displayed as x uArr y}
 \usage{
 x \%dblup\% y
 }
@@ -12,9 +12,8 @@ x \%dblup\% y
 \item{y}{second element}
 }
 \value{
-x=y
-it produces a upward double arrow
+x=y ,it produces a upward double arrow
 }
 \description{
-x uArr y
+Up double arrow, displayed as x uArr y
 }

@@ -2,19 +2,19 @@
 % Please edit documentation in R/mathml.R
 \name{\%+-\%}
 \alias{\%+-\%}
-\title{Plus Minus}
+\title{Plus Minus, it shows x and calculates x +- y}
 \usage{
 x \%+-\% y
 }
 \arguments{
-\item{x}{first operator}
+\item{x}{first term}
 
-\item{y}{second operator}
+\item{y}{second term}
 }
 \value{
 c(x - y, x + y)
 x plus min y
 }
 \description{
-Plus Minus
+Plus Minus, it shows x and calculates x +- y
 }

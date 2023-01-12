@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%->\%}
 \alias{\%->\%}
-\title{x rightarrow y}
+\title{Right arrow, presented as x -> y}
 \usage{
 x \%->\% y
 }
@@ -15,5 +15,5 @@ x \%->\% y
 x=y , it produces a right arrow
 }
 \description{
-x rightarrow y
+Right arrow, presented as x -> y
 }

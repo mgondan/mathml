@@ -2,18 +2,18 @@
 % Please edit documentation in R/mathml.R
 \name{\%=~\%}
 \alias{\%=~\%}
-\title{x cong y}
+\title{Congruence, shown as x =~ y}
 \usage{
 x \%=~\% y
 }
 \arguments{
-\item{x}{x}
+\item{x}{first argument}
 
-\item{y}{y}
+\item{y}{second argument}
 }
 \value{
 x=y , e.g., a cong b
 }
 \description{
-x cong y
+Congruence, shown as x =~ y
 }

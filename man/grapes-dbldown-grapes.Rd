@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%dbldown\%}
 \alias{\%dbldown\%}
-\title{x dArr y}
+\title{Down double arrow, displayed as x dArr y}
 \usage{
 x \%dbldown\% y
 }
@@ -12,9 +12,8 @@ x \%dbldown\% y
 \item{y}{second element}
 }
 \value{
-x=y
-it produces a downward double arrow
+x=y ,it produces a downward double arrow
 }
 \description{
-x dArr y
+Down double arrow, displayed as x dArr y
 }

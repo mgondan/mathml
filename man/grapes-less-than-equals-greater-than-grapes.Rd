@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%<=>\%}
 \alias{\%<=>\%}
-\title{x iff y}
+\title{If and only if condition, displayed as x <=> y}
 \usage{
 x \%<=>\% y
 }
@@ -15,5 +15,5 @@ x \%<=>\% y
 x=y , it produces a double arrow double-sided
 }
 \description{
-x iff y
+If and only if condition, displayed as x <=> y
 }

@@ -2,18 +2,18 @@
 % Please edit documentation in R/mathml.R
 \name{\%==\%}
 \alias{\%==\%}
-\title{x equiv y}
+\title{Equivalence, shown as x == y}
 \usage{
 x \%==\% y
 }
 \arguments{
-\item{x}{x}
+\item{x}{first argument}
 
-\item{y}{y}
+\item{y}{second argument}
 }
 \value{
 x=y , e.g., a = b
 }
 \description{
-x equiv y
+Equivalence, shown as x == y
 }

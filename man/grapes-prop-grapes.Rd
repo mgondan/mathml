@@ -2,19 +2,18 @@
 % Please edit documentation in R/mathml.R
 \name{\%prop\%}
 \alias{\%prop\%}
-\title{x propto y}
+\title{Proportional, shown as x prop y}
 \usage{
 x \%prop\% y
 }
 \arguments{
-\item{x}{x}
+\item{x}{first argument}
 
-\item{y}{y}
+\item{y}{second argument}
 }
 \value{
-x=y
-e.g, x prop y
+x=y e.g, x prop y
 }
 \description{
-x propto y
+Proportional, shown as x prop y
 }

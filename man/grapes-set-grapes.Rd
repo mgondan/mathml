@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%<-\%}
 \alias{\%<-\%}
-\title{x leftarrow y}
+\title{Left arrow, presented as x <- y}
 \usage{
 x \%<-\% y
 }
@@ -15,5 +15,5 @@ x \%<-\% y
 x=y , it produces a left arrow
 }
 \description{
-x leftarrow y
+Left arrow, presented as x <- y
 }

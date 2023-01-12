@@ -385,11 +385,13 @@ fname <- function(fname, body)
   return(body)
 }
 
-#' Plus Minus
+#' Plus Minus, it shows x and calculates x +- y
 #'
-#' @param x first operator
+#' @param x 
+#' first term
 #'
-#' @param y second operator
+#' @param y 
+#' second term
 #'
 #' @return c(x - y, x + y)
 #' x plus min y
@@ -428,152 +430,186 @@ fname <- function(fname, body)
 '%~~%' <- function(x, y)
   isTRUE(all.equal(x, y))
 
-#'x equiv y
+#'Equivalence, shown as x == y
 #'
-#' @param x x
+#' @param x 
+#' first argument
 #'
-#' @param y y
+#' @param y 
+#' second argument
 #'
-#' @return x=y , e.g., a = b
+#' @return 
+#' x=y , e.g., a = b
 #'
 '%==%' <- function(x, y)
   x=y
 
 
-#'x cong y
+#'Congruence, shown as x =~ y
 #'
-#' @param x x
+#' @param x 
+#' first argument
 #'
-#' @param y y
+#' @param y 
+#' second argument
 #'
-#' @return x=y , e.g., a cong b
+#' @return 
+#' x=y , e.g., a cong b
 #'
 '%=~%' <- function(x, y)
   x=y
 
-#'x propto y
+#'Proportional, shown as x prop y
 #'
-#' @param x x
+#' @param x 
+#' first argument
 #'
-#' @param y y
+#' @param y 
+#' second argument
 #'
-#' @return x=y
-#' e.g, x prop y
+#' @return 
+#' x=y e.g, x prop y
 #'
 '%prop%' <- function(x, y)
   x=y
 
-#'x leftrightarrow y
+#' Double sided arrow, presented as x <-> y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y
-#' it produces a doublrsides arrow
+#' @return 
+#' x=y ,it produces a double sided arrow
 #'
 #'
 '%<->%' <- function(x, y)
   x=y
 
-#'x rightarrow y
+#'Right arrow, presented as x -> y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces a right arrow
+#' @return 
+#' x=y , it produces a right arrow
 #'
 '%->%' <- function(x, y)
   x=y
 
-#'x leftarrow y
+#' Left arrow, presented as x <- y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces a left arrow
+#' @return 
+#' x=y , it produces a left arrow
 #'
 '%<-%' <- function(x, y)
   x=y
 
-#'x uparrow y
+#'Up arrow, presented as x up y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces an upward arrow
+#' @return 
+#' x=y , it produces an upward arrow
 #'
 '%up%' <- function(x, y)
   x=y
 
-#'x downarrow y
+#'Down arrow, presented as x downarrow y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces a downward arrow
+#' @return 
+#' x=y , it produces a downward arrow
 #'
 '%down%' <- function(x, y)
   x=y
 
-#'x iff y
+#'If and only if condition, displayed as x <=> y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces a double arrow double-sided
+#' @return 
+#' x=y , it produces a double arrow double-sided
 #'
 '%<=>%' <- function(x, y)
   x=y
 
-#'x rArr y
+#'Right double arrow, displayed as x => y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y , it produces a right double arrow
+#' @return 
+#' x=y , it produces a right double arrow
 #'
 '%<=%' <- function(x, y)
   x=y
 
-#'x lArr y
+#'Left double arrow, displayed as x <= y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y
-#' it produces a left doublearrow
+#' @return 
+#' x=y , it produces a left doublearrow
 #'
 '%=>%' <- function(x, y)
   x=y
 
-#'x uArr y
+#'Up double arrow, displayed as x uArr y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y
-#' it produces a upward double arrow
+#' @return 
+#' x=y ,it produces a upward double arrow
 #'
 '%dblup%' <- function(x, y)
   x=y
 
-#'x dArr y
+#'Down double arrow, displayed as x dArr y
 #'
-#' @param x first element
+#' @param x 
+#' first element
 #'
-#' @param y second element
+#' @param y 
+#' second element
 #'
-#' @return x=y
-#' it produces a downward double arrow
+#' @return 
+#' x=y ,it produces a downward double arrow
 #'
 '%dbldown%' <- function(x, y)
   x=y

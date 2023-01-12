@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%up\%}
 \alias{\%up\%}
-\title{x uparrow y}
+\title{Up arrow, presented as x up y}
 \usage{
 x \%up\% y
 }
@@ -15,5 +15,5 @@ x \%up\% y
 x=y , it produces an upward arrow
 }
 \description{
-x uparrow y
+Up arrow, presented as x up y
 }

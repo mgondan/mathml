@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%down\%}
 \alias{\%down\%}
-\title{x downarrow y}
+\title{Down arrow, presented as x downarrow y}
 \usage{
 x \%down\% y
 }
@@ -15,5 +15,5 @@ x \%down\% y
 x=y , it produces a downward arrow
 }
 \description{
-x downarrow y
+Down arrow, presented as x downarrow y
 }

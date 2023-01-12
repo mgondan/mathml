@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%<->\%}
 \alias{\%<->\%}
-\title{x leftrightarrow y}
+\title{Double sided arrow, presented as x <-> y}
 \usage{
 x \%<->\% y
 }
@@ -12,9 +12,8 @@ x \%<->\% y
 \item{y}{second element}
 }
 \value{
-x=y
-it produces a doublrsides arrow
+x=y ,it produces a double sided arrow
 }
 \description{
-x leftrightarrow y
+Double sided arrow, presented as x <-> y
 }

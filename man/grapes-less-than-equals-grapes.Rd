@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%<=\%}
 \alias{\%<=\%}
-\title{x rArr y}
+\title{Right double arrow, displayed as x => y}
 \usage{
 x \%<=\% y
 }
@@ -15,5 +15,5 @@ x \%<=\% y
 x=y , it produces a right double arrow
 }
 \description{
-x rArr y
+Right double arrow, displayed as x => y
 }
