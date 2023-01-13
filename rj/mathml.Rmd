@@ -363,7 +363,7 @@ op3 <- list(
 
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
 
-op3 <- names(names(op3))
+op3 <- names(op3)
 if(knitr::is_latex_output())
   op3 <- sapply(op3, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
