@@ -27,7 +27,7 @@ Vignette: >
 # Greek letters in MathJax
 # Typeface
 # Stylechanges
-# Phantoms
+# hat, overline, cancel, box, invisible, phantom
 
 library(mathml)
 
@@ -570,6 +570,56 @@ m_A <- 1.5; s2_A <- 2.4^2; n_A <- 27; m_B <- 3.9; s2_B <- 2.8^2; n_B <- 20
 print(eval(term))
 ```
 
+## Context-dependent rendering
+
+Consider an educational scenario in which we want to highlight a certain
+element of a term, for example, that a student has forgotten to subtract the
+null hypothesis in a \(t\)-ratio:
+
+```{r, results='asis'}
+t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
+mathout(t, flags=list(error='highlight'))
+mathout(t, flags=list(error='fix'))
+```
+
+The R function `omit_right(a + b)` uses non-standard evaluation
+techniques [e.g., @Wickham2019] to return only the left part an operation,
+and cancels the right part. This may not always be desired, for example, when
+illustrating how to fix the mistake.
+
+For this purpose, the functions `mathml()` or `mathjax()` have an optional
+argument `flags` which is a list with named elements. In this example, we use
+this argument to tell \pkg{mathml} how to render such erroneous
+expressions using the flag `error` which can be asis, highlight, fix, or ignore.
+For more examples, see Table \@ref(tab:mistakes).
+
+```{r mistakes, echo=FALSE}
+op1 <- list(
+  "omit_left(a\\ +\\ b)"=quote(omit_left(a + b)),
+  "omit_right(a\\ +\\ b)"=quote(omit_right(a + b)),
+  "list(quote(a),\\ quote(omit(b)))"=list(quote(a), quote(omit(b))),
+  "add_left(a\\ +\\ b)"=quote(add_left(a + b)),
+  "add_right(a\\ +\\ b)"=quote(add_right(a + b)),
+  "list(quote(a),\\ quote(add(b)))"=list(quote(a), quote(add(b))),
+  "instead(a,\\ b)\\ +\\ c"=quote(instead(a, b) + c))
+
+asis <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="asis"))
+high <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="highlight"))
+fix  <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="fix"))
+igno <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="ignore"))
+
+op1 <- names(op1)
+if(knitr::is_latex_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_html)
+
+t <- cbind(Operation=op1, 
+  "error\\ =\\ asis"=asis, highlight=high, fix=fix, ignore=igno)
+knitr::kable(t, caption="Highlighting elements of a term",
+  row.names=FALSE, escape=FALSE)
+```
+
 ## Customizing the package
 
 In typical R\ functions, variable names are typically longer than just single
@@ -793,115 +843,6 @@ indicating some lack of fit. Given the large trial numbers in the original
 study, some lack of fit is expected. For more detail, especially on fitting the
 observed standard deviations, the reader is referred to the original
 paper [@schwarz1994].
-
-
-## Errors
-
-An additional feature that this package offers is related to its application in educational scenarios. The functions here reported are intended to identify and highlight possible errors that students make, as well as provide the correct answer for the task.
-
-In this first example the function highlights that the student forgot to add the left-hand side of the expression and it does that by striking the missing part. In this case the letter A and the operator `+`.
-Similarly the function `omit_right` does the same for the omissions in the right-hand side of the expression. Finally the function `omit()` can be used, for instance, to highlight the omission in the elements of a list.
-
-```{r, results="asis"}
-t <- quote(omit_left(a + b))
-mathout(t)
-```
-
-```{r, results="asis"}
-t <- quote(omit_right(a + b))
-mathout(t)
-```
-
-```{r, results="asis"}
-t <- list(quote(a), quote(b), quote(omit(c)))
-mathout(t)
-```
-
-```{r omit, echo=FALSE}
-op <- list(left=quote(omit_left(a + b)), right=quote(omit_right(a + b)), list=quote(omit(c)))
-m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
-
-op <- as.character(op)
-if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
-
-t <- cbind(Operator=op, Output=m)
-knitr::kable(t, caption="Omit", row.names=FALSE, escape=FALSE)
-```
-
-The functions `add_left()`, `add_right()`, `add()` reported below follow the same way of reasoning, but they account for the mistakes made in adding incorrect elements in the expression. They highlight the redundant element placing it in a box. 
-
-```{r, results="asis"}
-t <- quote(add_left(a + b))
-mathout(t)
-```
-
-```{r, results="asis"}
-t <- quote(add_right(a + b))
-mathout(t)
-```
-
-```{r, results="asis"}
-t <- list(quote(a), quote(b), quote(add(c)), quote(d))
-mathout(t)
-```
-
-```{r add, echo=FALSE}
-op <- list(left=quote(add_left(a + b)), right=quote(add_right(a + b)))
-m <- lapply(op, FUN=mathout, flags=list(cat=FALSE))
-
-op <- as.character(op)
-if(knitr::is_latex_output())
-  op <- sapply(op, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op <- sapply(op, FUN=knitr:::escape_html)
-t <- cbind(Operator=op, Output=m)
-
-knitr::kable(t, caption="Add", row.names=FALSE, escape=FALSE)
-```
-
-Finally the function `instead( , )` place a curly bracket under the incorrect element  and provides its correct version under the curly bracket. In order to provide the correction with this function one must fill it with its wrong and correct terms in this order: `instead(wrong, correct)`. An example of its use its provided below.
-
-```{r, results="asis"}
-t <- quote(instead(a, b) + c)
-mathout(t)
-```
-
-It is also possible to use flags for context-dependent rendering. The `highlight` flag is the default one. It shows where the error is and what is its solution. The `ignore` flag allows the program to ignore the fact that there is an error and print the expression as if it were correct. The third flag, `fix`, tells you what is the term that you are supposed to fix without giving the solution. Finally, the last flag `asis` returns the incorrect expression as the student wrote it, without providing any solutions or corrections.  Below is provided the code with its comment and an example of use.
-
-Let us consider for example a student that instead of writing `b + c` wrote `a+c`. 
-
-With the `asis` flag we report the incorrect expression provided by the student: 
-
-```{r, results="asis"}
-# It prints the incorrect version
-t <- quote(instead(a, b) + c)
-mathout(t, flags=quote(error(asis)))
-```
-
-Then, we may want to underline the incorrect term and provide the correct solution. 
-
-```{r, results="asis"}
-# It highlights what has been mistakenly inserted
-mathout(t, flags=quote(error(highlight))) # default
-```
-
-Alternatively, we can put the correct solution in a box to let the student focus on its correction.
-
-```{r, results="asis"}
-# It highlights what has been corrected
-mathout(t, flags=quote(error(fix)))
-```
-
-Finally, we can simply provide the correct solution to the problem wit the flag `ignore`. 
-
-```{r, results="asis"}
-# It prints the correct version
-mathout(t, flags=quote(error(ignore)))
-```
-
 
 # Conclusions
 

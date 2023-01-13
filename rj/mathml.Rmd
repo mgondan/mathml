@@ -591,6 +591,56 @@ m_A <- 1.5; s2_A <- 2.4^2; n_A <- 27; m_B <- 3.9; s2_B <- 2.8^2; n_B <- 20
 print(eval(term))
 ```
 
+## Context-dependent rendering
+
+Consider an educational scenario in which we want to highlight a certain
+element of a term, for example, that a student has forgotten to subtract the
+null hypothesis in a \(t\)-ratio:
+
+```{r, results='asis'}
+t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
+mathout(t, flags=list(error='highlight'))
+mathout(t, flags=list(error='fix'))
+```
+
+The R function `omit_right(a + b)` uses non-standard evaluation
+techniques [e.g., @Wickham2019] to return only the left part an operation,
+and cancels the right part. This may not always be desired, for example, when
+illustrating how to fix the mistake.
+
+For this purpose, the functions `mathml()` or `mathjax()` have an optional
+argument `flags` which is a list with named elements. In this example, we use
+this argument to tell \pkg{mathml} how to render such erroneous
+expressions using the flag `error` which can be asis, highlight, fix, or ignore.
+For more examples, see Table \@ref(tab:mistakes).
+
+```{r mistakes, echo=FALSE}
+op1 <- list(
+  "omit_left(a\\ +\\ b)"=quote(omit_left(a + b)),
+  "omit_right(a\\ +\\ b)"=quote(omit_right(a + b)),
+  "list(quote(a),\\ quote(omit(b)))"=list(quote(a), quote(omit(b))),
+  "add_left(a\\ +\\ b)"=quote(add_left(a + b)),
+  "add_right(a\\ +\\ b)"=quote(add_right(a + b)),
+  "list(quote(a),\\ quote(add(b)))"=list(quote(a), quote(add(b))),
+  "instead(a,\\ b)\\ +\\ c"=quote(instead(a, b) + c))
+
+asis <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="asis"))
+high <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="highlight"))
+fix  <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="fix"))
+igno <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="ignore"))
+
+op1 <- names(op1)
+if(knitr::is_latex_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_latex)
+if(knitr::is_html_output())
+  op1 <- sapply(op1, FUN=knitr:::escape_html)
+
+t <- cbind(Operation=op1, 
+  "error\\ =\\ asis"=asis, highlight=high, fix=fix, ignore=igno)
+knitr::kable(t, caption="Highlighting elements of a term",
+  row.names=FALSE, escape=FALSE)
+```
+
 ## Customizing the package
 
 In typical R\ functions, variable names are typically longer than just single

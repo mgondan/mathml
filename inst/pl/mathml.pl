@@ -2163,140 +2163,129 @@ type(underbrace(A, _), Type, Flags)
 %
 % Mistakes
 %
+option_(NameOption, Flags) :-
+    option(NameOption, Flags).
+
+option_(NameOption, Flags) :-
+    compound_name_arguments(NameOption, Name, [Option]),
+    atom_string(Option, String),
+    member(Name-String, Flags).
+
 math(omit_left(Expr), M, Flags),
-    option(error(ignore), Flags, highlight)
+    option_(error(ignore), Flags)
  => M = Expr.
 
 math(omit_left(Expr), M, Flags),
-    option(error(asis), Flags, highlight),
+    option_(error(asis), Flags),
     Expr =.. [_Op, _L, R]
  => M = R.
 
 math(omit_left(Expr), M, Flags),
-    option(error(fix), Flags, highlight),
+    option_(error(fix), Flags),
     Expr =.. [Op, L, R]
  => M = list(space, [box(list(space, [L, op(Op)])), R]).
 
-math(omit_left(Expr), M, Flags),
-    option(error(highlight), Flags, highlight),
+math(omit_left(Expr), M, _Flags), % default
     Expr =.. [Op, L, R]
  => M = list(space, [cancel(list(space, [L, op(Op)])), R]).
 
 math(omit_right(Expr), M, Flags),
-    option(error(ignore), Flags, highlight)
+    option_(error(ignore), Flags)
  => M = Expr.
 
 math(omit_right(Expr), M, Flags),
-    option(error(asis), Flags, highlight),
+    option_(error(asis), Flags),
     Expr =.. [_Op, L, _R]
  => M = L.
 
 math(omit_right(Expr), M, Flags),
-    option(error(fix), Flags, highlight),
+    option_(error(fix), Flags),
     Expr =.. [Op, L, R]
  => M = list(space, [L, box(list(space, [op(Op), R]))]).
 
-math(omit_right(Expr), M, Flags),
-    option(error(highlight), Flags, highlight),
+math(omit_right(Expr), M, _Flags),
     Expr =.. [Op, L, R]
  => M = list(space, [L, cancel(list(space, [op(Op), R]))]).
-
-math(omit(Expr), M, Flags),
-    option(error(ignore), Flags, highlight)
- => M = Expr.
-
-math(omit(Expr), M, Flags),
-    option(error(fix), Flags, highlight)
- => M = box(Expr).
-
-math(omit(Expr), M, Flags),
-    option(error(highlight), Flags, highlight)
- => M = cancel(Expr).
-
-math(add_left(Expr), M, Flags),
-    option(error(ignore), Flags, highlight),
-    Expr =.. [_Op, _L, R]
- => M = R.
-
-math(add_left(Expr), M, Flags),
-    option(error(asis), Flags, highlight)
- => M = Expr.
-
-math(add_left(Expr), M, Flags),
-    option(error(fix), Flags, highlight),
-    Expr =.. [Op, L, R]
- => M = list(space, [cancel(list(space, [L, op(Op)])), R]).
-
-math(add_left(Expr), M, Flags),
-    option(error(highlight), Flags, highlight),
-    Expr =.. [Op, L, R]
- => M = list(space, [box(list(space, [L, op(Op)])), R]).
-
-math(add_right(Expr), M, Flags),
-    option(error(ignore), Flags, highlight),
-    Expr =.. [_Op, L, _R]
- => M = L.
-
-math(add_right(Expr), M, Flags),
-    option(error(asis), Flags, highlight)
- => M = Expr.
-
-math(add_right(Expr), M, Flags),
-    option(error(fix), Flags, highlight),
-    Expr =.. [Op, L, R]
- => M = list(space, [L, cancel(list(space, [op(Op), R]))]).
-
-math(add_right(Expr), M, Flags),
-    option(error(highlight), Flags, highlight),
-    Expr =.. [Op, L, R]
- => M = list(space, [L, box(list(space, [op(Op), R]))]).
-
-math(omit(Expr), M, Flags),
-    option(error(ignore), Flags, highlight)
- => M = Expr.
 
 math(omit(_Expr), M, Flags),
-    option(error(asis), Flags, highlight)
- => M = "". % suppress at the next level, in the list
+    option_(error(asis), Flags)
+ => M = "".
 
 math(omit(Expr), M, Flags),
-    option(error(fix), Flags, highlight)
+    option_(error(ignore), Flags)
+ => M = Expr.
+
+math(omit(Expr), M, Flags),
+    option_(error(fix), Flags)
  => M = box(Expr).
 
-math(omit(Expr), M, Flags),
-    option(error(highlight), Flags, highlight)
+math(omit(Expr), M, _Flags)
  => M = cancel(Expr).
 
+math(add_left(Expr), M, Flags),
+    option_(error(ignore), Flags),
+    Expr =.. [_Op, _L, R]
+ => M = R.
+
+math(add_left(Expr), M, Flags),
+    option_(error(asis), Flags)
+ => M = Expr.
+
+math(add_left(Expr), M, Flags),
+    option_(error(fix), Flags),
+    Expr =.. [Op, L, R]
+ => M = list(space, [cancel(list(space, [L, op(Op)])), R]).
+
+math(add_left(Expr), M, _Flags),
+    Expr =.. [Op, L, R]
+ => M = list(space, [box(list(space, [L, op(Op)])), R]).
+
+math(add_right(Expr), M, Flags),
+    option_(error(ignore), Flags),
+    Expr =.. [_Op, L, _R]
+ => M = L.
+
+math(add_right(Expr), M, Flags),
+    option_(error(asis), Flags)
+ => M = Expr.
+
+math(add_right(Expr), M, Flags),
+    option_(error(fix), Flags),
+    Expr =.. [Op, L, R]
+ => M = list(space, [L, cancel(list(space, [op(Op), R]))]).
+
+math(add_right(Expr), M, _Flags),
+    Expr =.. [Op, L, R]
+ => M = list(space, [L, box(list(space, [op(Op), R]))]).
+
 math(add(_Expr), M, Flags),
-    option(error(ignore), Flags, highlight)
+    option_(error(ignore), Flags)
  => M = "". % suppress at the next level, in the list
 
 math(add(Expr), M, Flags),
-    option(error(asis), Flags, highlight)
+    option_(error(asis), Flags)
  => M = Expr.
 
 math(add(Expr), M, Flags),
-    option(error(fix), Flags, highlight)
+    option_(error(fix), Flags)
  => M = cancel(Expr).
 
-math(add(Expr), M, Flags),
-    option(error(highlight), Flags, highlight)
+math(add(Expr), M, _Flags)
  => M = box(Expr).
 
 math(instead(_Wrong, Correct), M, Flags),
-    option(error(ignore), Flags, highlight)
+    option_(error(ignore), Flags)
  => M = Correct.
 
 math(instead(Wrong, _Correct), M, Flags),
-    option(error(asis), Flags, highlight)
+    option_(error(asis), Flags)
  => M = Wrong.
 
 math(instead(_Wrong, Correct), M, Flags),
-    option(error(fix), Flags, highlight)
+    option_(error(fix), Flags)
  => M = box(Correct).
 
-math(instead(Wrong, Correct), M, Flags),
-    option(error(highlight), Flags, highlight)
+math(instead(Wrong, Correct), M, _Flags)
  => M = underbrace(Wrong, list(space, ["instead of", Correct])).
 
 %
