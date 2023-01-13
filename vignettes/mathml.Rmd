@@ -27,6 +27,7 @@ Vignette: >
 # Greek letters in MathJax
 # Typeface
 # Stylechanges
+# linear models: DepVar ~ X0 + X1
 # hat, overline, cancel, box, invisible, phantom
 
 library(mathml)
@@ -68,9 +69,9 @@ and in on an interactive web page.
 The R\ extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
 Since recently [@R, version 4.2], R\'s manual pages include support for
-mathematical expressions [@Sarkar2022], which already is a big improvement.
-However, rules for the mapping of built-in language elements to their
-mathematical representation are still lacking. So far, R\ expressions such
+mathematical expressions [@Sarkar2022;@Viechtbauer2022], which already is a big
+improvement. However, rules for the mapping of built-in language elements to
+their mathematical representation are still lacking. So far, R\ expressions such
 as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
 such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit Latex commands, that
 is, `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for minimalistic use
