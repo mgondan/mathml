@@ -46,7 +46,8 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
 # Prolog representation of not equal etc. (left: R, right: Prolog)
 .mathml_operators = c(
   "%%" = "mod",
-  "%/%" = "div")
+  "%/%" = "div",
+  "%*%" = "times")
 
 #' Map R operators to their respective Prolog counterparts
 #'
