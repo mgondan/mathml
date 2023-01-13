@@ -32,7 +32,7 @@
 mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   env=globalenv())
 {
-  flags <- c(attributes(term), flags, list(cat=FALSE))
+  flags <- c(flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathml", term, expression(X), flags),
     options=list(preproc=list(rolog::preproc, mathml_preproc)),
     env=env)
@@ -112,7 +112,7 @@ mathml_preproc <- function(query=quote(5 %% 2))
 mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   env=globalenv())
 {
-  flags <- c(attributes(term), flags, list(cat=FALSE))
+  flags <- c(flags, list(cat=FALSE))
   t <- rolog::once(call("r2mathjax", term, expression(X), flags),
     options=list(preproc=list(rolog::preproc, mathml_preproc)),
     env=env)
