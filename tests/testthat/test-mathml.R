@@ -333,7 +333,7 @@ test_that("xor",
 test_that("expnumgreeki",
 {
   q <- mathml(quote(exp(2L*pi*i)))
-  expect_equal(q, "<math><mrow><mi>exp</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&sdot;</mo><mi>i</mi></mrow><mo>)</mo></mrow></mrow></math>")
+  expect_equal(q,  "<math><mrow><mi>exp</mi><mo>&af;</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&#x2062;</mo><mi>i</mi></mrow></mrow></math>")
 })
 
 test_that("expm1numgreeki",
@@ -469,19 +469,19 @@ test_that("x",
 test_that("expr",
 {
   q <- mathml(quote(a*b + c/d - e %*% f))
-  expect_equal(q,"<math><mrow><mrow><mrow><mi>a</mi><mo>&#x2062;</mo><mi>b</mi></mrow><mo>+</mo><mrow><mi>c</mi><mo>/</mo><mi>d</mi></mrow></mrow><mo>-</mo><mrow><mi>times</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>e</mi><mo>,</mo><mi>f</mi></mrow><mo>)</mo></mrow></mrow></mrow></math>")
+  expect_equal(q,"<math><mrow><mrow><mrow><mi>a</mi><mo>&#x2062;</mo><mi>b</mi></mrow><mo>+</mo><mrow><mi>c</mi><mo>/</mo><mi>d</mi></mrow></mrow><mo>-</mo><mrow><mi>e</mi><mo>&times;</mo><mi>f</mi></mrow></mrow></math>")
 })
 
 test_that("crossprod",
 {
   q <- mathml(quote(crossprod(A, B)))
-  expect_equal(q,"<math><mrow><mi>times</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><msup><mi>A</mi><mtext>T</mtext></msup><mo>,</mo><mi>B</mi></mrow><mo>)</mo></mrow></mrow></math>")
+  expect_equal(q,"<math><mrow><msup><mi>A</mi><mtext>T</mtext></msup><mo>&times;</mo><mi>B</mi></mrow></math>")
 })
 
 test_that("tcrossprod",
 {
   q <- mathml(quote(tcrossprod(A, B)))
-  expect_equal(q,  "<math><mrow><mi>times</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>A</mi><mo>,</mo><msup><mi>B</mi><mtext>T</mtext></msup></mrow><mo>)</mo></mrow></mrow></math>")
+  expect_equal(q,  "<math><mrow><mi>A</mi><mo>&times;</mo><msup><mi>B</mi><mtext>T</mtext></msup></mrow></math>")
 })
 
 test_that("tilde",
@@ -625,7 +625,7 @@ test_that("A/B",
 test_that("A mod B",
 {
   q <- mathml(quote(A %% B))
-  expect_equal(q, "<math><mrow><mo>&lceil;</mo><mrow><mi>A</mi><mo>/</mo><mi>B</mi></mrow><mo>&rceil;</mo></mrow></math>")
+  expect_equal(q, "<math><mrow><mi>mod</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("A&B",
@@ -864,3 +864,4 @@ test_that("Tdiamond",
   q <- mathml(quote(T^diamond))
   expect_equal(q, "<math><msup><mi>T</mi><mi>&diamond;</mi></msup></math>")
 })
+
