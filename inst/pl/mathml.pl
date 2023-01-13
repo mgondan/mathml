@@ -1141,10 +1141,10 @@ ml(op('%+-%'), M, _Flags)
 jax(op('%+-%'), M, _Flags)
  => M = "\\pm".
 
-ml(op(times), M, _Flags)
+ml(op('%*%'), M, _Flags)
  => M = mo(&(times)).
 
-jax(op(times), M, _Flags)
+jax(op('%*%'), M, _Flags)
  => M = "\\times".
 
 ml(op(sum), M, _Flags)
@@ -1547,8 +1547,8 @@ math(A * B, X, Flags),
 math(A * B, M)
  => M = '%.%'(A, B).
 
-math('%*%'(A, B), M)
- => M = times(A, B).
+math(times(A, B), M)
+  => M = '%*%'(A, B).
 
 math(crossprod(A, B), M)
  => M = '%*%'(t(A), B).
@@ -1579,9 +1579,9 @@ math(nodot(A, B), X)
  => current_op(Prec, yfx, *),
     X = yfy(Prec, '#x2062', A, B).
 
-math(times(A, B), X)
+math('%*%'(A, B), X)
  => current_op(Prec, yfx, *),
-    X = yfy(Prec, times, A, B).
+    X = yfy(Prec, '%*%', A, B).
 
 math(A / B, X)
  => current_op(Prec, yfx, /),
