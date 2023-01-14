@@ -430,6 +430,8 @@ knitr::kable(t, caption="R functions from base and stats",
 
 ## Custom functions
 
+**this part is incomprehensible for the naive reader**
+
 For self-written functions, matters are a bit more complicated. The name of a
 self-written function is not transparent in R, since only the function body is
 represented, as illustrated by the redefinition of `sign` below. The function is
@@ -448,7 +450,7 @@ sgn <- function(x)
 term <- quote(mysign <- sgn(x))
 mathout(term)
 
-hook(quote(mysign), quote(sg(x)))
+hook(mysign, sg(x))
 term <- call("<-", quote(mysign), sgn)
 mathout(term)
 ```
@@ -552,10 +554,10 @@ evaluated, `abbr` being rendered, plus a comment of the
 form "with `expr` denoting `info`". The hooks are described in the next section.
 
 ```{r, results='asis'}
-hook(quote(m_A), quote(mean(X)["A"])); hook(quote(s2_A), quote(s["A"]^2L));
-hook(quote(n_A), quote(n["A"]))
-hook(quote(m_B), quote(mean(X)["B"])); hook(quote(s2_B), quote(s["B"]^2L))
-hook(quote(n_B), quote(n["B"])); hook(quote(s2_p), quote(s["pool"]^2L))
+hook(m_A, mean(X)["A"]) ; hook(s2_A, s["A"]^2L) ;
+hook(n_A, n["A"])
+hook(m_B, mean(X)["B"]) ; hook(s2_B, s["B"]^2L)
+hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
 
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
@@ -630,17 +632,17 @@ letters, which may yield unsatisfactory results in the mathematical output.
 term <- quote(pbinom(successes, Ntotal, prob))
 mathout(term)
 
-hook(quote(successes), quote(k))
-hook(quote(Ntotal), quote(N))
-hook(quote(prob), quote(pi))
+hook(successes, k)
+hook(Ntotal, N)
+hook(prob, pi)
 mathout(term)
 ```
 
 To improve the situation, \pkg{mathml} provides a simple hook that can be used
 to replace elements (e.g., verbose variable names) of the code by concise
 mathematical symbols, as illustrated in the example. Care should be taken to
-avoid recursive hooks such as `hook(quote(s), quote(s["A"]))` that endlessly
-replace the \(s\) from \(s_{\mathrm{A}}\) as
+avoid recursive hooks such as `hook(s, s["A"])` that endlessly replace
+the \(s\) from \(s_{\mathrm{A}}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
 more stuff: math/2, ml/3, jax/3
@@ -657,16 +659,6 @@ stimuli, the model assumes a superposition of channel-specific diffusion
 processes that eventually reach an absorbing barrier to elicit the response. For
 a detailed description the reader may refer to the original article.
 
-```{r, echo=FALSE}
-hook(quote(mu_A), quote(mu["A"]))
-hook(quote(mu_B), quote(mu["B"]))
-hook(quote(sigma_A), quote(sigma["A"]))
-hook(quote(sigma_B), quote(sigma["B"]))
-hook(quote(mu_M), quote(mu["M"]))
-hook(quote(zn), quote(z[tau]))
-hook(quote(M), quote(overline(X)))
-```
-
 Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (AB, redundant stimuli), with the redundant stimuli
 being presented either simultaneously or with onset asynchrony \(\tau\). The
@@ -681,12 +673,11 @@ for the first time. In single-target trials, the first passages at \(c\) are
 expected at
 
 ```{r, results='asis'}
-hook(call("ED_single", expression(c), expression(mu)), 
-     call("E", call(";", quote(D), call(",", expression(c), expression(mu)))))
-
 ED_single <- function(c, mu)
   dfrac(c, mu)
 
+# display as E(D; mu), c is a scaling parameter
+hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
 mathout(call("=", quote(ED_single(c, mu)), ED_single))
 ```
 
@@ -698,6 +689,13 @@ variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
 first-passage time, we have
 
 ```{r, results='asis'}
+hook(mu_A, mu["A"])
+hook(mu_B, mu["B"])
+hook(sigma_A, sigma["A"])
+hook(sigma_B, sigma["B"])
+hook(mu_M, mu["M"])
+hook(M, overline(X))
+
 mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
@@ -705,10 +703,6 @@ For asynchronous stimuli, Schwarz [-@schwarz1994; Eq. 10] derived the expected
 first-passage time as a function of the stimulus onset asyncrony \(\tau\),
 
 ```{r, results="asis"}
-hook(call("ED_async", expression(tau), expression(c), expression(mu_A), expression(sigma_A), expression(mu_B)), 
-     call("E", call(";", call("[", quote(D), expression(tau)), 
-                    call(",", expression(c), expression(mu_A), expression(sigma_A), expression(mu_B)))))
-
 ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
@@ -716,6 +710,7 @@ ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
+hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
 mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
@@ -723,10 +718,6 @@ For negative onset asynchrony (i.e., B before A), the parameters need to be
 switched.
 
 ```{r, results='asis'}
-hook(call("ED", expression(tau), expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B)), 
-     call("E", call(";", call("[", quote(D), expression(tau)), 
-                    call(",", expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B)))))
-
 ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 {
   if(tau == Inf) return(ED_single(c, mu_A)) ;
@@ -736,6 +727,7 @@ ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
   if(tau < 0L) return(ED_async(abs(tau), c, mu_B, sigma_B, mu_A))
 }
 
+hook(ED(.Tau, .C, .MA, .SA, .MB, .SB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB, .SB))))
 mathout(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
 ```
 
@@ -795,13 +787,11 @@ a \(\chi^2(8~\mathrm{df})\)-distribution.
 ```{r, results='asis'}
 zv <- Vectorize(z, vectorize.args = c('tau', 'm', 's', 'n'))
 
-hook(call("zv", expression(m), expression(s), expression(n), expression(tau), 
-        expression(c), expression(mu_A), expression(sigma_A), expression(mu_B), expression(sigma_B), expression(mu_M)), quote(z[tau]))
-
 gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
+hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .MM), z(.Tau))
 mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 

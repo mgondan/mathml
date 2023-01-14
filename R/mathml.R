@@ -285,17 +285,38 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' @param display
 #' an R call or symbol/number. This is shown instead of _term_.
 #'
+#' @param quote (default is TRUE)
+#' indicates that _term_ and _display_ should be quoted.
+#'
+#' @param as.rolog (default is TRUE)
+#' indicates that simplified quasi-quotoation is to be used.
+#'
 #' @return
 #' TRUE on success
 #'
 #' @md
 #'
 #' @examples
-#' hook(term=quote(t0), display=quote(subscript(t, 0)))
+#' hook(t0, subscript(t, 0))
 #' mathml(quote(t0))
 #'
-hook <- function(term=quote(t0), display=quote(subscript(t, 0)))
+#' hook(term=quote(t0), display=quote(subscript(t, 0)), quote=FALSE)
+#' mathml(quote(t0))
+#'
+hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
 {
+  if(quote)
+  {
+    term <- substitute(term)
+    display <- substitute(display)
+  }
+
+  if(as.rolog)
+  {
+    term <- rolog::as.rolog(term)
+    display <- rolog::as.rolog(display)
+  }
+
   r <- rolog::once(call("assert", call("math_hook", term, display)))
   if(isFALSE(r))
     return(FALSE)
