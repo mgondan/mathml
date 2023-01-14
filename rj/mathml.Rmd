@@ -941,5 +941,3 @@ _I removed the examples since they were already present._
 mathout(quote(T^diamond))
 mathout(quote(sinpi(alpha)))
 ```
-
-# References
