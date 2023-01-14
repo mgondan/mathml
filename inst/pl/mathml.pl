@@ -556,7 +556,7 @@ ml(abs(R), M, Flags)
 
 jax(abs(R), M, Flags)
  => jax(R, X, Flags),
-    format(string(M), "\\left|~w\\right|", [X]).
+    format(string(M), "{\\left\\vert{~w}\\right\\vert}", [X]).
 
 paren(abs(_), P, _Flags)
  => P = 0.
