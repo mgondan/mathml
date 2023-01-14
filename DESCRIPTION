@@ -1,7 +1,7 @@
 Package: mathml
 Type: Package
 Title: Translate R Expressions to 'MathML' and 'LaTeX'/'MathJax'
-Version: 0.4
+Version: 0.5
 Date: 2023-01-12
 Author: Matthias Gondan
 Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
