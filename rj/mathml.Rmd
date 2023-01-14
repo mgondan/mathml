@@ -12,8 +12,7 @@ abstract: >
   description or symbolic representation, which is another step towards
   reproducible science. User-defined hooks allow to extend the package by
   mapping specific variables or functions to new MathML and LaTeX entities. A
-  few working examples illustrate the use of the package in a scientific report
-  and in on an interactive web page.
+  few working examples illustrate the use of the package in a scientific report.
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -110,17 +109,13 @@ The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
 and reduces mistakes, as will be illustrated below.
 
-The paper is organized as follows. Section\ 2 presents the technical background
-of the package, including the two main classes of Prolog rules for translating
-R\ objects to mathematical expressions. Section\ 3 illustrates the main features
-of the \pkg{mathml} package, potential issues and workarounds using examples
-from the day-to-day perspective of a user. Sections\ 4 and\ 5 present two case
-studies for the use of the package in a scientific report and 
-a **ShinyApp web page**. Section\ 6 concludes with a discussion and ideas for
-further development. A complete list of the R\ elements covered by the package
-is found in the Appendix.
-
-*shinyapp missing so far
+The vignette is organized as follows. Section\ 2 presents the technical
+background of the package, including the two main classes of Prolog rules for
+translating R\ objects to mathematical expressions. Section\ 3 illustrates the
+main features of the \pkg{mathml} package, potential issues and workarounds
+using examples from the day-to-day perspective of a user. Section\ 4 present a
+case study for the use of the package in a scientific report. Section\ 5
+concludes with a discussion and ideas for further development.
 
 # Background
 
@@ -651,19 +646,23 @@ term <- quote(pbinom(successes, Ntotal, prob))
 mathout(term)
 
 hook(successes, k)
-hook(Ntotal, N)
+hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
 mathout(term)
 ```
 
 To improve the situation, \pkg{mathml} provides a simple hook that can be used
 to replace elements (e.g., verbose variable names) of the code by concise
-mathematical symbols, as illustrated in the example. Care should be taken to
+mathematical symbols, as illustrated in the example. To simplify notation,
+the `quote` flag of `hook()` defaults to TRUE, and `hook()` uses non-standard
+evaluation to unpack its arguments. If quote is FALSE, as shown above, the user
+has to provide the quoted expressions. Care should be taken to
 avoid recursive hooks such as `hook(s, s["A"])` that endlessly replace
 the \(s\) from \(s_{\mathrm{A}}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
-more stuff: math/2, ml/3, jax/3
+Further customizations require the assertion of custom Prolog rules `math/2`,
+`ml/3`, `jax/3`, as shown in the introduction.
 
 # A case study {#case-study}
 
@@ -760,6 +759,8 @@ expected response time amounts to
 ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
   ED(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
 
+hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM), 
+     E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
 mathout(call("=", quote(E(T[tau])), ET))
 ```
 
@@ -823,7 +824,7 @@ minus 5 free parameters
 (\(c\) is a redundant scaling parameter).
 
 ```{r, results="asis", echo=FALSE}
-lsq = function(tau, m, s, n)
+lsq <- function(tau, m, s, n)
 {
   invisible(theta <- c(mu_A=0.53, sigma_A=4.3, mu_B=1.34, sigma_B=11.7, mu_M=160))
   optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
@@ -838,9 +839,9 @@ Table \@ref(tab:params) below.
 ```{r params, echo=FALSE}
 fit <- lsq(tau, m, s, n)
 theta <- fit$par
-se = sqrt(diag(solve(fit$hessian)))
-cilo = qnorm(0.025, theta, se)
-ciup = qnorm(0.975, theta, se)
+se <- sqrt(diag(solve(fit$hessian)))
+cilo <- qnorm(0.025, theta, se)
+ciup <- qnorm(0.975, theta, se)
 
 ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout, flags=list(cat=FALSE))
 ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
@@ -857,23 +858,18 @@ study, some lack of fit is expected. For more detail, especially on fitting the
 observed standard deviations, the reader is referred to the original
 paper [@schwarz1994].
 
-
 # Conclusions
 
-This package expands the possibilities of R\ by allowing calculations and graphical rendition at the same time. This makes it easier for the user to notice writing errors and correct them smoothly. Building on current features of R\ and existing packages for displaying formulas in R\ (e.g. Murrell and Ihaka [-@murrell2000], Allaire et al. [-@allaire2018]), the \pkg{mathml} package bridges the gap between computational needs, presentation of results, and their reproducibility. To do so, it uses the Prolog's grammar rules and translates the R\ expressions to MathML. Then, two possible solutions for typesetting are available to export R\ Markdown documents in different formats or ShinyApp webpages: MathML and MathJax. A further, not-yet-mentioned, use of \pkg{mathml} is related to presentations  made using R Markdown. By adopting \pkg{mathml} researchers or teachers can use the \R markdown to both conduct analysis and show results, smoothing the process and uniforming the graphical output. 
-
-The article and Appendix show examples of how the package can be used and what operations are currently possible. Additionally, \pkg{mathml} allows for user's custom hooks to provide a better definition of the needed functions.
-
-In its current version, however, \pkg{mathml} has some limitations. For example, it is still not possible to use the functions of \pkg{mathml} for writing intratextual formulas, while it is still more convenient to adopt the usual LateX notation. However, we do not consider this to be a serious limitation, since the most productive use of \pkg{mathml} still comes from more complicated calculations. Nevertheless, in the future versions of this package we will address this issue, to broaden its spectrum of possible applications. 
-
-Also: no linebreaks in long equations. Mostly because it is not properly
-supported by MathML renderers, and also in Latex, package "breqn" (insert
-reference) is mostly a proof of concept. No support for `\begin{align*}` with
-manual linebreaks etc.
-
-\pkg{mathml} is available for R\ version (…) and later, and can be easily installed using the usual `install.packages("mathml")`. The source code of the package is found at (…) including installation instructions for Unix, Windows and macOS.
-
-## Mistakes
+This package expands the possibilities of R\ by allowing calculations and
+graphical rendering of the same terms. Building on current features of R\ and
+existing packages for displaying formulas in
+R\ [@murrell2000;@allaire2018]), the \pkg{mathml} package bridges the gap
+between computational needs, presentation of results, and their reproducibility.
+Two possible modes for typesetting are available to export R\ Markdown documents
+in different formats or ShinyApp webpages: MathML and MathJax. A further, not-yet-mentioned, use of \pkg{mathml} is related to presentations made using
+RMarkdown. By adopting \pkg{mathml} researchers or teachers can use the
+RMarkdown to both conduct analysis and show results, smoothing the process and
+uniforming the graphical output.
 
 The case study presented above shows that \pkg{mathml} can help to improve
 data analyses and statistical reports from an aesthetical perspective, as well
@@ -916,9 +912,22 @@ causes of wrong results and errors that are hard to locate in programming code.
 This particular example shows that mathematical rendering can help to
 substantially reduce the amount of careless errors in programming.
 
-# Acknowledgments
- 
-## Appendix
+In its current version \pkg{mathml} has some limitations. For example, it is
+currently not possible to use the functions of \pkg{mathml} for writing
+intratextual formulas; here, the user has to adopt the usual LateX notation.
+However, we do not consider this to be a serious limitation, since the most
+productive use of \pkg{mathml} still comes from more complicated calculations.
+
+Also: In long equations, we did not yet find a convenient way to insert
+linebreaks. This is mostly because it is not properly supported by MathML and
+LaTeX renderers. In its current stage, the LaTeX package \pkg{breqn} [@breqn]
+is mostly a proof of concept.
+
+\pkg{mathml} is available for R\ version (…) and later, and can be easily
+installed using the usual `install.packages("mathml")`. The source code of the
+package is found at https://github.com/mgondan/mathml.
+
+# Appendix
 
 Please check if the examples below
 
@@ -932,3 +941,5 @@ _I removed the examples since they were already present._
 mathout(quote(T^diamond))
 mathout(quote(sinpi(alpha)))
 ```
+
+# References
