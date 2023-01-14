@@ -785,13 +785,13 @@ but the parameters are adjusted to the data, it follows
 a \(\chi^2(8~\mathrm{df})\)-distribution.
 
 ```{r, results='asis'}
-zv <- Vectorize(z, vectorize.args = c('tau', 'm', 's', 'n'))
+zv <- Vectorize(z, vectorize.args = c('m', 's', 'n', 'tau'))
 
 gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
-hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .MM), z(.Tau))
+hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
 mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 
