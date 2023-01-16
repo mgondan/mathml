@@ -18,14 +18,20 @@ MathML string.}
 list of flags that control the translation}
 
 \item{env}{(default globalenv())
-The R environment in which r_eval is being executed (see vignette for
-details, "Ringing back to R").}
+The R environment in which r_eval is being executed.}
 }
 \value{
 A string with the MathML representation or \emph{term}.
 }
 \description{
 MathML output
+}
+\details{
+In some functions, the Prolog code may ring back R, for example, to
+find the names of function arguments. For example (see vignette), when
+rendering the call \code{integrate(g, lower=0L, upper=Inf)} as Int_0^Inf g(x) dx,
+Prolog needs to know that the function g is a function of x. The Prolog rule
+then searches for the formalArgs of g in the environment \emph{env}.
 }
 \examples{
 mathml(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))

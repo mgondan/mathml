@@ -16,10 +16,6 @@ Vignette: >
 ---
 
 ```{r setup, include=FALSE}
-# To do
-#
-# paste(x, y, z)--> z, y, z (Covered by quote ())
-
 # Spacing: operator for separating elements in expression. E.g.,
 ## x ~ y --> x  y ;
 ## x ~ ~ y --> x    y

@@ -27,6 +27,13 @@ A string with the MathJax representation or \emph{term}.
 \description{
 Mathjax output
 }
+\details{
+In some functions, the Prolog code may ring back R, for example, to
+find the names of function arguments. For example (see vignette), when
+rendering the call \code{integrate(g, lower=0L, upper=Inf)} as Int_0^Inf g(x) dx,
+Prolog needs to know that the function g is a function of x. The Prolog rule
+then searches for the formalArgs of g in the environment \emph{env}.
+}
 \examples{
 mathjax(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
 

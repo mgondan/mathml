@@ -8,6 +8,8 @@
 
 #' MathML output
 #'
+#' @md
+#' 
 #' @param term
 #' an R call or symbol/number. This function translates _term_ into a
 #' MathML string.
@@ -16,15 +18,18 @@
 #' list of flags that control the translation
 #'
 #' @param env (default globalenv())
-#' The R environment in which r_eval is being executed (see vignette for
-#' details, "Ringing back to R").
-#'
+#' The R environment in which r_eval is being executed.
+#' 
 #' @return
 #' A string with the MathML representation or _term_.
 #'
-#' @md
-#'
 #' @seealso [mathjax()]
+#'
+#' @details In some functions, the Prolog code may ring back R, for example, to
+#' find the names of function arguments. For example (see vignette), when
+#' rendering the call `integrate(g, lower=0L, upper=Inf)` as Int_0^Inf g(x) dx,
+#' Prolog needs to know that the function g is a function of x. The Prolog rule
+#' then searches for the formalArgs of g in the environment _env_.
 #'
 #' @examples
 #' mathml(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
@@ -103,6 +108,12 @@ mathml_preproc <- function(query=quote(5 %% 2))
 #' A string with the MathJax representation or _term_.
 #'
 #' @md
+#'
+#' @details In some functions, the Prolog code may ring back R, for example, to
+#' find the names of function arguments. For example (see vignette), when
+#' rendering the call `integrate(g, lower=0L, upper=Inf)` as Int_0^Inf g(x) dx,
+#' Prolog needs to know that the function g is a function of x. The Prolog rule
+#' then searches for the formalArgs of g in the environment _env_.
 #'
 #' @seealso [mathml()]
 #'
