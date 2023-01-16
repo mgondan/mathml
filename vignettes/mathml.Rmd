@@ -18,16 +18,30 @@ Vignette: >
 ```{r setup, include=FALSE}
 # To do
 #
-# paste(x, y, z)
-# Spacing
-# Comma separated lists
-# Ellipsis
-# Radicals
-# Subsets
-# Greek letters in MathJax
-# Typeface
-# Stylechanges
+# paste(x, y, z)--> z, y, z (Covered by quote ())
+
+# Spacing: operator for separating elements in expression. E.g.,
+## x ~ y --> x  y ;
+## x ~ ~ y --> x    y
+
+# Ellipsis: ldots or cdots. E.g., 
+## x[1] + ... + x[n]
+
+# Radicals sqrt(x, y) --> y√x
+
+# Sets: some symbols in set relations are missing:
+## supset, supseteq, notsubset, subset, subseteq, notin
+
+# Phantom: command that produces a space in place of an argument (partially covered by omit() (?)). E.g.:
+## x + phantom(0) + y --> x +    + y
+## x + over(1, vphantom(0)) --> x + 1/  
+
+# Typeface: plain, bold, italic, bolditalic
+
+# Stylechanges: textstyle(x), scriptstyle(x) scriptscript(x)
+
 # linear models: DepVar ~ X0 + X1
+
 # hat, overline, cancel, box, invisible, phantom
 
 library(mathml)
