@@ -1,6 +1,6 @@
 ---
-title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
-date: "2022-12-09"
+title: "mathml: Translate R expressions to MathML and LaTeX"
+date: "2023-01-21"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
@@ -15,9 +15,8 @@ abstract: >
   few working examples illustrate the use of the package in a scientific report.
 draft: true
 author:  
-  # see ?rjournal_article for more information
   - name: Matthias Gondan
-    affiliation: University of Innsbruck
+    affiliation: Universität Innsbruck
     address:
     - Department of Psychology
     - Innsbruck, Austria
@@ -28,7 +27,7 @@ author:
     url: https://www.uibk.ac.at/psychologie/mitarbeiter/alfarone/index.html.en
     email: Irene.Alfarone@uibk.ac.at
     orcid: 0000-0002-8409-8900
-    affiliation: University of Innsbruck
+    affiliation: Universität Innsbruck
     address:
     - Department of Psychology
     - Innsbruck, Austria
@@ -37,13 +36,12 @@ output:
   rjtools::rjournal_web_article:
     self_contained: yes
     toc: no
-bibliography: RJreferences.bib
+bibliography: bibliography.bib
 preamble:
-- \usepackage{longtable}
 - \usepackage{cancel}
 - \usepackage{amsmath}
 Vignette: >
-  %\VignetteIndexEntry{mathml}
+  %\VignetteIndexEntry{mathml: Translate R expressions to MathML and LaTeX}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
