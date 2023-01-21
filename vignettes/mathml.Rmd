@@ -1,5 +1,5 @@
 ---
-title: "mathml: Translate R expressions to MathML and LaTeX/MathJax"
+title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Department of Psychology, Universität Innsbruck, Austria)"
 date: "2023-01-21"
@@ -568,6 +568,14 @@ avoid recursive hooks such as `hook(s, s["A"])` that endlessly replace
 the \(s\) from \(s_{\mathrm{A}}\) as
 in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 
+The hooks can also be used for more complex elements such as R\ calls, with
+dotted symbols representing Prolog variables.
+
+```{r, results='asis'}
+hook(pbinom(.K, .N, .P), subsupscript(sum(dbinom(i, .N, .P)), i=0L, .K))
+mathout(term)
+```
+
 ## Abbreviations
 
 We consider the \(t\)-statistic for independent samples with equal variance. To
@@ -651,7 +659,7 @@ knitr::kable(t, caption="Table 3. Highlighting elements of a term",
 # 4. A case study
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
-Psychology using the features of package _mathml_. Schwarz presents a new
+psychology using the features of package _mathml_. Schwarz presents a new
 explanation of redundancy gains that occur when observers respond to stimuli of
 different sources, and the same information is presented on two or more
 channels. In Schwarz' model, decision-making builds on a process of noisy
@@ -665,12 +673,12 @@ alone or in combination (AB, redundant stimuli), with the redundant stimuli
 being presented either simultaneously or with onset asynchrony \(\tau\). The
 channel activation is described as a two-dimensional Wiener process with
 drifts \(\mu_i\), variances \(\sigma^2_i\), and initial
-conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The channels may be correlated
-with \(\rho_{\mathrm{AB}}\), but we assume \(\rho_{\mathrm{AB}} = 0\) for
-simplicity.
+conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The buildup of 
+channel-specific activation may be correlated with \(\rho_{\mathrm{AB}}\), but
+we assume \(\rho_{\mathrm{AB}} = 0\) for simplicity.
 
 A response is elicited when the process reaches an absorbing barrier \(c > 0\)
-for the first time. In single-target trials, the first passages at \(c\) are
+for the first time. In single-target trials, the first passages of \(c\) are
 expected at
 
 ```{r, results='asis'}
@@ -682,10 +690,11 @@ hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
 mathout(call("=", quote(ED_single(c, mu)), ED_single))
 ```
 
-In redundant stimuli, the activation of the channel-specific diffusion processes
-adds up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\), hence
-the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process with
-drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
+(One would typically use chunk option `echo=FALSE` to suppress the R code.)
+In redundant stimuli, the activations from the channel-specific diffusion
+processes add up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\),
+hence the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process
+with drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
 variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
 first-passage time, we have
 
@@ -715,16 +724,16 @@ hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
 mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
-For negative onset asynchrony (i.e., B before A), the parameters need to be
+For negative onset asynchrony (i.e., B before A), the parameters are simply
 switched.
 
 ```{r, results='asis'}
 ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 {
-  if(tau == Inf) return(ED_single(c, mu_A)) ;
-  if(tau == -Inf) return(ED_single(c, mu_B)) ;
-  if(tau == 0L) return(ED_single(c, mu_A + mu_B)) ;
-  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B)) ;
+  if(tau == Inf) return(ED_single(c, mu_A))
+  if(tau == -Inf) return(ED_single(c, mu_B))
+  if(tau == 0L) return(ED_single(c, mu_A + mu_B))
+  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B))
   if(tau < 0L) return(ED_async(abs(tau), c, mu_B, sigma_B, mu_A))
 }
 
@@ -741,7 +750,7 @@ expected response time amounts to
 ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
   ED(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
 
-hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM), 
+hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
      E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
 mathout(call("=", quote(E(T[tau])), ET))
 ```
@@ -755,7 +764,7 @@ observed mean response times and their standard deviations are given in
 Table 4 below.
 
 ```{r miller-data, echo=FALSE}
-tau  <- list(-Inf, -167L, -133L, -100L, -67L, -33L, 0L, 33L, 67L, 100L, 133L, 167L, Inf)
+tau  <- list(-Inf,-167L,-133L,-100L,-67L,-33L,0L,33L,67L,100L,133L,167L,Inf)
 m    <- c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
 s    <- c( 56,  58,  40,  40,  32,  28,  28,  28,  26,  30,  32,  34,  92)
 n    <- c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
@@ -765,17 +774,18 @@ tm   <- lapply(as.integer(m), FUN=mathout, flags=list(cat=FALSE))
 ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
 tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
 
-t <- cbind('$\\tau$'=ttau, '$m$'=tm, '$s$'=ts, '$n$'=tn)
+t <- cbind('\\(\\tau\\)'=ttau, '\\(m\\)'=tm, '\\(s\\)'=ts, '\\(n\\)'=tn)
 knitr::kable(t, caption="Table 4. Miller data", row.names=FALSE, escape=FALSE)
 ```
 
 Assuming that the model is correct, the observable mean reaction times follow an
-approximate Normal distribution around the model prediction \(E(T)\). We can,
-therefore, use a standard goodness-of-fit measure by \(z\)-standardisation.
+approximate Normal distribution around the model prediction \(E(T_\tau)\) for
+each condition. We can, therefore, use a standard goodness-of-fit measure
+by \(z\)-standardisation.
 
 ```{r, results='asis'}
 z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-  dfrac(m - denote(E, ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
+  dfrac(m - denote(mu[tau], ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
               "the expected mean response time"),
     s / sqrt(n))
 
@@ -785,23 +795,24 @@ mathout(call("=", quote(z[tau]), z))
 The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
 onset asynchrony. Assuming again that the architecture of the model is correct,
 but the parameters are adjusted to the data, it follows
-a \(\chi^2(8~\mathrm{df})\)-distribution.
+a \(\chi^2(8\ \mathrm{df})\)-distribution.
 
 ```{r, results='asis'}
 zv <- Vectorize(z, vectorize.args = c('m', 's', 'n', 'tau'))
+hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
 
 gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
-hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
 mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 
-The degrees of freedom result from the 13 predicted mean response times, 
-minus 5 free parameters
-\(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A}, \mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\)
-(\(c\) is a redundant scaling parameter).
+with the degrees of freedom given by the difference between the number of
+observations (`r length(tau)`) and the number of free model
+parameters \(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A},
+\mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\); the barrier \(c\)
+is only a scaling parameter.
 
 ```{r, results="asis", echo=FALSE}
 lsq <- function(tau, m, s, n)
@@ -820,23 +831,24 @@ Table 5 below.
 fit <- lsq(tau, m, s, n)
 theta <- fit$par
 se <- sqrt(diag(solve(fit$hessian)))
-cilo <- qnorm(0.025, theta, se)
-ciup <- qnorm(0.975, theta, se)
+ci <- mapply(FUN=qnorm, theta, se, MoreArgs=list(p=c(0.025, 0.975)),
+    SIMPLIFY=FALSE)
 
-ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout, flags=list(cat=FALSE))
+ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout,
+    flags=list(cat=FALSE))
 ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
-tcilo <- lapply(cilo, FUN=mathout, flags=list(cat=FALSE))
-tciup <- lapply(ciup, FUN=mathout, flags=list(cat=FALSE))
+tci <- lapply(ci, FUN=mathout, flags=list(cat=FALSE))
 
-t <- cbind(Parameter=ntheta, Estimate=ttheta, Lo=tcilo, Up=tciup)
+t <- cbind(Parameter=ntheta, Estimate=ttheta, CI=tci)
 knitr::kable(t, caption="Table 5. Model fit", row.names=FALSE, escape=FALSE)
 ```
 
-The statistic goodness-of-fit value is \(X^2(8) = 30.54\), \(p = .0002\), 
-indicating some lack of fit. Given the large trial numbers in the original
-study, some lack of fit is expected. For more detail, especially on fitting the
-observed standard deviations, the reader is referred to the original
-paper [@schwarz1994].
+The goodness-of-fit statistic indicates some lack of
+fit, \(X^2(8\ \mathrm{df}) = `r sprintf("%.2f", fit$value)`, 
+  p = `r sprintf("%.4f", 1-pchisq(fit$value, df=8))`\). Given the large trial
+numbers in the original study, this is not an unexpected result. For more
+detail, especially on fitting the observed standard deviations, the reader is
+referred to the original paper [@schwarz1994].
 
 # 5. Conclusions
 
