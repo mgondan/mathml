@@ -852,48 +852,47 @@ referred to the original paper [@schwarz1994].
 
 # 5. Conclusions
 
-This package expands the possibilities of R\ by allowing calculations and
-graphical rendering of the same terms. Building on current features of R\ and
-existing packages for displaying formulas in
-R\ [@murrell2000;@allaire2018]), the _mathml_ package bridges the gap
-between computational needs, presentation of results, and their reproducibility.
-Two possible modes for typesetting are available to export R\ Markdown documents
-in different formats or ShinyApp webpages: MathML and MathJax. A further, not-yet-mentioned, use of _mathml_ is related to presentations made using
-RMarkdown. By adopting _mathml_ researchers or teachers can use the
-RMarkdown to both conduct analysis and show results, smoothing the process and
-uniforming the graphical output.
+This package allows R\ to render its terms in pretty mathematical equations. It
+extends the current features of R\ and existing packages for displaying
+mathematical formulas in R\ [@murrell2000;@allaire2018]), bit most
+importantly, _mathml_ bridges the gap between computational needs, presentation
+of results, and their reproducibility. The package supports both MathML and
+Latex/MathJax for use in R\ Markdown documents, presentations and ShinyApp
+webpages.
 
-The case study presented above shows that _mathml_ can help to improve
-data analyses and statistical reports from an aesthetical perspective, as well
-as regarding reproducibility of research. Furthermore, the package may also
-allow for a better detection of possible mistakes in R programs.
+Researchers or teachers can already use RMarkdown to conduct analyses
+and show results, and _mathml_ smoothes this process and allows for integrated
+calculations and output. As shown in the case study of the previous
+section, _mathml_ can help to improve data analyses and statistical reports from
+an aesthetical perspective, as well as regarding reproducibility of research.
 
-Similar to most programming languages [@green1977], R\ code is notoriously hard
-to read, and the poor legibility of the language is one of the main sources of
-mistakes. For illustration, we consider again Equation 10 in
-Schwarz [-@schwarz1994].
+Furthermore, the package may also allow for a better detection of possible
+mistakes in R\ programs. Similar to most programming languages [@green1977],
+R\ code is notoriously hard to read, and the poor legibility of the language is
+one of the main sources of mistakes. For illustration, we consider again
+Equation\ 10 in Schwarz [-@schwarz1994].
 
 ````{r, results="asis"}
 f1 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
 mathout(f1)
 ````
 
 The first version has a wrong parenthesis, which is barely visible in the code,
-whereas the wrong curly brace in the mathematical representation is immediately
-obvious. The correct version is shown below for comparison.
+whereas in the mathematical representation, the wrong curly brace is immediately
+obvious (the correct version is shown below for comparison).
 
 ````{r, results="asis"}
 f2 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
 mathout(f2)
@@ -907,16 +906,13 @@ substantially reduce the amount of careless errors in programming.
 In its current version _mathml_ has some limitations. For example, it is
 currently not possible to use the functions of _mathml_ for writing
 intratextual formulas, here, the user has to adopt the usual LateX notation.
-However, we do not consider this to be a serious limitation, since the most
-productive use of _mathml_ still comes from more complicated calculations.
+Moreover, for long equations, we did not yet find a convenient way to insert
+linebreaks. This is mostly due to lacking support by MathML and LaTeX renderers.
+For example, in its current stage, the LaTeX package _breqn_ [@breqn] is mostly
+a proof of concept.
 
-Also: In long equations, we did not yet find a convenient way to insert
-linebreaks. This is mostly because it is not properly supported by MathML and
-LaTeX renderers. In its current stage, the LaTeX package _breqn_ [@breqn]
-is mostly a proof of concept.
-
-_mathml_ is available for R\ version (…) and later, and can be easily
-installed using the usual `install.packages("mathml")`. The source code of the
-package is found at https://github.com/mgondan/mathml.
+The package _mathml_ is available for R\ version (…) and later, and can be
+easily installed using the usual `install.packages("mathml")`. The source code
+of the package is found at https://github.com/mgondan/mathml.
 
 # References
