@@ -122,13 +122,13 @@ The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
 and reduces mistakes, as will be illustrated below.
 
-The vignette is organized as follows. Section\ 2 presents the technical
-background of the package, including the two main classes of Prolog rules for
-translating R\ objects to mathematical expressions. Section\ 3 illustrates the
-main features of the \pkg{mathml} package, potential issues and workarounds
-using examples from the day-to-day perspective of a user. Section\ 4 present a
-case study for the use of the package in a scientific report. Section\ 5
-concludes with a discussion and ideas for further development.
+The paper is organized as follows. Section\ 2 presents the technical background
+of the package, including the two main classes of Prolog rules for translating
+R\ objects to mathematical expressions. Section\ 3 illustrates the main features
+of the \pkg{mathml} package, potential issues and workarounds using examples
+from the day-to-day perspective of a user. Section\ 4 present a case study for
+the use of the package in a scientific report. Section\ 5 concludes with a
+discussion and ideas for further development.
 
 # Background
 
