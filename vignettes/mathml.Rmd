@@ -9,7 +9,7 @@ preamble:
 - \usepackage{cancel}
 - \usepackage{amsmath}
 Vignette: >
-  %\VignetteIndexEntry{mathml: Translate R expressions to MathML and LaTeX/MathJax}
+  %\VignetteIndexEntry{mathml: Translate R expressions to MathML and LaTeX}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -72,7 +72,7 @@ reproducible science. User-defined hooks allow to extend the package by
 mapping specific variables or functions to new MathML and LaTeX entities. A
 few working examples illustrate the use of the package in a scientific report.
 
-# Introduction
+# 1. Introduction
 
 The R\ extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
@@ -106,7 +106,7 @@ from the day-to-day perspective of a user. Section\ 4 present a case study for
 the use of the package in a scientific report. Section\ 5 concludes with a
 discussion and ideas for further development.
 
-# Background
+# 2. Background
 
 The translation of R\ expressions to mathematical output is achieved through a
 Prolog interpreter. Prolog is a classical logic programming language with many
@@ -200,7 +200,7 @@ parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
 for MathJax/LaTeX. A list of flags can be used for context-sensitive
 translation (see, e.g., the errors below).
 
-# Package _mathml_ in practice
+# 3. Package _mathml_ in practice
 
 _mathml_ is an R\ package for pretty mathematical representation of
 R\ functions and objects in data analysis, scientific reports and interactive
@@ -651,7 +651,7 @@ in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 Further customizations require the assertion of custom Prolog rules `math/2`,
 `ml/3`, `jax/3`, as shown in the introduction.
 
-# A case study {#case-study}
+# 4. A case study
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
 Psychology using the features of package _mathml_. Schwarz presents a new
@@ -841,7 +841,7 @@ study, some lack of fit is expected. For more detail, especially on fitting the
 observed standard deviations, the reader is referred to the original
 paper [@schwarz1994].
 
-# Conclusions
+# 5. Conclusions
 
 This package expands the possibilities of R\ by allowing calculations and
 graphical rendering of the same terms. Building on current features of R\ and
