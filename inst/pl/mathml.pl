@@ -2040,7 +2040,7 @@ paren(frac(_, _), P, _Flags)
 
 prec(frac(_, _), P, _Flags)
  => current(P0, yfx, /),
-    P is P0. % was - 1
+    P is P0 + 1. % was - 1
 
 type(frac(_, _), Type, _Flags)
   => Type = fraction.
