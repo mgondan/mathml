@@ -12,7 +12,8 @@ abstract: >
   description or symbolic representation, which is another step towards
   reproducible science. User-defined hooks allow to extend the package by
   mapping specific variables or functions to new MathML and LaTeX entities. A
-  few working examples illustrate the use of the package in a scientific report.
+  number of examples and a case study illustrate the use of the package in a
+  scientific report.
 draft: true
 author:  
   - name: Matthias Gondan
@@ -59,6 +60,8 @@ Vignette: >
 ## x[1] + ... + x[n]
 
 # Radicals sqrt(x, y) --> y√x
+
+# Chains: a < b < c
 
 # Sets: some symbols in set relations are missing:
 ## supset, supseteq, notsubset, subset, subseteq, notin
@@ -133,22 +136,18 @@ discussion and ideas for further development.
 # Background
 
 The translation of R\ expressions to mathematical output is achieved through a
-Prolog interpreter. Prolog is a classical logic programming language with many
-applications in expert systems, computer linguistics and symbolic artificial
-intelligence. The main strength of Prolog is its concise representation of facts
-and rules for the representation of knowledge and grammar, as well as its
-efficient built-in search engine for closed world domains. As it is well-known,
-R\ is a statistical programming language for data analysis and statistical
-modeling which is widely used in academia and industry. Besides the core
-library, a lot of packages have been developed for all kinds of statistical
-problems, including statistics-based artificial intelligence tools such as
-neural networks for machine learning and deep learning. Whereas Prolog is weak
-in statistical computation, but strong in symbolic manipulation, the converse
-may be said for the R\ language. The \pkg{rolog} package [@rolog] bridges this
-gap by providing an interface to a SWI-Prolog distribution in R. The
-communication between the two systems is mainly in the form of queries from
-R\ to Prolog, but two predicates allow Prolog to ring back and evaluate terms in
-R.
+Prolog interpreter from R\ package \pkg{rolog} [@rolog]. Prolog is a classical logic
+programming language with many applications in expert systems, computer
+linguistics and symbolic artificial intelligence. The main strength of Prolog is
+its concise representation of facts and rules for knowledge and grammar, as well
+as its efficient built-in search engine for closed world domains. As it is
+well-known, R\ is a statistical programming language for data analysis and
+statistical modeling. Whereas Prolog is weak in statistical computation, but
+strong in symbolic manipulation, the converse may be said for the R\ language.
+The \pkg{rolog} package bridges this gap by providing an interface to a SWI-Prolog
+distribution [@swipl] in R. The communication between the two systems is mainly
+in the form of queries from R\ to Prolog, but two predicates allow Prolog to
+ring back and evaluate terms in R.
 
 For a first illustration of the \pkg{mathml} package, we consider the binomial
 probability.
@@ -167,8 +166,8 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 ```
 
 As is seen from the output above, the variable `term` is not assigned the result
-of the calculation, but an R\ "call"
-[see, e.g., @Wickham2019, for details on "non-standard evaluation"]. This call
+of the calculation, but an R\ call
+[see, e.g., @Wickham2019, for details on "non-standard evaluation"]. Such a call
 can eventually be evaluated with `eval()`,
 
 ```{r}
@@ -190,8 +189,8 @@ mathjax(term)
 
 We can include the output in a RMarkdown document by specifying `results='asis'`
 in the R\ code chunk, as is done in the next example. The
-R\ function `mathout()` is a wrapper that invokes `mathml()` for HTML output
-and `mathjax()` for LaTeX output.
+R\ function `mathout()` has been defined in this vignette; it invokes `mathml()`
+for HTML output and `mathjax()` for LaTeX output.
 
 ```{r, results='asis'}
 mathout(term)
@@ -222,7 +221,7 @@ The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
 with `N` representing the name of the function and `X` its arguments and
 parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
 for MathJax/LaTeX. A list of flags can be used for context-sensitive
-translation (see, e.g., the errors below).
+translation (see, e.g., the section on errors below).
 
 # Package \pkg{mathml} in practice
 
@@ -248,10 +247,12 @@ mathout(term)
 An expression such as `1 + -2` may be considered unsatisfactory from an
 aesthetical perspective. It is correct R\ syntax, though, and is reproduced
 accordingly, without the parentheses. Parentheses around negated numbers or
-symbols can be added as shown for `-Inf`.
+symbols can be added as shown above for `+ (-Inf)`.
 
-Note that an R function `hat()` does not exist in base R, it is provided by the
-package for convenience and points to the identity function.
+Note that an R\ function `hat()` does not exist in base R, it is provided by the
+package for convenience and points to the identity function. Quite a few such
+convenience functions have been defined
+in \pkg{mathml} (see, e.g., next section, and the manual for details).
 
 ## Operators and parentheses
 
@@ -268,10 +269,10 @@ mathout(term)
 
 For multiplications involving only numbers and symbols, the multiplication sign
 is omitted. This heuristic does not always produce the desired result;
-therefore, \pkg{mathml} defines alternative multiplication
-functions `dot()`, `nodot()`, and `times()` that calculate the product and
-produce the respective multiplication signs. Similarly, `frac()` and `dfrac()`
-can be used for small and large fractions.
+therefore, \pkg{mathml} defines alternative R\ functions `dot()`, `nodot()`,
+and `times()`. These functions calculate a product and produce the respective
+multiplication signs. Similarly, `frac()` and `dfrac()` can be used for small
+and large fractions.
 
 For standard operators with known precedence, \pkg{mathml} is generally able to
 detect if parentheses are needed; for example, parentheses are automatically
@@ -298,16 +299,16 @@ for precedence, undesirable results may be obtained in custom operators.
 ```{r, results='asis'}
 term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
 mathout(term)
-term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N)))
+term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N))) # functional form of '%+-%'
 term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
 mathout(term)
 ```
 
 The example is a reminder that it is not possible to define the precedence of
 custom operators in R, and that expressions with such operators are evaluated
-strictly from left to right. As in the previous example, the solution is to
-either use the functional form of the operator or a curly brace to enforce the
-correct operator precedence.
+strictly from left to right. Again, the problem can be worked around by the
+functional form of the operator, or a curly brace to hide the parenthesis but
+enforce the correct operator precedence.
 
 More operators are shown in Table \@ref(tab:custom-operators), including the
 suggestions by Murrell and Ihaka [-@murrell2000] for graphical annotations and
@@ -387,13 +388,13 @@ knitr::kable(t, caption="Custom operators in mathml",
 
 ## Builtin functions
 
-There is support for most functions from \pkg{base}, with adequate use and omission
-of parentheses.
+There is support for most functions from package _base_, with adequate use and
+omission of parentheses.
 
 ```{r, results='asis'}
 term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
 mathout(term)
-term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + ceiling(x))
+term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + exp(frac(x, y)))
 mathout(term)
 ```
 
@@ -405,7 +406,7 @@ op1 <- list(
   "sin(x)"=quote(sin(x)),
   "cosh(x)"=quote(cosh(x)),
   "tanpi(alpha)"=quote(tanpi(alpha)),
-  "asinh(alpha)"=quote(asinh(alpha)),
+  "asinh(x)"=quote(asinh(x)),
   "log(p)"=quote(log(p)),
   "log1p(x)"=quote(log1p(x)),
   "logb(x,\\ e)"=quote(logb(x, e)),
@@ -458,12 +459,10 @@ knitr::kable(t, caption="R functions from base and stats",
 
 ## Custom functions
 
-For self-written functions, matters are a bit more complicated. The name of a
-self-written function is not transparent in R, since only the function body is
-represented, as illustrated by the redefinition of `sign` below. The function is
-often a nested R "call" of the form `'{'(L)`, with `L` being a list of
-commands. \pkg{mathml} provides very limited support for typical control
-structures.
+For self-written functions, matters are a bit more complicated. For a function
+such as `g <- function(...) ...`, the name _g_ is not transparent to R, because
+only the function body is represented, as illustrated by the redefinition
+of `sign` below.
 
 ```{r, results='asis'}
 sgn <- function(x)
@@ -473,16 +472,18 @@ sgn <- function(x)
   if(x > 0L) return(1L)
 }
 
-term <- quote(mysign <- sgn(x))
-mathout(term)
-
-hook(mysign, sg(x))
-term <- call("<-", quote(mysign), sgn)
-mathout(term)
+mathout(sgn)
+mathout(call("<-", quote(sgn(x)), sgn))
 ```
 
-The hook (see below) is used to display \(\mathrm{sg}(x) = \{\ldots\) instead
-of just \(s = \{\).
+As shown in the example, we can still display functions in the
+form `head(x) = body` if we embed the object to be shown into a
+call `"<-"(head, body)`.
+
+The function body is generally a nested R\ call of the form `'{'(L)`, with `L`
+being a list of commands (the semicolon, not necessary in R, is translated to a
+newline). As illustrated in the example, \pkg{mathml} provides limited support
+for control structures such as `if`.
 
 ## Indices and powers
 
@@ -516,27 +517,27 @@ eval(term)
 For mathematical typesetting in the form
 of \(\int f(x)\, dx\), \pkg{mathml} needs to find out the name of the
 integration variable. For that purpose, the underlying Prolog bridge provides a
-predicate `r_eval/2` that calls R\ from Prolog. In the example above, this
+predicate `r_eval/3` that calls R\ from Prolog. In the example above, this
 predicate evaluates `formalArgs(args(sin))`, which returns the names of the
 arguments of `sin`, namely, `x`.
 
 Note that in the example above, the quoted term is an abbreviation
 for `call("integrate", quote(sin), ...)`, with `sin` being an R\ symbol, not a
-function. R's `integrate()` can handle both. However, as already mentioned in
-the previous subsection, \pkg{mathml} would be unable to find out the function
-name, it needs the symbol.
+function. While the R\ function `integrate()` can handle both symbols and
+functions, \pkg{mathml} needs the symbol because it is unable to determine the
+function name of custom fuctions.
 
 ## Names and order of arguments
 
 One of R's great features is the possibility to refer to function arguments by
 their names, not only by their position in the list of arguments. At the other
-end, most Prolog-powered handlers for the R\ calls are rather rigid, for
-example, `integrate/3` accepts exactly three arguments in a particular order and
-without names, that is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print
-the desired result.
+end, Prolog does not have such a feature. Therefore, the Prolog handlers for
+R\ calls are rather rigid, for example, `integrate/3` accepts exactly three
+arguments in a particular order and without names, that
+is, `integrate(lower=0L, upper=2L*pi, sin)`, would not print the desired result.
 
 To "canonicalize" function calls with named arguments and arguments in unusual
-order, \pkg{mathml} provides an auxilliary R\ function `canonical(f, drop)` that
+order, \pkg{mathml} provides an auxiliary R\ function `canonical(f, drop)` that
 reorders the argument list of calls to known R\ functions and, 
 if `drop=TRUE` (which is the default), also removes the names of the arguments.
 
@@ -567,7 +568,42 @@ mathout(term)
 ```
 
 Note that the seemingly more convient `term <- quote(A + B)` yields \(A + B\) in
-the output---instead of the desired matrix representation.
+the output---instead of the desired matrix representation. This behavior is
+expected because quotation of R calls also quote the components of the
+call (here, _A_ and _B_).
+
+## Short mathematical names for R symbols
+
+In typical R\ functions, variable names are typically longer than just single
+letters, which may yield unsatisfactory results in the mathematical output.
+
+```{r, results='asis'}
+term <- quote(pbinom(successes, Ntotal, prob))
+mathout(term)
+
+hook(successes, k)
+hook(quote(Ntotal), quote(N), quote=FALSE)
+hook(prob, pi)
+mathout(term)
+```
+
+To improve the situation, \pkg{mathml} provides a simple hook that can be used
+to replace elements (e.g., verbose variable names) of the code by concise
+mathematical symbols, as illustrated in the example. To simplify notation,
+the `quote` flag of `hook()` defaults to TRUE, and `hook()` uses non-standard
+evaluation to unpack its arguments. If quote is FALSE, as shown above, the user
+has to provide the quoted expressions. Care should be taken to
+avoid recursive hooks such as `hook(s, s["A"])` that endlessly replace
+the \(s\) from \(s_{\mathrm{A}}\) as
+in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
+
+The hooks can also be used for more complex elements such as R\ calls, with
+dotted symbols representing Prolog variables.
+
+```{r, results='asis'}
+hook(pbinom(.K, .N, .P), subsupscript(sum(dbinom(i, .N, .P)), i=0L, .K))
+mathout(term)
+```
 
 ## Abbreviations
 
@@ -577,7 +613,7 @@ abbreviated, and a comment is given with the expression
 for \(s^2_{\mathrm{pool}}\). For this purpose, \pkg{mathml} provides a
 function `denote(abbr, expr, info)`, with `expr` actually being
 evaluated, `abbr` being rendered, plus a comment of the
-form "with `expr` denoting `info`". The hooks are described in the next section.
+form "with `expr` denoting `info`".
 
 ```{r, results='asis'}
 hook(m_A, mean(X)["A"]) ; hook(s2_A, s["A"]^2L) ;
@@ -591,8 +627,8 @@ term <- quote(t <- dfrac(m_A - m_B,
 mathout(term)
 ```
 
-The term is evaluated below. `print()` is needed because the return value of the
-assignment in the term `t <- dfrac(...)` is invisible.
+The term is evaluated below. `print()` is needed because the return value of an
+assignment of the form `t <- dfrac(...)` is not visible in R.
 
 ```{r}
 m_A <- 1.5; s2_A <- 2.4^2; n_A <- 27; m_B <- 3.9; s2_B <- 2.8^2; n_B <- 20
@@ -607,8 +643,8 @@ null hypothesis in a \(t\)-ratio:
 
 ```{r, results='asis'}
 t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
-mathout(t, flags=list(error='highlight'))
-mathout(t, flags=list(error='fix'))
+mathout(t, flags=list(error="highlight"))
+mathout(t, flags=list(error="fix"))
 ```
 
 The R function `omit_right(a + b)` uses non-standard evaluation
@@ -680,7 +716,7 @@ Further customizations require the assertion of custom Prolog rules `math/2`,
 # A case study {#case-study}
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
-Psychology using the features of package \pkg{mathml}. Schwarz presents a new
+psychology using the features of package \pkg{mathml}. Schwarz presents a new
 explanation of redundancy gains that occur when observers respond to stimuli of
 different sources, and the same information is presented on two or more
 channels. In Schwarz' model, decision-making builds on a process of noisy
@@ -689,19 +725,17 @@ stimuli, the model assumes a superposition of channel-specific diffusion
 processes that eventually reach an absorbing barrier to elicit the response. For
 a detailed description the reader may refer to the original article.
 
-## The model 
-
 Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (AB, redundant stimuli), with the redundant stimuli
 being presented either simultaneously or with onset asynchrony \(\tau\). The
 channel activation is described as a two-dimensional Wiener process with
 drifts \(\mu_i\), variances \(\sigma^2_i\), and initial
-conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The channels may be correlated
-with \(\rho_{\mathrm{AB}}\), but we assume \(\rho_{\mathrm{AB}} = 0\) for
-simplicity.
+conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The buildup of 
+channel-specific activation may be correlated with \(\rho_{\mathrm{AB}}\), but
+we assume \(\rho_{\mathrm{AB}} = 0\) for simplicity.
 
 A response is elicited when the process reaches an absorbing barrier \(c > 0\)
-for the first time. In single-target trials, the first passages at \(c\) are
+for the first time. In single-target trials, the first passages of \(c\) are
 expected at
 
 ```{r, results='asis'}
@@ -713,10 +747,11 @@ hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
 mathout(call("=", quote(ED_single(c, mu)), ED_single))
 ```
 
-In redundant stimuli, the activation of the channel-specific diffusion processes
-adds up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\), hence
-the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process with
-drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
+(One would typically use chunk option `echo=FALSE` to suppress the R code.)
+In redundant stimuli, the activations from the channel-specific diffusion
+processes add up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\),
+hence the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process
+with drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
 variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
 first-passage time, we have
 
@@ -738,7 +773,7 @@ first-passage time as a function of the stimulus onset asyncrony \(\tau\),
 ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
-      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*c, sigma_A^2L))
+      - (mu_A*tau + c) * exp(dfrac(2L*c*mu_A, sigma_A^2L))
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
@@ -746,16 +781,16 @@ hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
 mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
-For negative onset asynchrony (i.e., B before A), the parameters need to be
+For negative onset asynchrony (i.e., B before A), the parameters are simply
 switched.
 
 ```{r, results='asis'}
 ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 {
-  if(tau == Inf) return(ED_single(c, mu_A)) ;
-  if(tau == -Inf) return(ED_single(c, mu_B)) ;
-  if(tau == 0L) return(ED_single(c, mu_A + mu_B)) ;
-  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B)) ;
+  if(tau == Inf) return(ED_single(c, mu_A))
+  if(tau == -Inf) return(ED_single(c, mu_B))
+  if(tau == 0L) return(ED_single(c, mu_A + mu_B))
+  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B))
   if(tau < 0L) return(ED_async(abs(tau), c, mu_B, sigma_B, mu_A))
 }
 
@@ -772,12 +807,10 @@ expected response time amounts to
 ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
   ED(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
 
-hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM), 
+hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
      E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
 mathout(call("=", quote(E(T[tau])), ET))
 ```
-
-## Methods
 
 Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
 with 13 onset
@@ -788,7 +821,7 @@ observed mean response times and their standard deviations are given in
 Table \@ref(tab:miller-data) below.
 
 ```{r miller-data, echo=FALSE}
-tau  <- list(-Inf, -167L, -133L, -100L, -67L, -33L, 0L, 33L, 67L, 100L, 133L, 167L, Inf)
+tau  <- list(-Inf,-167L,-133L,-100L,-67L,-33L,0L,33L,67L,100L,133L,167L,Inf)
 m    <- c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
 s    <- c( 56,  58,  40,  40,  32,  28,  28,  28,  26,  30,  32,  34,  92)
 n    <- c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
@@ -798,17 +831,18 @@ tm   <- lapply(as.integer(m), FUN=mathout, flags=list(cat=FALSE))
 ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
 tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
 
-t <- cbind('$\\tau$'=ttau, '$m$'=tm, '$s$'=ts, '$n$'=tn)
+t <- cbind('\\(\\tau\\)'=ttau, '\\(m\\)'=tm, '\\(s\\)'=ts, '\\(n\\)'=tn)
 knitr::kable(t, caption="Miller data", row.names=FALSE, escape=FALSE)
 ```
 
 Assuming that the model is correct, the observable mean reaction times follow an
-approximate Normal distribution around the model prediction \(E(T)\). We can,
-therefore, use a standard goodness-of-fit measure by \(z\)-standardisation.
+approximate Normal distribution around the model prediction \(E(T_\tau)\) for
+each condition. We can, therefore, use a standard goodness-of-fit measure
+by \(z\)-standardisation.
 
 ```{r, results='asis'}
 z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-  dfrac(m - denote(E, ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
+  dfrac(m - denote(mu[tau], ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
               "the expected mean response time"),
     s / sqrt(n))
 
@@ -818,28 +852,29 @@ mathout(call("=", quote(z[tau]), z))
 The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
 onset asynchrony. Assuming again that the architecture of the model is correct,
 but the parameters are adjusted to the data, it follows
-a \(\chi^2(8~\mathrm{df})\)-distribution. 
+a \(\chi^2(8\ \mathrm{df})\)-distribution.
 
 ```{r, results='asis'}
 zv <- Vectorize(z, vectorize.args = c('m', 's', 'n', 'tau'))
+hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
 
 gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
-hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
 mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 
-The degrees of freedom result from the 13 predicted mean response times, 
-minus 5 free parameters
-\(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A}, \mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\)
-(\(c\) is a redundant scaling parameter).
+with the degrees of freedom given by the difference between the number of
+observations (`r length(tau)`) and the number of free model
+parameters \(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A},
+\mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\); the barrier \(c\)
+is only a scaling parameter.
 
 ```{r, results="asis", echo=FALSE}
 lsq <- function(tau, m, s, n)
 {
-  invisible(theta <- c(mu_A=0.53, sigma_A=4.3, mu_B=1.34, sigma_B=11.7, mu_M=160))
+  invisible(theta <- c(mu_A=0.5, sigma_A=5, mu_B=0.5, sigma_B=5, mu_M=150))
   optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
 }
 
@@ -853,68 +888,68 @@ Table \@ref(tab:params) below.
 fit <- lsq(tau, m, s, n)
 theta <- fit$par
 se <- sqrt(diag(solve(fit$hessian)))
-cilo <- qnorm(0.025, theta, se)
-ciup <- qnorm(0.975, theta, se)
+ci <- mapply(FUN=qnorm, theta, se, MoreArgs=list(p=c(0.025, 0.975)),
+    SIMPLIFY=FALSE)
 
-ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout, flags=list(cat=FALSE))
+ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout,
+    flags=list(cat=FALSE))
 ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
-tcilo <- lapply(cilo, FUN=mathout, flags=list(cat=FALSE))
-tciup <- lapply(ciup, FUN=mathout, flags=list(cat=FALSE))
+tci <- lapply(ci, FUN=mathout, flags=list(cat=FALSE))
 
-t <- cbind(Parameter=ntheta, Estimate=ttheta, Lo=tcilo, Up=tciup)
+t <- cbind(Parameter=ntheta, Estimate=ttheta, CI=tci)
 knitr::kable(t, caption="Model fit", row.names=FALSE, escape=FALSE)
 ```
 
-The statistic goodness-of-fit value is \(X^2(8) = 30.54\), \(p = .0002\), 
-indicating some lack of fit. Given the large trial numbers in the original
-study, some lack of fit is expected. For more detail, especially on fitting the
-observed standard deviations, the reader is referred to the original
-paper [@schwarz1994].
+The goodness-of-fit statistic indicates some lack of
+fit, \(X^2(8\ \mathrm{df}) = `r sprintf("%.2f", fit$value)`, 
+  p = `r sprintf("%.4f", 1-pchisq(fit$value, df=8))`\). Given the large trial
+numbers in the original study, this is not an unexpected result. For more
+detail, especially on fitting the observed standard deviations, the reader is
+referred to the original paper [@schwarz1994].
 
 # Conclusions
 
-This package expands the possibilities of R\ by allowing calculations and
-graphical rendering of the same terms. Building on current features of R\ and
-existing packages for displaying formulas in
-R\ [@murrell2000;@allaire2018]), the \pkg{mathml} package bridges the gap
-between computational needs, presentation of results, and their reproducibility.
-Two possible modes for typesetting are available to export R\ Markdown documents
-in different formats or ShinyApp webpages: MathML and MathJax. A further, not-yet-mentioned, use of \pkg{mathml} is related to presentations made using
-RMarkdown. By adopting \pkg{mathml} researchers or teachers can use the
-RMarkdown to both conduct analysis and show results, smoothing the process and
-uniforming the graphical output.
+This package allows R\ to render its terms in pretty mathematical equations. It
+extends the current features of R\ and existing packages for displaying
+mathematical formulas in R\ [@murrell2000;@allaire2018]), bit most
+importantly, \pkg{mathml} bridges the gap between computational needs, presentation
+of results, and their reproducibility. The package supports both MathML and
+Latex/MathJax for use in R\ Markdown documents, presentations and ShinyApp
+webpages.
 
-The case study presented above shows that \pkg{mathml} can help to improve
-data analyses and statistical reports from an aesthetical perspective, as well
-as regarding reproducibility of research. Furthermore, the package may also
-allow for a better detection of possible mistakes in R programs.
+Researchers or teachers can already use RMarkdown to conduct analyses
+and show results, and \pkg{mathml} smoothes this process and allows for integrated
+calculations and output. As shown in the case study of the previous
+section, \pkg{mathml} can help to improve data analyses and statistical reports from
+an aesthetical perspective, as well as regarding reproducibility of research.
 
-Similar to most programming languages [@green1977], R\ code is notoriously hard
-to read, and the poor legibility of the language is one of the main sources of
-mistakes. For illustration, we consider again Equation 10 in
-Schwarz [-@schwarz1994].
+Furthermore, the package may also allow for a better detection of possible
+mistakes in R\ programs. Similar to most programming languages [@green1977],
+R\ code is notoriously hard to read, and the poor legibility of the language is
+one of the main sources of mistakes. For illustration, we consider again
+Equation\ 10 in Schwarz [-@schwarz1994].
 
 ````{r, results="asis"}
 f1 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
 mathout(f1)
 ````
 
 The first version has a wrong parenthesis, which is barely visible in the code,
-whereas the wrong curly brace in the mathematical representation is immediately
-obvious. The correct version is shown below for comparison.
+whereas in the mathematical representation, the wrong curly brace is immediately
+obvious (the correct version is shown below for comparison).
 
 ````{r, results="asis"}
 f2 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
 mathout(f2)
@@ -927,30 +962,12 @@ substantially reduce the amount of careless errors in programming.
 
 In its current version \pkg{mathml} has some limitations. For example, it is
 currently not possible to use the functions of \pkg{mathml} for writing
-intratextual formulas; here, the user has to adopt the usual LateX notation.
-However, we do not consider this to be a serious limitation, since the most
-productive use of \pkg{mathml} still comes from more complicated calculations.
+intratextual formulas, here, the user has to adopt the usual LateX notation.
+Moreover, for long equations, we did not yet find a convenient way to insert
+linebreaks. This is mostly due to lacking support by MathML and LaTeX renderers.
+For example, in its current stage, the LaTeX package \pkg{breqn} [@breqn] is mostly
+a proof of concept.
 
-Also: In long equations, we did not yet find a convenient way to insert
-linebreaks. This is mostly because it is not properly supported by MathML and
-LaTeX renderers. In its current stage, the LaTeX package \pkg{breqn} [@breqn]
-is mostly a proof of concept.
-
-\pkg{mathml} is available for R\ version (…) and later, and can be easily
-installed using the usual `install.packages("mathml")`. The source code of the
-package is found at https://github.com/mgondan/mathml.
-
-# Appendix
-
-Please check if the examples below
-
-* are already presented somewhere
-* can be added to one of the tables
-* or if they should go into a separate appendix
-
-_I removed the examples since they were already present._
-
-```{r, results='asis', echo=TRUE}
-mathout(quote(T^diamond))
-mathout(quote(sinpi(alpha)))
-```
+The package \pkg{mathml} is available for R\ version (…) and later, and can be
+easily installed using the usual `install.packages("mathml")`. The source code
+of the package is found at https://github.com/mgondan/mathml.

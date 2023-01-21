@@ -70,7 +70,8 @@ This tightens the link between the statistical analysis and its verbal
 description or symbolic representation, which is another step towards
 reproducible science. User-defined hooks allow to extend the package by
 mapping specific variables or functions to new MathML and LaTeX entities. A
-few working examples illustrate the use of the package in a scientific report.
+number of examples and a case study illustrate the use of the package in a
+scientific report.
 
 # 1. Introduction
 
@@ -378,7 +379,7 @@ op1 <- list(
   "sin(x)"=quote(sin(x)),
   "cosh(x)"=quote(cosh(x)),
   "tanpi(alpha)"=quote(tanpi(alpha)),
-  "asinh(alpha)"=quote(asinh(alpha)),
+  "asinh(x)"=quote(asinh(x)),
   "log(p)"=quote(log(p)),
   "log1p(x)"=quote(log1p(x)),
   "logb(x,\\ e)"=quote(logb(x, e)),
@@ -453,8 +454,9 @@ form `head(x) = body` if we embed the object to be shown into a
 call `"<-"(head, body)`.
 
 The function body is generally a nested R\ call of the form `'{'(L)`, with `L`
-being a list of commands. As illustrated in the example, _mathml_ provides
-limited support for control structures such as `if`.
+being a list of commands (the semicolon, not necessary in R, is translated to a
+newline). As illustrated in the example, _mathml_ provides limited support for
+control structures such as `if`.
 
 ## Indices and powers
 

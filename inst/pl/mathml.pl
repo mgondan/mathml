@@ -511,6 +511,15 @@ jax(space(thinmathspace), M, _Flags)
 jax(space(_Width), M, _Flags)
  => M = "\\ ".
 
+math(endl, M)
+ => M = space(nl).
+
+ml(space(nl), M, _Flags)
+ => M = mspace(linebreak(newline), "").
+
+jax(space(nl), M, _Flags)
+ => M = "\\\n".
+
 %
 % Symbols/Identifiers
 %
@@ -833,7 +842,7 @@ math(function(na, Body, _), M),
  => M = body(Args).
 
 math(function(na, Body, _), M)
- => M = body([[Body]]).
+ => M = body(Body).
 
 math(Curly, M, Flags),
     compound(Curly),
@@ -854,8 +863,9 @@ jax(body([R]), M, Flags)
  => jax(R, M, Flags).
 
 jax(body(Body), M, Flags)
- => maplist(jax_(Flags), Body, Rows),
-    format(string(M), "\\left\\{\\begin{array}{l}~w\\end{array}\\right.", [Rows]).
+ => maplist(jax_(Flags), Body, Ls),
+    atomic_list_concat(Ls, "}\\\\\n{", Rs),
+    format(string(M), "\\left\\{\\begin{array}{l}{~w}\\end{array}\\right.", [Rs]).
 
 % Hide
 math(invisible(_), M, _Flags)
