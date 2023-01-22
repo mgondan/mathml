@@ -815,7 +815,7 @@ mathout(call("=", quote(E(T[tau])), ET))
 Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
 with 13 onset
 asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
-where \(0\) refers to the synchronous condition, and \(\pm\infty\) to the
+where \(\tau = 0\) refers to the synchronous condition, and \(\pm\infty\) to the
 single-target presentations. Each condition was replicated 400 times. The
 observed mean response times and their standard deviations are given in
 Table \@ref(tab:miller-data) below.
@@ -971,3 +971,80 @@ a proof of concept.
 The package \pkg{mathml} is available for R\ version (…) and later, and can be
 easily installed using the usual `install.packages("mathml")`. The source code
 of the package is found at https://github.com/mgondan/mathml.
+
+# Appendix: Customizing the package
+
+Several ways exist for translating new R\ terms to their mathematical
+representation. We have already seen above how to use "hooks" to translate long
+variable names from R to compact mathematical signs, as well as functions such
+as cumulative probabilities \(P(X \le k)\) to different representations
+like \(\sum_{i=0}^k P(X = i)\). Obviously, the hooks require that there already
+exists a rule to translate the target representation into MathML and MathJax.
+
+In this appendix we describe a few more ways to extend the set of translations
+according to a user's needs. As stated in the background section, the Prolog end
+provides two classes of rules for translation, macros `math/2,3,4` mirroring the
+R\ hooks mentioned above, and the low-level predicates `ml/3` and `jax/3` that
+create proper MathML and Latex terms.
+
+## \(n\)-th root
+
+Base R does not provide a function like `cuberoot(x)` or `nthroot(x, n)`, and
+the present package does not support the respective representation. To obtain a
+cube root, a programmer would typically type `x^(1/3)` or better `x^{1/3}` (see
+the practice section why the curly brace is preferred in an exponent), resulting
+in \(x^{1/3}\) which may still not match everyone's taste. Here describe the
+steps needed to represent the \(n\)-th root as \(\sqrt[n]x\).
+
+We assume that `nthroot(x, n)` is available in the current
+namespace [manually defined, or from R package \pkg{pracma}, @pracma], so that
+the names of the arguments and their order are accessible to `canonical()` if
+needed. As we can see below, \pkg{mathml} uses a default
+representation `name(arguments)` for such unknown functions.
+
+```{r, results='asis'}
+nthroot <- function(x, n)
+  x^{1L/n}
+
+term <- canonical(quote(nthroot(n=3L, 2L)))
+mathout(term)
+```
+
+A proper MathML term is obtained by `mlx/3` (the x in mlx indicates that it is
+an extension and is prioritized over the default ml/3 rules). `mlx/3`
+recursively invokes `ml/3` for translating the function arguments _X_ and _N_,
+and then contructs the correct MathML entity `<mroot>...</mroot>`.
+
+```prolog
+mlx(nthroot(X, N), M, Flags) :-
+    ml(X, X1, Flags),
+    ml(N, N1, Flags),
+    M = mroot([X1, N1]).
+```
+
+The explicit unification `M = ...` in the last line serves to avoid clutter in
+the head of `mlx/3`. The Prolog file `nthroot.pl` also includes the respective
+rule for Latex and can be consulted from the package folder via the underlying
+package \pkg{rolog}.
+
+```{r, results='asis'}
+rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
+
+term <- quote(nthroot(a * (b + c), 3L)^2L)
+mathout(term)
+term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
+mathout(term)
+```
+
+The file `nthroot.pl` includes three more statements `precx/3` and `parenx/3`,
+as well as a `math_hook/2` macro. The first sets the operator precedence of the
+cubic root above the power, thereby putting a parentheses around nthroot
+in \((\sqrt[3]{\ldots})^2\). The second tells the system to increase the counter
+of the parentheses below the root, such that the outer parenthesis becomes a
+square bracket.
+
+The last rule maps powers like `a^(1L/3L)` to `nthroot/3`, as shown in the
+first summand. Of course, \pkg{mathml} is not a proper computer algebra system.
+As is illustrated by the other terms in the sum, such macros are limited to
+purely syntactical matching, and terms like `a^{1L/3L}` with the curly brace
+or `a^(1.0/3L)` with a floating point number in the numerator are not detected.

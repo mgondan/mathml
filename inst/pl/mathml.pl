@@ -1,4 +1,5 @@
-:- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3, jax/3, mathml/0.
+:- discontiguous mathml/0, math/2, math/3, math/4, current/3, paren/3, prec/3, type/3, denoting/3, ml/3, jax/3.
+
 :- use_module(library(http/html_write)).
 
 % Here you can define your own macros
@@ -6,6 +7,7 @@
 % Example: assert(math_hook(t0, subscript(t, 0)))
 %
 :- dynamic math_hook/2.
+:- multifile math_hook/2, mlx/3, jaxx/3, precx/3, parenx/3, typex/3.
 
 %
 % R interface: Translate R expression to MathML string
@@ -79,23 +81,43 @@ ml(R, M, Flags),
     macro(R, R1, Flags, Flags1)
  => ml(R1, M, Flags1).
 
+ml(R, M, Flags),
+    mlx(R, R1, Flags)
+ => M = R1.
+
 % Same for MathJax/LaTeX
 jax(R, M, Flags),
     macro(R, R1, Flags, Flags1)
  => jax(R1, M, Flags1).
+
+jax(R, M, Flags),
+    jaxx(R, R1, Flags)
+ => M = R1.
 
 % Same for precedence checks, parentheses and types
 prec(R, Prec, Flags),
     macro(R, R1, Flags, Flags1)
  => prec(R1, Prec, Flags1).
 
+prec(R, P, Flags),
+    precx(R, P1, Flags)
+ => P = P1.
+
 paren(R, Paren, Flags),
     macro(R, R1, Flags, Flags1)
  => paren(R1, Paren, Flags1).
 
+paren(R, P, Flags),
+    parenx(R, P1, Flags)
+ => P = P1.
+
 type(R, Type, Flags),
     macro(R, R1, Flags, Flags1)
  => type(R1, Type, Flags1).
+
+type(R, T, Flags),
+    typex(R, T1, Flags)
+ => T = T1.
 
 %
 % Suppress the names of function arguments from R
@@ -185,29 +207,44 @@ mathml :-
 % function can handle them. This is needed, e.g., if colors are to be
 % skipped.
 %
-math(subsupscript(R, Idx, Pwr), M, Flags, Flags1)
- => Flags1 = [subscript(Idx), superscript(Pwr) | Flags],
-    M = R.
+% math(subsupscript(R, Idx, Pwr), M, Flags, Flags1)
+%  => Flags1 = [subscript(Idx), superscript(Pwr) | Flags],
+%     M = R.
+%
+% ml(R, M, Flags),
+%     select(subscript(Idx), Flags, Flags1),
+%     select(superscript(Pwr), Flags1, Flags2)
+%  => ml(R, X, Flags2),
+%     ml(Idx, Y, Flags2),
+%     ml(Pwr, Z, Flags2),
+%     M = msubsup([X, Y, Z]).
 
-ml(R, M, Flags),
-    select(subscript(Idx), Flags, Flags1),
-    select(superscript(Pwr), Flags1, Flags2)
- => ml(R, X, Flags2),
-    ml(Idx, Y, Flags2),
-    ml(Pwr, Z, Flags2),
+% jax(R, M, Flags),
+%     select(subscript(Idx), Flags, Flags1),
+%     select(superscript(Pwr), Flags1, Flags2)
+%  => jax(R, X, Flags2),
+%     jax(Idx, Y, Flags2),
+%     jax(Pwr, Z, Flags2),
+%     format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
+%
+% type(R, Type, Flags),
+%     member(subscript(Idx), Flags),
+%     member(superscript(Pwr), Flags)
+%  => Type = subsupscript(R, Idx, Pwr).
+
+ml(subsupscript(R, Idx, Pwr), M, Flags)
+ => ml(R, X, Flags),
+    ml(Idx, Y, Flags),
+    ml(Pwr, Z, Flags),
     M = msubsup([X, Y, Z]).
 
-jax(R, M, Flags),
-    select(subscript(Idx), Flags, Flags1),
-    select(superscript(Pwr), Flags1, Flags2)
- => jax(R, X, Flags2),
-    jax(Idx, Y, Flags2),
-    jax(Pwr, Z, Flags2),
+jax(subsupscript(R, Idx, Pwr), M, Flags)
+ => jax(R, X, Flags),
+    jax(Idx, Y, Flags),
+    jax(Pwr, Z, Flags),
     format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
 
-type(R, Type, Flags),
-    member(subscript(Idx), Flags),
-    member(superscript(Pwr), Flags)
+type(subsupscript(R, Idx, Pwr), Type, _Flags)
  => Type = subsupscript(R, Idx, Pwr).
 
 mathml :-
@@ -219,66 +256,74 @@ math(Sub, M),
     compound_name_arguments(Sub, '[', [R | Indices])
  => M = subscript(R, list("", Indices)).
 
-math(subscript(R, Idx), M, Flags, Flags1)
- => Flags1 = [subscript(Idx) | Flags],
-    M = R.
+% math(subscript(R, Idx), M, Flags, Flags1)
+%  => Flags1 = [subscript(Idx) | Flags],
+%     M = R.
+%
+% ml(R, M, Flags),
+%     select(subscript(Idx), Flags, Flags1)
+%  => ml(R, X, Flags1),
+%     ml(Idx, Y, Flags1),
+%     M = msub([X, Y]).
+% 
+% jax(R, M, Flags),
+%     select(subscript(Idx), Flags, Flags1)
+%  => jax(R, X, Flags1),
+%     jax(Idx, Y, Flags1),
+%     format(string(M), "{~w}_{~w}", [X, Y]).
+% 
+% type(R, Type, Flags),
+%     member(subscript(Idx), Flags)
+%  => Type = subscript(R, Idx).
 
-ml(R, M, Flags),
-    select(subscript(Idx), Flags, Flags1)
- => ml(R, X, Flags1),
-    ml(Idx, Y, Flags1),
+ml(subscript(R, Idx), M, Flags)
+ => ml(R, X, Flags),
+    ml(Idx, Y, Flags),
     M = msub([X, Y]).
-
-jax(R, M, Flags),
-    select(subscript(Idx), Flags, Flags1)
- => jax(R, X, Flags1),
-    jax(Idx, Y, Flags1),
+ 
+jax(subscript(R, Idx), M, Flags)
+ => jax(R, X, Flags),
+    jax(Idx, Y, Flags),
     format(string(M), "{~w}_{~w}", [X, Y]).
 
-type(R, Type, Flags),
-    member(subscript(Idx), Flags)
+type(subscript(R, Idx), Type, _Flags)
  => Type = subscript(R, Idx).
 
 mathml :-
     mathml(subscript(x, i)).
 
 % Superscripts like s^D
-math(superscript(R, Idx), M, Flags, Flags1)
- => Flags1 = [superscript(Idx) | Flags],
-    M = R.
-
-ml(R, M, Flags),
-    select(superscript(Pwr), Flags, Flags1),
-    prec(R, Prec, Flags1),
+% math(superscript(R, Idx), M, Flags, Flags1)
+%  => Flags1 = [superscript(Idx) | Flags],
+%     M = R.
+% 
+ml(superscript(R, Pwr), M, Flags),
+    prec(R, Prec, Flags),
     current_op(P, xfy, ^),
     Prec >= P
- => ml(paren(R), X, Flags1),
-    ml(Pwr, Y, Flags1),
+ => ml(paren(R), X, Flags),
+    ml(Pwr, Y, Flags),
     M = msup([X, Y]).
 
-ml(R, M, Flags),
-    select(superscript(Pwr), Flags, Flags1)
- => ml(R, X, Flags1),
-    ml(Pwr, Y, Flags1),
+ml(superscript(R, Pwr), M, Flags)
+ => ml(R, X, Flags),
+    ml(Pwr, Y, Flags),
     M = msup([X, Y]).
 
-jax(R, M, Flags),
-    select(superscript(Pwr), Flags, Flags1),
-    prec(R, Prec, Flags1),
+jax(superscript(R, Pwr), M, Flags),
+    prec(R, Prec, Flags),
     current_op(P, xfy, ^),
     Prec >= P
- => jax(paren(R), X, Flags1),
-    jax(Pwr, Y, Flags1),
+ => jax(paren(R), X, Flags),
+    jax(Pwr, Y, Flags),
     format(string(M), "{~w}^{~w}", [X, Y]).
 
-jax(R, M, Flags),
-    select(superscript(Pwr), Flags, Flags1)
- => jax(R, X, Flags1),
-    jax(Pwr, Y, Flags1),
+jax(superscript(R, Pwr), M, Flags)
+ => jax(R, X, Flags),
+    jax(Pwr, Y, Flags),
     format(string(M), "{~w}^{~w}", [X, Y]).
 
-type(R, Type, Flags),
-    member(superscript(Pwr), Flags)
+type(superscript(R, Pwr), Type, _Flags)
  => Type = superscript(R, Pwr).
 
 mathml :-
