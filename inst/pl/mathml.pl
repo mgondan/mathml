@@ -126,13 +126,6 @@ math(name(_) = R, M)
  => M = R.
 
 %
-% Check if the current element is to be replaced
-%
-math(R, M, Flags, Flags1),
-    member(replace(R, _), Flags)
- => select(replace(R, M), Flags, Flags1).
-
-%
 % Examples
 %
 mathml(R) :-
@@ -159,175 +152,168 @@ denoting_(Flags, R, Den)
  => denoting(R, Den, Flags).
 
 %
-% Content starts here
+% Summation and product sign
 %
+math(sum_over(Arg, Range), M)
+ => M = fn(subscript(sum, Range), [Arg]).
 
-% Summation sign from to (subscript and superscript)
-math(Sum, M, Flags, New),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, [Arg]),
-    select(subscript(From), Flags, Flags1),
-    select(superscript(To), Flags1, Flags2)
- => New = Flags2,
-    M = fn(subsupscript(sum, From, To), [Arg]).
-
-math(Sum, M, Flags, New),
-    compound(Sum),
-    compound_name_arguments(Sum, sum, [Arg]),
-    select(subscript(Index), Flags, Flags1)
- => New = Flags1,
-    M = fn(subscript(sum, Index), [Arg]).
+math(sum_over(Arg, From, To), M)
+ => M = fn(subsupscript(sum, From, To), [Arg]).
 
 mathml :-
-    mathml(subscript(sum('['(x, i)), i)).
-
-% Same for product sign
-math(Prod, M, Flags, New),
-    compound(Prod),
-    compound_name_arguments(Prod, prod, [Arg]),
-    select(subscript(From), Flags, Flags1),
-    select(superscript(To), Flags1, Flags2)
- => New = Flags2,
-    M = fn(subsupscript(prod, From, To), [Arg]).
-
-math(Prod, M, Flags, New),
-    compound(Prod),
-    compound_name_arguments(Prod, prod, [Arg]),
-    select(subscript(Index), Flags, Flags1)
- => New = Flags1,
-    M = fn(subscript(prod, Index), [Arg]).
+    mathml(sum('['(x, i), i)).
 
 mathml :-
-    mathml(subscript(prod('['(x, i)), i)).
+    mathml(sum('['(x, i), i=1, n)).
 
-%
-% Sub- and superscripts
-%
-% Moves sub- and superscript into the flags, so that the next available
-% function can handle them. This is needed, e.g., if colors are to be
-% skipped.
-%
-% math(subsupscript(R, Idx, Pwr), M, Flags, Flags1)
-%  => Flags1 = [subscript(Idx), superscript(Pwr) | Flags],
-%     M = R.
-%
-% ml(R, M, Flags),
-%     select(subscript(Idx), Flags, Flags1),
-%     select(superscript(Pwr), Flags1, Flags2)
-%  => ml(R, X, Flags2),
-%     ml(Idx, Y, Flags2),
-%     ml(Pwr, Z, Flags2),
-%     M = msubsup([X, Y, Z]).
+math(prod_over(Arg, Range), M)
+ => M = fn(subscript(prod, Range), [Arg]).
 
-% jax(R, M, Flags),
-%     select(subscript(Idx), Flags, Flags1),
-%     select(superscript(Pwr), Flags1, Flags2)
-%  => jax(R, X, Flags2),
-%     jax(Idx, Y, Flags2),
-%     jax(Pwr, Z, Flags2),
-%     format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
-%
-% type(R, Type, Flags),
-%     member(subscript(Idx), Flags),
-%     member(superscript(Pwr), Flags)
-%  => Type = subsupscript(R, Idx, Pwr).
-
-ml(subsupscript(R, Idx, Pwr), M, Flags)
- => ml(R, X, Flags),
-    ml(Idx, Y, Flags),
-    ml(Pwr, Z, Flags),
-    M = msubsup([X, Y, Z]).
-
-jax(subsupscript(R, Idx, Pwr), M, Flags)
- => jax(R, X, Flags),
-    jax(Idx, Y, Flags),
-    jax(Pwr, Z, Flags),
-    format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
-
-type(subsupscript(R, Idx, Pwr), Type, _Flags)
- => Type = subsupscript(R, Idx, Pwr).
+math(prod_over(Arg, From, To), M)
+ => M = fn(subsupscript(prod, From, To), [Arg]).
 
 mathml :-
-    mathml(subsupscript(x, i, 2)).
+    mathml(prod_over('['(x, i), i)).
 
-% Subscript like s_D
-math(Sub, M),
-    compound(Sub),
-    compound_name_arguments(Sub, '[', [R | Indices])
- => M = subscript(R, list("", Indices)).
+mathml :-
+    mathml(prod_over('['(x, i), i=1, n)).
 
-% math(subscript(R, Idx), M, Flags, Flags1)
-%  => Flags1 = [subscript(Idx) | Flags],
-%     M = R.
 %
-% ml(R, M, Flags),
-%     select(subscript(Idx), Flags, Flags1)
-%  => ml(R, X, Flags1),
-%     ml(Idx, Y, Flags1),
-%     M = msub([X, Y]).
-% 
-% jax(R, M, Flags),
-%     select(subscript(Idx), Flags, Flags1)
-%  => jax(R, X, Flags1),
-%     jax(Idx, Y, Flags1),
-%     format(string(M), "{~w}_{~w}", [X, Y]).
-% 
-% type(R, Type, Flags),
-%     member(subscript(Idx), Flags)
-%  => Type = subscript(R, Idx).
+% Subscripts like x[i]
+%
+base(A, Base, Flags) :-
+    type(A, Type, Flags),
+    member(base(Base), Type).
 
-ml(subscript(R, Idx), M, Flags)
- => ml(R, X, Flags),
+index(A, Idx, Flags) :-
+    type(A, Type, Flags),
+    member(index(Idx), Type).
+
+power(A, Pwr, Flags) :-
+    type(A, Type, Flags),
+    member(power(Pwr), Type).
+
+math(A, M, _Flags),
+    compound(A),
+    compound_name_arguments(A, '[', [Base | Idx])
+ => M = subscript(Base, list("", Idx)).
+
+math(subscript(A, Idx), M, Flags),
+    power(A, Pwr, Flags),
+    base(A, Base, Flags)
+ => M = subsupscript(Base, Idx, Pwr).
+
+ml(subscript(Base, Idx), M, Flags)
+ => ml(Base, X, Flags),
     ml(Idx, Y, Flags),
     M = msub([X, Y]).
- 
-jax(subscript(R, Idx), M, Flags)
- => jax(R, X, Flags),
+
+jax(subscript(Base, Idx), M, Flags)
+ => jax(Base, X, Flags),
     jax(Idx, Y, Flags),
     format(string(M), "{~w}_{~w}", [X, Y]).
 
-type(subscript(R, Idx), Type, _Flags)
- => Type = subscript(R, Idx).
+prec(subscript(Base, _Idx), P, Flags)
+ => prec(Base, P, Flags).
+
+type(subscript(Base, Idx), Type, Flags)
+ => type(Base, T, Flags),
+    Type = [base(Base), index(Idx) | T].
 
 mathml :-
     mathml(subscript(x, i)).
 
-% Superscripts like s^D
-% math(superscript(R, Idx), M, Flags, Flags1)
-%  => Flags1 = [superscript(Idx) | Flags],
-%     M = R.
-% 
-ml(superscript(R, Pwr), M, Flags),
-    prec(R, Prec, Flags),
-    current_op(P, xfy, ^),
-    Prec >= P
- => ml(paren(R), X, Flags),
+mathml :-
+    mathml('['(x, i)).
+
+mathml :-
+    mathml('['(x, i, j)).
+
+%
+% Superscripts like s^2
+%
+math(Base^Pwr, M, _Flags)
+ => M = superscript(Base, Pwr).
+
+math(superscript(A, Pwr), M, Flags),
+    index(A, Idx, Flags),
+    base(A, Base, Flags)
+ => M = subsupscript(Base, Idx, Pwr).
+
+math(superscript(Base, Pwr), M, Flags),
+    type(Base, Type, Flags),
+    \+ member(special, Type),
+    prec(Base, P, Flags),
+    current_op(Hat, xfy, ^),
+    P >= Hat
+ => M = superscript(paren(Base), Pwr).
+
+ml(superscript(Base, Pwr), M, Flags)
+ => ml(Base, X, Flags),
     ml(Pwr, Y, Flags),
     M = msup([X, Y]).
 
-ml(superscript(R, Pwr), M, Flags)
- => ml(R, X, Flags),
-    ml(Pwr, Y, Flags),
-    M = msup([X, Y]).
-
-jax(superscript(R, Pwr), M, Flags),
-    prec(R, Prec, Flags),
-    current_op(P, xfy, ^),
-    Prec >= P
- => jax(paren(R), X, Flags),
+jax(superscript(Base, Pwr), M, Flags)
+ => jax(Base, X, Flags),
     jax(Pwr, Y, Flags),
     format(string(M), "{~w}^{~w}", [X, Y]).
 
-jax(superscript(R, Pwr), M, Flags)
- => jax(R, X, Flags),
-    jax(Pwr, Y, Flags),
-    format(string(M), "{~w}^{~w}", [X, Y]).
+prec(superscript(_Base, _Pwr), P, _Flags)
+ => current_op(P, xfy, ^).
 
-type(superscript(R, Pwr), Type, _Flags)
- => Type = superscript(R, Pwr).
+type(superscript(Base, Pwr), Type, Flags)
+ => type(Base, T, Flags),
+    Type = [base(Base), power(Pwr) | T].
 
 mathml :-
     mathml(superscript(x, 2)).
+
+mathml :-
+    mathml(x^2).
+
+mathml :-
+    mathml(-1 ^ 2).
+
+%
+% Subscripts and superscripts
+%
+math(subsupscript(Base, Idx, Pwr), M, Flags),
+    type(Base, Type, Flags),
+    \+ member(special, Type),
+    prec(Base, P, Flags),
+    current_op(Hat, xfy, ^),
+    P >= Hat
+ => M = subsupscript(paren(Base), Idx, Pwr).
+
+ml(subsupscript(Base, Idx, Pwr), M, Flags)
+ => ml(Base, X, Flags),
+    ml(Idx, Y, Flags),
+    ml(Pwr, Z, Flags),
+    M = msubsup([X, Y, Z]).
+
+jax(subsupscript(Base, Idx, Pwr), M, Flags)
+ => jax(Base, X, Flags),
+    jax(Idx, Y, Flags),
+    jax(Pwr, Z, Flags),
+    format(string(M), "{~w}_{~w}^{~w}", [X, Y, Z]).
+
+prec(subsupscript(Base, _Idx, Pwr), P, Flags)
+ => prec(subscript(Base, Pwr), P, Flags).
+
+type(subsupscript(Base, Idx, Pwr), Type, Flags)
+ => type(Base, T, Flags),
+    Type = [base(Base), index(Idx), power(Pwr) | T].
+
+mathml :-
+    mathml(subsupscript(x, i, 2)).
+
+mathml :-
+    mathml(subsupscript(-1, i, 2)).
+
+mathml :-
+    mathml('['(x, i)^2).
+
+
 
 %
 % Upright text
@@ -469,13 +455,13 @@ math(tanpi(A), M, Flags, Flags2),
 %
 % Special functions
 %
-special(R) :-
-    atom(R),
-    memberchk(R, [sgn, sin, cos, tan, asin, arcsin, acos, arccos, atan, arctan, arctan2, sinh, cosh, tanh,
+special(A, _Flags) :-
+    atom(A),
+    member(A, [sgn, sin, cos, tan, asin, arcsin, acos, arccos, atan, arctan, arctan2, sinh, cosh, tanh,
                arsinh, arcosh, artanh, log, exp, sum, prod, min, max, argmin, argmax]).
 
-math(R, M),
-    special(R)
+math(R, M, Flags),
+    special(R, Flags)
  => M = special(R).
 
 ml(special(sum), M, _Flags)
@@ -490,22 +476,16 @@ ml(special(prod), M, _Flags)
 
 prec(special(prod), Prec, _Flags)
  => current(P, yfx, *),
-    Prec is P + 1.
+    Prec is P.
 
 ml(special(R), M, _Flags)
  => M = mi(R).
 
-jax(special(sum), M, _Flags)
- => M = "\\sum".
-
-jax(special(prod), M, _Flags)
- => M = "\\prod".
-
 jax(special(sgn), M, _Flags)
- => M = "{\\mathrm{sgn}\\,}".
+ => M = "\\mathrm{sgn}\\,".
 
 jax(special(argmin), M, _Flags)
- => M = "{\\arg\\min}".
+ => M = "\\arg\\min".
 
 jax(special(argmax), M, _Flags)
  => M = "{\\arg\\max}".
@@ -514,7 +494,7 @@ jax(special(R), M, _Flags)
  => format(string(M), "\\~w", [R]).
 
 type(special(_), T, _Flags)
- => T = special.
+ => T = [special].
 
 prec(special(sin), Prec, _Flags)
  => Prec = 0.
@@ -2451,7 +2431,7 @@ prec(fn(_Name, (_Args ; _Pars)), Prec, Flags)
     Prec is P0 - 1.
 
 type(fn(_Name, (_Args ; _Pars)), Type, _Flags)
- => Type = paren.
+ => Type = [paren].
 
 ml(fn(Name, [Arg]), M, Flags),
     type(Arg, paren, Flags)
@@ -2465,13 +2445,22 @@ jax(fn(Name, [Arg]), M, Flags),
     jax(Arg, X, Flags),
     format(string(M), "~w{~w}", [F, X]).
 
+%
 % Omit parenthesis in special functions
+%
+% sum_i x_i              [prec: sum = 0 -> 401, x_i = 0]
+% sum_i (a_i + b_i)      [sum = 0 -> 401, + = 500]
+% sum_i a_i * b_i (!)    [sum = 0 -> 401, * = 400]
+% sum_i log p_i          [sum = 0 -> 401, log(x) = 400]
+%
+% prod_i x_i             [prod -> 400, x_i = 0]
+% prod_i (a_i + b_i)     [prod -> 400, + = 500]
+% prod_i (a_i * b_i) (!) [prod -> 400, * = 400]
+% prod_i log p_i         [prod -> 400, log(x) = 400]
+%
 ml(fn(Name, [Arg]), M, Flags),
-    (   type(Name, special, Flags)
-    ;   type(Name, subscript(N, _), Flags), type(N, special, Flags)
-    ;   type(Name, superscript(N, _), Flags), type(N, special, Flags)
-    ;   type(Name, subsupscript(N, _, _), Flags), type(N, special, Flags)
-    ),
+    type(Name, Type, Flags),
+    member(special, Type),
     prec(Name, P, Flags),
     prec(Arg, Prec, Flags),
     P >= Prec
@@ -2480,11 +2469,8 @@ ml(fn(Name, [Arg]), M, Flags),
     M = mrow([F, mo(&(af)), X]).
 
 jax(fn(Name, [Arg]), M, Flags),
-    (   type(Name, special, Flags)
-    ;   type(Name, subscript(N, _), Flags), type(N, special, Flags)
-    ;   type(Name, superscript(N, _), Flags), type(N, special, Flags)
-    ;   type(Name, subsupscript(N, _, _), Flags), type(N, special, Flags)
-    ),
+    type(Name, Type, Flags),
+    member(special, Type),
     prec(Name, P, Flags),
     prec(Arg, Prec, Flags),
     P >= Prec

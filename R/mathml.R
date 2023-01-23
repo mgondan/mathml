@@ -175,83 +175,55 @@ name <- function(x, name)
 #'
 cal <- identity
 
-#' Subscript. On the R side, this function is a wrapper of identity, but allows
-#' for decorations.
+#' sum over a range. On the R side, this function just returns the first
+#' argument, but allows for decorations.
 #'
-#' @param sub
-#' an R symbol or call, e.g., i
+#' @param x
+#' the object to be summed
 #'
-#' @param fun
-#' an R call or symbol, e.g. sum(x). This is the return value of the function.
+#' @param from
+#' decoration for sum_from^to x[i]
+#'
+#' @param to
+#' decoration for sum_from^to x[i]
 #'
 #' @return
-#' The function over is a wrapper for the identity function, returning _fun_
+#' The function returns sum(x)
 #'
 #' @md
 #'
-#' @seealso [identity()]
+#' @seealso [sum(), prod_over()]
 #'
 #' @examples
-#' mathjax(quote(subscript(sub=i, fun=x)))
+#' mathjax(quote(sum_over(x[i], i=1L, N)))
 #'
-subscript <- function(fun=quote(x), sub=quote(i))
-{
-  return(fun)
-}
+sum_over <- function(x, from, to)
+  sum(x)
 
-#' Superscript. This is a wrapper for the identity function, but decorates the
-#' result with a superscript.
+#' product over a range. On the R side, this function just returns the product
+#' of the first argument, but allows for decorations.
 #'
-#' @param sup
-#' an R symbol, e.g., "*"
+#' @param x
+#' the object to be multiplied
 #'
-#' @param fun
-#' an R call or symbol, e.g. x. This is the return value of the function.
+#' @param from
+#' decoration for prod_from^to x[i]
+#'
+#' @param to
+#' decoration for prod_from^to x[i]
 #'
 #' @return
-#' The function over is a wrapper for the identity function, returning _fun_
+#' The function returns prod(x)
 #'
 #' @md
 #'
-#' @seealso [identity()]
+#' @seealso [prod(), sum_over()]
 #'
 #' @examples
-#' mathjax(quote(superscript(fun=A, sup="*")))
+#' mathjax(quote(prod_over(x[i], i=1L, N)))
 #'
-superscript <- function(fun=quote(A), sup="*")
-{
-  return(fun)
-}
-
-#' Subsupscript. This is a wrapper for the identity function, but decorates the
-#' result with a sub- and a superscript.
-#'
-#' @md
-#'
-#' @param sub
-#' an R symbol, e.g., `i=1`
-#'
-#' @param sup
-#' an R symbol, e.g., `N`
-#'
-#' @param fun
-#' an R call or symbol, e.g. `sum(x[i])`. This is the return value.
-#'
-#' @return
-#' The function over is a wrapper for the identity function, returning _fun_
-#'
-#' @seealso [identity()]
-#'
-#' @examples
-#' N <- 10
-#' i <- 1:N
-#' x <- rnorm(N)
-#' mathjax(call("subsupscript", fun=sum(x[i]), sub=quote(`=`(i, 1L)), sup=quote(N)))
-#'
-subsupscript <- function(fun=quote(sum(x[i])), sub=quote(`=`(i, 1)), sup=quote(N))
-{
-  return(fun)
-}
+prod_over <- function(x, from, to)
+  prod(x)
 
 #' Canonicalize an R call: Reorder the function arguments
 #'

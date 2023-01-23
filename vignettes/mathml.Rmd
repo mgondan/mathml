@@ -462,16 +462,15 @@ control structures such as `if`.
 
 Indices in square brackets are rendered as subscripts, powers are rendered as
 superscript. Moreover, _mathml_ defines the
-functions `subscript()`, `superscript()` and `subsuperscript()` that simply
-return their first argument. The other arguments serve as decorations, for
-example, for summation and product signs.
+functions `sum_over(x, from, to)`, and `prod_over(x, from, to)` that simply
+return their first argument. The other two arguments serve as
+decorations (_to_ is optional), for example, for summation and product signs.
 
 ```{r, results='asis'}
 term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
 mathout(term)
 
-term <- quote(log(subsupscript(prod(L[i]), i==1L, N)) <- 
-          subsupscript(sum(log(L[i])), i==1L, N))
+term <- quote(log(prod_over(L[i], i==1L, N)) <- sum_over(log(L[i]), i==1L, N))
 mathout(term)
 ```
 
@@ -574,7 +573,7 @@ The hooks can also be used for more complex elements such as R\ calls, with
 dotted symbols representing Prolog variables.
 
 ```{r, results='asis'}
-hook(pbinom(.K, .N, .P), subsupscript(sum(dbinom(i, .N, .P)), i=0L, .K))
+hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
 mathout(term)
 ```
 

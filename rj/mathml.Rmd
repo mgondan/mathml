@@ -59,8 +59,6 @@ Vignette: >
 # Ellipsis: ldots or cdots. E.g., 
 ## x[1] + ... + x[n]
 
-# Radicals sqrt(x, y) --> y√x
-
 # Chains: a < b < c
 
 # Sets: some symbols in set relations are missing:
