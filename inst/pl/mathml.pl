@@ -1218,6 +1218,9 @@ prec(cancel(A), Prec, Flags)
 type(cancel(A), Type, Flags)
  => type(A, Type, Flags).
 
+math(boxed(A), M)
+ => M = box(A).
+
 ml(box(A), M, Flags)
  => ml(A, X, Flags),
     M = menclose(notation(roundedbox), X).

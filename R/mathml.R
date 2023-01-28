@@ -792,10 +792,10 @@ bold <- identity
 #' x
 #'
 #' @examples
-#' roof(1) + mean(2) + box(3) + cancel(4) + phantom(5) + prime(6) + tilde(7)
+#' roof(1) + mean(2) + boxed(3) + cancel(4) + phantom(5) + prime(6) + tilde(7)
 #'
 #' @examples
-#' mathml(quote(roof(b) + mean(X) + box(3) + cancel(4) + phantom(5) + prime(6)))
+#' mathml(quote(roof(b) + mean(X) + boxed(3) + cancel(4) + phantom(5)))
 
 #' @rdname decorations
 #' @export
@@ -803,7 +803,7 @@ roof <- identity
 
 #' @rdname decorations
 #' @export
-box <- identity
+boxed <- identity
 
 #' @rdname decorations
 #' @export

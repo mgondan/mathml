@@ -15,14 +15,6 @@ Vignette: >
 ---
 
 ```{r setup, include=FALSE}
-# Typeface: plain, bold, italic, bolditalic
-
-# Stylechanges: textstyle(x), scriptstyle(x) scriptscript(x)
-
-# linear models: DepVar ~ X0 + X1
-
-# hat, overline, cancel, box, invisible, phantom
-
 library(mathml)
 
 mathout <- function(..., flags=NULL, env=parent.frame())
@@ -222,7 +214,7 @@ so they can be introduced into R expressions without side-effects.
 term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
 mathout(term)
 
-term <- quote(tilde(a) + mean(X) + box(c) + cancel(d) + phantom(e) + prime(f))
+term <- quote(tilde(a) + mean(X) + boxed(c) + cancel(d) + phantom(e) + prime(f))
 mathout(term)
 ```
 
@@ -928,6 +920,45 @@ according to a user's needs. As stated in the background section, the Prolog end
 provides two classes of rules for translation, macros `math/2,3,4` mirroring the
 R\ hooks mentioned above, and the low-level predicates `ml/3` and `jax/3` that
 create proper MathML and Latex terms.
+
+## Linear models
+
+To render the model equation of a linear model such
+as `lm(EOT ~ T0 + Therapy, data=d)` in mathematical form, it is sufficient to
+map the `Formula` in `lm(Formula, Data)` to its respective equation. This can in
+two ways, using either the hooks described above, or a new `math/2` macro at the
+Prolog end.
+
+````r
+hook(lm(.Formula, .Data), .Formula)
+````
+
+The hook is simple, but is a bit limited because only R's tilde-form
+of linear models is shown, and it only works for a call with exactly two
+arguments.
+
+Below is an example how to build a linear equation of the
+form \(Y = b_0 + b_1X_1 + ...\) using the Prolog macros from _mathml_.
+
+````prolog
+math_hook(LM, M) :-
+    compound(LM),
+    LM =.. [lm, ~(Y, Sum) | _Tail],
+    summands(Sum, Predictors),
+    findall(subscript(b, X) * X, member(X, Predictors), Terms),
+    summands(Model, Terms),
+    M = (Y == subscript(b, 0) + Model + epsilon).
+````
+
+The predicate `summands/2` unpacks an expression `A + B + C` to a
+list `[C, B, A]` and vice-versa (see the file `lm.pl` for details).
+
+````{r, results='asis'}
+rolog::consult(system.file(file.path("pl", "lm.pl"), package="mathml"))
+
+term <- quote(lm(EOT ~ T0 + Therapy, data=d, na.action=na.fail))
+mathout(term)
+````
 
 ## \(n\)-th root
 
