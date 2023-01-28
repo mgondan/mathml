@@ -733,13 +733,54 @@ add <- function(expr)
 #' in particular adds a curly bracket under the wrong term and it provides the
 #' correct solutions.
 #'
-#' @param inst instead
+#' @param inst
+#' the wrong term
 #'
-#' @param of of
+#' @param of
+#' the correct term
 #'
-#' @return inst , e.g. a + c instead of a + b
+#' @return
+#' inst
+#'
+#' @examples
+#' 1 + instead(2, 3)
+#'
+#' @examples
+#' mathml(term=quote(1 + instead(2, 3)))
 #'
 instead <- function(inst, of)
 {
   return(inst)
 }
+
+#' Identity functions for different font styles
+#'
+#' @name fontstyles
+#'
+#' @param expr
+#' the expression to render
+#'
+#' @return
+#' expr
+#'
+#' @examples
+#' plain(1) + bold(2) + italic(3) + bolditalic(4)
+#'
+#' @examples
+#' mathml(term=quote(plain(1) + bold(2) + italic(3) + bolditalic(4)))
+
+#' @rdname fontstyles
+#' @export
+plain <- identity
+
+#' @rdname fontstyles
+#' @export
+italic <- identity
+
+#' @rdname fontstyles
+#' @export
+bold <- identity
+
+#' @rdname fontstyles
+#' @export
+bolditalic <- identity

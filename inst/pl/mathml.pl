@@ -556,6 +556,22 @@ ml(ident(R), M, Flags),
     member(mathvariant(calligraphy), Flags)
  => M = mi(mathvariant(script), R).
 
+ml(ident(R), M, Flags),
+    member(mathvariant(plain), Flags)
+ => M = mi(mathvariant(normal), R).
+
+ml(ident(R), M, Flags),
+    member(mathvariant(italic), Flags)
+ => M = mi(mathvariant(italic), R).
+
+ml(ident(R), M, Flags),
+    member(mathvariant(bold), Flags)
+ => M = mi(mathvariant(bold), R).
+
+ml(ident(R), M, Flags),
+    member(mathvariant(bolditalic), Flags)
+ => M = mi(mathvariant('bold-italic'), R).
+
 ml(ident(R), M, _Flags)
  => M = mi(R).
 
@@ -568,6 +584,33 @@ jax(ident(R), M, _Flags)
 
 type(ident(_), T, _Flags)
  => T = atomic.
+
+%
+% Font styles
+%
+math(plain(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(plain) | Flags0].
+
+math(bold(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(bold) | Flags0].
+
+math(italic(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(italic) | Flags0].
+
+math(bolditalic(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(bolditalic) | Flags0].
+
+jax(ident(R), M, Flags),
+    member(mathvariant(calligraphy), Flags)
+ => format(string(M), "\\mathcal{~w}", [R]).
+
+jax(ident(R), M, _Flags)
+ => format(string(M), "~w", [R]).
+
 
 %
 % Linear model

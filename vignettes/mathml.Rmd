@@ -2,7 +2,7 @@
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Department of Psychology, Universität Innsbruck, Austria)"
-date: "2023-01-21"
+date: "2023-01-28"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
@@ -15,22 +15,6 @@ Vignette: >
 ---
 
 ```{r setup, include=FALSE}
-# Spacing: operator for separating elements in expression. E.g.,
-## x ~ y --> x  y ;
-## x ~ ~ y --> x    y
-
-# Ellipsis: ldots or cdots. E.g., 
-## x[1] + ... + x[n]
-
-# Radicals sqrt(x, y) --> y√x
-
-# Sets: some symbols in set relations are missing:
-## supset, supseteq, notsubset, subset, subseteq, notin
-
-# Phantom: command that produces a space in place of an argument (partially covered by omit() (?)). E.g.:
-## x + phantom(0) + y --> x +    + y
-## x + over(1, vphantom(0)) --> x + 1/  
-
 # Typeface: plain, bold, italic, bolditalic
 
 # Stylechanges: textstyle(x), scriptstyle(x) scriptscript(x)
@@ -227,6 +211,25 @@ Note that an R\ function `hat()` does not exist in base R, it is provided by the
 package for convenience and points to the identity function. Quite a few such
 convenience functions have been defined
 in _mathml_ (see, e.g., next section, and the manual for details).
+
+## Decorations
+
+The package offers some support for different fonts as well as accents and
+boxes etc. Internally, these decorations are implemented as identitiy functions,
+so they can be introduced into R expressions without side-effects. Note that the
+font styles only affect the display of identifiers, whereas numbers, character
+strings etc. are left untouched.
+
+```{r, results='asis'}
+term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + bolditalic(X))
+mathout(term)
+
+# hat, overline, box, cancel, prime, phantom, color
+term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + hat(b)[i, j]^2L)
+mathout(term)
+```
+
+Note that these 
 
 ## Operators and parentheses
 
