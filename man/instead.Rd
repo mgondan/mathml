@@ -7,15 +7,21 @@
 instead(inst, of)
 }
 \arguments{
-\item{inst}{instead}
+\item{inst}{the wrong term}
 
-\item{of}{of}
+\item{of}{the correct term}
 }
 \value{
-inst , e.g. a + c instead of a + b
+inst
 }
 \description{
 This is a function that allows the user to highlight the mistakes,
 in particular adds a curly bracket under the wrong term and it provides the
 correct solutions.
+}
+\examples{
+1 + instead(2, 3)
+
+mathml(term=quote(1 + instead(2, 3)))
+
 }

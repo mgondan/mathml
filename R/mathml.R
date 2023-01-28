@@ -757,17 +757,17 @@ instead <- function(inst, of)
 #'
 #' @name fontstyles
 #'
-#' @param expr
+#' @param x
 #' the expression to render
 #'
 #' @return
-#' expr
+#' x
 #'
 #' @examples
 #' plain(1) + bold(2) + italic(3) + bolditalic(4)
 #'
 #' @examples
-#' mathml(term=quote(plain(1) + bold(2) + italic(3) + bolditalic(4)))
+#' mathml(term=quote(plain(abc) + bold(def) + italic(ghi)))
 
 #' @rdname fontstyles
 #' @export
@@ -781,6 +781,42 @@ italic <- identity
 #' @export
 bold <- identity
 
-#' @rdname fontstyles
+#' Identity functions for different decorations
+#'
+#' @name decorations
+#'
+#' @param x
+#' the expression to render
+#'
+#' @return
+#' x
+#'
+#' @examples
+#' roof(1) + mean(2) + box(3) + cancel(4) + phantom(5) + prime(6) + tilde(7)
+#'
+#' @examples
+#' mathml(quote(roof(b) + mean(X) + box(3) + cancel(4) + phantom(5) + prime(6)))
+
+#' @rdname decorations
 #' @export
-bolditalic <- identity
+roof <- identity
+
+#' @rdname decorations
+#' @export
+box <- identity
+
+#' @rdname decorations
+#' @export
+cancel <- identity
+
+#' @rdname decorations
+#' @export
+phantom <- identity
+
+#' @rdname decorations
+#' @export
+prime <- identity
+
+#' @rdname decorations
+#' @export
+tilde <- identity

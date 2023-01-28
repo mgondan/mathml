@@ -195,7 +195,7 @@ such as numbers, Latin and Greek letters, multi-letter identifiers, accents,
 subscripts, and superscripts. 
  
 ```{r, results='asis'}
-term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + hat(b)[i, j]^2L)
+term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
 mathout(term)
 
 term <- quote(NaN + NA + TRUE + FALSE + Inf + (-Inf))
@@ -207,29 +207,27 @@ aesthetical perspective. It is correct R\ syntax, though, and is reproduced
 accordingly, without the parentheses. Parentheses around negated numbers or
 symbols can be added as shown above for `+ (-Inf)`.
 
-Note that an R\ function `hat()` does not exist in base R, it is provided by the
-package for convenience and points to the identity function. Quite a few such
-convenience functions have been defined
-in _mathml_ (see, e.g., next section, and the manual for details).
+To avoid name clashes with package _stats_, `roof()` is used to put a hat
+on a symbol (see next section for further decorations). Note that an 
+R\ function `roof()` does not exist in base R, it is provided by the package
+for convenience and points to the identity function.
 
-## Decorations
+# Decorations
 
 The package offers some support for different fonts as well as accents and
-boxes etc. Internally, these decorations are implemented as identitiy functions,
-so they can be introduced into R expressions without side-effects. Note that the
-font styles only affect the display of identifiers, whereas numbers, character
-strings etc. are left untouched.
+boxes etc. Internally, these decorations are implemented as identity functions,
+so they can be introduced into R expressions without side-effects.
 
 ```{r, results='asis'}
-term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + bolditalic(X))
+term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
 mathout(term)
 
-# hat, overline, box, cancel, prime, phantom, color
-term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + hat(b)[i, j]^2L)
+term <- quote(tilde(a) + mean(X) + box(c) + cancel(d) + phantom(e) + prime(f))
 mathout(term)
 ```
 
-Note that these 
+Note that the font styles only affect the display of identifiers, whereas
+numbers, character strings etc. are left untouched.
 
 ## Operators and parentheses
 
@@ -553,12 +551,10 @@ In typical R\ functions, variable names are typically longer than just single
 letters, which may yield unsatisfactory results in the mathematical output.
 
 ```{r, results='asis'}
-term <- quote(pbinom(successes, Ntotal, prob))
-mathout(term)
-
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
+term <- quote(dbinom(successes, Ntotal, prob))
 mathout(term)
 ```
 
@@ -595,7 +591,6 @@ hook(m_A, mean(X)["A"]) ; hook(s2_A, s["A"]^2L) ;
 hook(n_A, n["A"])
 hook(m_B, mean(X)["B"]) ; hook(s2_B, s["B"]^2L)
 hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
-
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
                 "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
@@ -713,7 +708,7 @@ hook(M, overline(X))
 mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
-For asynchronous stimuli, Schwarz [-@schwarz1994; Eq. 10] derived the expected
+For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
 first-passage time as a function of the stimulus onset asyncrony \(\tau\),
 
 ```{r, results="asis"}

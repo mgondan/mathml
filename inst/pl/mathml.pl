@@ -552,6 +552,22 @@ math(R, M),
     atom(R)
  => M = ident(R).
 
+math(plain(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(plain) | Flags0].
+
+math(bold(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(bold) | Flags0].
+
+math(italic(R), M, Flags0, Flags1)
+ => M = R,
+    Flags1 = [mathvariant(italic) | Flags0].
+
+math(cal(A), M, Flags, New)
+ => New = [mathvariant(calligraphy) | Flags],
+    M = A.
+
 ml(ident(R), M, Flags),
     member(mathvariant(calligraphy), Flags)
  => M = mi(mathvariant(script), R).
@@ -568,10 +584,6 @@ ml(ident(R), M, Flags),
     member(mathvariant(bold), Flags)
  => M = mi(mathvariant(bold), R).
 
-ml(ident(R), M, Flags),
-    member(mathvariant(bolditalic), Flags)
- => M = mi(mathvariant('bold-italic'), R).
-
 ml(ident(R), M, _Flags)
  => M = mi(R).
 
@@ -579,38 +591,23 @@ jax(ident(R), M, Flags),
     member(mathvariant(calligraphy), Flags)
  => format(string(M), "\\mathcal{~w}", [R]).
 
+jax(ident(R), M, Flags),
+    member(mathvariant(plain), Flags)
+ => format(string(M), "\\mathrm{~w}", [R]).
+
+jax(ident(R), M, Flags),
+    member(mathvariant(italic), Flags)
+ => format(string(M), "\\mathit{~w}", [R]).
+
+jax(ident(R), M, Flags),
+    member(mathvariant(bold), Flags)
+ => format(string(M), "\\mathbf{~w}", [R]).
+
 jax(ident(R), M, _Flags)
  => format(string(M), "~w", [R]).
 
 type(ident(_), T, _Flags)
  => T = atomic.
-
-%
-% Font styles
-%
-math(plain(R), M, Flags0, Flags1)
- => M = R,
-    Flags1 = [mathvariant(plain) | Flags0].
-
-math(bold(R), M, Flags0, Flags1)
- => M = R,
-    Flags1 = [mathvariant(bold) | Flags0].
-
-math(italic(R), M, Flags0, Flags1)
- => M = R,
-    Flags1 = [mathvariant(italic) | Flags0].
-
-math(bolditalic(R), M, Flags0, Flags1)
- => M = R,
-    Flags1 = [mathvariant(bolditalic) | Flags0].
-
-jax(ident(R), M, Flags),
-    member(mathvariant(calligraphy), Flags)
- => format(string(M), "\\mathcal{~w}", [R]).
-
-jax(ident(R), M, _Flags)
- => format(string(M), "~w", [R]).
-
 
 %
 % Linear model
@@ -1070,9 +1067,6 @@ prec(Prod, P, _Flags),
     compound_name_arity(Prod, prod, _)
  => current(P, yfx, *).
 
-math(mean(A), M)
- => M = overline(A).
-
 math(Min, M),
     compound(Min),
     compound_name_arguments(Min, min, Args)
@@ -1096,11 +1090,6 @@ math('which.max'(A), M)
 
 math('which.min'(A), M)
  => M = argmin(A).
-
-% calligraphic letters
-math(cal(A), M, Flags, New)
- => New = [mathvariant(calligraphy) | Flags],
-    M = A.
 
 %
 % Extract value from a result (e.g., integrate)
@@ -1154,7 +1143,12 @@ paren(integrate(_, _, _, A), Paren, Flags)
 prec(integrate(_, _, _, _), Prec, _Flags)
  => current(Prec, yfx, *).
 
-% hats
+%
+% Decorations
+%
+math(roof(A), M)
+ => M = hat(A).
+
 ml(hat(A), M, Flags)
  => ml(A, X, Flags),
     M = mover(accent(true), [X, mo(&('Hat'))]).
@@ -1172,7 +1166,6 @@ prec(hat(A), Prec, Flags)
 type(hat(A), Type, Flags)
  => type(A, Type, Flags).
 
-% tilde
 ml(tilde(A), M, Flags)
  => ml(A, X, Flags),
     M = mover(accent(true), [X, mo(&(tilde))]).
@@ -1184,6 +1177,98 @@ prec(tilde(A), Prec, Flags)
  => prec(A, Prec, Flags).
 
 type(tilde(A), Type, Flags)
+ => type(A, Type, Flags).
+
+math(mean(A), M)
+ => M = overline(A).
+
+ml(overline(A), M, Flags)
+ => ml(A, X, Flags),
+    M = mover(accent(true), [X, mo(&(macr))]).
+
+jax(overline(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "\\overline{~w}", [X]).
+
+paren(overline(A), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+% Put overline(x)^2 in parentheses
+prec(overline(_), Prec, _Flags)
+ => current(P, yfx, *),
+    Prec = P.
+
+type(overline(A), Type, Flags)
+ => type(A, Type, Flags).
+
+ml(cancel(A), M, Flags)
+ => ml(A, X, Flags),
+    M = menclose(notation(updiagonalstrike), X).
+
+jax(cancel(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "\\cancel{~w}", [X]).
+
+paren(cancel(A), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(cancel(A), Prec, Flags)
+ => prec(A, Prec, Flags).
+
+type(cancel(A), Type, Flags)
+ => type(A, Type, Flags).
+
+ml(box(A), M, Flags)
+ => ml(A, X, Flags),
+    M = menclose(notation(roundedbox), X).
+
+jax(box(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "\\boxed{~w}", [X]).
+
+paren(box(A), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(box(A), Prec, Flags)
+ => prec(A, Prec, Flags).
+
+type(box(A), Type, Flags)
+ => type(A, Type, Flags).
+
+ml(phantom(A), M, Flags)
+ => ml(A, X, Flags),
+    M = mphantom(X).
+
+jax(phantom(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "\\phantom{~w}", [X]).
+
+paren(phantom(A), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(phantom(A), Prec, Flags)
+ => prec(A, Prec, Flags).
+
+type(phantom(A), Type, Flags)
+ => type(A, Type, Flags).
+
+ml(prime(A), M, Flags)
+ => ml(A, X, Flags),
+    M = msup([X, mo(&('#x2032'))]).
+
+jax(prime(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "{~w^\\prime}", [X]).
+
+paren(prime(A), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+% Put prime(x)^2 in parentheses
+prec(prime(_), Prec, _Flags)
+ => current(P, yfx, *),
+    Prec = P.
+
+type(prime(A), Type, Flags)
  => type(A, Type, Flags).
 
 %
@@ -2157,68 +2242,6 @@ prec(display(A), P, Flags)
 
 type(display(A), T, Flags)
  => type(A, T, Flags).
-
-%
-% Decorations
-%
-ml(overline(A), M, Flags)
- => ml(A, X, Flags),
-    M = mover(accent(true), [X, mo(&(macr))]).
-
-jax(overline(A), M, Flags)
- => jax(A, X, Flags),
-    format(string(M), "\\overline{~w}", [X]).
-
-paren(overline(A), Paren, Flags)
- => paren(A, Paren, Flags).
-
-% Put overline(x)^2 in parentheses
-prec(overline(_), Prec, _Flags)
- => current(P, yfx, *),
-    Prec = P.
-
-type(overline(A), Type, Flags)
- => type(A, Type, Flags).
-
-%
-% Cancel out
-%
-ml(cancel(A), M, Flags)
- => ml(A, X, Flags),
-    M = menclose(notation(updiagonalstrike), X).
-
-jax(cancel(A), M, Flags)
- => jax(A, X, Flags),
-    format(string(M), "\\cancel{~w}", [X]).
-
-paren(cancel(A), Paren, Flags)
- => paren(A, Paren, Flags).
-
-prec(cancel(A), Prec, Flags)
- => prec(A, Prec, Flags).
-
-type(cancel(A), Type, Flags)
- => type(A, Type, Flags).
-
-%
-% Box
-%
-ml(box(A), M, Flags)
- => ml(A, X, Flags),
-    M = menclose(notation(roundedbox), X).
-
-jax(box(A), M, Flags)
- => jax(A, X, Flags),
-    format(string(M), "\\boxed{~w}", [X]).
-
-paren(box(A), Paren, Flags)
- => paren(A, Paren, Flags).
-
-prec(box(A), Prec, Flags)
- => prec(A, Prec, Flags).
-
-type(box(A), Type, Flags)
- => type(A, Type, Flags).
 
 %
 % Underbrace

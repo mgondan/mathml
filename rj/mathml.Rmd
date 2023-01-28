@@ -1,6 +1,6 @@
 ---
 title: "mathml: Translate R expressions to MathML and LaTeX"
-date: "2023-01-21"
+date: "2023-01-28"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
@@ -48,33 +48,7 @@ Vignette: >
 ---
 
 ```{r setup, include=FALSE}
-# To do
-#
-# paste(x, y, z)--> z, y, z (Covered by quote ())
-
-# Spacing: operator for separating elements in expression. E.g.,
-## x ~ y --> x  y ;
-## x ~ ~ y --> x    y
-
-# Ellipsis: ldots or cdots. E.g., 
-## x[1] + ... + x[n]
-
-# Chains: a < b < c
-
-# Sets: some symbols in set relations are missing:
-## supset, supseteq, notsubset, subset, subseteq, notin
-
-# Phantom: command that produces a space in place of an argument (partially covered by omit() (?)). E.g.:
-## x + phantom(0) + y --> x +    + y
-## x + over(1, vphantom(0)) --> x + 1/  
-
-# Typeface: plain, bold, italic, bolditalic
-
-# Stylechanges: textstyle(x), scriptstyle(x) scriptscript(x)
-
 # linear models: DepVar ~ X0 + X1
-
-# hat, overline, cancel, box, invisible, phantom
 
 library(mathml)
 
@@ -235,7 +209,7 @@ such as numbers, Latin and Greek letters, multi-letter identifiers, accents,
 subscripts, and superscripts. 
  
 ```{r, results='asis'}
-term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + hat(b)[i, j]^2L)
+term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
 mathout(term)
 
 term <- quote(NaN + NA + TRUE + FALSE + Inf + (-Inf))
@@ -247,10 +221,27 @@ aesthetical perspective. It is correct R\ syntax, though, and is reproduced
 accordingly, without the parentheses. Parentheses around negated numbers or
 symbols can be added as shown above for `+ (-Inf)`.
 
-Note that an R\ function `hat()` does not exist in base R, it is provided by the
-package for convenience and points to the identity function. Quite a few such
-convenience functions have been defined
-in \pkg{mathml} (see, e.g., next section, and the manual for details).
+To avoid name clashes with package \pkg{stats}, `roof()` is used to put a hat
+on a symbol (see next section for further decorations). Note that an 
+R\ function `roof()` does not exist in base R, it is provided by the package
+for convenience and points to the identity function.
+
+## Decorations
+
+The package offers some support for different fonts as well as accents and
+boxes etc. Internally, these decorations are implemented as identity functions,
+so they can be introduced into R expressions without side-effects.
+
+```{r, results='asis'}
+term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
+mathout(term)
+
+term <- quote(tilde(a) + mean(X) + box(c) + cancel(d) + phantom(e) + prime(f))
+mathout(term)
+```
+
+Note that the font styles only affect the display of identifiers, whereas
+numbers, character strings etc. are left untouched.
 
 ## Operators and parentheses
 
@@ -487,16 +478,15 @@ for control structures such as `if`.
 
 Indices in square brackets are rendered as subscripts, powers are rendered as
 superscript. Moreover, \pkg{mathml} defines the
-functions `subscript()`, `superscript()` and `subsuperscript()` that simply
-return their first argument. The other arguments serve as decorations, for
-example, for summation and product signs.
+functions `sum_over(x, from, to)`, and `prod_over(x, from, to)` that simply
+return their first argument. The other two arguments serve as
+decorations (_to_ is optional), for example, for summation and product signs.
 
 ```{r, results='asis'}
 term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
 mathout(term)
 
-term <- quote(log(subsupscript(prod(L[i]), i==1L, N)) <- 
-          subsupscript(sum(log(L[i])), i==1L, N))
+term <- quote(log(prod_over(L[i], i==1L, N)) <- sum_over(log(L[i]), i==1L, N))
 mathout(term)
 ```
 
@@ -599,7 +589,7 @@ The hooks can also be used for more complex elements such as R\ calls, with
 dotted symbols representing Prolog variables.
 
 ```{r, results='asis'}
-hook(pbinom(.K, .N, .P), subsupscript(sum(dbinom(i, .N, .P)), i=0L, .K))
+hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
 mathout(term)
 ```
 
@@ -689,12 +679,11 @@ In typical R\ functions, variable names are typically longer than just single
 letters, which may yield unsatisfactory results in the mathematical output.
 
 ```{r, results='asis'}
-term <- quote(pbinom(successes, Ntotal, prob))
-mathout(term)
-
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
+
+term <- quote(dbinom(successes, Ntotal, prob))
 mathout(term)
 ```
 
@@ -764,7 +753,7 @@ hook(M, overline(X))
 mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
-For asynchronous stimuli, Schwarz [-@schwarz1994; Eq. 10] derived the expected
+For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
 first-passage time as a function of the stimulus onset asyncrony \(\tau\),
 
 ```{r, results="asis"}
