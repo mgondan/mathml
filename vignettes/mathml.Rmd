@@ -828,7 +828,7 @@ ci <- mapply(FUN=qnorm, theta, se, MoreArgs=list(p=c(0.025, 0.975)),
 ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout,
     flags=list(cat=FALSE))
 ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
-tci <- lapply(ci, FUN=mathout, flags=list(cat=FALSE))
+tci <- lapply(ci, FUN=mathout, flags=list(cat=FALSE, sep=","))
 
 t <- cbind(Parameter=ntheta, Estimate=ttheta, CI=tci)
 knitr::kable(t, caption="Table 5. Model fit", row.names=FALSE, escape=FALSE)

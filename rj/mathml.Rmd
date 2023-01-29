@@ -48,8 +48,6 @@ Vignette: >
 ---
 
 ```{r setup, include=FALSE}
-# linear models: DepVar ~ X0 + X1
-
 library(mathml)
 
 mathout <- function(..., flags=NULL, env=parent.frame())

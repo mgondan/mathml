@@ -10,9 +10,9 @@ sum_over(x, from, to)
 \arguments{
 \item{x}{the object to be summed}
 
-\item{from}{decoration for sum_from^to x\link{i}}
+\item{from}{decoration for sum_from^to x_i}
 
-\item{to}{decoration for sum_from^to x\link{i}}
+\item{to}{decoration for sum_from^to x_i}
 }
 \value{
 The function returns sum(x)
@@ -26,5 +26,5 @@ mathjax(quote(sum_over(x[i], i=1L, N)))
 
 }
 \seealso{
-\code{\link[=sum(), prod_over]{sum(), prod_over()}}
+\code{\link[=sum]{sum()}}, \code{\link[=prod_over]{prod_over()}}
 }

@@ -182,17 +182,17 @@ cal <- identity
 #' the object to be summed
 #'
 #' @param from
-#' decoration for sum_from^to x[i]
+#' decoration for sum_from^to x_i
 #'
 #' @param to
-#' decoration for sum_from^to x[i]
+#' decoration for sum_from^to x_i
 #'
 #' @return
 #' The function returns sum(x)
 #'
 #' @md
 #'
-#' @seealso [sum(), prod_over()]
+#' @seealso [sum()], [prod_over()]
 #'
 #' @examples
 #' mathjax(quote(sum_over(x[i], i=1L, N)))
@@ -207,17 +207,17 @@ sum_over <- function(x, from, to)
 #' the object to be multiplied
 #'
 #' @param from
-#' decoration for prod_from^to x[i]
+#' decoration for prod_from^to x_i
 #'
 #' @param to
-#' decoration for prod_from^to x[i]
+#' decoration for prod_from^to x_i
 #'
 #' @return
 #' The function returns prod(x)
 #'
 #' @md
 #'
-#' @seealso [prod(), sum_over()]
+#' @seealso [prod()], [sum_over()]
 #'
 #' @examples
 #' mathjax(quote(prod_over(x[i], i=1L, N)))
@@ -764,7 +764,7 @@ instead <- function(inst, of)
 #' x
 #'
 #' @examples
-#' plain(1) + bold(2) + italic(3) + bolditalic(4)
+#' plain(1) + bold(2) + italic(3)
 #'
 #' @examples
 #' mathml(term=quote(plain(abc) + bold(def) + italic(ghi)))

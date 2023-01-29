@@ -937,7 +937,14 @@ math(invisible(_), M, _Flags)
  => M = ''.
 
 % Vectors
-math(Hash, M),
+math(Hash, M, Flags),
+    option_(sep(Sep), Flags),
+    compound(Hash),
+    compound_name_arguments(Hash, Name, Elements),
+    member(Name, ['#', '$$', '%', '!'])
+ => M = paren(list(Sep, Elements)).
+
+math(Hash, M, _Flags),
     compound(Hash),
     compound_name_arguments(Hash, Name, Elements),
     member(Name, ['#', '$$', '%', '!'])
@@ -1697,9 +1704,11 @@ math(A - B, X)
 % Use dot or no dot instead of asterisk
 math(A * B, X, Flags),
     type(A, TypeA, Flags),
-    member(TypeA, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)]),
+    member(TypeA, [atomic, subscript(_, _), superscript(_, _),
+                   subsupscript(_, _, _)]),
     type(B, TypeB, Flags),
-    member(TypeB, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)])
+    member(TypeB, [atomic, subscript(_, _), superscript(_, _),
+                   subsupscript(_, _, _)])
  => X = nodot(A, B).
 
 % Todo: This should be checked
@@ -2205,8 +2214,7 @@ paren(frac(_, _), P, _Flags)
  => P = 0.
 
 prec(frac(_, _), P, _Flags)
- => current(P0, yfx, /),
-    P is P0 + 1. % was - 1
+ => current(P, yfx, /). % was P - 1
 
 type(frac(_, _), Type, _Flags)
   => Type = fraction.
@@ -2272,8 +2280,8 @@ option_(NameOption, Flags) :-
 
 option_(NameOption, Flags) :-
     compound_name_arguments(NameOption, Name, [Option]),
-    atom_string(Option, String),
-    member(Name-String, Flags).
+    member(Name-String, Flags),
+    atom_string(Option, String).
 
 math(omit_left(Expr), M, Flags),
     option_(error(ignore), Flags)

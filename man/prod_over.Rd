@@ -10,9 +10,9 @@ prod_over(x, from, to)
 \arguments{
 \item{x}{the object to be multiplied}
 
-\item{from}{decoration for prod_from^to x\link{i}}
+\item{from}{decoration for prod_from^to x_i}
 
-\item{to}{decoration for prod_from^to x\link{i}}
+\item{to}{decoration for prod_from^to x_i}
 }
 \value{
 The function returns prod(x)
@@ -26,5 +26,5 @@ mathjax(quote(prod_over(x[i], i=1L, N)))
 
 }
 \seealso{
-\code{\link[=prod(), sum_over]{prod(), sum_over()}}
+\code{\link[=prod]{prod()}}, \code{\link[=sum_over]{sum_over()}}
 }
