@@ -3,6 +3,7 @@
   if(!requireNamespace("rolog", quietly=TRUE))
     stop("Could not attach library rolog.")
 
+  options(rolog.boolvec="!!")
   rolog::consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
