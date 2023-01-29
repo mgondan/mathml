@@ -4,6 +4,7 @@
     stop("Could not attach library rolog.")
 
   options(rolog.boolvec="!!")
+  options(rolog.boolmat="!!!")
   rolog::consult(system.file("pl/mathml.pl", package=pkgname))
 }
 
