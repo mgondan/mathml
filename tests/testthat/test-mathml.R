@@ -249,7 +249,7 @@ test_that("alogb",
 test_that("bloga",
 {
   q <- mathml(quote(log(b)*a))
-  expect_equal(q, "<math><mrow><mrow><mi>log</mi><mo>&af;</mo><mi>b</mi></mrow><mo>&#x2062;</mo><mi>a</mi></mrow></math>")
+  expect_equal(q, "<math><mrow><mrow><mi>log</mi><mo>&af;</mo><mi>b</mi></mrow><mo>&sdot;</mo><mi>a</mi></mrow></math>")
 })
 
 test_that("sumab",
@@ -333,13 +333,13 @@ test_that("xor",
 test_that("expnumgreeki",
 {
   q <- mathml(quote(exp(2L*pi*i)))
-  expect_equal(q,  "<math><mrow><mi>exp</mi><mo>&af;</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&#x2062;</mo><mi>i</mi></mrow></mrow></math>")
+  expect_equal(q,  "<math><mrow><mi>exp</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&#x2062;</mo><mi>i</mi></mrow><mo>)</mo></mrow></mrow></math>")
 })
 
 test_that("expm1numgreeki",
 {
   q <- mathml(quote(expm1(2L*pi*i)))
-  expect_equal(q, "<math><mrow><mrow><mi>exp</mi><mo>&af;</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&#x2062;</mo><mi>i</mi></mrow></mrow><mo>-</mo><mn>1</mn></mrow></math>")
+  expect_equal(q, "<math><mrow><mrow><mi>exp</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow><mo>&#x2062;</mo><mi>i</mi></mrow><mo>)</mo></mrow></mrow><mo>-</mo><mn>1</mn></mrow></math>")
 })
 
 test_that("logx",

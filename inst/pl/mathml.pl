@@ -514,6 +514,9 @@ prec(special(cosh), Prec, _Flags)
 prec(special(tanh), Prec, _Flags)
  => Prec = 0.
 
+prec(special(exp), Prec, _Flags)
+ => Prec = 0.
+
 prec(special(_), Prec, _Flags)
  => current(Prec, yfx, *).
 
@@ -1715,10 +1718,13 @@ math(A * B, X, Flags),
 
 % Todo: This should be checked
 math(A * B, X, Flags),
-    current_op(Prec, yfx, *),
+    current_op(Mult, yfx, *),
     prec(A, Prec, Flags),
+    Prec =< Mult,
+    type(A, TypeA, Flags),
+    (member(atomic, TypeA) ; member(op, TypeA)),
     type(B, TypeB, Flags),
-    member(TypeB, [atomic, subscript(_, _), superscript(_, _), subsupscript(_, _, _)])
+    member(atomic, TypeB)
  => X = nodot(A, B).
 
 math(A * B, M)
@@ -1913,23 +1919,22 @@ prec(yfy(Prec, _, _, _), P, _Flags)
  => P = Prec.
 
 type(fy(_, _, _), Type, _Flags)
- => Type = op.
+ => Type = [op].
 
 type(yf(_, _, _), Type, _Flags)
- => Type = op.
+ => Type = [op].
 
 type(xfx(_, _, _, _), Type, _Flags)
- => Type = op.
+ => Type = [op].
 
 type(yfx(_, _, _, _), Type, _Flags)
- => Type = op.
+ => Type = [op].
 
 type(xfy(_, _, _, _), Type, _Flags)
- => Type = op.
+ => Type = [op].
 
 type(yfy(_, _, _, _), Type, _Flags)
- => Type = op.
-
+ => Type = [op].
 
 math(left(Prec, A), M, Flags),
     prec(A, P, Flags),
@@ -2219,7 +2224,7 @@ prec(frac(_, _), P, _Flags)
  => current(P, yfx, /). % was P - 1
 
 type(frac(_, _), Type, _Flags)
-  => Type = fraction.
+  => Type = [fraction].
 
 %
 % Large fraction
@@ -2605,7 +2610,7 @@ prec(fn(Name, _Args), Prec, Flags)
  => prec(Name, Prec, Flags).
 
 type(fn(_Name, _Args), Type, _Flags)
- => Type = function.
+ => Type = [function].
 
 % Comma-separated list
 math(R, M),
