@@ -1544,6 +1544,10 @@ ml(posint(A), M, _Flags)
 ml(pos(1.0Inf), M, _Flags)
  => M = mi(&('#x221E')).
 
+math(round(A, D), M, Flags0, Flags1)
+ => M = A,
+    Flags1 = [round(D) | Flags0].
+
 ml(pos(A), M, Flags)
  => option(round(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
