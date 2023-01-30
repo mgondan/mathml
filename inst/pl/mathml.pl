@@ -329,7 +329,7 @@ jax(text(R), M, _Flags)
  => format(string(M), "\\mathrm{~w}", [R]).
 
 type(text(_), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 mathml :-
     mathml("text").
@@ -356,7 +356,7 @@ jax(greek(R), M, _Flags)
  => format(string(M), "\\~w", [R]).
 
 type(greek(_), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 mathml :-
     mathml(alpha).
@@ -376,7 +376,7 @@ jax(symbol(R), M, _Flags)
  => format(string(M), "\\~w", [R]).
 
 type(symbol(_), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 
 %
@@ -395,7 +395,7 @@ jax(boolean(R), M, _Flags)
  => format(string(M), "~w", [R]).
 
 type(boolean(_), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 mathml :-
     mathml(true),
@@ -417,7 +417,7 @@ jax(set(empty), M, _Flags)
  => M = "\\emptyset".
 
 type(set(empty), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 %
 % sin^2(x) etc.
@@ -607,7 +607,7 @@ jax(ident(R), M, _Flags)
  => format(string(M), "~w", [R]).
 
 type(ident(_), T, _Flags)
- => T = atomic.
+ => T = [atomic].
 
 %
 % Linear model
@@ -1566,10 +1566,10 @@ jax(pos(A), M, Flags)
     format(string(M), Mask, [A]).
 
 type(pos(_), Type, _Flags)
- => Type = atomic.
+ => Type = [atomic].
 
 type(posint(_), Type, _Flags)
- => Type = atomic.
+ => Type = [atomic].
 
 math(number(A), M),
     A < 0
@@ -1708,11 +1708,9 @@ math(A - B, X)
 % Use dot or no dot instead of asterisk
 math(A * B, X, Flags),
     type(A, TypeA, Flags),
-    member(TypeA, [atomic, subscript(_, _), superscript(_, _),
-                   subsupscript(_, _, _)]),
+    member(atomic, TypeA),
     type(B, TypeB, Flags),
-    member(TypeB, [atomic, subscript(_, _), superscript(_, _),
-                   subsupscript(_, _, _)])
+    member(atomic, TypeB)
  => X = nodot(A, B).
 
 % Todo: This should be checked
