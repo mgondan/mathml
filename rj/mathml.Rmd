@@ -210,7 +210,7 @@ subscripts, and superscripts.
 term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
 mathout(term)
 
-term <- quote(NaN + NA + TRUE + FALSE + Inf + (-Inf))
+term <- quote(round(3.1415, 3L) + NaN + NA + TRUE + FALSE + Inf + (-Inf))
 mathout(term)
 ```
 
@@ -1072,3 +1072,8 @@ first summand. Of course, \pkg{mathml} is not a proper computer algebra system.
 As is illustrated by the other terms in the sum, such macros are limited to
 purely syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
+
+# Acknowledgement
+
+Supported by the Erasmus+ programme of the European
+Commission (2019-1-EE01-KA203-051708).
