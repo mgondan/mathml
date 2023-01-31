@@ -2,7 +2,7 @@
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Department of Psychology, Universität Innsbruck, Austria)"
-date: "2023-01-30"
+date: "2023-01-31"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
@@ -18,38 +18,8 @@ Vignette: >
 library(mathml)
 
 mathout <- function(..., flags=NULL, env=parent.frame())
-{
-  if(knitr::is_html_output())
-    return(mathml(..., flags=c(flags, list(cat=TRUE)), env=env))
-
-  if(knitr::is_latex_output())
-    return(mathjax(..., flags=c(flags, list(cat=TRUE)), env=env))
-
-  warning("mathout: no knitr output specified")  
-  mathjax(..., flags=c(flags, list(cat=TRUE)), env=env)
-}
-
-catmath <- function(term, ...)
-{
-  s <- substitute(term)
-  mathout(canonical(s), ...)
-}
+  mathml(..., flags=c(flags, list(cat=TRUE)), env=env)
 ```
-
-This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
-thereby allowing for a pretty mathematical representation of R\ objects and
-functions in data analyses, scientific reports and interactive web content. In
-the RMarkdown document rendering language, R\ code and mathematical content
-already exist side-by-side. The present package allows to use the same
-R\ objects for both data analysis and typesetting in documents or web content.
-This tightens the link between the statistical analysis and its verbal
-description or symbolic representation, which is another step towards
-reproducible science. User-defined hooks allow to extend the package by
-mapping specific variables or functions to new MathML and LaTeX entities. A
-number of examples and a case study illustrate the use of the package in a
-scientific report.
-
-# 1. Introduction
 
 The R\ extension of the markdown language [@Xie2020] enables reproducible
 statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
@@ -63,7 +33,7 @@ is, `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for minimalistic use
 cases, these commands are tedious to type in and their source code is hard to
 read.
 
-The present R\ package defines a set of rules for the automatic translation of
+The R\ package `mathml` defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in RMarkdown documents [@Xie2020] and
 ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
@@ -74,16 +44,6 @@ signs.
 The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
 and reduces mistakes, as will be illustrated below.
-
-The paper is organized as follows. Section\ 2 presents the technical background
-of the package, including the two main classes of Prolog rules for translating
-R\ objects to mathematical expressions. Section\ 3 illustrates the main features
-of the _mathml_ package, potential issues and workarounds using examples
-from the day-to-day perspective of a user. Section\ 4 present a case study for
-the use of the package in a scientific report. Section\ 5 concludes with a
-discussion and ideas for further development.
-
-# 2. Background
 
 The translation of R\ expressions to mathematical output is achieved through a
 Prolog interpreter from R\ package _rolog_ [@rolog]. Prolog is a classical logic
@@ -173,7 +133,7 @@ parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
 for MathJax/LaTeX. A list of flags can be used for context-sensitive
 translation (see, e.g., the section on errors below).
 
-# 3. Package _mathml_ in practice
+# Package _mathml_ in practice
 
 _mathml_ is an R\ package for pretty mathematical representation of
 R\ functions and objects in data analysis, scientific reports and interactive
@@ -204,7 +164,7 @@ on a symbol (see next section for further decorations). Note that an
 R\ function `roof()` does not exist in base R, it is provided by the package
 for convenience and points to the identity function.
 
-# Decorations
+## Decorations
 
 The package offers some support for different fonts as well as accents and
 boxes etc. Internally, these decorations are implemented as identity functions,
@@ -650,201 +610,7 @@ knitr::kable(t, caption="Table 3. Highlighting elements of a term",
 Further customization requires the assertion of new Prolog rules `math/2`,
 `ml/3`, `jax/3`, as shown in the Appendix.
 
-# 4. A case study
-
-This case study describes a model by Schwarz [-@schwarz1994] from mathematical
-psychology using the features of package _mathml_. Schwarz presents a new
-explanation of redundancy gains that occur when observers respond to stimuli of
-different sources, and the same information is presented on two or more
-channels. In Schwarz' model, decision-making builds on a process of noisy
-accumulation of information over time [e.g., @ratcliff2016]. In redundant
-stimuli, the model assumes a superposition of channel-specific diffusion
-processes that eventually reach an absorbing barrier to elicit the response. For
-a detailed description the reader may refer to the original article.
-
-Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
-alone or in combination (AB, redundant stimuli), with the redundant stimuli
-being presented either simultaneously or with onset asynchrony \(\tau\). The
-channel activation is described as a two-dimensional Wiener process with
-drifts \(\mu_i\), variances \(\sigma^2_i\), and initial
-conditions \(X_i(t = 0) = 0, i = \mathrm{A, B}\). The buildup of 
-channel-specific activation may be correlated with \(\rho_{\mathrm{AB}}\), but
-we assume \(\rho_{\mathrm{AB}} = 0\) for simplicity.
-
-A response is elicited when the process reaches an absorbing barrier \(c > 0\)
-for the first time. In single-target trials, the first passages of \(c\) are
-expected at
-
-```{r, results='asis'}
-ED_single <- function(c, mu)
-  dfrac(c, mu)
-
-# display as E(D; mu), c is a scaling parameter
-hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
-mathout(call("=", quote(ED_single(c, mu)), ED_single))
-```
-
-(One would typically use chunk option `echo=FALSE` to suppress the R code.)
-In redundant stimuli, the activations from the channel-specific diffusion
-processes add up, \(X_{\mathrm{AB}}(t) = X_{\mathrm A}(t) + X_{\mathrm B}(t)\),
-hence the name, superposition. \(X_{\mathrm{AB}}(t)\) is again a Wiener process
-with drift \(\mu_{\mathrm A} + \mu_{\mathrm B}\) and
-variance \(\sigma^2_{\mathrm A} + \sigma^2_{\mathrm B}\). For the expected
-first-passage time, we have
-
-```{r, results='asis'}
-hook(mu_A, mu["A"])
-hook(mu_B, mu["B"])
-hook(sigma_A, sigma["A"])
-hook(sigma_B, sigma["B"])
-hook(mu_M, mu["M"])
-hook(M, overline(X))
-
-mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
-```
-
-For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
-first-passage time as a function of the stimulus onset asynchrony \(\tau\),
-
-```{r, results="asis"}
-ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
-{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
-    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
-      - (mu_A*tau + c) * exp(dfrac(2L*c*mu_A, sigma_A^2L))
-        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
-}
-
-hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
-mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
-```
-
-For negative onset asynchrony (i.e., B before A), the parameters are simply
-switched.
-
-```{r, results='asis'}
-ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
-{
-  if(tau == Inf) return(ED_single(c, mu_A))
-  if(tau == -Inf) return(ED_single(c, mu_B))
-  if(tau == 0L) return(ED_single(c, mu_A + mu_B))
-  if(tau > 0L) return(ED_async(tau, c, mu_A, sigma_A, mu_B))
-  if(tau < 0L) return(ED_async(abs(tau), c, mu_B, sigma_B, mu_A))
-}
-
-hook(ED(.Tau, .C, .MA, .SA, .MB, .SB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB, .SB))))
-mathout(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
-```
-
-The observable response time is assumed to be the sum of \(D\), the time
-employed to reach the threshold for the decision, and a residual \(M\) denoting
-other processes such a motor preparation and execution. Correspondingly, the
-expected response time amounts to
-
-```{r, results='asis'}
-ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-  ED(tau, c, mu_A, sigma_A, mu_B, sigma_B) + mu_M
-
-hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
-     E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
-mathout(call("=", quote(E(T[tau])), ET))
-```
-
-Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
-with 13 onset
-asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
-where \(\tau = 0\) refers to the synchronous condition, and \(\pm\infty\) to the
-single-target presentations. Each condition was replicated 400 times. The
-observed mean response times and their standard deviations are given in
-Table 4 below.
-
-```{r miller-data, echo=FALSE}
-tau  <- list(-Inf,-167L,-133L,-100L,-67L,-33L,0L,33L,67L,100L,133L,167L,Inf)
-m    <- c(231, 234, 230, 227, 228, 221, 217, 238, 263, 277, 298, 316, 348)
-s    <- c( 56,  58,  40,  40,  32,  28,  28,  28,  26,  30,  32,  34,  92)
-n    <- c(400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400)
-
-ttau <- lapply(tau, FUN=mathout, flags=list(cat=FALSE))
-tm   <- lapply(as.integer(m), FUN=mathout, flags=list(cat=FALSE))
-ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
-tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
-
-t <- cbind('\\(\\tau\\)'=ttau, '\\(m\\)'=tm, '\\(s\\)'=ts, '\\(n\\)'=tn)
-knitr::kable(t, caption="Table 4. Miller data", row.names=FALSE, escape=FALSE)
-```
-
-Assuming that the model is correct, the observable mean reaction times follow an
-approximate Normal distribution around the model prediction \(E(T_\tau)\) for
-each condition. We can, therefore, use a standard goodness-of-fit measure
-by \(z\)-standardization.
-
-```{r, results='asis'}
-z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
-  dfrac(m - denote(mu[tau], ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
-              "the expected mean response time"),
-    s / sqrt(n))
-
-mathout(call("=", quote(z[tau]), z))
-```
-
-The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
-onset asynchrony. Assuming again that the architecture of the model is correct,
-but the parameters are adjusted to the data, it follows
-a \(\chi^2(8\ \mathrm{df})\)-distribution.
-
-```{r, results='asis'}
-zv <- Vectorize(z, vectorize.args = c('m', 's', 'n', 'tau'))
-hook(zv(.M, .S, .N, .Tau, .C, .MA, .SA, .MB, .SB, .MM), z[.Tau])
-
-gof <- function(par, tau, m, s, n)
-  sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
-         mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
-
-mathout(call("=", quote(X["8 df"]^2L), gof))
-```
-
-with the degrees of freedom given by the difference between the number of
-observations (`r length(tau)`) and the number of free model
-parameters \(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A},
-\mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\); the barrier \(c\)
-is only a scaling parameter.
-
-```{r, results="asis", echo=FALSE}
-lsq <- function(tau, m, s, n)
-{
-  invisible(theta <- c(mu_A=0.53, sigma_A=4.3, mu_B=1.34, sigma_B=11.7, mu_M=160))
-  optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
-}
-
-mathout(call("=", quote(hat(theta)), lsq))
-```
-
-The best fitting parameter values and their confidence intervals are given in
-Table 5 below.
-
-```{r params, echo=FALSE}
-fit <- lsq(tau, m, s, n)
-theta <- fit$par
-se <- sqrt(diag(solve(fit$hessian)))
-ci <- mapply(FUN=qnorm, theta, se, MoreArgs=list(p=c(0.025, 0.975)),
-    SIMPLIFY=FALSE)
-
-ntheta <- lapply(lapply(FUN=as.symbol, names(theta)), FUN=mathout,
-    flags=list(cat=FALSE))
-ttheta <- lapply(theta, FUN=mathout, flags=list(cat=FALSE))
-tci <- lapply(ci, FUN=mathout, flags=list(cat=FALSE, sep=","))
-
-t <- cbind(Parameter=ntheta, Estimate=ttheta, CI=tci)
-knitr::kable(t, caption="Table 5. Model fit", row.names=FALSE, escape=FALSE)
-```
-
-The goodness-of-fit statistic indicates some lack of
-fit, \(X^2(8\ \mathrm{df}) = `r sprintf("%.2f", fit$value)`, 
-  p = `r sprintf("%.4f", 1-pchisq(fit$value, df=8))`\). Given the large trial
-numbers in the original study, this is not an unexpected result. For more
-detail, especially on fitting the observed standard deviations, the reader is
-referred to the original paper [@schwarz1994].
-
-# 5. Conclusions
+# Conclusion
 
 This package allows R\ to render its terms in pretty mathematical equations. It
 extends the current features of R\ and existing packages for displaying
@@ -863,15 +629,15 @@ an aesthetical perspective, as well as regarding reproducibility of research.
 Furthermore, the package may also allow for a better detection of possible
 mistakes in R\ programs. Similar to most programming languages [@green1977],
 R\ code is notoriously hard to read, and the poor legibility of the language is
-one of the main sources of mistakes. For illustration, we consider again
-Equation\ 10 in Schwarz [-@schwarz1994].
+one of the main sources of mistakes. For illustration, we consider a complicated
+equation [e.g., @schwarz1994].
 
 ````{r, results="asis"}
 f1 <- function(tau)
-{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
-    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
-      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
-        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
 }
 
 mathout(f1)
@@ -883,10 +649,10 @@ obvious (the correct version is shown below for comparison).
 
 ````{r, results="asis"}
 f2 <- function(tau)
-{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
-    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
-      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
-        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
+{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
+    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
+      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
+        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
 }
 
 mathout(f2)
