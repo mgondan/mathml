@@ -243,7 +243,7 @@ and large fractions.
 
 For standard operators with known precedence, _mathml_ is generally able to
 detect if parentheses are needed; for example, parentheses are automatically
-placed around `g + h` in the `nodot`-example. However, we note unecessary
+placed around `g + h` in the `nodot`-example. However, we note unnecessary
 parentheses around `l + m` above. Thes parentheses are a consequence
 of `quote(a^(b + c))` actually producing a nested R\ call of the
 form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
@@ -490,7 +490,7 @@ Note that in the example above, the quoted term is an abbreviation
 for `call("integrate", quote(sin), ...)`, with `sin` being an R\ symbol, not a
 function. While the R\ function `integrate()` can handle both symbols and
 functions, _mathml_ needs the symbol because it is unable to determine the
-function name of custom fuctions.
+function name of custom functions.
 
 ## Names and order of arguments
 
@@ -532,7 +532,7 @@ term <- call("+", A, B)
 mathout(term)
 ```
 
-Note that the seemingly more convient `term <- quote(A + B)` yields \(A + B\) in
+Note that the seemingly more convenient `term <- quote(A + B)` yields \(A + B\) in
 the output---instead of the desired matrix representation. This behavior is
 expected because quotation of R calls also quote the components of the
 call (here, _A_ and _B_).
@@ -647,6 +647,9 @@ knitr::kable(t, caption="Table 3. Highlighting elements of a term",
   row.names=FALSE, escape=FALSE)
 ```
 
+Further customization requires the assertion of new Prolog rules `math/2`,
+`ml/3`, `jax/3`, as shown in the Appendix.
+
 # 4. A case study
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
@@ -701,7 +704,7 @@ mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
-first-passage time as a function of the stimulus onset asyncrony \(\tau\),
+first-passage time as a function of the stimulus onset asynchrony \(\tau\),
 
 ```{r, results="asis"}
 ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
@@ -772,7 +775,7 @@ knitr::kable(t, caption="Table 4. Miller data", row.names=FALSE, escape=FALSE)
 Assuming that the model is correct, the observable mean reaction times follow an
 approximate Normal distribution around the model prediction \(E(T_\tau)\) for
 each condition. We can, therefore, use a standard goodness-of-fit measure
-by \(z\)-standardisation.
+by \(z\)-standardization.
 
 ```{r, results='asis'}
 z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
@@ -896,9 +899,9 @@ substantially reduce the amount of careless errors in programming.
 
 In its current version _mathml_ has some limitations. For example, it is
 currently not possible to use the functions of _mathml_ for writing
-intratextual formulas, here, the user has to adopt the usual LateX notation.
+inline formulas, here, the user has to adopt the usual LateX notation.
 Moreover, for long equations, we did not yet find a convenient way to insert
-linebreaks. This is mostly due to lacking support by MathML and LaTeX renderers.
+line breaks. This is mostly due to lacking support by MathML and LaTeX renderers.
 For example, in its current stage, the LaTeX package _breqn_ [@breqn] is mostly
 a proof of concept.
 
@@ -986,7 +989,7 @@ mathout(term)
 A proper MathML term is obtained by `mlx/3` (the x in mlx indicates that it is
 an extension and is prioritized over the default ml/3 rules). `mlx/3`
 recursively invokes `ml/3` for translating the function arguments _X_ and _N_,
-and then contructs the correct MathML entity `<mroot>...</mroot>`.
+and then constructs the correct MathML entity `<mroot>...</mroot>`.
 
 ```prolog
 mlx(nthroot(X, N), M, Flags) :-
@@ -1022,9 +1025,9 @@ is illustrated by the other terms in the sum, such macros are limited to purely
 syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
 
-# Acknowledgement
+# Acknowledgment
 
-Supported by the Erasmus+ programme of the European
+Supported by the Erasmus+ program of the European
 Commission (2019-1-EE01-KA203-051708).
 
 # References
