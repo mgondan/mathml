@@ -1,8 +1,8 @@
 ---
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
-         (Department of Psychology, Universität Innsbruck, Austria)"
-date: "2023-01-31"
+         (Universität Innsbruck, Department of Psychology)"
+date: "2023-04-05"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
