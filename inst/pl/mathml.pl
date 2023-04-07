@@ -2249,6 +2249,11 @@ ml(underbrace(A, U), M, Flags)
     M = munder([munder(accentunder(true),
                   [X, mo(stretchy(true), &('UnderBrace'))]), Y]).
 
+jax(underbrace(A, U), M, Flags)
+ => jax(A, X, Flags),
+    jax(U, Y, Flags),
+    format(string(M), "\\underbrace{~w}{~w}", [X, Y]).
+
 paren(underbrace(A, _), Paren, Flags)
  => paren(A, Paren, Flags).
 
