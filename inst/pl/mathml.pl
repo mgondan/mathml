@@ -1174,6 +1174,10 @@ ml(tilde(A), M, Flags)
  => ml(A, X, Flags),
     M = mover(accent(true), [X, mo(&(tilde))]).
 
+jax(tilde(A), M, Flags)
+ => jax(A, X, Flags),
+    format(string(M), "\\tilde{~w}", [X]).
+
 paren(tilde(A), Paren, Flags)
  => paren(A, Paren, Flags).
 

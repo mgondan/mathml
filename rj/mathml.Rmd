@@ -110,7 +110,7 @@ R\ commands (i.e., R\ "calls") are, themselves, symbolic data structures that
 can be created, parsed and modified. Because the default response of the
 R\ interpreter is to evaluate a call and return its result, this property is not
 transparent to the general user. There exist, however, a number of built-in
-R\ functions (e.g., `quote()`, `call()` etc.) that allow to create R\ calls
+R\ functions (e.g., `quote()`, `call()` etc.) that allow the user to create R\ calls
 which can be stored in regular variables and then, for example, be evaluated at
 a later stage or in a specific environment [@Wickham2019]. The present package
 includes a set of rules that translate such calls to a mathematical
@@ -312,17 +312,17 @@ arrows in R\ figures.
 
 ```{r custom-operators, echo=FALSE}
 op1 <- list(
-  "A\\ %*%\\ B"=quote(A %*% B),
-  "A\\ %.%\\ B"=quote(A %.% B),
-  "A\\ %x%\\ B"=quote(A %x% B),
-  "A\\ %/%\\ B"=quote(A %/% B),
-  "A\\ %%\\ B"=quote(A %% B),
-  "A\\ &\\ B"=quote(A & B),
-  "A\\ |\\ B"=quote(A | B),
-  "xor(A,\\ B)"=quote(xor(A, B)),
+  "A%*%B"=quote(A %*% B),
+  "A%.%B"=quote(A %.% B),
+  "A%x%B"=quote(A %x% B),
+  "A%/%B"=quote(A %/% B),
+  "A%%B"=quote(A %% B),
+  "A & B"=quote(A & B),
+  "A | B"=quote(A | B),
+  "xor(A, B)"=quote(xor(A, B)),
   "!A"=quote(!A),
-  "A\\ ==\\ B"=quote(A == B),
-  "A\\ <-\\ B"=quote(A <- B))
+  "A == B"=quote(A == B),
+  "A <- B"=quote(A <- B))
 
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
@@ -333,16 +333,16 @@ if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
 op2 <- list(
-  "A\\ !=\\ B"=quote(A != B),
-  "A\\ ~ B"=quote(A ~ B),
-  "A\\ %~~%\\ B"=quote(A %~~% B),
-  "A\\ %==%\\ B"=quote(A %==% B),
-  "A\\ %=~%\\ B"=quote(A %=~% B),
-  "A\\ %prop%\\ B"=quote(A %prop% B),
-  "A\\ %in%\\ B"=quote(A %in% B),
-  "intersect(A,\\ B)"=quote(intersect(A, B)),
-  "union(A,\\ B)"=quote(union(A, B)),
-  "crossprod(A,\\ B)"=quote(crossprod(A, B)),
+  "A != B"=quote(A != B),
+  "A ~ B"=quote(A ~ B),
+  "A%~~%B"=quote(A %~~% B),
+  "A%==%B"=quote(A %==% B),
+  "A%=~%B"=quote(A %=~% B),
+  "A%prop%B"=quote(A %prop% B),
+  "A%in%B"=quote(A %in% B),
+  "intersect(A,B)"=quote(intersect(A, B)),
+  "union(A,B)"=quote(union(A, B)),
+  "crossprod(A,B)"=quote(crossprod(A, B)),
   "is.null(A)"=quote(is.null(A)))
 
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
@@ -354,16 +354,16 @@ if(knitr::is_html_output())
   op2 <- sapply(op2, FUN=knitr:::escape_html)
 
 op3 <- list(
-  "A\\ %<->%\\ B"=quote(A %<->% B),
-  "A\\ %->%\\ B"=quote(A %->% B),
-  "A\\ %<-%\\ B"=quote(A %<-% B),
-  "A\\ %up%\\ B"=quote(A %up% B),
-  "A\\ %down%\\ B"=quote(A %down% B),
-  "A\\ %<=>%\\ B"=quote(A %<=>% B),
-  "A\\ %=>%\\ B"=quote(A %=>% B),
-  "A\\ %<=%\\ B"=quote(A %<=% B),
-  "A\\ %dblup%\\ B"=quote(A %dblup% B),
-  "A\\ %dbldown%\\ B"=quote(A %dbldown% B),
+  "A%<->%B"=quote(A %<->% B),
+  "A%->%B"=quote(A %->% B),
+  "A%<-%B"=quote(A %<-% B),
+  "A%up%B"=quote(A %up% B),
+  "A%down%B"=quote(A %down% B),
+  "A%<=>%B"=quote(A %<=>% B),
+  "A%=>%B"=quote(A %=>% B),
+  "A%<=%B"=quote(A %<=% B),
+  "A%dblup%B" =quote(A %dblup% B),
+  "A%dbldown%B"=quote(A %dbldown% B),
   " "="")
 
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
@@ -405,11 +405,11 @@ op1 <- list(
   "asinh(x)"=quote(asinh(x)),
   "log(p)"=quote(log(p)),
   "log1p(x)"=quote(log1p(x)),
-  "logb(x,\\ e)"=quote(logb(x, e)),
+  "logb(x,e)"=quote(logb(x, e)),
   "exp(x)"=quote(exp(x)),
   "expm1(x)"=quote(expm1(x)),
-  "choose(n,\\ k)"=quote(choose(n, k)),
-  "lchoose(n,\\ k)"=quote(lchoose(n, k)),
+  "choose(n,k)"=quote(choose(n, k)),
+  "lchoose(n,k)"=quote(lchoose(n, k)),
   "factorial(n)"=quote(factorial(n)), 
   "lfactorial(n)"=quote(lfactorial(n)),
   "sqrt(x)"=quote(sqrt(x)),
@@ -424,22 +424,22 @@ if(knitr::is_html_output())
   op1 <- sapply(op1, FUN=knitr:::escape_html)
 
 op2 <- list(
-  "dbinom(k,\\ N,\\ pi)"=quote(dbinom(k, N, pi)),
-  "pbinom(k,\\ N,\\ pi)"=quote(pbinom(k, N, pi)),
-  "qbinom(p,\\ N,\\ pi)"=quote(qbinom(p, N, pi)),
-  "dpois(k,\\ lambda)"=quote(dpois(k, lambda)),
-  "ppois(k,\\ lambda)"=quote(ppois(k, lambda)),
-  "qpois(p,\\ lambda)"=quote(qpois(p, lambda)),
-  "dexp(x,\\ lambda)"=quote(dexp(x, lambda)),
-  "pexp(x,\\ lambda)"=quote(pexp(x, lambda)),
-  "qexp(p,\\ lambda)"=quote(qexp(p, lambda)),
-  "dnorm(x,\\ mu,\\ sigma)"=quote(dnorm(x, mu, sigma)),
-  "pnorm(x,\\ mu,\\ sigma)"=quote(pnorm(x, mu, sigma)),
+  "dbinom(k,N,pi)"=quote(dbinom(k, N, pi)),
+  "pbinom(k,N,pi)"=quote(pbinom(k, N, pi)),
+  "qbinom(p,N,pi)"=quote(qbinom(p, N, pi)),
+  "dpois(k,lambda)"=quote(dpois(k, lambda)),
+  "ppois(k,lambda)"=quote(ppois(k, lambda)),
+  "qpois(p,lambda)"=quote(qpois(p, lambda)),
+  "dexp(x,lambda)"=quote(dexp(x, lambda)),
+  "pexp(x,lambda)"=quote(pexp(x, lambda)),
+  "qexp(p,lambda)"=quote(qexp(p, lambda)),
+  "dnorm(x,mu,sigma)"=quote(dnorm(x, mu, sigma)),
+  "pnorm(x,mu,sigma)"=quote(pnorm(x, mu, sigma)),
   "qnorm(alpha/2L)"=quote(qnorm(alpha/2L)),
-  "1L\\ -\\ pchisq(x,\\ 1L)"=quote(1L - pchisq(x, 1L)),
-  "qchisq(1L\\ -\\ alpha,\\ 1L)"=quote(qchisq(1L-alpha, 1L)),
-  "pt(t,\\ N\\ -\\ 1L)"=quote(pt(t, N-1L)),
-  "qt(alpha/2L,\\ N\\ -\\ 1L)"=quote(qt(alpha/2L, N-1L)))
+  "1L-pchisq(x,1L)"=quote(1L - pchisq(x, 1L)),
+  "qchisq(1L-alpha,1L)"=quote(qchisq(1L-alpha, 1L)),
+  "pt(t,N-1L)"=quote(pt(t, N-1L)),
+  "qt(alpha/2L,N-1L)"=quote(qt(alpha/2L, N-1L)))
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
 op2 <- names(op2)
@@ -683,10 +683,10 @@ knitr::kable(t, caption="Highlighting elements of a term",
 # A case study
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
-psychology using the features of package \pkg{mathml}. Schwarz presents a new
+psychology using the features of package \pkg{mathml}. Schwarz [-@schwarz1994] presents a new
 explanation of redundancy gains that occur when observers respond to stimuli of
 different sources, and the same information is presented on two or more
-channels. In Schwarz' model, decision-making builds on a process of noisy
+channels. In Schwarz' [-@schwarz1994] model, decision-making builds on a process of noisy
 accumulation of information over time [e.g., @ratcliff2016]. In redundant
 stimuli, the model assumes a superposition of channel-specific diffusion
 processes that eventually reach an absorbing barrier to elicit the response. For
@@ -850,7 +850,7 @@ mathout(call("=", quote(hat(theta)), lsq))
 ```
 
 The best fitting parameter values and their confidence intervals are given in
-Table \@ref(tab:params) below.
+Table \@ref(tab:params).
 
 ```{r params, echo=FALSE}
 fit <- lsq(tau, m, s, n)
