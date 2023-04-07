@@ -655,13 +655,13 @@ or "ignore". For more examples, see Table \@ref(tab:mistakes).
 
 ```{r mistakes, echo=FALSE}
 op1 <- list(
-  "omit_left(a\\ +\\ b)"=quote(omit_left(a + b)),
-  "omit_right(a\\ +\\ b)"=quote(omit_right(a + b)),
-  "list(quote(a),\\ quote(omit(b)))"=list(quote(a), quote(omit(b))),
-  "add_left(a\\ +\\ b)"=quote(add_left(a + b)),
-  "add_right(a\\ +\\ b)"=quote(add_right(a + b)),
-  "list(quote(a),\\ quote(add(b)))"=list(quote(a), quote(add(b))),
-  "instead(a,\\ b)\\ +\\ c"=quote(instead(a, b) + c))
+  "omit_left(a+b)"=quote(omit_left(a + b)),
+  "omit_right(a+b)"=quote(omit_right(a + b)),
+  "list(quote(a),quote(omit(b)))"=list(quote(a), quote(omit(b))),
+  "add_left(a+b)"=quote(add_left(a + b)),
+  "add_right(a+b)"=quote(add_right(a + b)),
+  "list(quote(a),quote(add(b)))"=list(quote(a), quote(add(b))),
+  "instead(a,b)+c"=quote(instead(a, b) + c))
 
 asis <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="asis"))
 high <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="highlight"))
