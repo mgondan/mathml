@@ -2252,7 +2252,7 @@ ml(underbrace(A, U), M, Flags)
 jax(underbrace(A, U), M, Flags)
  => jax(A, X, Flags),
     jax(U, Y, Flags),
-    format(string(M), "\\underbrace{~w}{~w}", [X, Y]).
+    format(string(M), "\\underbrace{~w}_{~w}", [X, Y]).
 
 paren(underbrace(A, _), Paren, Flags)
  => paren(A, Paren, Flags).
