@@ -2385,7 +2385,7 @@ math(instead(_Wrong, Correct), M, Flags),
  => M = box(Correct).
 
 math(instead(Wrong, Correct), M, _Flags)
- => M = underbrace(Wrong, list(space, ["instead of", Correct])).
+ => M = underbrace(Wrong, list(space, ["instead", "of", Correct])).
 
 % Find minimum
 math(Optim, M),
