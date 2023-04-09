@@ -20,7 +20,8 @@ Encoding: UTF-8
 Suggests: 
     rmarkdown,
     knitr,
-    testthat
+    testthat,
+    rswipl
 VignetteBuilder:
     knitr,
     rmarkdown
