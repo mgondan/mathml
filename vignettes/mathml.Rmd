@@ -2,7 +2,7 @@
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Universität Innsbruck, Department of Psychology)"
-date: "2023-04-05"
+date: "2023-04-20"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
@@ -159,9 +159,9 @@ aesthetical perspective. It is correct R\ syntax, though, and is reproduced
 accordingly, without the parentheses. Parentheses around negated numbers or
 symbols can be added as shown above for `+ (-Inf)`.
 
-To avoid name clashes with package _stats_, `roof()` is used to put a hat
-on a symbol (see next section for further decorations). Note that an 
-R\ function `roof()` does not exist in base R, it is provided by the package
+To avoid name clashes with package _stats_, `roof()` is used instead of `hat()`
+to put a hat on a symbol (see next section for further decorations). Note that
+an R\ function `roof()` does not exist in base R, it is provided by the package
 for convenience and points to the identity function.
 
 ## Decorations
