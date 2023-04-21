@@ -34,10 +34,10 @@ This R package is distributed under a
 
 ````
 library(mathml)
-term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
+term <- quote(a^b + c*d - a^2*(a+d))
 mathout(term)
 ````
 
-$(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))$
+$(a^b + c*d - a^2*(a+d))$
 
 
