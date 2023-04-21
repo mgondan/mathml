@@ -27,9 +27,7 @@ This R package is distributed under a BSD-2 simplified license (see the file LIC
 3. R> `install.packages("mathml")`
 
 
-# Examples
-
-## Example 1
+# Example
 
 ````
 library(mathml)
@@ -39,13 +37,4 @@ mathout(term)
 
 $(a^b + c*(d+3) - a^2*(a+d))$
 
-## Example 2
-
-
-````
-library(mathml)
-term <- quote(a^b + c*d - a^2*(a+d))
-mathout(term)
-````
-$choose(N, k)$
 
