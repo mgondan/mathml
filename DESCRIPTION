@@ -17,6 +17,9 @@ Depends:
     R (>= 4.2),
     rolog (>= 0.9.10)
 Encoding: UTF-8
+URL: https://github.com/mgondan/mathml
+BugReports: https://github.com/mgondan/mathml/issues
+LinkingTo:
 Suggests: 
     rmarkdown,
     knitr,
