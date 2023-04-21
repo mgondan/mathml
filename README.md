@@ -1,7 +1,7 @@
 # mathml
 ### Translate R expressions to MathML
 
-´mathml´ allows R to render its terms in pretty mathematical equations
+`mathml` allows R to render its terms in pretty mathematical equations
 bridging the gap between computational needs, presentation of results, and their
 reproducibility. 
 
