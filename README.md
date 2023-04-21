@@ -16,8 +16,7 @@ The package supports both MathML and Latex/MathJax for use in R\ Markdown docume
 presentations and ShinyApp webpages.
 
 ## License
-
-This R package is distributed under a 
+This R package is distributed under a BSD-2 simplified license (see the file LICENSE).
 
 ## Installation
 
@@ -38,6 +37,6 @@ term <- quote(a^b + c*d - a^2*(a+d))
 mathout(term)
 ````
 
-$(a^b + c*d - a^2*(a+d))$
+$(a^b + c*(d+3) - a^2*(a+d))$
 
 
