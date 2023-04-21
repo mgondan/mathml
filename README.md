@@ -1,18 +1,18 @@
 # mathml
 ### Translate R expressions to MathML
 
-mathml allows R\ to render its terms in pretty mathematical equations
+mathml allows R to render its terms in pretty mathematical equations
 bridging the gap between computational needs, presentation of results, and their
 reproducibility. 
 
 Researchers or teachers can already use RMarkdown to conduct analyses and show
-results, and mathml smoothes this process and allows for integrated
+results, additionally mathml smoothes this process and allows for integrated
 calculations and output. mathml can help to improve data analyses and 
 statistical reports from an aesthetical perspective, as well as regarding 
 reproducibility of research, by allowing also for a better detection of possible
-mistakes in R\ programs. 
+mistakes in R programs. 
 
-The package supports both MathML and Latex/MathJax for use in R\ Markdown documents, 
+The package supports both MathML and Latex/MathJax for use in R Markdown documents, 
 presentations and ShinyApp webpages.
 
 ## License
@@ -39,4 +39,13 @@ mathout(term)
 
 $(a^b + c*(d+3) - a^2*(a+d))$
 
+## Example 2
+
+
+````
+library(mathml)
+term <- quote(a^b + c*d - a^2*(a+d))
+mathout(term)
+````
+$sin(x) + cos(x) * sqrt(x)$
 
