@@ -1,12 +1,12 @@
 # mathml
 ### Translate R expressions to MathML
 
-mathml allows R to render its terms in pretty mathematical equations
+´mathml´ allows R to render its terms in pretty mathematical equations
 bridging the gap between computational needs, presentation of results, and their
 reproducibility. 
 
 Researchers or teachers can already use RMarkdown to conduct analyses and show
-results, additionally mathml smoothes this process and allows for integrated
+results. Additionally, mathml smoothes this process and allows for integrated
 calculations and output. mathml can help to improve data analyses and 
 statistical reports from an aesthetical perspective, as well as regarding 
 reproducibility of research, by allowing also for a better detection of possible
