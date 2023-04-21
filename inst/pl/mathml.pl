@@ -2249,6 +2249,11 @@ ml(underbrace(A, U), M, Flags)
     M = munder([munder(accentunder(true),
                   [X, mo(stretchy(true), &('UnderBrace'))]), Y]).
 
+jax(underbrace(A, U), M, Flags)
+ => jax(A, X, Flags),
+    jax(U, Y, Flags),
+    format(string(M), "\\underbrace{~w}_{~w}", [X, Y]).
+
 paren(underbrace(A, _), Paren, Flags)
  => paren(A, Paren, Flags).
 
@@ -2385,7 +2390,7 @@ math(instead(_Wrong, Correct), M, Flags),
  => M = box(Correct).
 
 math(instead(Wrong, Correct), M, _Flags)
- => M = underbrace(Wrong, list(space, ["instead of", Correct])).
+ => M = underbrace(Wrong, list(space, ["instead", "of", Correct])).
 
 % Find minimum
 math(Optim, M),

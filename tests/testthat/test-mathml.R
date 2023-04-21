@@ -856,8 +856,7 @@ t <- quote(instead(a, b) + c)
 test_that("instead",
           {
             q <- mathml(t)
-#            expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead</mtext><mspace width=\"thinmathspace\"></mspace><mtext>of</mtext><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
-            expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead of</mtext><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
+            expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead</mtext><mspace width=\"thinmathspace\"></mspace><mtext>of</mtext><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
           })
 
 test_that("Tdiamond",

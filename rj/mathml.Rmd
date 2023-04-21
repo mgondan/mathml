@@ -1,6 +1,6 @@
 ---
 title: "`mathml`: Translate R Expressions to MathML and LaTeX"
-date: "2023-01-28"
+date: "2023-04-21"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
@@ -311,68 +311,74 @@ suggestions by Murrell and Ihaka [-@murrell2000] for graphical annotations and
 arrows in R\ figures.
 
 ```{r custom-operators, echo=FALSE}
+escape <- function(s)
+{
+  if(knitr::is_latex_output())
+  {
+    s = lapply(s, FUN=gsub, pattern="\\\\ ", replacement=" ")
+    return(sapply(s, FUN=knitr:::escape_latex))
+  }
+  
+  if(knitr::is_html_output())
+    return(sapply(s, FUN=knitr:::escape_html))
+  
+  warning("escape: no knitr output specified")
+  sapply(s, FUN=knitr:::escape_html)
+}
+
 op1 <- list(
-  "A%*%B"=quote(A %*% B),
-  "A%.%B"=quote(A %.% B),
-  "A%x%B"=quote(A %x% B),
-  "A%/%B"=quote(A %/% B),
-  "A%%B"=quote(A %% B),
-  "A & B"=quote(A & B),
-  "A | B"=quote(A | B),
-  "xor(A, B)"=quote(xor(A, B)),
+  "A\\ %*%\\ B"=quote(A %*% B),
+  "A\\ %.%\\ B"=quote(A %.% B),
+  "A\\ %x%\\ B"=quote(A %x% B),
+  "A\\ %/%\\ B"=quote(A %/% B),
+  "A\\ %%\\ B"=quote(A %% B),
+  "A\\ & B"=quote(A & B),
+  "A\\ | B"=quote(A | B),
+  "xor(A,\\ B)"=quote(xor(A, B)),
   "!A"=quote(!A),
-  "A == B"=quote(A == B),
-  "A <- B"=quote(A <- B))
+  "A\\ ==\\ B"=quote(A == B),
+  "A\\ <-\\ B"=quote(A <- B))
 
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
 op1 <- names(op1)
-if(knitr::is_latex_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+op1 <- escape(op1)
 
 op2 <- list(
-  "A != B"=quote(A != B),
-  "A ~ B"=quote(A ~ B),
-  "A%~~%B"=quote(A %~~% B),
-  "A%==%B"=quote(A %==% B),
-  "A%=~%B"=quote(A %=~% B),
-  "A%prop%B"=quote(A %prop% B),
-  "A%in%B"=quote(A %in% B),
-  "intersect(A,B)"=quote(intersect(A, B)),
-  "union(A,B)"=quote(union(A, B)),
-  "crossprod(A,B)"=quote(crossprod(A, B)),
+  "A\\ !=\\ B"=quote(A != B),
+  "A\\ ~\\ B"=quote(A ~ B),
+  "A\\ %~~%\\ B"=quote(A %~~% B),
+  "A\\ %==%\\ B"=quote(A %==% B),
+  "A\\ %=~%\\ B"=quote(A %=~% B),
+  "A\\ %prop%\\ B"=quote(A %prop% B),
+  "A\\ %in%\\ B"=quote(A %in% B),
+  "intersect(A,\\ B)"=quote(intersect(A, B)),
+  "union(A,\\ B)"=quote(union(A, B)),
+  "crossprod(A,\\ B)"=quote(crossprod(A, B)),
   "is.null(A)"=quote(is.null(A)))
 
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
 op2 <- names(op2)
-if(knitr::is_latex_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
+op2 <- escape(op2)
 
 op3 <- list(
-  "A%<->%B"=quote(A %<->% B),
-  "A%->%B"=quote(A %->% B),
-  "A%<-%B"=quote(A %<-% B),
-  "A%up%B"=quote(A %up% B),
-  "A%down%B"=quote(A %down% B),
-  "A%<=>%B"=quote(A %<=>% B),
-  "A%=>%B"=quote(A %=>% B),
-  "A%<=%B"=quote(A %<=% B),
-  "A%dblup%B" =quote(A %dblup% B),
-  "A%dbldown%B"=quote(A %dbldown% B),
+  "A\\ %<->%\\ B"=quote(A %<->% B),
+  "A\\ %->%\\ B"=quote(A %->% B),
+  "A\\ %<-%\\ B"=quote(A %<-% B),
+  "A\\ %up%\\ B"=quote(A %up% B),
+  "A\\ %down%\\ B"=quote(A %down% B),
+  "A\\ %<=>%\\ B"=quote(A %<=>% B),
+  "A\\ %=>%\\ B"=quote(A %=>% B),
+  "A\\ %<=%\\ B"=quote(A %<=% B),
+  "A\\ %dblup%\\ B" =quote(A %dblup% B),
+  "A\\ %dbldown%\\ B"=quote(A %dbldown% B),
   " "="")
 
 m3 <- lapply(op3, FUN=mathout, flags=list(cat=FALSE))
 
 op3 <- names(op3)
-if(knitr::is_latex_output())
-  op3 <- sapply(op3, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op3 <- sapply(op3, FUN=knitr:::escape_html)
+op3 <- escape(op3)
 
 t <- cbind(Operator=op1, Output=m1,
   Operator=op2, Output=m2,
@@ -405,11 +411,11 @@ op1 <- list(
   "asinh(x)"=quote(asinh(x)),
   "log(p)"=quote(log(p)),
   "log1p(x)"=quote(log1p(x)),
-  "logb(x,e)"=quote(logb(x, e)),
+  "logb(x,\\ e)"=quote(logb(x, e)),
   "exp(x)"=quote(exp(x)),
   "expm1(x)"=quote(expm1(x)),
-  "choose(n,k)"=quote(choose(n, k)),
-  "lchoose(n,k)"=quote(lchoose(n, k)),
+  "choose(n,\\ k)"=quote(choose(n, k)),
+  "lchoose(n,\\ k)"=quote(lchoose(n, k)),
   "factorial(n)"=quote(factorial(n)), 
   "lfactorial(n)"=quote(lfactorial(n)),
   "sqrt(x)"=quote(sqrt(x)),
@@ -418,35 +424,29 @@ op1 <- list(
 m1 <- lapply(op1, FUN=mathout, flags=list(cat=FALSE))
 
 op1 <- names(op1)
-if(knitr::is_latex_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+op1 <- escape(op1)
 
 op2 <- list(
-  "dbinom(k,N,pi)"=quote(dbinom(k, N, pi)),
-  "pbinom(k,N,pi)"=quote(pbinom(k, N, pi)),
-  "qbinom(p,N,pi)"=quote(qbinom(p, N, pi)),
-  "dpois(k,lambda)"=quote(dpois(k, lambda)),
-  "ppois(k,lambda)"=quote(ppois(k, lambda)),
-  "qpois(p,lambda)"=quote(qpois(p, lambda)),
-  "dexp(x,lambda)"=quote(dexp(x, lambda)),
-  "pexp(x,lambda)"=quote(pexp(x, lambda)),
-  "qexp(p,lambda)"=quote(qexp(p, lambda)),
-  "dnorm(x,mu,sigma)"=quote(dnorm(x, mu, sigma)),
-  "pnorm(x,mu,sigma)"=quote(pnorm(x, mu, sigma)),
+  "dbinom(k,\\ N,\\ pi)"=quote(dbinom(k, N, pi)),
+  "pbinom(k,\\ N,\\ pi)"=quote(pbinom(k, N, pi)),
+  "qbinom(p,\\ N,\\ pi)"=quote(qbinom(p, N, pi)),
+  "dpois(k,\\ lambda)"=quote(dpois(k, lambda)),
+  "ppois(k,\\ lambda)"=quote(ppois(k, lambda)),
+  "qpois(p,\\ lambda)"=quote(qpois(p, lambda)),
+  "dexp(x,\\ lambda)"=quote(dexp(x, lambda)),
+  "pexp(x,\\ lambda)"=quote(pexp(x, lambda)),
+  "qexp(p,\\ lambda)"=quote(qexp(p, lambda)),
+  "dnorm(x,\\ mu,\\ sigma)"=quote(dnorm(x, mu, sigma)),
+  "pnorm(x,\\ mu,\\ sigma)"=quote(pnorm(x, mu, sigma)),
   "qnorm(alpha/2L)"=quote(qnorm(alpha/2L)),
-  "1L-pchisq(x,1L)"=quote(1L - pchisq(x, 1L)),
-  "qchisq(1L-alpha,1L)"=quote(qchisq(1L-alpha, 1L)),
-  "pt(t,N-1L)"=quote(pt(t, N-1L)),
-  "qt(alpha/2L,N-1L)"=quote(qt(alpha/2L, N-1L)))
+  "1L\\ -\\ pchisq(x,\\ 1L)"=quote(1L - pchisq(x, 1L)),
+  "qchisq(1L\\ -\\ alpha,\\ 1L)"=quote(qchisq(1L-alpha, 1L)),
+  "pt(t,\\ N\\ -\\ 1L)"=quote(pt(t, N-1L)),
+  "qt(alpha/2L,\\ N\\ -\\ 1L)"=quote(qt(alpha/2L, N-1L)))
 m2 <- lapply(op2, FUN=mathout, flags=list(cat=FALSE))
 
 op2 <- names(op2)
-if(knitr::is_latex_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
+op2 <- escape(op2)
 
 t <- cbind(Function=op1, Output=m1, Function=op2, Output=m2)
 knitr::kable(t, caption="R functions from base and stats",
@@ -655,13 +655,13 @@ or "ignore". For more examples, see Table \@ref(tab:mistakes).
 
 ```{r mistakes, echo=FALSE}
 op1 <- list(
-  "omit_left(a+b)"=quote(omit_left(a + b)),
-  "omit_right(a+b)"=quote(omit_right(a + b)),
-  "list(quote(a),quote(omit(b)))"=list(quote(a), quote(omit(b))),
-  "add_left(a+b)"=quote(add_left(a + b)),
-  "add_right(a+b)"=quote(add_right(a + b)),
-  "list(quote(a),quote(add(b)))"=list(quote(a), quote(add(b))),
-  "instead(a,b)+c"=quote(instead(a, b) + c))
+  "omit_left(a\\ +\\ b)"=quote(omit_left(a + b)),
+  "omit_right(a\\ +\\ b)"=quote(omit_right(a + b)),
+  "list(quote(a),\\ quote(omit(b)))"=list(quote(a), quote(omit(b))),
+  "add_left(a\\ +\\ b)"=quote(add_left(a + b)),
+  "add_right(a\\ +\\ b)"=quote(add_right(a + b)),
+  "list(quote(a),\\ quote(add(b)))"=list(quote(a), quote(add(b))),
+  "instead(a,\\ b)\\ +\\ c"=quote(instead(a, b) + c))
 
 asis <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="asis"))
 high <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="highlight"))
@@ -669,10 +669,7 @@ fix  <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="fix"))
 igno <- lapply(op1, FUN=mathout, flags=list(cat=FALSE, error="ignore"))
 
 op1 <- names(op1)
-if(knitr::is_latex_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_latex)
-if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+op1 <- escape(op1)
 
 t <- cbind(Operation=op1, 
   "error\\ =\\ asis"=asis, highlight=high, fix=fix, ignore=igno)
