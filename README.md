@@ -47,5 +47,5 @@ library(mathml)
 term <- quote(a^b + c*d - a^2*(a+d))
 mathout(term)
 ````
-$sin(x) + cos(x) * sqrt(x)$
+$choose(N, k)$
 
