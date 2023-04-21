@@ -1,7 +1,7 @@
 # mathml
 ### Translate R expressions to MathML
 
-`mathml` allows R to render its terms in pretty mathematical equations
+`mathml` allows rendering R terms in pretty mathematical equations
 bridging the gap between computational needs, presentation of results, and their
 reproducibility. 
 
@@ -16,6 +16,7 @@ The package supports both MathML and Latex/MathJax for use in R Markdown documen
 presentations and ShinyApp webpages.
 
 ## License
+
 This R package is distributed under a BSD-2 simplified license (see the file LICENSE).
 
 ## Installation
@@ -26,7 +27,6 @@ This R package is distributed under a BSD-2 simplified license (see the file LIC
 
 3. R> `install.packages("mathml")`
 
-
 # Example
 
 ````
@@ -36,5 +36,3 @@ mathout(term)
 ````
 
 $(a^b + c*(d+3) - a^2*(a+d))$
-
-
