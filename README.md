@@ -34,10 +34,10 @@ This R package is distributed under a
 
 ````
 library(mathml)
-term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
+term <- quote(a - ((b + c)) - d*(g + h) + i/j + k^(l + m) + n^{p + q})
 mathout(term)
 ````
 
-$(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})$
+$(a - ((b + c)) - d*(g + h) + i/j + k^(l + m) + n^{p + q})$
 
 
