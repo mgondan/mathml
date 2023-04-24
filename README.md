@@ -35,4 +35,4 @@ term <- quote(a^b + c*d - a^2*(a+d))
 mathout(term)
 ````
 
-$(a^b + c*(d+3) - a^2*(a+d))$
+$(a^b + c \cdot (d+3) - a^2 \cdot (a+d))$
