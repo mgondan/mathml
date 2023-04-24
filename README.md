@@ -31,8 +31,8 @@ This R package is distributed under a BSD-2 simplified license (see the file LIC
 
 ````
 library(mathml)
-term <- quote(a^b + c*d - a^2*(a+d))
+term <- quote(a^b + c * (d + 3) - a^2L * (a + d))
 mathout(term)
 ````
 
-$(a^b + c \cdot (d+3) - a^2 \cdot (a+d))$
+$a^b + c \cdot (d+3.00) - a^2 \cdot (a+d)$
