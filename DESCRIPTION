@@ -5,7 +5,7 @@ Version: 0.8
 Date: 2023-04-24
 Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
   email="Matthias.Gondan-Rochon@uibk.ac.at", comment="Universität Innsbruck"),
-  person("Irene", "Alfarone", role="ctb",
+  person("Irene", "Alfarone", role="aut",
   email="Irene.Alfarone@uibk.ac.at", comment="Universität Innsbruck"),
   person("European Commission", role="fnd",
   comment="Erasmus+ Programme, 2019-1-EE01-KA203-051708"))
