@@ -1,0 +1,61 @@
+## Referee report of "mathml: Translate R Expressions to MathML and LaTeX".
+
+- **Id**: 2023-47
+
+## General
+
+This article introduces an R package, mathml, to translate R expressions to MathML and LaTeX. I find this package both interesting and useful. I'm not familiar with the underlying technology (Prolog), but the article has show many convincing examples. Being able to see the (LaTeX/MathML) math representation of R code is a great advantage, since it's much easier to read and understand the math when reading the formulas in PDF than reading them as R source code.
+
+I think the major missing part of the article is a mention or comparison or comment of other existing work, e.g.,
+
+* https://github.com/datalorax/equatiomatic
+
+* https://github.com/cran/simsalapar/blob/master/R/expr2latex.R Examples: https://rstudio-pubs-static.s3.amazonaws.com/268872_483cb8ee959642b68e9cf2b84eda1e06.html
+
+* https://github.com/tomicapretto/latex2r
+
+Response: References to equatiomatic and latex2r have been added to the 
+manuscript (Introduction and Conclusion). For simsalapar, we refer to R's own
+plotmath syntax (Introduction).
+
+## Detailed comments
+
+p2: I have no idea what "the predicate math/2" means, although I understand what
+it does. Sounds like a technical jargon. May be worth a brief explanation. Same
+thing for "ml/3" and "jax/3", etc. later.
+
+Response: We added a few sentences explaining the Prolog-specific terminology
+(e.g., predicate), as well as the name/arity-notation.
+
+p4: "parentheses are automatically placed around g + h in the nodot-example".
+Do you mean "d + e" instead of "g + h"?
+
+Response: Thanks for noticing, this has been corrected.
+
+p12: "it is currently not possible to use the functions of mathml for writing
+inline formulas, here, the user has to adopt the usual LateX notation". I'm
+curious why it's impossible to use `r mathout()`. It can be used inline if it
+can return a character string.
+
+Response: The normal code chunks need the chunk option results="asis" in order
+to avoid quoting the HTML code. Otherwise, mathml(2 + 2) would produce
+"<mn>2</mn><mo>+</mo><mn>2</mn>" in the output. Such an option does not exist in
+inline code; therefore, `r mathml(expr)` does not produce the desired result.
+
+Minor correction of some names: RMarkdown -> R Markdown; Latex -> LaTeX;
+ShinyApp webpages -> Shiny Apps.
+
+Response: The names have been corrected accordingly.
+
+## Code
+
+The article defined a `mathout()` function in it. I wonder if it would be more
+convenient to just define it in the mathml package.
+
+Response: This has been added to the package.                                   ********
+
+To work better with R Markdown documents, it may be worth defining
+a `knitr::knit_print` method for the results returned
+from `mathjax()`/`mathml()`.
+
+Response: This has been added to the package, thank you, big improvement.       ********
