@@ -15,14 +15,14 @@ Description: Translate R expressions to 'MathML' or 'MathJax' so that
 License: FreeBSD
 Depends:
     R (>= 4.2),
-    rolog (>= 0.9.12)
+    rolog (>= 0.9.12),
+    knitr
 Encoding: UTF-8
 URL: https://github.com/mgondan/mathml
 BugReports: https://github.com/mgondan/mathml/issues
 LinkingTo:
 Suggests: 
     rmarkdown,
-    knitr,
     testthat
 VignetteBuilder:
     knitr,

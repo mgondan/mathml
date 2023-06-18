@@ -1,6 +1,6 @@
 ---
 title: "`mathml`: Translate R Expressions to MathML and LaTeX"
-date: "2023-04-25"
+date: "2023-06-17"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
@@ -49,24 +49,6 @@ Vignette: >
 
 ```{r setup, include=FALSE}
 library(mathml)
-
-mathout <- function(..., flags=NULL, env=parent.frame())
-{
-  if(knitr::is_html_output())
-    return(mathml(..., flags=c(flags, list(cat=TRUE)), env=env))
-
-  if(knitr::is_latex_output())
-    return(mathjax(..., flags=c(flags, list(cat=TRUE)), env=env))
-
-  warning("mathout: no knitr output specified")  
-  mathjax(..., flags=c(flags, list(cat=TRUE)), env=env)
-}
-
-catmath <- function(term, ...)
-{
-  s <- substitute(term)
-  mathout(canonical(s), ...)
-}
 ```
 
 # Introduction
@@ -151,19 +133,23 @@ below.
 
 ````{r}
 library(mathml)
+substr(mathml(term), 1, 70)
 mathjax(term)
 ````
 
-Some of the curly braces are not really needed in this simple example, but are
-necessary in edge cases. We can include the output in a R\ Markdown document by
-specifying `results='asis'` in the R\ code chunk of R\ Markdown, as is done in all
-examples below. The R\ function `mathout()` has been defined in the preamble of
-this article; it wraps a call to `mathml()` for HTML output and `mathjax()` for
-LaTeX output.
+Some of the curly braces are not really needed in the LaTeX output, but are
+necessary in edge cases. The package also includes a function `mathout()` that
+wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
+Moreover, the function `math(x)` adds the class `"math"` to its argument, such
+that a special knitr printing function is invoked. We can include the output in
+a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
+R\ Markdown, as is done in all examples below.
 
-````{r, results='asis'}
-mathout(term)
+````{r, results="asis"}
+math(term)
 ````
+
+Similarly, `inline()` produces inline output: `r inline(term)`.
 
 For convenience, the translation of the R expressions is achieved through a
 Prolog interpreter provided by another package 
@@ -222,10 +208,10 @@ identifiers, accents, subscripts, and superscripts.
  
 ```{r, results='asis'}
 term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
-mathout(term)
+math(term)
 
 term <- quote(round(3.1415, 3L) + NaN + NA + TRUE + FALSE + Inf + (-Inf))
-mathout(term)
+math(term)
 ```
 
 An expression such as `1 + -2` may be considered aesthetically unsatisfactory.
@@ -246,10 +232,10 @@ so that they can be introduced into R expressions without side-effects.
 
 ```{r, results='asis'}
 term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
-mathout(term)
+math(term)
 
 term <- quote(tilde(a) + mean(X) + box(c) + cancel(d) + phantom(e) + prime(f))
-mathout(term)
+math(term)
 ```
 
 Note that the font styles only affect the display of identifiers, whereas
@@ -262,10 +248,10 @@ below.
 
 ```{r, results="asis"}
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
-mathout(term)
+math(term)
 
 term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
-mathout(term)
+math(term)
 ```
 
 For multiplications involving only numbers and symbols, the multiplication sign
@@ -299,10 +285,10 @@ for precedence, undesirable results may be obtained in custom operators.
 
 ```{r, results='asis'}
 term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
-mathout(term)
+math(term)
 term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N))) # functional form of '%+-%'
 term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
-mathout(term)
+math(term)
 ```
 
 The example is a reminder that it is not possible to define the precedence of
@@ -400,9 +386,9 @@ omission of parentheses.
 
 ```{r, results='asis'}
 term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
-mathout(term)
+math(term)
 term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + exp(frac(x, y)))
-mathout(term)
+math(term)
 ```
 
 A few more examples are shown in Table \@ref(tab:base-stats), including
@@ -474,8 +460,8 @@ sgn <- function(x)
   if(x > 0L) return(1L)
 }
 
-mathout(sgn)
-mathout(call("<-", quote(sgn(x)), sgn))
+math(sgn)
+math(call("<-", quote(sgn(x)), sgn))
 ```
 
 The function body is generally a nested R\ call of the form `'{'(L)`, with `L`
@@ -494,10 +480,10 @@ decorations (_to_ is optional), for example, for summation and product signs.
 
 ```{r, results='asis'}
 term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
-mathout(term)
+math(term)
 
 term <- quote(log(prod_over(L[i], i==1L, N)) <- sum_over(log(L[i]), i==1L, N))
-mathout(term)
+math(term)
 ```
 
 ## Ringing back to R
@@ -508,7 +494,7 @@ integration.
 
 ```{r, results='asis'}
 term <- quote(integrate(sin, 0L, 2L*pi))
-mathout(term)
+math(term)
 eval(term)
 ```
 
@@ -545,7 +531,7 @@ canonical(term)
 ```
 
 ```{r, results='asis'}
-mathout(canonical(term))
+math(canonical(term))
 ```
 
 This function can be used to feed mixtures of partially named and positional
@@ -557,12 +543,12 @@ Of course, \pkg{mathml} also supports matrices and vectors.
 
 ```{r, results='asis'}
 v <- 1:3
-mathout(call("t", v))
+math(call("t", v))
 
 A <- matrix(data=11:16, nrow=2, ncol=3)
 B <- matrix(data=21:26, nrow=2, ncol=3)
 term <- call("+", A, B)
-mathout(term)
+math(term)
 ```
 
 Note that the seemingly more convenient `term <- quote(A + B)` yields \(A + B\)
@@ -577,12 +563,12 @@ letters, which may yield unsatisfactory results in the mathematical output.
 
 ```{r, results='asis'}
 term <- quote(pbinom(successes, Ntotal, prob))
-mathout(term)
+math(term)
 
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
-mathout(term)
+math(term)
 ```
 
 To improve the situation, \pkg{mathml} provides a simple hook that can be used
@@ -599,7 +585,7 @@ dotted symbols representing Prolog variables.
 
 ```{r, results='asis'}
 hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
-mathout(term)
+math(term)
 ```
 
 Further customization requires the assertion of new Prolog rules `math/2`,
@@ -624,7 +610,7 @@ hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
                 "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
-mathout(term)
+math(term)
 ```
 
 The term is evaluated below. `print()` is needed because the return value of an
@@ -643,8 +629,8 @@ null hypothesis in a \(t\)-ratio:
 
 ```{r, results='asis'}
 t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
-mathout(t, flags=list(error="highlight"))
-mathout(t, flags=list(error="fix"))
+math(t, flags=list(error="highlight"))
+math(t, flags=list(error="fix"))
 ```
 
 The R function `omit_right(a + b)` uses non-standard evaluation
@@ -652,11 +638,12 @@ techniques [e.g., @Wickham2019] to return only the left part an operation,
 and cancels the right part. This may not always be desired, for example, when
 illustrating how to fix the mistake.
 
-For this purpose, the functions `mathml()` or `mathjax()` have an optional
-argument `flags` which is a list with named elements. In this example, we use
-this argument to tell \pkg{mathml} how to render such erroneous
-expressions using the flag `error` which can be "asis", "highlight", "fix", 
-or "ignore". For more examples, see Table \@ref(tab:mistakes).
+For this purpose, the functions `mathml()`, `mathjax()`, `mathout()`
+and `math()` have an optional argument `flags` which is a list with named
+elements. In this example, we use this argument to tell \pkg{mathml} how to
+render such erroneous expressions using the flag `error` which can be "asis",
+"highlight", "fix", or "ignore". For more examples,
+see Table \@ref(tab:mistakes).
 
 ```{r mistakes, echo=FALSE}
 op1 <- list(
@@ -685,14 +672,15 @@ knitr::kable(t, caption="Highlighting elements of a term",
 # A case study
 
 This case study describes a model by Schwarz [-@schwarz1994] from mathematical
-psychology using the features of package \pkg{mathml}. Schwarz [-@schwarz1994] presents a new
-explanation of redundancy gains that occur when observers respond to stimuli of
-different sources, and the same information is presented on two or more
-channels. In Schwarz' [-@schwarz1994] model, decision-making builds on a process of noisy
-accumulation of information over time [e.g., @ratcliff2016]. In redundant
-stimuli, the model assumes a superposition of channel-specific diffusion
-processes that eventually reach an absorbing barrier to elicit the response. For
-a detailed description the reader may refer to the original article.
+psychology using the features of package \pkg{mathml}. Schwarz [-@schwarz1994]
+presents a new explanation of redundancy gains that occur when observers respond
+to stimuli of different sources, and the same information is presented on two or
+more channels. In Schwarz' [-@schwarz1994] model, decision-making builds on a
+process of noisy accumulation of information over time [e.g., @ratcliff2016]. In
+redundant stimuli, the model assumes a superposition of channel-specific
+diffusion processes that eventually reach an absorbing barrier to elicit the
+response. For a detailed description the reader may refer to the original
+article.
 
 Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (AB, redundant stimuli), with the redundant stimuli
@@ -713,7 +701,7 @@ ED_single <- function(c, mu)
 
 # display as E(D; mu), c is a scaling parameter
 hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
-mathout(call("=", quote(ED_single(c, mu)), ED_single))
+math(call("=", quote(ED_single(c, mu)), ED_single))
 ```
 
 One would typically use chunk option `echo=FALSE` to suppress the R code.
@@ -733,7 +721,7 @@ hook(sigma_B, sigma["B"])
 hook(mu_M, mu["M"])
 hook(M, overline(X))
 
-mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
+math(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
@@ -748,7 +736,7 @@ ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 }
 
 hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
-mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
+math(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
 For negative onset asynchrony (i.e., B before A), the parameters are simply
@@ -765,7 +753,7 @@ ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 }
 
 hook(ED(.Tau, .C, .MA, .SA, .MB, .SB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB, .SB))))
-mathout(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
+math(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
 ```
 
 The observable response time is assumed to be the sum of \(D\), the time
@@ -779,7 +767,7 @@ ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 
 hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
      E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
-mathout(call("=", quote(E(T[tau])), ET))
+math(call("=", quote(E(T[tau])), ET))
 ```
 
 Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
@@ -816,7 +804,7 @@ z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
               "the expected mean response time"),
     s / sqrt(n))
 
-mathout(call("=", quote(z[tau]), z))
+math(call("=", quote(z[tau]), z))
 ```
 
 The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
@@ -832,7 +820,7 @@ gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
-mathout(call("=", quote(X["8 df"]^2L), gof))
+math(call("=", quote(X["8 df"]^2L), gof))
 ```
 
 with the degrees of freedom given by the difference between the number of
@@ -848,7 +836,7 @@ lsq <- function(tau, m, s, n)
   optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
 }
 
-mathout(call("=", quote(hat(theta)), lsq))
+math(call("=", quote(hat(theta)), lsq))
 ```
 
 The best fitting parameter values and their confidence intervals are given in
@@ -908,7 +896,7 @@ f1 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
-mathout(f1)
+math(f1)
 ````
 
 The first version has a wrong parenthesis, which is barely visible in the code,
@@ -923,7 +911,7 @@ f2 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
-mathout(f2)
+math(f2)
 ````
 
 As the reader may know from own experience, missed parentheses are frequent
@@ -931,17 +919,11 @@ causes of wrong results and errors that are hard to locate in programming code.
 This particular example shows that mathematical rendering can help to
 substantially reduce the amount of careless errors in programming.
 
-In its current version \pkg{mathml} has some limitations. For example, it is
-currently not possible to use the functions of \pkg{mathml} for writing
-inline formulas, here, the user has to adopt the usual LaTeX notation. The
-reason is the missing chunk option results="asis" in inline output from
-R\ Markdown, such that the HTML or LaTeX commands are quoted.
-Moreover, for long equations, we did not yet find a convenient way to insert
-line breaks. This is mostly due to lacking support by MathML and LaTeX
-renderers. For example, in its current stage, the LaTeX package `breqn` [@breqn]
-is mostly a proof of concept. Finally, \pkg{mathml} is one-way road, that is,
-translation from LaTeX or HTML back to R is not 
-possible [see @latex2r, for an example].
+One limitation of the package is the lack of a convenient way to insert line
+breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
+For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
+a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, translation
+from LaTeX or HTML back to R is not possible [see @latex2r, for an example].
 
 The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. The source code
@@ -999,7 +981,7 @@ list `[C, B, A]` and vice-versa (see the file `lm.pl` for details).
 rolog::consult(system.file(file.path("pl", "lm.pl"), package="mathml"))
 
 term <- quote(lm(EOT ~ T0 + Therapy, data=d, na.action=na.fail))
-mathout(term)
+math(term)
 ````
 
 ## \(n\)-th root
@@ -1022,7 +1004,7 @@ nthroot <- function(x, n)
   x^{1L/n}
 
 term <- canonical(quote(nthroot(n=3L, 2L)))
-mathout(term)
+math(term)
 ```
 
 A proper MathML term is obtained by `mlx/3` (the x in mlx indicates that it is
@@ -1046,9 +1028,9 @@ package \pkg{rolog}.
 rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
 
 term <- quote(nthroot(a * (b + c), 3L)^2L)
-mathout(term)
+math(term)
 term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
-mathout(term)
+math(term)
 ```
 
 The file `nthroot.pl` includes three more statements `precx/3` and `parenx/3`,

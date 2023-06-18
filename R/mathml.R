@@ -1,3 +1,8 @@
+.onLoad <- function(...)
+{
+  registerS3method("knit_print", "math", .knit_print.math)
+}
+
 .onAttach <- function(libname, pkgname)
 {
   if(!requireNamespace("rolog", quietly=TRUE))
@@ -21,7 +26,7 @@
 #' The R environment in which r_eval is being executed.
 #' 
 #' @return
-#' A string with the MathML representation or _term_.
+#' A string with the MathML representation of _term_.
 #'
 #' @seealso [mathjax()]
 #'
@@ -105,7 +110,7 @@ mathml_preproc <- function(query=quote(5 %% 2))
 #' details, "Ringing back to R").
 #'
 #' @return
-#' A string with the MathJax representation or _term_.
+#' A string with the MathJax representation of _term_.
 #'
 #' @md
 #'
@@ -132,6 +137,89 @@ mathjax <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
     return(cat(r))
 
   return(r)
+}
+
+#' MathML or MathJax output, depending on the knitr context
+#'
+#' @param term
+#' an R call or symbol/number. This function translates _term_ into a
+#' LaTeX/MathJax string.
+#'
+#' @param flags (default NULL)
+#' list of flags that control the translation
+#'
+#' @param env (default parent.frame())
+#' The R environment in which r_eval is being executed (see vignette for
+#' details, "Ringing back to R").
+#'
+#' @return
+#' A string with the MathML or MathJax representation of _term_.
+#'
+#' @md
+#'
+#' @details This function checks knitr::is_html_output() 
+#' and knitr::is_html_output() and invokes the respective function mathml() or
+#' mathjax(). Outside of knitr context, MathML is returned, and a warning is
+#' given.
+#'
+#' @seealso [mathml()], [mathjax()], [inline()]
+#'
+#' @examples
+#' mathout(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+#'
+#' inline(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+#'
+mathout <- function(term, flags=NULL, env=parent.frame())
+{
+  if(knitr::is_html_output())
+    return(mathml(term, flags=c(flags, list(cat=TRUE)), env=env))
+
+  if(knitr::is_latex_output())
+    return(mathjax(term, flags=c(flags, list(cat=TRUE)), env=env))
+
+  warning("mathout: no knitr output specified")  
+  mathjax(term, flags=c(flags, list(cat=TRUE)), env=env)
+}
+
+#' @rdname mathout
+#' @export
+inline <- function(term, flags=NULL, env=parent.frame())
+{
+  mathout(term, flags=c(flags, list(cat=FALSE)), env=env)
+}
+
+#' Adds the class "math" to the object for knitr output via `mathout()`
+#'
+#' @param term
+#' an R call or symbol/number. This function translates _term_ into a
+#' LaTeX/MathJax string.
+#'
+#' @param flags (default NULL)
+#' list of flags that control the translation
+#'
+#' @return
+#' _term_ with additional class "math" and _flags_ as attributes.
+#'
+#' @md
+#'
+#' @seealso [mathml()], [mathjax()], [mathout()]
+#'
+#' @examples
+#' math(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+math <- function(term, flags=NULL)
+{
+  class(term) <- c("math", class(term))
+  attr(term, "flags") <- flags
+  return(term)
+}
+  
+.knit_print.math <- function(x, options, inline=FALSE) 
+{
+  flags <- attr(x, "flags")
+  if(inline)
+    return(structure(inline(x, flags), class="knit_asis"))
+
+  structure(mathout(x, flags), class="knit_asis")
 }
 
 #' Add a name attribute to an element (most often, an R function)

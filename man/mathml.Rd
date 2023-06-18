@@ -21,7 +21,7 @@ list of flags that control the translation}
 The R environment in which r_eval is being executed.}
 }
 \value{
-A string with the MathML representation or \emph{term}.
+A string with the MathML representation of \emph{term}.
 }
 \description{
 MathML output

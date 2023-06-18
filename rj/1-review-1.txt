@@ -37,10 +37,8 @@ inline formulas, here, the user has to adopt the usual LateX notation". I'm
 curious why it's impossible to use `r mathout()`. It can be used inline if it
 can return a character string.
 
-Response: The normal code chunks need the chunk option results="asis" in order
-to avoid quoting the HTML code. Otherwise, mathml(2 + 2) would produce
-"<mn>2</mn><mo>+</mo><mn>2</mn>" in the output. Such an option does not exist in
-inline code; therefore, `r mathml(expr)` does not produce the desired result.
+Response: The reviewer is correct, the limitation has been removed and an
+example with inline math is given in the introduction.
 
 Minor correction of some names: RMarkdown -> R Markdown; Latex -> LaTeX;
 ShinyApp webpages -> Shiny Apps.
@@ -52,10 +50,11 @@ Response: The names have been corrected accordingly.
 The article defined a `mathout()` function in it. I wonder if it would be more
 convenient to just define it in the mathml package.
 
-Response: This has been added to the package.                                   ********
+Response: Two functions mathout() and inline() have been added to the package.
 
 To work better with R Markdown documents, it may be worth defining
 a `knitr::knit_print` method for the results returned
 from `mathjax()`/`mathml()`.
 
-Response: This has been added to the package, thank you, big improvement.       ********
+Response: A function `math()` has been added to the package that does exactly
+this, thank you, nice improvement.

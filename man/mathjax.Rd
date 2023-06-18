@@ -22,7 +22,7 @@ The R environment in which r_eval is being executed (see vignette for
 details, "Ringing back to R").}
 }
 \value{
-A string with the MathJax representation or \emph{term}.
+A string with the MathJax representation of \emph{term}.
 }
 \description{
 Mathjax output
