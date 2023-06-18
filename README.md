@@ -17,7 +17,8 @@ presentations and ShinyApp webpages.
 
 ## License
 
-This R package is distributed under a BSD-2 simplified license (see the file LICENSE).
+This R package is distributed under a BSD-2 simplified
+license (see the file LICENSE).
 
 ## Installation
 
@@ -26,6 +27,10 @@ This R package is distributed under a BSD-2 simplified license (see the file LIC
 2. Download and install a recent RStudio from https://www.rstudio.com/
 
 3. R> `install.packages("mathml")`
+
+The package depends on R package rolog [https://github.com/mgondan/rolog], which
+itself needs either SWI-Prolog [https://swi-prolog.org] or another R package
+rswipl [https://github.com/mgondan/rswipl].
 
 # Example
 

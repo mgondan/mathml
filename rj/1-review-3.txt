@@ -1,0 +1,131 @@
+## Referee report of "mathml: Translate R Expressions to MathML and LaTeX".
+
+- **Id**: 2023-47
+
+## General
+
+This article presents a recent package for typesetting equations differently than the usual way offered by markup syntax in Markdown.
+Its main advantage is that it allows typesetting some mathematical R code directly.
+Usually, with R Markdown, it builds on Pandoc support for Math and requires writing Math syntax directly, not converting R code to Math directly.
+This is new and interesting for documents heavily relying on math expressions for the code and the typeset content.
+The article is rather technical, which can make it quite scoped to interested readers, but not to any R Journal readers.
+It explains the technical implementation and then demos the usage through simple examples and a long case study.
+It is unfortunate that code can't be reproduced directly from the paper examples without accessing the companion R file.
+Overall, despite being highly technical in its form, I believe the usage and advantage are clear.
+Readers will know if they could be interested in becoming users too.
+Especially for PDF publication.
+
+## Detailed comments
+
+-   The article is quite technical about the package and how it works.
+    It even requires some external software (Prolog), but it is not mentioned as a requirement (not even on the CRAN page or Github repo README).
+    It would be better to make it clear that R alone is not enough.
+
+Response: In the revision, it is now made explicit that the package needs either SWI-Prolog installed on the system or R package rswipl.
+
+-   The technical background part is interesting, but I feel it is quite complicated for a direct user of the package reading this to understand how it will help.
+    I wonder if it would not be better to leave technicals for after the "How to Use" part (called Package mathml in practice)
+
+Response: In the revision, the technical implementation has been moved to the suggested place.
+
+-   The introduction says: \> The R extension of the markdown language (Xie, Dervieux, and Riederer 2020) enables reproducible statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
+    This is a bit confusing, as there is the rmarkdown package and also a markdown package.
+    The reference points to the R Markdown Cookbook, so the reader can guess, but this is not the "R Markdown Definitive Guide," which would be the correct reference to **rmarkdown** package documentation.
+    Citing the package itself would be the most accurate, I believe.
+    I think this introduction can be made less confusing.
+
+Response: Thank you for pointing this out, this has been corrected in the revised manuscript. 
+-   Paper is using "RMarkdown" whereas convention should probably be "R Markdown" (with a space) as found in the R Markdown Cookbook or R Markdown Definitive Guide (<https://bookdown.org/yihui/rmarkdown-cookbook/software-info.html> and <https://bookdown.org/yihui/rmarkdown/software-info.html>) rmarkdown (with lowercase and no space) is the package name.
+    "R Markdown" is correctly used once in the conclusion.
+    The usage should be made coherent throughout the article to use "R Markdown"
+
+Response: This has been corrected in the revised manuscript.
+
+-   I find it sometimes hard to follow the examples, as they are hidden in the source.
+
+    > We can include the output in a RMarkdown document by specifying results = "asis" in the R code chunk of RMarkdown, as is done in all examples below.
+
+    It is not really shown how, without probably looking at the article code source.
+    It is assumed that the reader is a knowledgeable rmarkdown or knitr user.
+    This can be made more clear if this is indeed the case.
+
+Response: It is now made clear that the target audience has some basic knowledge
+of rmarkdown and knitr. Moreover, a code snippet with a R code chunk is
+presented in the introduction.
+
+    > The R function mathout() has been defined in the preamble of this article; it wraps a call to mathml() for HTML output and mathjax() for LaTeX output.
+
+    Same here.
+    The function `mathout()` is mentioned but not shown.
+    We have to open the R source file to understand.
+    This also assumes some form of expertise from the readers.
+    This could be made more clear or point to more resources to help non-knowledgeable users understand.
+    Overall, is it really worth adding those details without an example?
+    This adds to the already-existing technical complexity.
+    A reader could try reproducing the code by copying and pasting, but it won't work.
+    (And I did try it.)
+
+Response: mathout() has been added to the list of functions of the package, so
+that copy-pasting the examples now works.
+
+-   As said earlier, a system requirement seems to be needed.
+    Package won't work without it (it errors and also adds a warning about missing software).
+    The CRAN page does not mention it either, and we derive the need for it from the dependency on Prolog.
+    I think the article could be more specific about this.
+
+Response: It is actually sufficient to have R package rswipl installed *or*
+SWI-Prolog on the system. To our knowledge, it is not possible to give
+alternative system requirements in a package. However, we improved the error
+message from R package rolog to explicitly remind the user what is to be done if
+Prolog is not found.
+
+-   In conclusion, **distill** (Allaire et al. 2018) is cited as a package for displaying mathematical formulas.
+    I am not sure to see the direct relation \> It extends the current features of R and existing packages for displaying mathematical formulas in R (Murrell and Ihaka 2000; Allaire et al. 2018).
+    Maybe this needs checking to see if the reference is still applicable where it is.
+
+Response: The reviewer is correct, the reference is a bit far from the topic and
+has been removed.
+
+## Code
+
+-   A simple try of the package will lead to an error.
+
+    ``` r
+    library(mathml) 
+    #> Le chargement a nécessité le package : rolog 
+    #> Warning in fun(libname, pkgname): swipl not found in the PATH. Please set 
+    #> SWI_HOME_DIR accordingly or install R package rswipl. 
+    #> Warning in rolog::consult(system.file("pl/mathml.pl", package = pkgname)): 
+    #> swipl not found in the PATH. Please set SWI_HOME_DIR accordingly or install R 
+    #> package rswipl. term <- quote(pbinom(k, N, p)) term 
+    #> pbinom(k, N, p) mathjax(term) 
+    #> Warning in rolog::once(call("r2mathjax", term, expression(X), flags), options = 
+    #> list(preproc = list(rolog::preproc, : swipl not found in the PATH. Please set 
+    #> SWI_HOME_DIR accordingly or install R package rswipl. 
+    #> Error in t$X: $ operator is invalid for atomic vectors 
+    ```
+
+    This is a bit unfortunate.
+    Package improvement to make?
+    Probably improving correct setup checks and error messages would be helpful.
+    Adding more warnings about requirements to the article would be good.
+    It seems package `rswipl` could be used to avoid installing Prolog, but I needed to search for this specifically from the error message shown.
+    not a great user experience in my opinion, especially when discovering the MathML package while reading this article.
+
+Response: The welcome message of the underlying package rolog has been revised
+to make it more informative and helpful in case of missing requirements, as well
+as the package DESCRIPTION and the readme on github.
+
+-   Why is the `mathout()` function not part of the package?
+    A reader will definitely want to try it while reading, and it would also make it easier to have this included.
+    Using this mathml in a R Markdown document will make sense if the function offered by the package handles the different formats.
+
+Response: mathout() has been added to the list of functions of the package, so
+that copy-pasting the examples now works.
+
+-   I think the package should have functions that better support its usage in 'knitting' context.
+    knitr provides tools like `knitr::asis_output()` and [Custom Printing Method](https://cran.r-project.org/web/packages/knitr/vignettes/knit_print.html).
+    These should be used so that calling `mathml(term)` in a chunk will work without knowing more about setting `flags` Currently, `results = "asis"` is needed, and `mathml(term, flags = list(cat=TRUE))` needs to be used.
+    This can definitely be improved with a `knit_print()` method.
+
+Response: A knit_print method has been added, as suggested.

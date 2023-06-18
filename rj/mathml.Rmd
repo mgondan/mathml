@@ -53,11 +53,11 @@ library(mathml)
 
 # Introduction
 
-The R\ extension of the markdown language [@Xie2020] enables reproducible
-statistical reports with nice typesetting in HTML, Microsoft Word, and LaTeX.
-Since recently [@R, version 4.2], R\'s manual pages include support for
-mathematical expressions [@Sarkar2022;@Viechtbauer2022], which already is a big
-improvement. However, except for special cases such as regression
+The R\ extension of the markdown language [@Xie2018;rmarkdown] enables
+reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
+and LaTeX. Since recently [@R, version 4.2], R\'s manual pages include support
+for mathematical expressions [@Sarkar2022;@Viechtbauer2022], which already is a
+big improvement. However, except for special cases such as regression
 models [@equatiomatic] and R's own plotmath annotation, rules for the mapping of
 built-in language elements to their mathematical representation are still
 lacking. So far, R\ expressions such as `pbinom(k, N, p)` are printed as they
@@ -69,7 +69,7 @@ read.
 
 The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
-ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
+Shiny apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
 rules, for example, to represent specific R\ elements by custom mathematical
@@ -77,7 +77,10 @@ signs.
 
 The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
-and potentially reduces mistakes, as will be illustrated below.
+and potentially reduces mistakes, as will be illustrated below. Readers should
+have basic knowledge of knitr and R\ Markdown to be able to follow this
+article [@knitr;@rmarkdown]. To extend and customize the package, some basic
+knowledge of Prolog is needed.
 
 The paper is organized as follows. We start with a description of the
 technical background of the package, including the two main classes of rules for
@@ -145,55 +148,18 @@ that a special knitr printing function is invoked. We can include the output in
 a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
 R\ Markdown, as is done in all examples below.
 
-````{r, results="asis"}
+``````markdown
+`r ''`````{r, results="asis"}
+math(term)
+````
+``````
+
+````{r, results="asis", echo=FALSE}
 math(term)
 ````
 
-Similarly, `inline()` produces inline output: `r inline(term)`.
-
-For convenience, the translation of the R expressions is achieved through a
-Prolog interpreter provided by another package 
-R\ package \CRANpkg{rolog} [@rolog]. Prolog is a classical logic programming
-language with many applications in expert systems, computer linguistics and
-symbolic artificial intelligence. The strength of Prolog lies in its concise
-representation of facts and rules for knowledge and grammar, as well as its
-efficient built-in search engine for closed world domains. Whereas Prolog is
-weak in statistical computation, but strong in symbolic manipulation, the
-converse may be said for the R\ language. \pkg{rolog} bridges this gap by
-providing an interface to a SWI-Prolog distribution [@swipl] in R. The
-communication between the two systems is mainly in the form of queries from
-R\ to Prolog, but two Prolog functions allow to ring back and evaluate terms
-in R. 
-
-The proper term for a Prolog "function" is predicate, and it is typically
-written with name and arity (i.e., number of arguments), separated by a forward
-slash. Thus, at the Prolog end, the predicate `math/2` translates the
-representation of the R call `pbinom(K, N, Pi)` into a more general 
-representation of an R function `fn/2` with the name `P_Bi`, one 
-argument `X =< K`, and the two parameters `N` and `Pi`, as shown below.
-
-````prolog
-math(pbinom(K, N, Pi), M)
- => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
-````
-
-`math/2` operates like macro that translates one mathematical
-element (here, `pbinom(K, N, Pi)`) to another mathematical element,
-namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is used to
-convert these basic elements to MathML.
-
-````prolog
-ml(fn(Name, (Args ; Pars)), M, Flags)
- => ml(Name, N, Flags),
-    ml(paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
-    M = mrow([N, mo(&(af)), X]).
-````
-
-The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
-with `N` representing the name of the function and `X` its arguments and
-parameters enclosed in parentheses. A corresponding rule `jax/3` does the same
-for MathJax/LaTeX. A list of flags can be used for context-sensitive
-translation (see, e.g., the section on errors below).
+Similarly, `inline()` produces inline
+output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
 
 # Package \pkg{mathml} in practice
 
@@ -208,10 +174,10 @@ identifiers, accents, subscripts, and superscripts.
  
 ```{r, results='asis'}
 term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
-math(term)
+mathout(term)
 
 term <- quote(round(3.1415, 3L) + NaN + NA + TRUE + FALSE + Inf + (-Inf))
-math(term)
+mathout(term)
 ```
 
 An expression such as `1 + -2` may be considered aesthetically unsatisfactory.
@@ -232,10 +198,10 @@ so that they can be introduced into R expressions without side-effects.
 
 ```{r, results='asis'}
 term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
-math(term)
+mathout(term)
 
 term <- quote(tilde(a) + mean(X) + box(c) + cancel(d) + phantom(e) + prime(f))
-math(term)
+mathout(term)
 ```
 
 Note that the font styles only affect the display of identifiers, whereas
@@ -248,10 +214,10 @@ below.
 
 ```{r, results="asis"}
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
-math(term)
+mathout(term)
 
 term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
-math(term)
+mathout(term)
 ```
 
 For multiplications involving only numbers and symbols, the multiplication sign
@@ -285,10 +251,10 @@ for precedence, undesirable results may be obtained in custom operators.
 
 ```{r, results='asis'}
 term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
-math(term)
+mathout(term)
 term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N))) # functional form of '%+-%'
 term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
-math(term)
+mathout(term)
 ```
 
 The example is a reminder that it is not possible to define the precedence of
@@ -386,9 +352,9 @@ omission of parentheses.
 
 ```{r, results='asis'}
 term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
-math(term)
+mathout(term)
 term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + exp(frac(x, y)))
-math(term)
+mathout(term)
 ```
 
 A few more examples are shown in Table \@ref(tab:base-stats), including
@@ -460,8 +426,8 @@ sgn <- function(x)
   if(x > 0L) return(1L)
 }
 
-math(sgn)
-math(call("<-", quote(sgn(x)), sgn))
+mathout(sgn)
+mathout(call("<-", quote(sgn(x)), sgn))
 ```
 
 The function body is generally a nested R\ call of the form `'{'(L)`, with `L`
@@ -480,10 +446,10 @@ decorations (_to_ is optional), for example, for summation and product signs.
 
 ```{r, results='asis'}
 term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
-math(term)
+mathout(term)
 
 term <- quote(log(prod_over(L[i], i==1L, N)) <- sum_over(log(L[i]), i==1L, N))
-math(term)
+mathout(term)
 ```
 
 ## Ringing back to R
@@ -494,7 +460,7 @@ integration.
 
 ```{r, results='asis'}
 term <- quote(integrate(sin, 0L, 2L*pi))
-math(term)
+mathout(term)
 eval(term)
 ```
 
@@ -531,7 +497,7 @@ canonical(term)
 ```
 
 ```{r, results='asis'}
-math(canonical(term))
+mathout(canonical(term))
 ```
 
 This function can be used to feed mixtures of partially named and positional
@@ -543,12 +509,12 @@ Of course, \pkg{mathml} also supports matrices and vectors.
 
 ```{r, results='asis'}
 v <- 1:3
-math(call("t", v))
+mathout(call("t", v))
 
 A <- matrix(data=11:16, nrow=2, ncol=3)
 B <- matrix(data=21:26, nrow=2, ncol=3)
 term <- call("+", A, B)
-math(term)
+mathout(term)
 ```
 
 Note that the seemingly more convenient `term <- quote(A + B)` yields \(A + B\)
@@ -563,12 +529,12 @@ letters, which may yield unsatisfactory results in the mathematical output.
 
 ```{r, results='asis'}
 term <- quote(pbinom(successes, Ntotal, prob))
-math(term)
+mathout(term)
 
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
-math(term)
+mathout(term)
 ```
 
 To improve the situation, \pkg{mathml} provides a simple hook that can be used
@@ -585,7 +551,7 @@ dotted symbols representing Prolog variables.
 
 ```{r, results='asis'}
 hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
-math(term)
+mathout(term)
 ```
 
 Further customization requires the assertion of new Prolog rules `math/2`,
@@ -610,7 +576,7 @@ hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
                 "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
-math(term)
+mathout(term)
 ```
 
 The term is evaluated below. `print()` is needed because the return value of an
@@ -629,8 +595,8 @@ null hypothesis in a \(t\)-ratio:
 
 ```{r, results='asis'}
 t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
-math(t, flags=list(error="highlight"))
-math(t, flags=list(error="fix"))
+mathout(t, flags=list(error="highlight"))
+mathout(t, flags=list(error="fix"))
 ```
 
 The R function `omit_right(a + b)` uses non-standard evaluation
@@ -701,7 +667,7 @@ ED_single <- function(c, mu)
 
 # display as E(D; mu), c is a scaling parameter
 hook(ED_single(.C, .Mu), E(`;`(D, .Mu)))
-math(call("=", quote(ED_single(c, mu)), ED_single))
+mathout(call("=", quote(ED_single(c, mu)), ED_single))
 ```
 
 One would typically use chunk option `echo=FALSE` to suppress the R code.
@@ -721,7 +687,7 @@ hook(sigma_B, sigma["B"])
 hook(mu_M, mu["M"])
 hook(M, overline(X))
 
-math(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
+mathout(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 ```
 
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
@@ -736,7 +702,7 @@ ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 }
 
 hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
-math(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
+mathout(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
 ```
 
 For negative onset asynchrony (i.e., B before A), the parameters are simply
@@ -753,7 +719,7 @@ ED <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B)
 }
 
 hook(ED(.Tau, .C, .MA, .SA, .MB, .SB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB, .SB))))
-math(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
+mathout(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
 ```
 
 The observable response time is assumed to be the sum of \(D\), the time
@@ -767,7 +733,7 @@ ET <- function(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
 
 hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
      E(`;`(T[.Tau], `,`(.MA, .SA, .MB, .SB, .MM))))
-math(call("=", quote(E(T[tau])), ET))
+mathout(call("=", quote(E(T[tau])), ET))
 ```
 
 Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
@@ -804,7 +770,7 @@ z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
               "the expected mean response time"),
     s / sqrt(n))
 
-math(call("=", quote(z[tau]), z))
+mathout(call("=", quote(z[tau]), z))
 ```
 
 The overall goodness-of-fit is the sum of the squared \(z\)-statistics for each
@@ -820,7 +786,7 @@ gof <- function(par, tau, m, s, n)
   sum(zv(m, s, n, tau, c=100L, mu_A=par["mu_A"], sigma_A=par["sigma_A"], 
          mu_B=par["mu_B"], sigma_B=par["sigma_B"], mu_M=par["mu_M"])^2L)
 
-math(call("=", quote(X["8 df"]^2L), gof))
+mathout(call("=", quote(X["8 df"]^2L), gof))
 ```
 
 with the degrees of freedom given by the difference between the number of
@@ -836,7 +802,7 @@ lsq <- function(tau, m, s, n)
   optim(theta, gof, tau=tau, m=m, s=s, n=n, hessian=TRUE)
 }
 
-math(call("=", quote(hat(theta)), lsq))
+mathout(call("=", quote(hat(theta)), lsq))
 ```
 
 The best fitting parameter values and their confidence intervals are given in
@@ -896,7 +862,7 @@ f1 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
-math(f1)
+mathout(f1)
 ````
 
 The first version has a wrong parenthesis, which is barely visible in the code,
@@ -911,7 +877,7 @@ f2 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
-math(f2)
+mathout(f2)
 ````
 
 As the reader may know from own experience, missed parentheses are frequent
@@ -930,6 +896,54 @@ easily installed using the usual `install.packages("mathml")`. The source code
 of the package is found at https://github.com/mgondan/mathml.
 
 # Appendix: Customizing the package
+
+## Implementation details
+
+For convenience, the translation of the R expressions is achieved through a
+Prolog interpreter provided by another R\ package \CRANpkg{rolog} [@rolog]. If a
+version of SWI-Prolog [@swipl] is found on the system, \CRANpkg{rolog} connects
+to it. Alternatively, the SWI-Prolog runtime libraries can be conveniently
+accessed by installing the R\ package \CRANpkg{rswipl} [@rswipl]. Prolog is a
+classical logic programming language with many applications in expert systems,
+computer linguistics and symbolic artificial intelligence. The strength of
+Prolog lies in its concise representation of facts and rules for knowledge and
+grammar, as well as its efficient built-in search engine for closed world
+domains. Whereas Prolog is weak in statistical computation, but strong in
+symbolic manipulation, the converse may be said for the R\ language. \pkg{rolog}
+bridges this gap by providing an interface to a SWI-Prolog
+distribution [@swipl] in R. The communication between the two systems is mainly
+in the form of queries from R\ to Prolog, but two Prolog functions allow to ring
+back and evaluate terms in R. 
+
+The proper term for a Prolog "function" is predicate, and it is typically
+written with name and arity (i.e., number of arguments), separated by a forward
+slash. Thus, at the Prolog end, the predicate `math/2` translates the
+representation of the R call `pbinom(K, N, Pi)` into a more general 
+representation of an R function `fn/2` with the name `P_Bi`, one 
+argument `X =< K`, and the two parameters `N` and `Pi`, as shown below.
+
+````prolog
+math(pbinom(K, N, Pi), M)
+ => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
+````
+
+`math/2` operates like macro that translates one mathematical
+element (here, `pbinom(K, N, Pi)`) to another mathematical element,
+namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is used to
+convert these basic elements to MathML.
+
+````prolog
+ml(fn(Name, (Args ; Pars)), M, Flags)
+ => ml(Name, N, Flags),
+    ml(paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
+    M = mrow([N, mo(&(af)), X]).
+````
+
+The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
+with `N` representing the name of the function and `X` its arguments and
+parameters enclosed in parentheses. A corresponding rule `jax/3` does the same
+for MathJax/LaTeX. A list of flags can be used for context-sensitive
+translation (see, e.g., the section on errors above).
 
 Several ways exist for translating new R\ terms to their mathematical
 representation. We have already seen above how to use "hooks" to translate long
@@ -981,7 +995,7 @@ list `[C, B, A]` and vice-versa (see the file `lm.pl` for details).
 rolog::consult(system.file(file.path("pl", "lm.pl"), package="mathml"))
 
 term <- quote(lm(EOT ~ T0 + Therapy, data=d, na.action=na.fail))
-math(term)
+mathout(term)
 ````
 
 ## \(n\)-th root
@@ -1004,7 +1018,7 @@ nthroot <- function(x, n)
   x^{1L/n}
 
 term <- canonical(quote(nthroot(n=3L, 2L)))
-math(term)
+mathout(term)
 ```
 
 A proper MathML term is obtained by `mlx/3` (the x in mlx indicates that it is
@@ -1028,9 +1042,9 @@ package \pkg{rolog}.
 rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
 
 term <- quote(nthroot(a * (b + c), 3L)^2L)
-math(term)
+mathout(term)
 term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
-math(term)
+mathout(term)
 ```
 
 The file `nthroot.pl` includes three more statements `precx/3` and `parenx/3`,
