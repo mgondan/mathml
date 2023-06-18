@@ -10,7 +10,7 @@ Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
   person("European Commission", role="fnd",
   comment="Erasmus+ Programme, 2019-1-EE01-KA203-051708"))
 Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
-Description: Translate R expressions to 'MathML' or 'MathJax' so that
+Description: Translate R expressions to 'MathML' or 'MathJax'/'LaTeX' so that
     they can be rendered in 'rmarkdown' documents and shiny apps.
 License: FreeBSD
 Depends:

@@ -177,7 +177,7 @@ mathout <- function(term, flags=NULL, env=parent.frame())
   if(knitr::is_latex_output())
     return(mathjax(term, flags=c(flags, list(cat=TRUE)), env=env))
 
-  warning("mathout: no knitr output specified")  
+  warning("knitr output not specified. Use mathml() or mathjax() outside of code chunks.")  
   mathjax(term, flags=c(flags, list(cat=TRUE)), env=env)
 }
 
