@@ -119,7 +119,7 @@ term
 
 As it can be seen from the output, to the variable `term` is not assigned the 
 result of the calculation, yet an R\ call [see, e.g., @Wickham2019, for details 
-on "non-standard evaluation"], which can eventually be evaluated with `eval()`.
+on "non-standard evaluation"], which can eventually be evaluated with `eval()`,
 
 ````{r}
 k <- 10

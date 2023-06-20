@@ -21,21 +21,23 @@ mathout <- function(..., flags=NULL, env=parent.frame())
   mathml(..., flags=c(flags, list(cat=TRUE)), env=env)
 ```
 
-The R\ extension of the markdown language [@Xie2020] enables reproducible
-statistical reports with nice typesetting in HTML, Microsoft Word, and Latex.
-Since recently [@R, version 4.2], R\'s manual pages include support for
-mathematical expressions [@Sarkar2022;@Viechtbauer2022], which already is a big
-improvement. However, rules for the mapping of built-in language elements to
-their mathematical representation are still lacking. So far, R\ expressions such
-as `pbinom(k, N, p)` are printed as they are; pretty mathematical formulae
-such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit Latex commands, that
-is, `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for minimalistic use
+The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
+reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
+and LaTeX. Moreover, since recently [@R, version 4.2], R\'s manual pages 
+include support for mathematical expressions [@Sarkar2022;@Viechtbauer2022],
+which already is a big improvement. However, except for special cases 
+such as regression models [@equatiomatic] and R's own plotmath annotation, 
+rules for the mapping of built-in language elements to their mathematical 
+representation are still lacking. So far, R\ expressions such 
+as `pbinom(k, N, p)` are printed as they are and pretty mathematical formulae 
+such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit LaTeX commands
+like `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for very basic use
 cases, these commands are tedious to type in and their source code is hard to
 read.
 
-The R\ package `mathml` defines a set of rules for the automatic translation of
-R\ expressions to mathematical output in RMarkdown documents [@Xie2020] and
-ShinyApp webpages [@Chang2022]. The translation is done by an embedded Prolog
+The present R\ package defines a set of rules for the automatic translation of
+R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
+Shiny Apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
 rules, for example, to represent specific R\ elements by custom mathematical
@@ -43,7 +45,7 @@ signs.
 
 The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
-and reduces mistakes, as will be illustrated below.
+and potentially reduces mistakes, as will be illustrated below.
 
 The translation of R\ expressions to mathematical output is achieved through a
 Prolog interpreter from R\ package _rolog_ [@rolog]. Prolog is a classical logic
@@ -75,10 +77,9 @@ readers will remember that the quoted expression above is a short form for
 term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 ```
 
-As is seen from the output above, the variable `term` is not assigned the result
-of the calculation, but an R\ call
-[see, e.g., @Wickham2019, for details on "non-standard evaluation"]. Such a call
-can eventually be evaluated with `eval()`,
+As it can be seen from the output, to the variable `term` is not assigned the 
+result of the calculation, yet an R\ call [see, e.g., @Wickham2019, for details 
+on "non-standard evaluation"], which can eventually be evaluated with `eval()`,
 
 ```{r}
 k <- 10
@@ -97,14 +98,28 @@ library(mathml)
 mathjax(term)
 ```
 
-We can include the output in a RMarkdown document by specifying `results='asis'`
-in the R\ code chunk, as is done in the next example. The
-R\ function `mathout()` has been defined in this vignette; it invokes `mathml()`
-for HTML output and `mathjax()` for LaTeX output.
+Some of the curly braces are not really needed in the LaTeX output, but are
+necessary in edge cases. The package also includes a function `mathout()` that
+wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
+Moreover, the function `math(x)` adds the class `"math"` to its argument, such
+that a special knitr printing function is invoked. We can include the output in
+a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
+R\ Markdown, as is done in all examples below.
 
-```{r, results='asis'}
-mathout(term)
-```
+
+``````markdown
+`r ''`````{r, results="asis"}
+math(term)
+````
+``````
+
+````{r, results="asis", echo=FALSE}
+math(term)
+````
+
+Similarly, `inline()` produces inline
+output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
+
 
 At the Prolog end, a predicate `math/2` translates the call `pbinom(K, N, Pi)`
 into a "function" `fn/2` with the name `P_Bi`, one argument `X =< K`, and the
@@ -203,7 +218,7 @@ and large fractions.
 
 For standard operators with known precedence, _mathml_ is generally able to
 detect if parentheses are needed; for example, parentheses are automatically
-placed around `g + h` in the `nodot`-example. However, we note unnecessary
+placed around `d + e` in the `nodot`-example. However, we note unnecessary
 parentheses around `l + m` above. Thes parentheses are a consequence
 of `quote(a^(b + c))` actually producing a nested R\ call of the
 form `'^'(a, (b + c))` instead of `'^'(a, b + c)`:
@@ -385,10 +400,12 @@ knitr::kable(t, caption="Table 2. R functions from _base_ and _stats_",
 
 ## Custom functions
 
-For self-written functions, matters are a bit more complicated. For a function
+For self-written functions, the matter is somewhat more complicated. For a function
 such as `g <- function(...) ...`, the name _g_ is not transparent to R, because
-only the function body is represented, as illustrated by the redefinition
-of `sign` below.
+only the function body is represented. We can still display functions in the
+form `head(x) = body` if we embed the object to be shown into a
+call `"<-"(head, body)`.
+
 
 ```{r, results='asis'}
 sgn <- function(x)
@@ -614,30 +631,31 @@ Further customization requires the assertion of new Prolog rules `math/2`,
 
 This package allows R\ to render its terms in pretty mathematical equations. It
 extends the current features of R\ and existing packages for displaying
-mathematical formulas in R\ [@murrell2000;@allaire2018]), bit most
-importantly, _mathml_ bridges the gap between computational needs, presentation
-of results, and their reproducibility. The package supports both MathML and
-Latex/MathJax for use in R\ Markdown documents, presentations and ShinyApp
-webpages.
+mathematical formulas in R\ [@murrell2000;@allaire2018]), but most
+importantly, \pkg{mathml} bridges the gap between computational needs,
+presentation of results, and their reproducibility. The package supports both
+MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
+Shiny App webpages.
 
-Researchers or teachers can already use RMarkdown to conduct analyses
-and show results, and _mathml_ smoothes this process and allows for integrated
+Researchers or teachers can already use R\ Markdown to conduct analyses and show
+results, and \pkg{mathml} smoothes this process and allows for integrated
 calculations and output. As shown in the case study of the previous
-section, _mathml_ can help to improve data analyses and statistical reports from
-an aesthetical perspective, as well as regarding reproducibility of research.
+section, \pkg{mathml} can help to improve data analyses and statistical reports
+from an aesthetical perspective, as well as regarding reproducibility of
+research.
 
 Furthermore, the package may also allow for a better detection of possible
 mistakes in R\ programs. Similar to most programming languages [@green1977],
 R\ code is notoriously hard to read, and the poor legibility of the language is
-one of the main sources of mistakes. For illustration, we consider a complicated
-equation [e.g., @schwarz1994].
+one of the main sources of mistakes. For illustration, we consider again
+Equation\ 10 in Schwarz [-@schwarz1994].
 
 ````{r, results="asis"}
 f1 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"]) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
 mathout(f1)
@@ -649,10 +667,10 @@ obvious (the correct version is shown below for comparison).
 
 ````{r, results="asis"}
 f2 <- function(tau)
-{ dfrac(c, mu["A"]) + (dfrac(1L, mu["A"]) - dfrac(1L, mu["A"] + mu["B"])) * 
-    ((mu["A"]*tau - c) * pnorm(dfrac(c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau)))
-      - (mu["A"]*tau + c) * exp(dfrac(2L*mu["A"]*tau, sigma["A"]^2L))
-        * pnorm(dfrac(-c - mu["A"]*tau, sqrt(sigma["A"]^2L*tau))))
+{ dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
+    ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
+      - (mu_A*tau + c) * exp(dfrac(2L*mu_A*tau, sigma_A^2L))
+        * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
 mathout(f2)
@@ -663,17 +681,16 @@ causes of wrong results and errors that are hard to locate in programming code.
 This particular example shows that mathematical rendering can help to
 substantially reduce the amount of careless errors in programming.
 
-In its current version _mathml_ has some limitations. For example, it is
-currently not possible to use the functions of _mathml_ for writing
-inline formulas, here, the user has to adopt the usual LateX notation.
-Moreover, for long equations, we did not yet find a convenient way to insert
-line breaks. This is mostly due to lacking support by MathML and LaTeX renderers.
-For example, in its current stage, the LaTeX package _breqn_ [@breqn] is mostly
-a proof of concept.
+One limitation of the package is the lack of a convenient way to insert line
+breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
+For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
+a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, it is not 
+possible to translate from LaTeX or HTML back to R [see @latex2r, for an example].
 
-The package _mathml_ is available for R\ version (…) and later, and can be
+The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. The source code
 of the package is found at https://github.com/mgondan/mathml.
+
 
 # Appendix: Customizing the package
 
@@ -694,9 +711,9 @@ create proper MathML and Latex terms.
 
 To render the model equation of a linear model such
 as `lm(EOT ~ T0 + Therapy, data=d)` in mathematical form, it is sufficient to
-map the `Formula` in `lm(Formula, Data)` to its respective equation. This can in
-two ways, using either the hooks described above, or a new `math/2` macro at the
-Prolog end.
+map the `Formula` in `lm(Formula, Data)` to its respective equation 
+[see also @equatiomatic]. This can in two ways, using either the hooks 
+described above, or a new `math/2` macro at the Prolog end.
 
 ````r
 hook(lm(.Formula, .Data), .Formula)
