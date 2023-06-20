@@ -16,9 +16,6 @@ Vignette: >
 
 ```{r setup, include=FALSE}
 library(mathml)
-
-mathout <- function(..., flags=NULL, env=parent.frame())
-  mathml(..., flags=c(flags, list(cat=TRUE)), env=env)
 ```
 
 The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables

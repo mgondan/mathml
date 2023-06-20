@@ -217,9 +217,9 @@ math <- function(term, flags=NULL)
 {
   flags <- attr(x, "flags")
   if(inline)
-    return(structure(inline(x, flags), class="knit_asis"))
+    return(knitr::asis_output(as.character(inline(x, flags=flags))))
 
-  structure(mathout(x, flags), class="knit_asis")
+  structure(knitr::asis_output(as.character(mathout(x, flags=flags))))
 }
 
 #' Add a name attribute to an element (most often, an R function)
