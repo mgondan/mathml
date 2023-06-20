@@ -164,7 +164,7 @@ output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
 # Package \pkg{mathml} in practice
 
 The currently supported R\ objects are listed below, roughly following the order
-proposed by [@murrell2000].
+proposed by Murrell and Ihaka [-@murrell2000].
 
 ## Basic elements
 
@@ -835,7 +835,7 @@ referred to the original paper [@schwarz1994].
 
 This package allows R\ to render its terms in pretty mathematical equations. It
 extends the current features of R\ and existing packages for displaying
-mathematical formulas in R\ [@murrell2000;@allaire2018]), but most
+mathematical formulas in R\ [@murrell2000], but most
 importantly, \pkg{mathml} bridges the gap between computational needs,
 presentation of results, and their reproducibility. The package supports both
 MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
@@ -927,7 +927,7 @@ math(pbinom(K, N, Pi), M)
  => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 ````
 
-`math/2` operates like macro that translates one mathematical
+`math/2` operates like a macro that translates one mathematical
 element (here, `pbinom(K, N, Pi)`) to another mathematical element,
 namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is used to
 convert these basic elements to MathML.

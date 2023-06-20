@@ -47,22 +47,17 @@ The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
 and potentially reduces mistakes, as will be illustrated below.
 
-The translation of R\ expressions to mathematical output is achieved through a
-Prolog interpreter from R\ package _rolog_ [@rolog]. Prolog is a classical logic
-programming language with many applications in expert systems, computer
-linguistics and symbolic artificial intelligence. The main strength of Prolog is
-its concise representation of facts and rules for knowledge and grammar, as well
-as its efficient built-in search engine for closed world domains. As it is
-well-known, R\ is a statistical programming language for data analysis and
-statistical modeling. Whereas Prolog is weak in statistical computation, but
-strong in symbolic manipulation, the converse may be said for the R\ language.
-The _rolog_ package bridges this gap by providing an interface to a SWI-Prolog
-distribution [@swipl] in R. The communication between the two systems is mainly
-in the form of queries from R\ to Prolog, but two predicates allow Prolog to
-ring back and evaluate terms in R.
-
-For a first illustration of the _mathml_ package, we consider the binomial
-probability.
+Similar to other high-level programming languages, R is homoiconic, that is,
+R\ commands (i.e., R\ "calls") are, themselves, symbolic data structures that
+can be created, parsed and modified. Because the default response of the
+R\ interpreter is to evaluate a call and return its result, this property is not
+transparent to the general user. There exists, however, a number of built-in
+R\ functions (e.g., `quote()`, `call()` etc.) that allow the user to create R\ calls
+which can be stored in regular variables and then, for example, evaluated at
+a later stage or in a specific environment [@Wickham2019]. The present package
+includes a set of rules that translate such calls to a mathematical
+representation in MathML and LaTeX. For a first illustration of the _mathml_ 
+package, we consider the binomial probability.
 
 ```{r}
 term <- quote(pbinom(k, N, p))
@@ -121,39 +116,12 @@ Similarly, `inline()` produces inline
 output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
 
 
-At the Prolog end, a predicate `math/2` translates the call `pbinom(K, N, Pi)`
-into a "function" `fn/2` with the name `P_Bi`, one argument `X =< K`, and the
-two parameters `N` and `Pi`.
-
-```prolog
-math(pbinom(K, N, Pi), M)
- => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
-```
-
-Thus, the predicate `math/2` could be considered a "macro" that translates a
-mathematical element (here, `pbinom(K, N, Pi)`) to a different mathematical
-element, namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is
-used to convert these basic elements to MathML.
-
-```prolog
-ml(Flags, fn(Name, (Args ; Pars)), M)
- => ml(Flags, Name, N),
-    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X),
-    M = mrow([N, mo(&(af)), X]).
-```
-
-The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
-with `N` representing the name of the function and `X` its arguments and
-parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
-for MathJax/LaTeX. A list of flags can be used for context-sensitive
-translation (see, e.g., the section on errors below).
-
 # Package _mathml_ in practice
 
 _mathml_ is an R\ package for pretty mathematical representation of
 R\ functions and objects in data analysis, scientific reports and interactive
 web content. The currently supported features are listed below, roughly
-following the order proposed by [@murrell2000].
+following the order proposed by Murrell and Ihaka [-@murrell2000].
 
 ## Basic elements
 
@@ -631,7 +599,7 @@ Further customization requires the assertion of new Prolog rules `math/2`,
 
 This package allows R\ to render its terms in pretty mathematical equations. It
 extends the current features of R\ and existing packages for displaying
-mathematical formulas in R\ [@murrell2000;@allaire2018]), but most
+mathematical formulas in R\ [@murrell2000], but most
 importantly, \pkg{mathml} bridges the gap between computational needs,
 presentation of results, and their reproducibility. The package supports both
 MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
@@ -694,6 +662,51 @@ of the package is found at https://github.com/mgondan/mathml.
 
 # Appendix: Customizing the package
 
+## Implementation details
+
+For convenience, the translation of R\ expressions to mathematical output 
+is achieved through a Prolog interpreter from R\ package _rolog_ [@rolog]. 
+Prolog is a classical logic programming language with many applications 
+in expert systems, computer linguistics and symbolic artificial intelligence. 
+The main strength of Prolog is its concise representation of facts and rules 
+for knowledge and grammar, as well as its efficient built-in search engine for 
+closed world domains. As it is well-known, R\ is a statistical programming 
+language for data analysis and statistical modeling. Whereas Prolog is weak 
+in statistical computation, but strong in symbolic manipulation, the converse 
+may be said for the R\ language. The _rolog_ package bridges this gap by 
+providing an interface to a SWI-Prolog distribution [@swipl] in R. The 
+communication between the two systems is mainly in the form of queries from R\ 
+to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R.
+
+The proper term for a Prolog "function" is predicate, and it is typically
+written with name and arity (i.e., number of arguments), separated by a forward
+slash. Thus, at the Prolog end, a predicate `math/2` translates the call 
+`pbinom(K, N, Pi)` into a "function" `fn/2` with the name `P_Bi`, one argument 
+`X =< K`, and the two parameters `N` and `Pi`.
+
+```prolog
+math(pbinom(K, N, Pi), M)
+ => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
+```
+
+`math/2` operates like a "macro" that translates one mathematical 
+element (here, `pbinom(K, N, Pi)`) to a different mathematical
+element, namely `fn(Name, (Args ; Pars))`. The low-level predicate `ml/3` is
+used to convert these basic elements to MathML.
+
+```prolog
+ml(Flags, fn(Name, (Args ; Pars)), M)
+ => ml(Flags, Name, N),
+    ml(Flags, paren(list(op(;), [list(op(','), Args), list(op(','), Pars)])), X),
+    M = mrow([N, mo(&(af)), X]).
+```
+
+The relevant rule for `ml/3` builds the MathML entity `mrow([N, mo(&(af)), X])`,
+with `N` representing the name of the function and `X` its arguments and
+parameters, enclosed in parentheses. A corresponding rule `jax/3` does the same
+for MathJax/LaTeX. A list of flags can be used for context-sensitive
+translation (see, e.g., the section on errors above).
+
 Several ways exist for translating new R\ terms to their mathematical
 representation. We have already seen above how to use "hooks" to translate long
 variable names from R to compact mathematical signs, as well as functions such
@@ -705,7 +718,7 @@ In this appendix we describe a few more ways to extend the set of translations
 according to a user's needs. As stated in the background section, the Prolog end
 provides two classes of rules for translation, macros `math/2,3,4` mirroring the
 R\ hooks mentioned above, and the low-level predicates `ml/3` and `jax/3` that
-create proper MathML and Latex terms.
+create proper MathML and LateX terms.
 
 ## Linear models
 
@@ -783,7 +796,7 @@ mlx(nthroot(X, N), M, Flags) :-
 
 The explicit unification `M = ...` in the last line serves to avoid clutter in
 the head of `mlx/3`. The Prolog file `nthroot.pl` also includes the respective
-rule for Latex and can be consulted from the package folder via the underlying
+rule for LateX and can be consulted from the package folder via the underlying
 package _rolog_.
 
 ```{r, results='asis'}
