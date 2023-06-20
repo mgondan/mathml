@@ -53,23 +53,23 @@ library(mathml)
 
 # Introduction
 
-The R\ extension of the markdown language [@Xie2018;rmarkdown] enables
+The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
 reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
-and LaTeX. Since recently [@R, version 4.2], R\'s manual pages include support
-for mathematical expressions [@Sarkar2022;@Viechtbauer2022], which already is a
-big improvement. However, except for special cases such as regression
-models [@equatiomatic] and R's own plotmath annotation, rules for the mapping of
-built-in language elements to their mathematical representation are still
-lacking. So far, R\ expressions such as `pbinom(k, N, p)` are printed as they
-are; pretty mathematical formulae such as \(P_{\mathrm{Bi}}(X \le k; N, p)\)
-require explicit LaTeX commands
+and LaTeX. Moreover, since recently [@R, version 4.2], R\'s manual pages 
+include support for mathematical expressions [@Sarkar2022;@Viechtbauer2022],
+which already is a big improvement. However, except for special cases 
+such as regression models [@equatiomatic] and R's own plotmath annotation, 
+rules for the mapping of built-in language elements to their mathematical 
+representation are still lacking. So far, R\ expressions such 
+as `pbinom(k, N, p)` are printed as they are and pretty mathematical formulae 
+such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit LaTeX commands
 like `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for very basic use
 cases, these commands are tedious to type in and their source code is hard to
 read.
 
 The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
-Shiny apps [@Chang2022]. The translation is done by an embedded Prolog
+Shiny Apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
 rules, for example, to represent specific R\ elements by custom mathematical
@@ -79,8 +79,8 @@ The main feature of the package is that the same R\ expressions and equations
 can be used for both mathematical typesetting and calculations. This saves time
 and potentially reduces mistakes, as will be illustrated below. Readers should
 have basic knowledge of knitr and R\ Markdown to be able to follow this
-article [@knitr;@rmarkdown]. To extend and customize the package, some basic
-knowledge of Prolog is needed.
+article [@knitr;@rmarkdown], while to extend and customize the package, 
+some basic knowledge of Prolog is needed.
 
 The paper is organized as follows. We start with a description of the
 technical background of the package, including the two main classes of rules for
@@ -96,9 +96,9 @@ Similar to other high-level programming languages, R is homoiconic, that is,
 R\ commands (i.e., R\ "calls") are, themselves, symbolic data structures that
 can be created, parsed and modified. Because the default response of the
 R\ interpreter is to evaluate a call and return its result, this property is not
-transparent to the general user. There exist, however, a number of built-in
+transparent to the general user. There exists, however, a number of built-in
 R\ functions (e.g., `quote()`, `call()` etc.) that allow the user to create R\ calls
-which can be stored in regular variables and then, for example, be evaluated at
+which can be stored in regular variables and then, for example, evaluated at
 a later stage or in a specific environment [@Wickham2019]. The present package
 includes a set of rules that translate such calls to a mathematical
 representation in MathML and LaTeX. For a first illustration of the \pkg{mathml}
@@ -117,10 +117,9 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 term
 ````
 
-As is seen from the output, the variable `term` is not assigned the result of
-the calculation, but an R\ call
-[see, e.g., @Wickham2019, for details on "non-standard evaluation"]. Such a call
-can eventually be evaluated with `eval()`,
+As it can be seen from the output, to the variable `term` is not assigned the 
+result of the calculation, yet an R\ call [see, e.g., @Wickham2019, for details 
+on "non-standard evaluation"], which can eventually be evaluated with `eval()`.
 
 ````{r}
 k <- 10
@@ -147,6 +146,7 @@ Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is invoked. We can include the output in
 a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
 R\ Markdown, as is done in all examples below.
+
 
 ``````markdown
 `r ''`````{r, results="asis"}
@@ -412,7 +412,7 @@ knitr::kable(t, caption="R functions from base and stats",
 
 ## Custom functions
 
-For self-written functions, matters are a bit more complicated. For a function
+For self-written functions, the matter is somewhat more complicated. For a function
 such as `g <- function(...) ...`, the name _g_ is not transparent to R, because
 only the function body is represented. We can still display functions in the
 form `head(x) = body` if we embed the object to be shown into a
@@ -839,7 +839,7 @@ mathematical formulas in R\ [@murrell2000;@allaire2018]), but most
 importantly, \pkg{mathml} bridges the gap between computational needs,
 presentation of results, and their reproducibility. The package supports both
 MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
-ShinyApp webpages.
+Shiny App webpages.
 
 Researchers or teachers can already use R\ Markdown to conduct analyses and show
 results, and \pkg{mathml} smoothes this process and allows for integrated
@@ -888,8 +888,8 @@ substantially reduce the amount of careless errors in programming.
 One limitation of the package is the lack of a convenient way to insert line
 breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
 For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
-a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, translation
-from LaTeX or HTML back to R is not possible [see @latex2r, for an example].
+a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, it is not 
+possible to translate from LaTeX or HTML back to R [see @latex2r, for an example].
 
 The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. The source code
