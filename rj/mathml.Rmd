@@ -147,7 +147,6 @@ that a special knitr printing function is invoked. We can include the output in
 a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
 R\ Markdown, as is done in all examples below.
 
-
 ``````markdown
 `r ''`````{r, results="asis"}
 math(term)
