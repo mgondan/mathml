@@ -57,7 +57,7 @@ The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
 reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
 and LaTeX. Moreover, since recently [@R, version 4.2], R\'s manual pages 
 include support for mathematical expressions [@Sarkar2022;@Viechtbauer2022],
-which already is a big improvement. However, except for special cases 
+which is already a big improvement. However, except for special cases 
 such as regression models [@equatiomatic] and R's own plotmath annotation, 
 rules for the mapping of built-in language elements to their mathematical 
 representation are still lacking. So far, R\ expressions such 
