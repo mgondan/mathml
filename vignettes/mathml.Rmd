@@ -616,6 +616,11 @@ one of the main sources of mistakes. For illustration, we consider again
 Equation\ 10 in Schwarz [-@schwarz1994].
 
 ````{r, results="asis"}
+hook(mu_A, mu["A"])
+hook(mu_B, mu["B"])
+hook(sigma_A, sigma["A"])
+hook(sigma_B, sigma["B"])
+
 f1 <- function(tau)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))

@@ -1,0 +1,30 @@
+## Referee report of "mathml: Translate R Expressions to MathML and LaTeX".
+
+- **Id**: 2023-47
+
+## General
+
+The re-submission following review took all the comments into account. Thank you ! Really improved version for this great article. Some of the previous review comments were about some new print method in code and this probably requires more improvement to be complete. 
+This does not impact much the article content though
+
+## Detailed comments
+
+-   p.2 "We can include the output in a R Markdown document by specifying results="asis" in the R code chunk of R Markdown, as is done in all examples below." 
+	It seems following the previous review a `knit_print` method has been implemented. This should not require `output = "asis"` anymore on chunk, but it seems it still does. Probably some improvment in the way output is printed. 
+        More details in code part below. 
+
+RESPONSE: The revised math() function does not need an "asis" option anymore.
+
+## Code
+
+-   Previous comment:
+
+    > I think the package should have functions that better support its usage in 'knitting' context.
+    > knitr provides tools like `knitr::asis_output()` and [Custom Printing Method](https://cran.r-project.org/web/packages/knitr/vignettes/knit_print.html).
+    > These should be used so that calling `mathml(term)` in a chunk will work without knowing more about setting `flags` Currently, `results = "asis"` is needed, and `mathml(term, flags = list(cat=TRUE))` needs to be used.
+    > This can definitely be improved with a `knit_print()` method.
+
+    I think this has been improved, but it seems there is still a `cat()` applying to the output, which makes the `knitr::asis_output()` not working as it should. The `##` in the output when running `math(term)` in a chunk shows that the `cat()` applies. 
+    Using `knitr::asis_output()` should allow to have a character vector as output (without `cat`-ing it), and that will be considered as a `"asis"` result by **knitr** which will print correctly. Users won't need `results= "asis"` anymore which would improve experience in my opinion.
+
+RESPONSE: The cat was indeed in the way, thank you again for the valuable hint.
