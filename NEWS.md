@@ -10,7 +10,7 @@
 
 # mathml 0.8
 
-* Maintainan release
+* Maintainance release
 * Prepare manuscript submission
 
 # mathml 0.7
