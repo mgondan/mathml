@@ -94,24 +94,16 @@ Some of the curly braces are not really needed in the LaTeX output, but are
 necessary in edge cases. The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
-that a special knitr printing function is invoked. We can include the output in
-a R\ Markdown document by specifying `results="asis"` in the R\ code chunk of
-R\ Markdown, as is done in all examples below.
+that a special knitr printing function is
+invoked [see the vignette on custom print methods in @knitr].
 
 
-``````markdown
-`r ''`````{r, results="asis"}
-math(term)
-````
-``````
-
-````{r, results="asis", echo=FALSE}
+````{r, echo=FALSE}
 math(term)
 ````
 
 Similarly, `inline()` produces inline
 output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
-
 
 # Package _mathml_ in practice
 
@@ -126,12 +118,12 @@ _mathml_ handles the basic elements of everyday mathematical expressions,
 such as numbers, Latin and Greek letters, multi-letter identifiers, accents,
 subscripts, and superscripts. 
  
-```{r, results='asis'}
+```{r}
 term <- quote(1 + -2L + a + abc + "a" + phi + Phi + varphi + roof(b)[i, j]^2L)
-mathout(term)
+math(term)
 
 term <- quote(round(3.1415, 3L) + NaN + NA + TRUE + FALSE + Inf + (-Inf))
-mathout(term)
+math(term)
 ```
 
 An expression such as `1 + -2` may be considered unsatisfactory from an
@@ -150,12 +142,12 @@ The package offers some support for different fonts as well as accents and
 boxes etc. Internally, these decorations are implemented as identity functions,
 so they can be introduced into R expressions without side-effects.
 
-```{r, results='asis'}
+```{r}
 term <- quote(bold(b[x, 5L]) + bold(b[italic(x)]) + italic(ab) + italic(42L))
-mathout(term)
+math(term)
 
 term <- quote(tilde(a) + mean(X) + boxed(c) + cancel(d) + phantom(e) + prime(f))
-mathout(term)
+math(term)
 ```
 
 Note that the font styles only affect the display of identifiers, whereas
@@ -166,12 +158,12 @@ numbers, character strings etc. are left untouched.
 Arithmetic operators and parentheses are translated as they are, as illustrated
 below.
 
-```{r, results="asis"}
+```{r}
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
-mathout(term)
+math(term)
 
 term <- quote(dot(a, b) + frac(1L, nodot(c, d + e)) + dfrac(1L, times(g, h)))
-mathout(term)
+math(term)
 ```
 
 For multiplications involving only numbers and symbols, the multiplication sign
@@ -203,12 +195,12 @@ workaround (see `p + q` above).
 Whereas in standard infix operators, the parentheses typically follow the rules
 for precedence, undesirable results may be obtained in custom operators.
 
-```{r, results='asis'}
+```{r}
 term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
-mathout(term)
+math(term)
 term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N))) # functional form of '%+-%'
 term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
-mathout(term)
+math(term)
 ```
 
 The example is a reminder that it is not possible to define the precedence of
@@ -298,11 +290,11 @@ knitr::kable(t, caption="Table 1. Custom operators in mathml",
 There is support for most functions from package _base_, with adequate use and
 omission of parentheses.
 
-```{r, results='asis'}
+```{r}
 term <- quote(sin(x) + sin(x)^2L + cos(pi/2L) + tan(2L*pi) * expm1(x))
-mathout(term)
+math(term)
 term <- quote(choose(N, k) + abs(x) + sqrt(x) + floor(x) + exp(frac(x, y)))
-mathout(term)
+math(term)
 ```
 
 A few more examples are shown in Table\ 2, including functions from _stats_. 
@@ -372,7 +364,7 @@ form `head(x) = body` if we embed the object to be shown into a
 call `"<-"(head, body)`.
 
 
-```{r, results='asis'}
+```{r}
 sgn <- function(x)
 {
   if(x == 0L) return(0L)
@@ -380,8 +372,8 @@ sgn <- function(x)
   if(x > 0L) return(1L)
 }
 
-mathout(sgn)
-mathout(call("<-", quote(sgn(x)), sgn))
+math(sgn)
+math(call("<-", quote(sgn(x)), sgn))
 ```
 
 As shown in the example, we can still display functions in the
@@ -401,12 +393,12 @@ functions `sum_over(x, from, to)`, and `prod_over(x, from, to)` that simply
 return their first argument. The other two arguments serve as
 decorations (_to_ is optional), for example, for summation and product signs.
 
-```{r, results='asis'}
+```{r}
 term <- quote(S[Y]^2L <- frac(1L, N) * sum(Y[i] - mean(Y))^2L)
-mathout(term)
+math(term)
 
 term <- quote(log(prod_over(L[i], i==1L, N)) <- sum_over(log(L[i]), i==1L, N))
-mathout(term)
+math(term)
 ```
 
 ## Ringing back to R
@@ -415,9 +407,9 @@ R\'s `integrate` function takes a number of arguments, the most important ones
 being the function to integrate, and the lower and the upper bound of the
 integration.
 
-```{r, results='asis'}
+```{r}
 term <- quote(integrate(sin, 0L, 2L*pi))
-mathout(term)
+math(term)
 eval(term)
 ```
 
@@ -453,8 +445,8 @@ term <- quote(integrate(lower=0L, upper=2L*pi, sin))
 canonical(term)
 ```
 
-```{r, results='asis'}
-mathout(canonical(term))
+```{r}
+math(canonical(term))
 ```
 
 This function can be used to feed mixtures of partially named and positional
@@ -464,14 +456,14 @@ arguments into the renderer. For details, see the R\ function `match.call()`.
 
 Of course, _mathml_ also supports matrices and vectors.
 
-```{r, results='asis'}
+```{r}
 v <- 1:3
-mathout(call("t", v))
+math(call("t", v))
 
 A <- matrix(data=11:16, nrow=2, ncol=3)
 B <- matrix(data=21:26, nrow=2, ncol=3)
 term <- call("+", A, B)
-mathout(term)
+math(term)
 ```
 
 Note that the seemingly more convenient `term <- quote(A + B)` yields \(A + B\) in
@@ -484,12 +476,12 @@ call (here, _A_ and _B_).
 In typical R\ functions, variable names are typically longer than just single
 letters, which may yield unsatisfactory results in the mathematical output.
 
-```{r, results='asis'}
+```{r}
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
 term <- quote(dbinom(successes, Ntotal, prob))
-mathout(term)
+math(term)
 ```
 
 To improve the situation, _mathml_ provides a simple hook that can be used
@@ -505,9 +497,9 @@ in \(s_{\mathrm{A}_{\mathrm{A}_{\mathrm{A}\cdots}}}\).
 The hooks can also be used for more complex elements such as R\ calls, with
 dotted symbols representing Prolog variables.
 
-```{r, results='asis'}
+```{r}
 hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
-mathout(term)
+math(term)
 ```
 
 ## Abbreviations
@@ -520,7 +512,7 @@ function `denote(abbr, expr, info)`, with `expr` actually being
 evaluated, `abbr` being rendered, plus a comment of the
 form "with `expr` denoting `info`".
 
-```{r, results='asis'}
+```{r}
 hook(m_A, mean(X)["A"]) ; hook(s2_A, s["A"]^2L) ;
 hook(n_A, n["A"])
 hook(m_B, mean(X)["B"]) ; hook(s2_B, s["B"]^2L)
@@ -528,7 +520,7 @@ hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
                 "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
-mathout(term)
+math(term)
 ```
 
 The term is evaluated below. `print()` is needed because the return value of an
@@ -545,10 +537,10 @@ Consider an educational scenario in which we want to highlight a certain
 element of a term, for example, that a student has forgotten to subtract the
 null hypothesis in a \(t\)-ratio:
 
-```{r, results='asis'}
+```{r}
 t <- quote(dfrac(omit_right(mean(D) - mu[0L]), s / sqrt(N)))
-mathout(t, flags=list(error="highlight"))
-mathout(t, flags=list(error="fix"))
+math(t, flags=list(error="highlight"))
+math(t, flags=list(error="fix"))
 ```
 
 The R function `omit_right(a + b)` uses non-standard evaluation
@@ -615,7 +607,7 @@ R\ code is notoriously hard to read, and the poor legibility of the language is
 one of the main sources of mistakes. For illustration, we consider again
 Equation\ 10 in Schwarz [-@schwarz1994].
 
-````{r, results="asis"}
+````{r}
 hook(mu_A, mu["A"])
 hook(mu_B, mu["B"])
 hook(sigma_A, sigma["A"])
@@ -628,14 +620,14 @@ f1 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau)))))
 }
 
-mathout(f1)
+math(f1)
 ````
 
 The first version has a wrong parenthesis, which is barely visible in the code,
 whereas in the mathematical representation, the wrong curly brace is immediately
 obvious (the correct version is shown below for comparison).
 
-````{r, results="asis"}
+````{r}
 f2 <- function(tau)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
@@ -643,7 +635,7 @@ f2 <- function(tau)
         * pnorm(dfrac(-c - mu_A*tau, sqrt(sigma_A^2L*tau))))
 }
 
-mathout(f2)
+math(f2)
 ````
 
 As the reader may know from own experience, missed parentheses are frequent
@@ -754,11 +746,11 @@ math_hook(LM, M) :-
 The predicate `summands/2` unpacks an expression `A + B + C` to a
 list `[C, B, A]` and vice-versa (see the file `lm.pl` for details).
 
-````{r, results='asis'}
+````{r}
 rolog::consult(system.file(file.path("pl", "lm.pl"), package="mathml"))
 
 term <- quote(lm(EOT ~ T0 + Therapy, data=d, na.action=na.fail))
-mathout(term)
+math(term)
 ````
 
 ## \(n\)-th root
@@ -776,12 +768,12 @@ names of the arguments and their order are accessible to `canonical()` if
 needed. As we can see below, _mathml_ uses a default
 representation `name(arguments)` for such unknown functions.
 
-```{r, results='asis'}
+```{r}
 nthroot <- function(x, n)
   x^{1L/n}
 
 term <- canonical(quote(nthroot(n=3L, 2L)))
-mathout(term)
+math(term)
 ```
 
 A proper MathML term is obtained by `mlx/3` (the x in mlx indicates that it is
@@ -801,13 +793,13 @@ the head of `mlx/3`. The Prolog file `nthroot.pl` also includes the respective
 rule for LateX and can be consulted from the package folder via the underlying
 package _rolog_.
 
-```{r, results='asis'}
+```{r}
 rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
 
 term <- quote(nthroot(a * (b + c), 3L)^2L)
-mathout(term)
+math(term)
 term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
-mathout(term)
+math(term)
 ```
 
 The file `nthroot.pl` includes three more statements `precx/3` and `parenx/3`,
