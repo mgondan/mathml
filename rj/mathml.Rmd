@@ -204,7 +204,7 @@ numbers, character strings etc. are left untouched.
 Arithmetic operators and parentheses are translated as they are, as illustrated
 below.
 
-```{r, results="asis"}
+```{r}
 term <- quote(a - ((b + c)) - d*e + f*(g + h) + i/j + k^(l + m) + (n*o)^{p + q})
 math(term)
 
@@ -685,7 +685,7 @@ math(call("=", quote(E(D["AB"])), quote(ED_single(c, mu_A + mu_B))))
 For asynchronous stimuli, Schwarz [-@schwarz1994] derived the expected
 first-passage time as a function of the stimulus onset asynchrony \(\tau\),
 
-```{r, results="asis"}
+```{r}
 ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) *
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
@@ -787,7 +787,7 @@ parameters \(\theta = \langle\mu_{\mathrm A}, \sigma_{\mathrm A},
 \mu_{\mathrm B}, \sigma_{\mathrm B}, \mu_{\mathrm M}\rangle\); the barrier \(c\)
 is only a scaling parameter.
 
-```{r, results="asis", echo=FALSE}
+```{r, echo=FALSE}
 lsq <- function(tau, m, s, n)
 {
   invisible(theta <- c(mu_A=0.5, sigma_A=5, mu_B=0.5, sigma_B=5, mu_M=150))
@@ -846,7 +846,7 @@ R\ code is notoriously hard to read, and the poor legibility of the language is
 one of the main sources of mistakes. For illustration, we consider again
 Equation\ 10 in Schwarz [-@schwarz1994].
 
-````{r, results="asis"}
+````{r}
 f1 <- function(tau)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B) * 
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))
@@ -861,7 +861,7 @@ The first version has a wrong parenthesis, which is barely visible in the code,
 whereas in the mathematical representation, the wrong curly brace is immediately
 obvious (the correct version is shown below for comparison).
 
-````{r, results="asis"}
+````{r}
 f2 <- function(tau)
 { dfrac(c, mu_A) + (dfrac(1L, mu_A) - dfrac(1L, mu_A + mu_B)) * 
     ((mu_A*tau - c) * pnorm(dfrac(c - mu_A*tau, sqrt(sigma_A^2L*tau)))

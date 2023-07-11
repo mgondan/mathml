@@ -222,7 +222,7 @@ math <- function(term, flags=NULL)
   if(inline)
     return(knitr::asis_output(as.character(inline(x, flags=flags))))
 
-  structure(knitr::asis_output(as.character(mathout(x, flags=flags))))
+  structure(knitr::asis_output(as.character(mathout(x, flags=c(cat=FALSE, flags)))))
 }
 
 #' Add a name attribute to an element (most often, an R function)
