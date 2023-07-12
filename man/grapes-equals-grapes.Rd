@@ -12,7 +12,7 @@ x \%==\% y
 \item{y}{second argument}
 }
 \value{
-x=y , e.g., a = b
+x == y
 }
 \description{
 Equivalence, shown as x == y
