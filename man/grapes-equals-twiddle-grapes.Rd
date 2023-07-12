@@ -12,7 +12,7 @@ x \%=~\% y
 \item{y}{second argument}
 }
 \value{
-x=y , e.g., a cong b
+x == y , e.g., a cong b
 }
 \description{
 Congruence, shown as x =~ y

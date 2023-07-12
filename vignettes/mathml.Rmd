@@ -2,7 +2,7 @@
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Universität Innsbruck, Department of Psychology)"
-date: "2023-04-20"
+date: "2023-07-12"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
@@ -650,9 +650,10 @@ a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, it is not
 possible to translate from LaTeX or HTML back to R [see @latex2r, for an example].
 
 The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
-easily installed using the usual `install.packages("mathml")`. The source code
-of the package is found at https://github.com/mgondan/mathml.
-
+easily installed using the usual `install.packages("mathml")`. At its present
+stage, it supports output in HTML, LaTeX, and Microsoft 
+Word [via pandoc, @pandoc]. The source code of the package is found
+at https://github.com/mgondan/mathml.
 
 # Appendix: Customizing the package
 

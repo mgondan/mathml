@@ -1,3 +1,7 @@
+# mathml 1.2
+
+* Supports MS Word docx output
+
 # mathml 1.1
 
 * Revised manuscript

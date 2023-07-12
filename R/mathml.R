@@ -180,6 +180,9 @@ mathout <- function(term, flags=NULL, env=parent.frame())
   if(knitr::is_latex_output())
     return(mathjax(term, flags=c(flags, list(cat=TRUE)), env=env))
 
+  if(knitr::pandoc_to("docx"))
+    return(mathjax(term, flags=c(flags, list(cat=TRUE)), env=env))
+
   warning("knitr output not specified. Use mathml() or mathjax() outside of code chunks.")  
   mathjax(term, flags=c(flags, list(cat=TRUE)), env=env)
 }
@@ -493,7 +496,7 @@ fname <- function(fname, body)
 #'
 '%+-%' <- function(x, y)
 {
-  return(c(x - y, x + y))
+  c(x - y, x + y)
 }
 
 
@@ -534,10 +537,10 @@ fname <- function(fname, body)
 #' second argument
 #'
 #' @return 
-#' x=y , e.g., a = b
+#' x == y
 #'
 '%==%' <- function(x, y)
-  x=y
+  x == y
 
 
 #'Congruence, shown as x =~ y
@@ -549,10 +552,10 @@ fname <- function(fname, body)
 #' second argument
 #'
 #' @return 
-#' x=y , e.g., a cong b
+#' x == y , e.g., a cong b
 #'
 '%=~%' <- function(x, y)
-  x=y
+  x == y
 
 #'Proportional, shown as x prop y
 #'
