@@ -12,7 +12,7 @@ x \%->\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces a right arrow
+NA, it produces a right arrow
 }
 \description{
 Right arrow, presented as x -> y

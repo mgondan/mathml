@@ -12,7 +12,7 @@ x \%<->\% y
 \item{y}{second element}
 }
 \value{
-x=y ,it produces a double sided arrow
+NA, it produces a double sided arrow
 }
 \description{
 Double sided arrow, presented as x <-> y
