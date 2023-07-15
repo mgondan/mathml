@@ -1,6 +1,6 @@
 ---
 title: "`mathml`: Translate R Expressions to MathML and LaTeX"
-date: "2023-06-29"
+date: "2023-07-15"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
