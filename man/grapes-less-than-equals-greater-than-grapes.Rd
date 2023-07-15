@@ -12,7 +12,7 @@ x \%<=>\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces a double arrow double-sided
+NA, it produces a double arrow double-sided
 }
 \description{
 If and only if condition, displayed as x <=> y

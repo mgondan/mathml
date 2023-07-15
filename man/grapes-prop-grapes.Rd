@@ -10,9 +10,11 @@ x \%prop\% y
 \item{x}{first argument}
 
 \item{y}{second argument}
+
+\item{k}{constant}
 }
 \value{
-x=y e.g, x prop y
+x = k*y that is e.g, x prop y
 }
 \description{
 Proportional, shown as x prop y

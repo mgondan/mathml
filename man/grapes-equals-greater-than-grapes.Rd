@@ -12,7 +12,7 @@ x \%=>\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces a left doublearrow
+NA, it produces a left double arrow
 }
 \description{
 Left double arrow, displayed as x <= y

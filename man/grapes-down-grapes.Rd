@@ -12,7 +12,7 @@ x \%down\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces a downward arrow
+NA, it produces a downward arrow
 }
 \description{
 Down arrow, presented as x downarrow y

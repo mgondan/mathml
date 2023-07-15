@@ -12,7 +12,7 @@ x \%up\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces an upward arrow
+NA, it produces an upward arrow
 }
 \description{
 Up arrow, presented as x up y

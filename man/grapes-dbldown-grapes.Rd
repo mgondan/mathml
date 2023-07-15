@@ -12,7 +12,7 @@ x \%dbldown\% y
 \item{y}{second element}
 }
 \value{
-x=y ,it produces a downward double arrow
+NA, it produces a downward double arrow
 }
 \description{
 Down double arrow, displayed as x dArr y
