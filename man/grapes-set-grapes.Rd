@@ -12,7 +12,7 @@ x \%<-\% y
 \item{y}{second element}
 }
 \value{
-x=y , it produces a left arrow
+NA, it produces a left arrow
 }
 \description{
 Left arrow, presented as x <- y

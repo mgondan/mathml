@@ -500,7 +500,7 @@ fname <- function(fname, body)
 }
 
 
-#'Product x * y, shown as x dot y
+#' Product x * y, shown as x dot y
 #'
 #' @param x
 #' first factor
@@ -514,7 +514,7 @@ fname <- function(fname, body)
 '%.%' <- function(x, y)
   x * y
 
-#'Approximate equality, shown as x ~~ y
+#' Approximate equality, shown as x ~~ y
 #'
 #' @param x
 #' first argument
@@ -528,7 +528,7 @@ fname <- function(fname, body)
 '%~~%' <- function(x, y)
   isTRUE(all.equal(x, y))
 
-#'Equivalence, shown as x == y
+#' Equivalence, shown as x == y
 #'
 #' @param x 
 #' first argument
@@ -543,7 +543,7 @@ fname <- function(fname, body)
   x == y
 
 
-#'Congruence, shown as x =~ y
+#' Congruence, shown as x =~ y
 #'
 #' @param x 
 #' first argument
@@ -552,24 +552,24 @@ fname <- function(fname, body)
 #' second argument
 #'
 #' @return 
-#' x == y , e.g., a cong b
+#' x == y, e.g., a cong b
 #'
 '%=~%' <- function(x, y)
   x == y
 
-#'Proportional, shown as x prop y
+#' Proportional, shown as x o< y
 #'
 #' @param x 
 #' first argument
 #'
 #' @param y 
 #' second argument
-#'
+#' 
 #' @return 
-#' x=y e.g, x prop y
+#' NA
 #'
 '%prop%' <- function(x, y)
-  x=y
+  NA
 
 #' Double sided arrow, presented as x <-> y
 #'
@@ -580,13 +580,13 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y ,it produces a double sided arrow
+#' NA, it produces a double sided arrow
 #'
 #'
 '%<->%' <- function(x, y)
-  x=y
+  NA
 
-#'Right arrow, presented as x -> y
+#' Right arrow, presented as x -> y
 #'
 #' @param x 
 #' first element
@@ -595,10 +595,10 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a right arrow
+#' NA, it produces a right arrow
 #'
 '%->%' <- function(x, y)
-  x=y
+  NA
 
 #' Left arrow, presented as x <- y
 #'
@@ -609,12 +609,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a left arrow
+#' NA, it produces a left arrow
 #'
 '%<-%' <- function(x, y)
-  x=y
+  NA
 
-#'Up arrow, presented as x up y
+#' Up arrow, presented as x up y
 #'
 #' @param x 
 #' first element
@@ -623,12 +623,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces an upward arrow
+#' NA, it produces an upward arrow
 #'
 '%up%' <- function(x, y)
-  x=y
+  NA
 
-#'Down arrow, presented as x downarrow y
+#' Down arrow, presented as x downarrow y
 #'
 #' @param x 
 #' first element
@@ -637,12 +637,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a downward arrow
+#' NA, it produces a downward arrow
 #'
 '%down%' <- function(x, y)
-  x=y
+  NA
 
-#'If and only if condition, displayed as x <=> y
+#' If and only if condition, displayed as x <=> y
 #'
 #' @param x 
 #' first element
@@ -651,10 +651,10 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a double arrow double-sided
+#' NA, it produces a double arrow double-sided
 #'
 '%<=>%' <- function(x, y)
-  x=y
+  NA
 
 #'Right double arrow, displayed as x => y
 #'
@@ -665,12 +665,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a right double arrow
+#' NA, it produces a right double arrow
 #'
 '%<=%' <- function(x, y)
-  x=y
+  NA
 
-#'Left double arrow, displayed as x <= y
+#' Left double arrow, displayed as x <= y
 #'
 #' @param x 
 #' first element
@@ -679,12 +679,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y , it produces a left doublearrow
+#' NA, it produces a left double arrow
 #'
 '%=>%' <- function(x, y)
-  x=y
+  NA
 
-#'Up double arrow, displayed as x uArr y
+#' Up double arrow, displayed as x uArr y
 #'
 #' @param x 
 #' first element
@@ -693,12 +693,12 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y ,it produces a upward double arrow
+#' NA, it produces a upward double arrow
 #'
 '%dblup%' <- function(x, y)
-  x=y
+  NA
 
-#'Down double arrow, displayed as x dArr y
+#' Down double arrow, displayed as x dArr y
 #'
 #' @param x 
 #' first element
@@ -707,10 +707,10 @@ fname <- function(fname, body)
 #' second element
 #'
 #' @return 
-#' x=y ,it produces a downward double arrow
+#' NA, it produces a downward double arrow
 #'
 '%dbldown%' <- function(x, y)
-  x=y
+  NA
 
 
 #' denote

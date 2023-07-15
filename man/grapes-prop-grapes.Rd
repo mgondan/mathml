@@ -2,7 +2,7 @@
 % Please edit documentation in R/mathml.R
 \name{\%prop\%}
 \alias{\%prop\%}
-\title{Proportional, shown as x prop y}
+\title{Proportional, shown as x o< y}
 \usage{
 x \%prop\% y
 }
@@ -12,8 +12,8 @@ x \%prop\% y
 \item{y}{second argument}
 }
 \value{
-x=y e.g, x prop y
+NA
 }
 \description{
-Proportional, shown as x prop y
+Proportional, shown as x o< y
 }

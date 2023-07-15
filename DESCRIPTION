@@ -2,7 +2,7 @@ Package: mathml
 Type: Package
 Title: Translate R Expressions to 'MathML' and 'LaTeX'/'MathJax'
 Version: 1.2
-Date: 2023-07-12
+Date: 2023-08-15
 Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
   email="Matthias.Gondan-Rochon@uibk.ac.at", comment="Universität Innsbruck"),
   person("Irene", "Alfarone", role="aut",

@@ -12,7 +12,7 @@ x \%dblup\% y
 \item{y}{second element}
 }
 \value{
-x=y ,it produces a upward double arrow
+NA, it produces a upward double arrow
 }
 \description{
 Up double arrow, displayed as x uArr y
