@@ -12,9 +12,8 @@ abstract: >
   description or symbolic representation, which is another step towards
   reproducible science. User-defined hooks enable extension of the package by
   mapping specific variables or functions to new MathML and LaTeX entities. 
-  The use of the package is displayed throughout the paper by examples and its
-  application is illustrated as a case study in a scientific report.
-  
+  Throughout the paper, examples are given for the functions of the package, and
+  a case study illustrates its use in a scientific report.
 draft: true
 author:  
   - name: Matthias Gondan
@@ -35,17 +34,13 @@ author:
     - Innsbruck, Austria
 type: package
 output: 
-  rjtools::rjournal_web_article:
+  rjtools::rjournal_article:
     self_contained: yes
     toc: no
 bibliography: bibliography.bib
 preamble:
 - \usepackage{cancel}
 - \usepackage{amsmath}
-Vignette: >
-  %\VignetteIndexEntry{mathml: Translate R expressions to MathML and LaTeX}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -141,16 +136,17 @@ substr(mathml(term), 1, 70)
 mathjax(term)
 ````
 
-````{r, echo=FALSE}
-math(term)
-````
-
 Some of the curly braces are not really needed in the LaTeX output, but are
 necessary in edge cases. The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is
-invoked [see the vignette on custom print methods in @knitr].
+invoked [see the vignette on custom print methods in @knitr]. An R\ Markdown
+code chunk with `mathout(term)` thus produces:
+
+````{r, echo=FALSE}
+math(term)
+````
 
 Similarly, `inline()` produces inline
 output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
@@ -696,7 +692,7 @@ ED_async <- function(tau, c, mu_A, sigma_A, mu_B)
 }
 
 hook(ED_async(.Tau, .C, .MA, .SA, .MB), E(`;`(D[.Tau], `,`(.MA, .SA, .MB))))
-math(call("=", quote(ED_async(tau, c, mu_A, sigma_A, mu_B)), ED_async))
+math(call("=", quote(E(D[tau])), ED_async))
 ```
 
 For negative onset asynchrony (i.e., B before A), the parameters are simply
@@ -730,8 +726,8 @@ hook(ET(.Tau, .C, .MA, .SA, .MB, .SB, .MM),
 math(call("=", quote(E(T[tau])), ET))
 ```
 
-Schwarz [-@schwarz1994] applied the model to data from a redundant signals task
-with 13 onset
+Schwarz [-@schwarz1994] applied the model to data from a redundant signals 
+task [@miller] with 13 onset
 asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
 where \(\tau = 0\) refers to the synchronous condition, and \(\pm\infty\) to the
 single-target presentations. Each condition was replicated 400 times. The
@@ -750,8 +746,7 @@ ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
 tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
 
 t <- cbind('\\(\\tau\\)'=ttau, '\\(m\\)'=tm, '\\(s\\)'=ts, '\\(n\\)'=tn)
-knitr::kable(t, caption="Observed RT Means and SDs of [@miller]'s study in 
-             [@schwarz1994, p. 513]", row.names=FALSE, escape=FALSE)
+knitr::kable(t, caption="Miller (1986) data", row.names=FALSE, escape=FALSE)
 ```
 
 Assuming that the model is correct, the observable mean reaction times follow an
@@ -882,7 +877,7 @@ substantially reduce the amount of careless errors in programming.
 
 One limitation of the package is the lack of a convenient way to insert line
 breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
-For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
+For example, in its current stage, the LaTeX package breqn [@breqn] is mostly
 a proof of concept. Moreover, \pkg{mathml} only works in one direction,
 that is, it is not possible to translate from LaTeX or HTML back to R 
 [see @latex2r, for an example].
