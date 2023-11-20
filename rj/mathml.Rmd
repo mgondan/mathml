@@ -1,19 +1,20 @@
 ---
 title: "`mathml`: Translate R Expressions to MathML and LaTeX"
-date: "2023-07-15"
+date: "2023-11-20"
 abstract: >
   This R\ package translates R\ objects to suitable elements in MathML or LaTeX,
   thereby allowing for a pretty mathematical representation of R\ objects and
   functions in data analyses, scientific reports and interactive web content. In
   the R\ Markdown document rendering language, R\ code and mathematical content
-  already exist side-by-side. The present package allows to use the same
+  already exist side-by-side. The present package enables use of the same
   R\ objects for both data analysis and typesetting in documents or web content.
   This tightens the link between the statistical analysis and its verbal
   description or symbolic representation, which is another step towards
-  reproducible science. User-defined hooks allow to extend the package by
-  mapping specific variables or functions to new MathML and LaTeX entities. A
-  number of examples and a case study illustrate the use of the package in a
-  scientific report.
+  reproducible science. User-defined hooks enable extension of the package by
+  mapping specific variables or functions to new MathML and LaTeX entities. 
+  The use of the package is displayed throughout the paper by examples and its
+  application is illustrated as a case study in a scientific report.
+  
 draft: true
 author:  
   - name: Matthias Gondan
@@ -64,14 +65,14 @@ representation are still lacking. So far, R\ expressions such
 as `pbinom(k, N, p)` are printed as they are and pretty mathematical formulae 
 such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit LaTeX commands
 like `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for very basic use
-cases, these commands are tedious to type in and their source code is hard to
+cases, these commands are tedious to type and their source code is hard to
 read.
 
 The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
 Shiny Apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
-LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
+LaTeX/MathJax, respectively. User-defined hooks enable extension of the set of
 rules, for example, to represent specific R\ elements by custom mathematical
 signs.
 
@@ -117,9 +118,10 @@ term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 term
 ````
 
-As it can be seen from the output, to the variable `term` is not assigned the 
-result of the calculation, yet an R\ call [see, e.g., @Wickham2019, for details 
-on "non-standard evaluation"], which can eventually be evaluated with `eval()`,
+As can be seen from the output, to the variable `term` is not assigned the 
+result of the calculation, but instead an R\ call [see, e.g., @Wickham2019, 
+for details on "non-standard evaluation"], which can eventually be evaluated 
+with `eval()`,
 
 ````{r}
 k <- 10
@@ -139,16 +141,16 @@ substr(mathml(term), 1, 70)
 mathjax(term)
 ````
 
+````{r, echo=FALSE}
+math(term)
+````
+
 Some of the curly braces are not really needed in the LaTeX output, but are
 necessary in edge cases. The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is
 invoked [see the vignette on custom print methods in @knitr].
-
-````{r, echo=FALSE}
-math(term)
-````
 
 Similarly, `inline()` produces inline
 output, `` `r "\x60r inline(term)\x60"` `` yields `r inline(term)`.
@@ -640,7 +642,7 @@ diffusion processes that eventually reach an absorbing barrier to elicit the
 response. For a detailed description the reader may refer to the original
 article.
 
-Schwarz' [-@schwarz1994] model refers to two stimuli A and B, presented either
+Schwarz's [-@schwarz1994] model refers to two stimuli A and B, presented either
 alone or in combination (AB, redundant stimuli), with the redundant stimuli
 being presented either simultaneously or with onset asynchrony \(\tau\). The
 channel activation is described as a two-dimensional Wiener process with
@@ -716,7 +718,7 @@ math(call("=", quote(ED(tau, c, mu_A, sigma_A, mu_B, sigma_B)), ED))
 
 The observable response time is assumed to be the sum of \(D\), the time
 employed to reach the threshold for the decision, and a residual \(M\) denoting
-other processes such a motor preparation and execution. Correspondingly, the
+other processes such as motor preparation and execution. Correspondingly, the
 expected response time amounts to
 
 ```{r}
@@ -748,7 +750,8 @@ ts   <- lapply(as.integer(s), FUN=mathout, flags=list(cat=FALSE))
 tn   <- lapply(as.integer(n), FUN=mathout, flags=list(cat=FALSE))
 
 t <- cbind('\\(\\tau\\)'=ttau, '\\(m\\)'=tm, '\\(s\\)'=ts, '\\(n\\)'=tn)
-knitr::kable(t, caption="Miller data", row.names=FALSE, escape=FALSE)
+knitr::kable(t, caption="Observed RT Means and SDs of [@miller]'s study in 
+             [@schwarz1994, p. 513]", row.names=FALSE, escape=FALSE)
 ```
 
 Assuming that the model is correct, the observable mean reaction times follow an
@@ -872,7 +875,7 @@ f2 <- function(tau)
 math(f2)
 ````
 
-As the reader may know from own experience, missed parentheses are frequent
+As the reader may know from their own experience, missed parentheses are frequent
 causes of wrong results and errors that are hard to locate in programming code.
 This particular example shows that mathematical rendering can help to
 substantially reduce the amount of careless errors in programming.
@@ -880,9 +883,9 @@ substantially reduce the amount of careless errors in programming.
 One limitation of the package is the lack of a convenient way to insert line
 breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
 For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
-a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, it is not 
-possible to translate from LaTeX or HTML back to
-R [see @latex2r, for an example].
+a proof of concept. Moreover, \pkg{mathml} only works in one direction,
+that is, it is not possible to translate from LaTeX or HTML back to R 
+[see @latex2r, for an example].
 
 The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. At its present
@@ -907,8 +910,8 @@ domains. Whereas Prolog is weak in statistical computation, but strong in
 symbolic manipulation, the converse may be said for the R\ language. \pkg{rolog}
 bridges this gap by providing an interface to a SWI-Prolog
 distribution [@swipl] in R. The communication between the two systems is mainly
-in the form of queries from R\ to Prolog, but two Prolog functions allow to ring
-back and evaluate terms in R. 
+in the form of queries from R\ to Prolog, but two Prolog functions allow ring
+back and evaluation of terms in R. 
 
 The proper term for a Prolog "function" is predicate, and it is typically
 written with name and arity (i.e., number of arguments), separated by a forward
@@ -970,7 +973,7 @@ The hook is simple, but is a bit limited because only R's tilde-form
 of linear models is shown, and it only works for a call with exactly two
 arguments.
 
-Below is an example how to build a linear equation of the
+Below is an example of how to build a linear equation of the
 form \(Y = b_0 + b_1X_1 + ...\) using the Prolog macros from \pkg{mathml}.
 
 ````prolog
@@ -999,7 +1002,7 @@ Base R does not provide a function like `cuberoot(x)` or `nthroot(x, n)`, and
 the present package does not support the respective representation. To obtain a
 cube root, a programmer would typically type `x^(1/3)` or better `x^{1/3}` (see
 the practice section why the curly brace is preferred in an exponent), resulting
-in \(x^{1/3}\) which may still not match everyone's taste. Here describe the
+in \(x^{1/3}\) which may still not match everyone's taste. Here we describe the
 steps needed to represent the \(n\)-th root as \(\sqrt[n]x\).
 
 We assume that `nthroot(x, n)` is available in the current
