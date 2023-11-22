@@ -631,7 +631,7 @@ This case study describes a model by Schwarz [-@schwarz1994] from mathematical
 psychology using the features of package \pkg{mathml}. Schwarz [-@schwarz1994]
 presents a new explanation of redundancy gains that occur when observers respond
 to stimuli of different sources, and the same information is presented on two or
-more channels. In Schwarz' [-@schwarz1994] model, decision-making builds on a
+more channels. In Schwarz's [-@schwarz1994] model, decision-making builds on a
 process of noisy accumulation of information over time [e.g., @ratcliff2016]. In
 redundant stimuli, the model assumes a superposition of channel-specific
 diffusion processes that eventually reach an absorbing barrier to elicit the
@@ -732,7 +732,7 @@ asynchronies \(0, \pm33, \pm67, \pm100, \pm133, \pm167, \pm\infty\) ms,
 where \(\tau = 0\) refers to the synchronous condition, and \(\pm\infty\) to the
 single-target presentations. Each condition was replicated 400 times. The
 observed mean response times and their standard deviations are given in
-Table \@ref(tab:miller-data) below.
+Table \@ref(tab:miller-data).
 
 ```{r miller-data, echo=FALSE}
 tau  <- list(-Inf,-167L,-133L,-100L,-67L,-33L,0L,33L,67L,100L,133L,167L,Inf)
