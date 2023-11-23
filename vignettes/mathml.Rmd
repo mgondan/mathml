@@ -4,7 +4,7 @@ author: "Matthias Gondan and Irene Alfarone
          (Universität Innsbruck, Department of Psychology)"
 date: "2023-07-12"
 output: rmarkdown::html_vignette
-bibliography: bibliography.bibtex
+bibliography: bibliography.bib
 preamble:
 - \usepackage{cancel}
 - \usepackage{amsmath}
@@ -22,21 +22,21 @@ The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
 reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
 and LaTeX. Moreover, since recently [@R, version 4.2], R\'s manual pages 
 include support for mathematical expressions [@Sarkar2022;@Viechtbauer2022],
-which already is a big improvement. However, except for special cases 
+which is already a big improvement. However, except for special cases 
 such as regression models [@equatiomatic] and R's own plotmath annotation, 
 rules for the mapping of built-in language elements to their mathematical 
 representation are still lacking. So far, R\ expressions such 
 as `pbinom(k, N, p)` are printed as they are and pretty mathematical formulae 
 such as \(P_{\mathrm{Bi}}(X \le k; N, p)\) require explicit LaTeX commands
 like `P_{\mathrm{Bi}}\left(X \le k; N, p\right)`. Except for very basic use
-cases, these commands are tedious to type in and their source code is hard to
+cases, these commands are tedious to type and their source code is hard to
 read.
 
 The present R\ package defines a set of rules for the automatic translation of
 R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
 Shiny Apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
-LaTeX/MathJax, respectively. User-defined hooks enable to extend the set of
+LaTeX/MathJax, respectively. User-defined hooks enable extension of the set of
 rules, for example, to represent specific R\ elements by custom mathematical
 signs.
 
@@ -53,7 +53,7 @@ R\ functions (e.g., `quote()`, `call()` etc.) that allow the user to create R\ c
 which can be stored in regular variables and then, for example, evaluated at
 a later stage or in a specific environment [@Wickham2019]. The present package
 includes a set of rules that translate such calls to a mathematical
-representation in MathML and LaTeX. For a first illustration of the _mathml_ 
+representation in MathML and LaTeX. For a first illustration of the \pkg{mathml}
 package, we consider the binomial probability.
 
 ```{r}
@@ -69,7 +69,7 @@ readers will remember that the quoted expression above is a short form for
 term <- call("pbinom", as.name("k"), as.name("N"), as.name("p"))
 ```
 
-As it can be seen from the output, to the variable `term` is not assigned the 
+As can be seen from the output, to the variable `term` is not assigned the 
 result of the calculation, yet an R\ call [see, e.g., @Wickham2019, for details 
 on "non-standard evaluation"], which can eventually be evaluated with `eval()`,
 
@@ -95,8 +95,8 @@ necessary in edge cases. The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is
-invoked [see the vignette on custom print methods in @knitr].
-
+invoked [see the vignette on custom print methods in @knitr]. An R\ Markdown
+code chunk with `mathout(term)` thus produces:
 
 ````{r, echo=FALSE}
 math(term)
@@ -638,16 +638,17 @@ f2 <- function(tau)
 math(f2)
 ````
 
-As the reader may know from own experience, missed parentheses are frequent
+As the reader may know from their own experience, missed parentheses are frequent
 causes of wrong results and errors that are hard to locate in programming code.
 This particular example shows that mathematical rendering can help to
 substantially reduce the amount of careless errors in programming.
 
 One limitation of the package is the lack of a convenient way to insert line
 breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
-For example, in its current stage, the LaTeX package `breqn` [@breqn] is mostly
-a proof of concept. Moreover, \pkg{mathml} is one-way road, that is, it is not 
-possible to translate from LaTeX or HTML back to R [see @latex2r, for an example].
+For example, in its current stage, the LaTeX package breqn [@breqn] is mostly
+a proof of concept. Moreover, \pkg{mathml} only works in one direction,
+that is, it is not possible to translate from LaTeX or HTML back to R 
+[see @latex2r, for an example].
 
 The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. At its present
@@ -655,23 +656,26 @@ stage, it supports output in HTML, LaTeX, and Microsoft
 Word [via pandoc, @pandoc]. The source code of the package is found
 at https://github.com/mgondan/mathml.
 
+
 # Appendix: Customizing the package
 
 ## Implementation details
 
-For convenience, the translation of R\ expressions to mathematical output 
-is achieved through a Prolog interpreter from R\ package _rolog_ [@rolog]. 
-Prolog is a classical logic programming language with many applications 
-in expert systems, computer linguistics and symbolic artificial intelligence. 
-The main strength of Prolog is its concise representation of facts and rules 
-for knowledge and grammar, as well as its efficient built-in search engine for 
-closed world domains. As it is well-known, R\ is a statistical programming 
-language for data analysis and statistical modeling. Whereas Prolog is weak 
-in statistical computation, but strong in symbolic manipulation, the converse 
-may be said for the R\ language. The _rolog_ package bridges this gap by 
-providing an interface to a SWI-Prolog distribution [@swipl] in R. The 
-communication between the two systems is mainly in the form of queries from R\ 
-to Prolog, but two predicates allow Prolog to ring back and evaluate terms in R.
+For convenience, the translation of the R expressions is achieved through a
+Prolog interpreter provided by another R\ package \CRANpkg{rolog} [@rolog]. If a
+version of SWI-Prolog [@swipl] is found on the system, \CRANpkg{rolog} connects
+to it. Alternatively, the SWI-Prolog runtime libraries can be conveniently
+accessed by installing the R\ package \CRANpkg{rswipl} [@rswipl]. Prolog is a
+classical logic programming language with many applications in expert systems,
+computer linguistics and symbolic artificial intelligence. The strength of
+Prolog lies in its concise representation of facts and rules for knowledge and
+grammar, as well as its efficient built-in search engine for closed world
+domains. Whereas Prolog is weak in statistical computation, but strong in
+symbolic manipulation, the converse may be said for the R\ language. \pkg{rolog}
+bridges this gap by providing an interface to a SWI-Prolog
+distribution [@swipl] in R. The communication between the two systems is mainly
+in the form of queries from R\ to Prolog, but two Prolog functions allow ring
+back and evaluation of terms in R. 
 
 The proper term for a Prolog "function" is predicate, and it is typically
 written with name and arity (i.e., number of arguments), separated by a forward
@@ -731,7 +735,7 @@ The hook is simple, but is a bit limited because only R's tilde-form
 of linear models is shown, and it only works for a call with exactly two
 arguments.
 
-Below is an example how to build a linear equation of the
+Below is an example of how to build a linear equation of the
 form \(Y = b_0 + b_1X_1 + ...\) using the Prolog macros from _mathml_.
 
 ````prolog
@@ -760,7 +764,7 @@ Base R does not provide a function like `cuberoot(x)` or `nthroot(x, n)`, and
 the present package does not support the respective representation. To obtain a
 cube root, a programmer would typically type `x^(1/3)` or better `x^{1/3}` (see
 the practice section why the curly brace is preferred in an exponent), resulting
-in \(x^{1/3}\) which may still not match everyone's taste. Here describe the
+in \(x^{1/3}\) which may still not match everyone's taste. Here we describe the
 steps needed to represent the \(n\)-th root as \(\sqrt[n]x\).
 
 We assume that `nthroot(x, n)` is available in the current
