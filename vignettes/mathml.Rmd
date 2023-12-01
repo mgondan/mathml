@@ -4,7 +4,7 @@ author: "Matthias Gondan and Irene Alfarone
          (Universität Innsbruck, Department of Psychology)"
 date: "2023-07-12"
 output: rmarkdown::html_vignette
-bibliography: bibliography.bib
+bibliography: bibliography.bibtex
 preamble:
 - \usepackage{cancel}
 - \usepackage{amsmath}
