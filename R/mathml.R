@@ -355,6 +355,9 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 }
 
 #' Hook for custom symbols
+#' 
+#' hook(term, display)
+#' unhook(term)
 #'
 #' @param term
 #' an R call or symbol/number. This is the expression to replace.
@@ -366,7 +369,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' indicates that _term_ and _display_ should be quoted.
 #'
 #' @param as.rolog (default is TRUE)
-#' indicates that simplified quasi-quotoation is to be used.
+#' indicates that simplified quasi-quotation is to be used.
 #'
 #' @return
 #' TRUE on success
@@ -376,9 +379,10 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' @examples
 #' hook(t0, subscript(t, 0))
 #' mathml(quote(t0))
-#'
+#' unhook(t0)
 #' hook(term=quote(t0), display=quote(subscript(t, 0)), quote=FALSE)
 #' mathml(quote(t0))
+#' unhook(quote(t0), quote=FALSE)
 #'
 hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
 {
@@ -398,6 +402,23 @@ hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
   if(isFALSE(r))
     return(FALSE)
 
+  invisible(r)
+}
+
+#' @rdname hook
+#' @export
+unhook <- function(term, quote=TRUE, as.rolog=TRUE)
+{
+  if(quote)
+    term <- substitute(term)
+
+  if(as.rolog)
+    term <- rolog::as.rolog(term)
+
+  r <- rolog::once(call("retractall", call("math_hook", term, expression(X))))
+  if(isFALSE(r))
+    return(FALSE)
+  
   invisible(r)
 }
 

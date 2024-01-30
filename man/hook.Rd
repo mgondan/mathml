@@ -2,9 +2,12 @@
 % Please edit documentation in R/mathml.R
 \name{hook}
 \alias{hook}
+\alias{unhook}
 \title{Hook for custom symbols}
 \usage{
 hook(term, display, quote = TRUE, as.rolog = TRUE)
+
+unhook(term, quote = TRUE, as.rolog = TRUE)
 }
 \arguments{
 \item{term}{an R call or symbol/number. This is the expression to replace.}
@@ -15,19 +18,21 @@ hook(term, display, quote = TRUE, as.rolog = TRUE)
 indicates that \emph{term} and \emph{display} should be quoted.}
 
 \item{as.rolog}{(default is TRUE)
-indicates that simplified quasi-quotoation is to be used.}
+indicates that simplified quasi-quotation is to be used.}
 }
 \value{
 TRUE on success
 }
 \description{
-Hook for custom symbols
+hook(term, display)
+unhook(term)
 }
 \examples{
 hook(t0, subscript(t, 0))
 mathml(quote(t0))
-
+unhook(t0)
 hook(term=quote(t0), display=quote(subscript(t, 0)), quote=FALSE)
 mathml(quote(t0))
+unhook(quote(t0), quote=FALSE)
 
 }

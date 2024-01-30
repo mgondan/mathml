@@ -2,7 +2,7 @@
 title: "mathml: Translate R expressions to MathML and LaTeX"
 author: "Matthias Gondan and Irene Alfarone
          (Universität Innsbruck, Department of Psychology)"
-date: "2023-07-12"
+date: "2024-01-30"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bibtex
 preamble:
@@ -498,7 +498,15 @@ The hooks can also be used for more complex elements such as R\ calls, with
 dotted symbols representing Prolog variables.
 
 ```{r}
+term <- quote(pbinom(successes, Ntotal, prob))
 hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
+math(term)
+```
+
+The old behavior is restored with `unhook(term)`.
+
+```{r}
+unhook(pbinom(.K, .N, .P))
 math(term)
 ```
 
