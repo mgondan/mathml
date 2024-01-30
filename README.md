@@ -42,3 +42,20 @@ mathout(term)
 ````
 
 $a^b + c \cdot (d+3.00) - a^2 \cdot (a+d)$
+
+# For package developers
+
+If you use `mathml` for your own package, please do not "Import" `mathml` in
+your DESCRIPTION, but "Depend" on it.
+
+```
+Package: onmathml
+Type: Package
+Title: A package that uses mathml
+...
+Depends: 
+    R (>= 4.3),
+    mathml (>= 1.3)
+```
+
+It's not entirely clear why this is needed.

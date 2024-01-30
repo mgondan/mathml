@@ -664,8 +664,24 @@ stage, it supports output in HTML, LaTeX, and Microsoft
 Word [via pandoc, @pandoc]. The source code of the package is found
 at https://github.com/mgondan/mathml.
 
+# Appendix A: For package developers
 
-# Appendix: Customizing the package
+If you use `mathml` for your own package, please do not "Import" `mathml` in
+your DESCRIPTION, but "Depend" on it.
+
+```
+Package: onmathml
+Type: Package
+Title: A package that uses mathml
+...
+Depends: 
+    R (>= 4.3),
+    mathml (>= 1.3)
+```
+
+It's not entirely clear why this is needed.
+
+# Appendix B: Customizing the package
 
 ## Implementation details
 
