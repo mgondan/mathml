@@ -30,9 +30,9 @@ unhook(term)
 \examples{
 hook(t0, subscript(t, 0))
 mathml(quote(t0))
-unhook(t0)
-hook(term=quote(t0), display=quote(subscript(t, 0)), quote=FALSE)
+hook(term=quote(t0), display=quote(superscript(t, 0)), quote=FALSE)
 mathml(quote(t0))
-unhook(quote(t0), quote=FALSE)
+unhook(t0)
+mathml(quote(t0))
 
 }

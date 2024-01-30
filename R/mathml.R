@@ -379,10 +379,10 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' @examples
 #' hook(t0, subscript(t, 0))
 #' mathml(quote(t0))
-#' unhook(t0)
-#' hook(term=quote(t0), display=quote(subscript(t, 0)), quote=FALSE)
+#' hook(term=quote(t0), display=quote(superscript(t, 0)), quote=FALSE)
 #' mathml(quote(t0))
-#' unhook(quote(t0), quote=FALSE)
+#' unhook(t0)
+#' mathml(quote(t0))
 #'
 hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
 {
@@ -398,7 +398,7 @@ hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
     display <- rolog::as.rolog(display)
   }
 
-  r <- rolog::once(call("assert", call("math_hook", term, display)))
+  r <- rolog::once(call("asserta", call("math_hook", term, display)))
   if(isFALSE(r))
     return(FALSE)
 

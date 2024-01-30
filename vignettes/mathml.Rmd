@@ -477,10 +477,12 @@ In typical R\ functions, variable names are typically longer than just single
 letters, which may yield unsatisfactory results in the mathematical output.
 
 ```{r}
+term <- quote(dbinom(successes, Ntotal, prob))
 hook(successes, k)
 hook(quote(Ntotal), quote(N), quote=FALSE)
 hook(prob, pi)
-term <- quote(dbinom(successes, Ntotal, prob))
+math(term)
+hook(prob, p) # update hook
 math(term)
 ```
 
