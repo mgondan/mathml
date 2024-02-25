@@ -935,3 +935,16 @@ prime <- identity
 #' @rdname decorations
 #' @export
 tilde <- identity
+
+#' @rdname decorations
+#' @export
+above <- identity
+
+
+#' @rdname decorations
+#' @export
+below <- identity
+
+#' @rdname decorations
+#' @export
+belowabove <- identity
