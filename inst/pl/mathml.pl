@@ -273,10 +273,10 @@ mathml :-
 %
 % Check for under(over(A, Power), Index)
 %
-math(under(A, Idx), New, X, Flags),
+/* math(under(A, Idx), New, X, Flags),
     type(A, over(Bas, Pwr), Flags)
  => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
-    X = A.
+    X = A. */
 
 ml(under(A, B), M, Flags)
  => ml(A, X, Flags),
@@ -349,10 +349,10 @@ mathml :-
 %
 % Check for over(under(A, Index), Power)
 %
-math(over(A, Pwr), New, X, Flags),
+/* math(over(A, Pwr), New, X, Flags),
     type(A, under(Bas, Idx), Flags)
  => New = [replace(under(Bas, Idx), underover(Bas, Idx, Pwr)) | Flags],
-    X = A.
+    X = A. */
 
 ml(over(A, B), M, Flags)
  => ml(A, X, Flags),
@@ -371,7 +371,7 @@ type(over(A, B), Type, _Flags)
 jax(over(A, B), M, Flags)
  => jax(A, X, Flags),
     jax(B, Y, Flags),
-    format(string(M), "{~w}^{~w}", [X, Y]).
+    format(string(M), "{~w}/limits^{~w}", [X, Y]).
 
 % Subscripts and superscripts
 %
@@ -427,10 +427,10 @@ prec(underover(A, _, C), Prec, Flags)
 type(underover(A, B, C), Type, _Flags)
  => Type = underover(A, B, C).
 
-math(Flags, under(A, Idx), New, X),
-    type(Flags, A, over(Bas, Pwr))
+/* math(under(A, Idx), New, X, Flags),
+    type(A, over(Bas, Pwr, Flags))
  => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
-    X = A.
+    X = A. */
 
 jax(underover(A, B, C), M, Flags)
  => jax(A, X, Flags),
