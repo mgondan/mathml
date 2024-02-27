@@ -926,13 +926,13 @@ tilde <- identity
 
 #' @rdname decorations
 #' @export
-above <- identity
+over <- identity
 
 
 #' @rdname decorations
 #' @export
-below <- identity
+under <- identity
 
 #' @rdname decorations
 #' @export
-belowabove <- identity
+underover <- identity

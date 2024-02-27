@@ -8,6 +8,9 @@
 \alias{phantom}
 \alias{prime}
 \alias{tilde}
+\alias{over}
+\alias{under}
+\alias{underover}
 \title{Identity functions for different decorations}
 \usage{
 roof(x)
@@ -21,6 +24,12 @@ phantom(x)
 prime(x)
 
 tilde(x)
+
+over(x)
+
+under(x)
+
+underover(x)
 }
 \arguments{
 \item{x}{the expression to render}

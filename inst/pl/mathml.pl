@@ -268,31 +268,31 @@ mathml :-
 mathml :-
     mathml('['(x, i, 2)).
 
-% Below
+% Under
 
 %
-% Check for below(above(A, Power), Index)
+% Check for under(over(A, Power), Index)
 %
-math(below(A, Idx), New, X, Flags),
-    type(A, above(Bas, Pwr), Flags)
- => New = [replace(above(Bas, Pwr), belowabove(Bas, Idx, Pwr)) | Flags],
+math(under(A, Idx), New, X, Flags),
+    type(A, over(Bas, Pwr), Flags)
+ => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
     X = A.
 
-ml(below(A, B), M, Flags)
+ml(under(A, B), M, Flags)
  => ml(A, X, Flags),
     ml(B, Y, Flags),
     M = munder([X, Y]).
 
-paren(below(A, _), Paren, Flags)
+paren(under(A, _), Paren, Flags)
  => paren(A, Paren, Flags).
 
-prec(below(A, _), Prec,Flags)
+prec(under(A, _), Prec,Flags)
  => prec(A, Prec, Flags).
 
-type(below(A, B), Type, _Flags)
- => Type = below(A, B).
+type(under(A, B), Type, _Flags)
+ => Type = under(A, B).
 
-jax(below(A, B), M, Flags)
+jax(under(A, B), M, Flags)
  => jax(A, X, Flags),
     jax(B, Y, Flags),
     format(string(M), "{~w}/limits_{~w}", [X, Y]).
@@ -344,31 +344,31 @@ mathml :-
 mathml :-
     mathml(-1 ^ 2).
 
-% Above
+% Over
 
 %
-% Check for above(below(A, Index), Power)
+% Check for over(under(A, Index), Power)
 %
-math(above(A, Pwr), New, X, Flags),
-    type(A, below(Bas, Idx), Flags)
- => New = [replace(below(Bas, Idx), belowabove(Bas, Idx, Pwr)) | Flags],
+math(over(A, Pwr), New, X, Flags),
+    type(A, under(Bas, Idx), Flags)
+ => New = [replace(under(Bas, Idx), underover(Bas, Idx, Pwr)) | Flags],
     X = A.
 
-ml(above(A, B), M, Flags)
+ml(over(A, B), M, Flags)
  => ml(A, X, Flags),
     ml(B, Y, Flags),
     M = mover([X, Y]).
 
-paren(above(A, _), Paren, Flags)
+paren(over(A, _), Paren, Flags)
  => paren(A, Paren, Flags).
 
-prec(above(_, _), Prec, _Flags)
+prec(over(_, _), Prec, _Flags)
  => current(Prec, xfy, ^).
 
-type(above(A, B), Type, _Flags)
- => Type = above(A, B).
+type(over(A, B), Type, _Flags)
+ => Type = over(A, B).
 
-jax(above(A, B), M, Flags)
+jax(over(A, B), M, Flags)
  => jax(A, X, Flags),
     jax(B, Y, Flags),
     format(string(M), "{~w}^{~w}", [X, Y]).
@@ -411,28 +411,28 @@ mathml :-
 mathml :-
     mathml('['(x, i)^2).
 
-% Belowabove
-ml(belowabove(A, B, C), M, Flags)
+% Underover
+ml(underover(A, B, C), M, Flags)
  => ml(A, X, Flags),
     ml(B, Y, Flags),
     ml(C, Z, Flags),
     M = munderover([X, Y, Z]).
 
-paren(belowabove(A, _, _), Paren, Flags)
+paren(underover(A, _, _), Paren, Flags)
  => paren(A, Paren, Flags).
 
-prec(belowabove(A, _, C), Prec, Flags)
- => prec(above(A, C), Prec, Flags).
+prec(underover(A, _, C), Prec, Flags)
+ => prec(over(A, C), Prec, Flags).
 
-type(belowabove(A, B, C), Type, _Flags)
- => Type = belowabove(A, B, C).
+type(underover(A, B, C), Type, _Flags)
+ => Type = underover(A, B, C).
 
-math(Flags, below(A, Idx), New, X),
-    type(Flags, A, above(Bas, Pwr))
- => New = [replace(above(Bas, Pwr), belowabove(Bas, Idx, Pwr)) | Flags],
+math(Flags, under(A, Idx), New, X),
+    type(Flags, A, over(Bas, Pwr))
+ => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
     X = A.
 
-jax(belowabove(A, B, C), M, Flags)
+jax(underover(A, B, C), M, Flags)
  => jax(A, X, Flags),
     jax(B, Y, Flags),
     jax(C, Z, Flags),
