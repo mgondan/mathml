@@ -2300,9 +2300,6 @@ type(frac(_, _), Type, _Flags)
 math(dfrac(Num, Den), M)
  => M = display(frac(Num, Den)).
 
-math(over(Num, Den), M)
- => M = frac(Num, Den).
-
 % Integer division
 math(div(Num, Den), M)
  => M = floor(Num / Den).
