@@ -268,6 +268,35 @@ mathml :-
 mathml :-
     mathml('['(x, i, 2)).
 
+% Under
+
+%
+% Check for under(over(A, Power), Index)
+%
+math(under(A, Idx), X, Flags, New),
+    type(A, over(Bas, Pwr), Flags)
+ => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
+    X = A. 
+
+ml(under(A, B), M, Flags)
+ => ml(A, X, Flags),
+    ml(B, Y, Flags),
+    M = munder([X, Y]).
+
+paren(under(A, _), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(under(A, _), Prec,Flags)
+ => prec(A, Prec, Flags).
+
+type(under(A, B), Type, _Flags)
+ => Type = under(A, B).
+
+jax(under(A, B), M, Flags)
+ => jax(A, X, Flags),
+    jax(B, Y, Flags),
+    format(string(M), "{~w}/limits_{~w}", [X, Y]).
+
 % Superscripts like s^2
 %
 % See above for terms that have an index and a power at the same time.
@@ -315,6 +344,35 @@ mathml :-
 mathml :-
     mathml(-1 ^ 2).
 
+% Over
+
+%
+% Check for over(under(A, Index), Power)
+%
+math(over(A, Pwr), X, Flags, New),
+    type(A, under(Bas, Idx), Flags)
+ => New = [replace(under(Bas, Idx), underover(Bas, Idx, Pwr)) | Flags],
+    X = A. 
+
+ml(over(A, B), M, Flags)
+ => ml(A, X, Flags),
+    ml(B, Y, Flags),
+    M = mover([X, Y]).
+
+paren(over(A, _), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(over(_, _), Prec, _Flags)
+ => current(Prec, xfy, ^).
+
+type(over(A, B), Type, _Flags)
+ => Type = over(A, B).
+
+jax(over(A, B), M, Flags)
+ => jax(A, X, Flags),
+    jax(B, Y, Flags),
+    format(string(M), "{~w}/limits^{~w}", [X, Y]).
+
 % Subscripts and superscripts
 %
 math(subsupscript(Base, Idx, Pwr), M, Flags),
@@ -352,6 +410,33 @@ mathml :-
 
 mathml :-
     mathml('['(x, i)^2).
+
+% Underover
+ml(underover(A, B, C), M, Flags)
+ => ml(A, X, Flags),
+    ml(B, Y, Flags),
+    ml(C, Z, Flags),
+    M = munderover([X, Y, Z]).
+
+paren(underover(A, _, _), Paren, Flags)
+ => paren(A, Paren, Flags).
+
+prec(underover(A, _, C), Prec, Flags)
+ => prec(over(A, C), Prec, Flags).
+
+type(underover(A, B, C), Type, _Flags)
+ => Type = underover(A, B, C).
+
+math(under(A, Idx), X, Flags, New),
+    type(A, over(Bas, Pwr, Flags), Flags)
+ => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
+    X = A. 
+
+jax(underover(A, B, C), M, Flags)
+ => jax(A, X, Flags),
+    jax(B, Y, Flags),
+    jax(C, Z, Flags),
+    format(string(M), "{~w}/limits_{~w}^{~w}", [X, Y, Z]).
 
 % Strings are translated to upright text
 math(R, M),
@@ -2214,9 +2299,6 @@ type(frac(_, _), Type, _Flags)
 % Large fraction
 math(dfrac(Num, Den), M)
  => M = display(frac(Num, Den)).
-
-math(over(Num, Den), M)
- => M = frac(Num, Den).
 
 % Integer division
 math(div(Num, Den), M)

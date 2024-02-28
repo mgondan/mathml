@@ -460,18 +460,6 @@ times <- dot
 frac <- function(e1, e2)
   e1 / e2
 
-#' Division displayed as fraction
-#'
-#' @param e1
-#' numerator
-#'
-#' @param e2
-#' denominator
-#'
-#' @return
-#' e1 / e2
-#'
-over <- frac
 
 #' Division displayed as large fraction
 #'
@@ -935,3 +923,16 @@ prime <- identity
 #' @rdname decorations
 #' @export
 tilde <- identity
+
+#' @rdname decorations
+#' @export
+over <- identity
+
+
+#' @rdname decorations
+#' @export
+under <- identity
+
+#' @rdname decorations
+#' @export
+underover <- identity
