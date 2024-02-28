@@ -273,10 +273,10 @@ mathml :-
 %
 % Check for under(over(A, Power), Index)
 %
-/* math(under(A, Idx), New, X, Flags),
+math(under(A, Idx), X, Flags, New),
     type(A, over(Bas, Pwr), Flags)
  => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
-    X = A. */
+    X = A. 
 
 ml(under(A, B), M, Flags)
  => ml(A, X, Flags),
@@ -349,10 +349,10 @@ mathml :-
 %
 % Check for over(under(A, Index), Power)
 %
-/* math(over(A, Pwr), New, X, Flags),
+math(over(A, Pwr), X, Flags, New),
     type(A, under(Bas, Idx), Flags)
  => New = [replace(under(Bas, Idx), underover(Bas, Idx, Pwr)) | Flags],
-    X = A. */
+    X = A. 
 
 ml(over(A, B), M, Flags)
  => ml(A, X, Flags),
@@ -427,10 +427,10 @@ prec(underover(A, _, C), Prec, Flags)
 type(underover(A, B, C), Type, _Flags)
  => Type = underover(A, B, C).
 
-/* math(under(A, Idx), New, X, Flags),
-    type(A, over(Bas, Pwr, Flags))
+math(under(A, Idx), X, Flags, New),
+    type(A, over(Bas, Pwr, Flags), Flags)
  => New = [replace(over(Bas, Pwr), underover(Bas, Idx, Pwr)) | Flags],
-    X = A. */
+    X = A. 
 
 jax(underover(A, B, C), M, Flags)
  => jax(A, X, Flags),
