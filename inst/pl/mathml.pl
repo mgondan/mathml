@@ -438,6 +438,20 @@ jax(underover(A, B, C), M, Flags)
     jax(C, Z, Flags),
     format(string(M), "{~w}/limits_{~w}^{~w}", [X, Y, Z]).
 
+%
+% Hyphen
+%
+math(hyph(L, R), M, _Flags)
+ =>  M = hyph(L, R).
+
+ml(hyph(L, R), M, Flags)
+ => ml(L, X, Flags),
+    ml(R, Y, Flags),
+    M = mtext([L, &('#8209'), R]). 
+
+jax(hyph(L, R), M, _Flags)
+ => format(string(M), "\\mbox{~w}{-}{~w}", [L, R]). 
+
 % Strings are translated to upright text
 math(R, M),
     string(R)

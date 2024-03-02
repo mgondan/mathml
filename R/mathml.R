@@ -936,3 +936,7 @@ under <- identity
 #' @rdname decorations
 #' @export
 underover <- identity
+
+#' @rdname decorations
+#' @export
+hyph<- identity
