@@ -11,6 +11,7 @@
 \alias{over}
 \alias{under}
 \alias{underover}
+\alias{hyph}
 \title{Identity functions for different decorations}
 \usage{
 roof(x)
@@ -30,6 +31,8 @@ over(x)
 under(x)
 
 underover(x)
+
+hyph(x)
 }
 \arguments{
 \item{x}{the expression to render}
