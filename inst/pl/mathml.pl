@@ -447,7 +447,7 @@ math(hyph(L, R), M, _Flags)
 ml(hyph(L, R), M, Flags)
  => ml(L, X, Flags),
     ml(R, Y, Flags),
-    M = mtext([L, &('#8209'), R]). 
+    M = mtext([mi(L), &('#8209'), R]). 
 
 jax(hyph(L, R), M, _Flags)
  => format(string(M), "\\mbox{~w}{-}{~w}", [L, R]). 
