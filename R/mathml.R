@@ -928,7 +928,6 @@ tilde <- identity
 #' @export
 over <- identity
 
-
 #' @rdname decorations
 #' @export
 under <- identity
@@ -936,3 +935,7 @@ under <- identity
 #' @rdname decorations
 #' @export
 underover <- identity
+
+#' @rdname decorations
+#' @export
+hyph<- identity
