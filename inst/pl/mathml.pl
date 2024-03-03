@@ -454,6 +454,26 @@ jax(hyph(L, R), M, _Flags)
     jax(R, Y, _Flags),
     format(string(M), "\\mbox{{~w}{-}{~w}}", [X, Y]). 
 
+%
+% Colours 
+%
+math(color(C, A), M, _Flags)
+ => M = color(C, A).
+
+ml(color(C, A), M, Flags),
+    atom(C)
+ => member(color(C, S), Flags),
+    ml(color(S, A), M, Flags).
+
+ml(color(C, A), M, Flags),
+    string(C)
+ => ml(A, X, Flags),
+    M = mstyle(mathcolor(C), X).
+
+jax(color(C, A), M, _Flags)
+ => jax(A, X, _Flags),
+    format(string(M), "\\color{~w}{~w}", [C, X]). 
+    
 % Strings are translated to upright text
 math(R, M),
     string(R)

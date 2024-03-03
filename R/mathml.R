@@ -939,3 +939,7 @@ underover <- identity
 #' @rdname decorations
 #' @export
 hyph<- identity
+
+#' @rdname decorations
+#' @export
+color<- identity
