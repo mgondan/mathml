@@ -138,7 +138,7 @@ for convenience and points to the identity function.
 
 ## Decorations
 
-The package offers some support for different fonts as well as accents and
+The package offers some support for different fonts and colors as well as accents and
 boxes etc. Internally, these decorations are implemented as identity functions,
 so they can be introduced into R expressions without side-effects.
 
@@ -152,6 +152,16 @@ math(term)
 
 Note that the font styles only affect the display of identifiers, whereas
 numbers, character strings etc. are left untouched.
+
+Colors can be specified as color names, RGB-values (in decimal or hexadecimal format), 
+HSL-values and HWB-values.
+
+```{r}
+term <- quote(color("red", tilde(a)) + color("rgb(255, 0, 0)", mean(X)) + 
+        color("#FF0000", boxed(c)) + color("hsl(0, 100%, 50%)", cancel(d)) + 
+        color("hwb(0 0% 0%)", prime(f)))
+math(term)
+```
 
 ## Operators and parentheses
 
