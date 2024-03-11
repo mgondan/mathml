@@ -449,9 +449,9 @@ ml(hyph(L, R), M, Flags)
     ml(R, Y, Flags),
     M = mtext([X, &('#8209'), Y]). 
 
-jax(hyph(L, R), M, _Flags)
- => jax(L, X, _Flags),
-    jax(R, Y, _Flags),
+jax(hyph(L, R), M, Flags)
+ => jax(L, X, Flags),
+    jax(R, Y, Flags),
     format(string(M), "\\mbox{{~w}{-}{~w}}", [X, Y]). 
 
 %
@@ -470,8 +470,8 @@ ml(color(C, A), M, Flags),
  => ml(A, X, Flags),
     M = mstyle(mathcolor(C), X).
 
-jax(color(C, A), M, _Flags)
- => jax(A, X, _Flags),
+jax(color(C, A), M, Flags)
+ => jax(A, X, Flags),
     format(string(M), "\\color{~w}{~w}", [C, X]). 
     
 % Strings are translated to upright text
