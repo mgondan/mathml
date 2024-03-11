@@ -1,6 +1,8 @@
 :- module(lm, []).
 :- reexport(library(mathml)).
 
+:- multifile math_hook/2.
+
 % A + B + C => [C, B, A]
 summands(A + B, X) :-
     var(X),
