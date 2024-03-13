@@ -18,10 +18,9 @@
 atom_split(X, D, L) :-
     atomic_list_concat(L, D, X).
 
-jaxx(prover(H, J), M, Flags) :-
+jaxx(latex(H, J), M, Flags) :-
     jax(latex_root(H, J), M0, Flags),
-    atom_split(M, '', M0),
-    write(M), nl.
+    atom_split(M, '', M0).
 
 jaxx(latex_root(P, J), M, Flags) :-
     jax(latex_proof(P, J), M0, Flags),
