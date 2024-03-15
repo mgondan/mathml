@@ -856,6 +856,15 @@ is illustrated by the other terms in the sum, such macros are limited to purely
 syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
 
+## Proofs
+
+```{r}
+rolog::consult(system.file(file.path("pl", "bussproofs.pl"), package="mathml"))
+
+term <- quote(rcond(A, B))
+math(term)
+```
+
 # Acknowledgment
 
 Supported by the Erasmus+ program of the European
