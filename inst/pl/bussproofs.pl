@@ -13,6 +13,7 @@
 %        </mstyle>
 %      </mpadded>
 %
+% math_hook(rcond(A, B), [frac(B, A), '%->%'('R', xx)]).
 
 % Render in MathML
 mlx(rcond(A, B), M, Flags) :-
