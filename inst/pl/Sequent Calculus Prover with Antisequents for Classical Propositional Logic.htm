@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-03-01 ven. 15:30 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sequent Calculus Prover with Antisequents for Classical Propositional Logic</title>
+<meta name="generator" content="Org Mode" />
+<script> MathJax = {loader: {load: ['[tex]/bussproofs']}, tex: {packages: {'[+]': ['bussproofs']}, tags: 'ams'}}; </script>
+<script id="MathJax-script " async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<p>
+Proof = rcond([]&gt;[(a&amp;b=&gt;a)],land([(a&amp;b)]&gt;[a],ax([a,b]&gt;[a],a)))
+</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow semantics="bspr_inference:1;bspr_proof:true;bspr_labelledRule:right">
+    <mrow>
+      <mtable align="top 2" rowlines="solid" framespacing="0 0" semantics="bspr_inferenceRule:down">
+        <mtr>
+          <mtd>
+            <mtable framespacing="0 0">
+              <mtr>
+                <mtd rowalign="bottom">
+                  <mrow semantics="bspr_inference:1;bspr_labelledRule:right">
+                    <mrow>
+                      <mtable align="top 2" rowlines="solid" framespacing="0 0" semantics="bspr_inferenceRule:down">
+                        <mtr>
+                          <mtd>
+                            <mtable framespacing="0 0">
+                              <mtr>
+                                <mtd rowalign="bottom">
+                                  <mrow semantics="bspr_inference:0;bspr_labelledRule:right">
+                                    <mrow>
+                                      <mtable align="top 2" rowlines="solid" framespacing="0 0" semantics="bspr_inferenceRule:down">
+                                        <mtr>
+                                          <mtd>
+                                            <mtable framespacing="0 0">
+                                              <mtr>
+                                                <mtd rowalign="bottom">
+                                                  <mrow semantics="bspr_axiom:true"></mrow>
+                                                </mtd>
+                                              </mtr>
+                                            </mtable>
+                                          </mtd>
+                                        </mtr>
+                                        <mtr>
+                                          <mtd>
+                                            <mrow>
+                                              <mspace width=".5ex"></mspace>
+                                              <mstyle displaystyle="false" scriptlevel="0">
+                                                <mrow data-mjx-texclass="ORD">
+                                                  <mi>A</mi>
+                                                  <mo>,</mo>
+                                                  <mi>B</mi>
+                                                  <mo>&#x22A2;</mo>
+                                                  <mi>A</mi>
+                                                </mrow>
+                                              </mstyle>
+                                              <mspace width=".5ex"></mspace>
+                                            </mrow>
+                                          </mtd>
+                                        </mtr>
+                                      </mtable>
+                                      <mpadded height="+.5em" width="+.5em" voffset="-.15em" semantics="bspr_prooflabel:right">
+                                        <mstyle displaystyle="false" scriptlevel="0">
+                                          <mrow data-mjx-texclass="ORD">
+                                            <mstyle mathsize="0.7em">
+                                              <mrow data-mjx-texclass="ORD">
+                                                <mi>A</mi>
+                                                <mi>x</mi>
+                                                <mo>.</mo>
+                                              </mrow>
+                                            </mstyle>
+                                          </mrow>
+                                        </mstyle>
+                                      </mpadded>
+                                    </mrow>
+                                    <mspace width="-1.62em"></mspace>
+                                  </mrow>
+                                </mtd>
+                              </mtr>
+                            </mtable>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mrow>
+                              <mspace width=".5ex"></mspace>
+                              <mstyle displaystyle="false" scriptlevel="0">
+                                <mrow data-mjx-texclass="ORD">
+                                  <mi>A</mi>
+                                  <mo>&#x2227;</mo>
+                                  <mi>B</mi>
+                                  <mo>&#x22A2;</mo>
+                                  <mi>A</mi>
+                                </mrow>
+                              </mstyle>
+                              <mspace width=".5ex"></mspace>
+                            </mrow>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                      <mpadded height="+.5em" width="+.5em" voffset="-.15em" semantics="bspr_prooflabel:right">
+                        <mstyle displaystyle="false" scriptlevel="0">
+                          <mrow data-mjx-texclass="ORD">
+                            <mstyle mathsize="0.7em">
+                              <mrow data-mjx-texclass="ORD">
+                                <mi>L</mi>
+                                <mo>&#x2227;</mo>
+                              </mrow>
+                            </mstyle>
+                          </mrow>
+                        </mstyle>
+                      </mpadded>
+                    </mrow>
+                    <mspace width="-1.444em"></mspace>
+                  </mrow>
+                </mtd>
+              </mtr>
+            </mtable>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mspace width=".5ex"></mspace>
+              <mstyle displaystyle="false" scriptlevel="0">
+                <mrow data-mjx-texclass="ORD">
+                  <mo>&#x22A2;</mo>
+                  <mo stretchy="false">(</mo>
+                  <mi>A</mi>
+                  <mo>&#x2227;</mo>
+                  <mi>B</mi>
+                  <mo stretchy="false">)</mo>
+                  <mo accent="false" stretchy="false">&#x2192;</mo>
+                  <mi>A</mi>
+                </mrow>
+              </mstyle>
+              <mspace width=".5ex"></mspace>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+      <mpadded height="+.5em" width="+.5em" voffset="-.15em" semantics="bspr_prooflabel:right">
+        <mstyle displaystyle="false" scriptlevel="0">
+          <mrow data-mjx-texclass="ORD">
+            <mstyle mathsize="0.7em">
+              <mrow data-mjx-texclass="ORD">
+                <mi>R</mi>
+                <mo accent="false" stretchy="false">&#x2192;</mo>
+              </mrow>
+            </mstyle>
+          </mrow>
+        </mstyle>
+      </mpadded>
+    </mrow>
+    <mspace width="-0.306em"></mspace>
+  </mrow>
+</math>
+</body>
