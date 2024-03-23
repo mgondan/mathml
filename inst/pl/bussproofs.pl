@@ -28,7 +28,7 @@ mlx(land(A, B), M, Flags) :-
 
 mlx(ax(A, B), M, Flags) :-
     ml(frac(B, A), F1, Flags),
-    ml(ident('Ax.'), R1, Flags),
+    ml(ident('Ax.'), R1, [mathvariant(italic)]),
     M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
 
 
