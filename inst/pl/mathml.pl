@@ -1072,6 +1072,14 @@ math(Hash, M, _Flags),
     member(Name, ['##', '$$', '%%', '!!'])
  => M = paren(Elements).
 
+% Prooftree
+ml(proof_tree(A), M, Flags),
+    compound(A),
+    compound_name_arguments(A, Name, Rows),
+    member(Name, ['###', '$$$', '%%%', '!!!'])
+ => maplist(ml_row(Flags), Rows, R),
+    M = mrow([mtable(rowlines(solid), R)]).
+
 % Matrices
 ml(Matrix, M, Flags),
     compound(Matrix),
@@ -1810,11 +1818,13 @@ math('%prop%'(A, B), X)
     X = yfy(Prec, '%prop%', A, B).
 
 math('%>%'(A, B), X)
- => current_op(Prec, xfy, ->),
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
     X = yfy(Prec, '%>%', A, B).
 
 math('%,%'(A, B), X)
- => current_op(Prec, xfy, ->),
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
     X = yfy(Prec, '%,%', A, B).
 
 math(A > B, X)
