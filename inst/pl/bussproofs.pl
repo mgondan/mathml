@@ -20,6 +20,18 @@ mlx(rcond(A, B), M, Flags) :-
     ml(frac(B, A), F1, Flags),
     ml('%->%'('R', ''), R1, Flags),
     M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
+ 
+mlx(land(A, B), M, Flags) :-
+    ml(frac(B, A), F1, Flags),
+    ml('&'('L', ''), R1, Flags),
+    M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
+
+mlx(ax(A, B), M, Flags) :-
+    ml(frac(B, A), F1, Flags),
+    ml(ident('Ax.'), R1, Flags),
+    M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
+
+
 
 % Render in MathJax
 % jaxx(rcond(A, B), M, Flags) :-
