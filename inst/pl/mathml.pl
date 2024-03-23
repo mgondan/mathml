@@ -1568,6 +1568,12 @@ ml(op('%prop%'), M, _Flags)
 jax(op('%prop%'), M, _Flags)
  => M = "\\propto".
 
+ml(op('%>%'), M, _Flags)
+ => M = mo(&('#x22A2')).
+
+ml(op('%,%'), M, _Flags)
+ => M = mo(',').
+
 ml(op(and), M, _Flags)
  => M = mo(&(and)).
 
@@ -1802,6 +1808,14 @@ math('%=~%'(A, B), X)
 math('%prop%'(A, B), X)
  => current_op(Prec, xfx, =),
     X = yfy(Prec, '%prop%', A, B).
+
+math('%>%'(A, B), X)
+ => current_op(Prec, xfy, ->),
+    X = yfy(Prec, '%>%', A, B).
+
+math('%,%'(A, B), X)
+ => current_op(Prec, xfy, ->),
+    X = yfy(Prec, '%,%', A, B).
 
 math(A > B, X)
  => current_op(Prec, xfx, >),
