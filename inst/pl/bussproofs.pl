@@ -16,38 +16,28 @@
 % math_hook(rcond(A, B), [frac(B, A), '%->%'('R', xx)]).
 
 % Render in MathML
-mlx(rcond(A, B), M, Flags) :-
-    build_table([B], [##(A)], M1),
-    M2 = [##('') | M1],
-    M3 =.. [### | M2],
-    ml(proof_tree(M3), M4, Flags),
-    M = mrow([M4]).
- 
-build_table([], Acc, Acc).
+mlx(table(A, B), M, _Flags) :-
+    M =.. ['###', '##'(B), '##'(A)].
 
-build_table([B], Acc, Matrix) :-
-    B =.. L,
-    nth0(0, L, Func, L1),
-    nth0(0, L1, Arg, L2),
-    B1 =.. [Func, Arg],
-    append([##(B1)], Acc, List),
-    build_table(L2, List, Matrix). 
-
-/* 
 mlx(rcond(A, B), M, Flags) :-
-    ml(frac(B, A), F1, Flags),
+    ml(table(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
     ml('%->%'('R', ''), R1, Flags),
-    M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
+    M = mrow([F2, mstyle([mathsize('0.7em')], R1)]).  
+
+ %M = mrow([F2, mpadded([height('+.5em'), width('+.5em'), voffset('-.15em')], mstyle([displaystyle(false, scriptlevel(0)], mrow([mstyle([mathsize('0.7em')], R1 ])))]).
 
 mlx(land(A, B), M, Flags) :-
-    ml(frac(B, A), F1, Flags),
+    ml(table(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
     ml('&'('L', ''), R1, Flags),
-    M = mrow([F1, mstyle([mathsize('0.7em')], R1)]).
+    M = mrow([F2, mstyle([mathsize('0.7em')], R1)]). 
 
 mlx(ax(A, B), M, Flags) :-
-    ml(frac(B, A), F1, Flags),
+    ml(table(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
     ml(ident('Ax.'), R1, [mathvariant(italic)]),
-    M = mrow([F1, mstyle([mathsize('0.7em')], R1)]). */
+    M = mrow([F2, mstyle([mathsize('0.7em')], R1)]).
 
 % Render in MathJax
 % jaxx(rcond(A, B), M, Flags) :-
