@@ -1072,14 +1072,52 @@ math(Hash, M, _Flags),
     member(Name, ['##', '$$', '%%', '!!'])
  => M = paren(Elements).
 
-% Prooftree
+% Prooftree: two tables are needed because of different attributes
+
+% For the table with two rows
 ml(proof_tree(A), M, Flags),
     compound(A),
     compound_name_arguments(A, Name, Rows),
-    member(Name, ['###', '$$$', '%%%', '!!!'])
+    member(Name, ['###'])
  => maplist(ml_row(Flags), Rows, R),
-    M = mrow([mtable(rowlines(solid), R)]).
+    M = mrow([mtable([align('top 2'), rowlines(solid), framespacing('0 0'), semantics('bspr_inferenceRule:down')], R)]).
 
+% For the table with just one row
+ml(A, M, Flags),
+    compound(A),
+    compound_name_arguments(A, Name, Rows),
+    member(Name, ['###1'])
+ => maplist(ml_row2(Flags), Rows, R),
+    M = mrow([mtable([framespacing('0 0')], R)]).
+
+% Needed to set the attribute of the cell to "rowalign('bottom')"
+ml_row2(Flags, Row, M),
+    compound(Row),
+    compound_name_arguments(Row, Name, Cells),
+    member(Name, ['##', '$$', '%%', '!!'])
+ => maplist(ml_cell2(Flags), Cells, C),
+    M = mtr(C).
+
+ml_cell2(Flags, Cell, M)
+ => ml(Cell, C, Flags),
+    M = mtd([rowalign('bottom')], C).
+
+% Needed to add attributes
+ml_cell3(Flags, Cell, M)
+ => ml(func3(Cell), C, Flags),
+    M = mtd(C).
+
+ml(func3(A), M, Flags) 
+ => ml(A, M1, Flags),
+    M = mrow(mspace([width('.5ex')], mstyle([displaystyle('false'), scriptlevel('0')], M1))).
+
+/* This should be:
+ M = mrow(mspace([width('.5ex')]), mstyle([displaystyle('false'), scriptlevel('0')], M1)).
+
+so that the resulting line is <mrow><mspace width(".5ex")</mspace> ...</mrow>
+but it raises an error
+*/
+    
 % Matrices
 ml(Matrix, M, Flags),
     compound(Matrix),
@@ -1093,6 +1131,14 @@ ml_row(Flags, Row, M),
     compound_name_arguments(Row, Name, Cells),
     member(Name, ['##', '$$', '%%', '!!'])
  => maplist(ml_cell(Flags), Cells, C),
+    M = mtr(C).
+
+% Needed to add attributes with "ml_cell3 (see above)"
+ml_row(Flags, Row, M),
+    compound(Row),
+    compound_name_arguments(Row, Name, Cells),
+    member(Name, ['##1'])
+ => maplist(ml_cell3(Flags), Cells, C),
     M = mtr(C).
 
 ml_cell(Flags, Cell, M)
