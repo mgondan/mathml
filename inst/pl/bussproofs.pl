@@ -28,21 +28,21 @@ mlx(rcond(A, B), M, Flags) :-
     ml(proof_tree(F1), F2, Flags),
     ml('%->%'('R', ''), R1, Flags),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('+1em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
+    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
 
 mlx(land(A, B), M, Flags) :-
     ml(table(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
     ml('&'('L', ''), R1, Flags),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('+1em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
+    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
 
 mlx(ax(A, B), M, Flags) :-
     ml(table(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
     ml(ident('Ax.'), R1, [mathvariant(italic)]),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('+1em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]). 
+    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]). 
 
 % Render in MathJax
 % jaxx(rcond(A, B), M, Flags) :-
