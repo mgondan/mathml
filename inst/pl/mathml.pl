@@ -1100,7 +1100,11 @@ ml_row2(Flags, Row, M),
 
 ml_cell2(Flags, Cell, M)
  => ml(Cell, C, Flags),
-    M = mtd([rowalign('bottom')], C).
+    ml(mrow_attribute([semantics('bspr_inference:1;bspr_labelledRule:right')], C), C1, Flags),
+    M = mtd([rowalign('bottom')], C1).
+
+ml(mrow_attribute(Attr, A), M, _Flags)
+ => M = mrow(Attr, [A]).
 
 % Needed to add attributes
 ml_cell3(Flags, Cell, M)
@@ -1109,6 +1113,7 @@ ml_cell3(Flags, Cell, M)
 
 ml(func3(A), M, Flags) 
  => ml(A, M1, Flags),
+    %ml(mrow_attribute([data-mjx-textclass('ORD')], M1), M2, Flags),
     M = mrow(mspace([width('.5ex')], mstyle([displaystyle('false'), scriptlevel('0')], M1))).
 
 /* This should be:
