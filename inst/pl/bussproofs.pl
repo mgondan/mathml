@@ -16,33 +16,45 @@
 % math_hook(rcond(A, B), [frac(B, A), '%->%'('R', xx)]).
 
 % Render in MathML
-mlx(table(A, B), M, _Flags) :-
-    M1 =.. ['###1', '##'(B)],
-    M =.. ['###', '##'(M1), '##1'(A)].
+mlx(proof(Denominator, Numerator), X, _Flags) :-
+    X1 =.. ['###1', '##'(Numerator)],
+    X =.. ['###2', '##'(X1), '##1'(Denominator)].
 
-mlx(size(A, S), M, _Flags) :-
-    M = mrow([mstyle([mathsize(S)], A)]).
+mlx(size(A, Size), M, _Flags) :-
+    M = mrow([mstyle([mathsize(Size)], A)]).
+
+mlx(mstyle_right(A), M, _Flags) :-
+    M = mstyle([displaystyle('false'), scriptlevel('0')], A).
+
+mlx(mpadded_right(A), M, _Flags) :-
+    M = mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], A).
 
 mlx(rcond(A, B), M, Flags) :-
-    ml(table(A, B), F1, Flags),
+    ml(proof(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
     ml('%->%'('R', ''), R1, Flags),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([F2, R4]).  
 
 mlx(land(A, B), M, Flags) :-
-    ml(table(A, B), F1, Flags),
+    ml(proof(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
     ml('&'('L', ''), R1, Flags),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]).  
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([F2, R4]).  
 
 mlx(ax(A, B), M, Flags) :-
-    ml(table(A, B), F1, Flags),
+    ml(proof(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
     ml(ident('Ax.'), R1, [mathvariant(italic)]),
     ml(size(R1, '0.7em'), R2, Flags),
-    M = mrow([F2, mpadded([height('.5em'), width('.5em'), voffset('.9em'), semantics('bspr_prooflabel:right')], mstyle([displaystyle('false'), scriptlevel('0')], R2))]). 
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([F2, R4]).
 
 % Render in MathJax
 % jaxx(rcond(A, B), M, Flags) :-

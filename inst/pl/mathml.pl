@@ -1078,7 +1078,7 @@ math(Hash, M, _Flags),
 ml(proof_tree(A), M, Flags),
     compound(A),
     compound_name_arguments(A, Name, Rows),
-    member(Name, ['###'])
+    member(Name, ['###2'])
  => maplist(ml_row(Flags), Rows, R),
     M = mrow([mtable([align('top 2'), rowlines(solid), framespacing('0 0'), semantics('bspr_inferenceRule:down')], R)]).
 
