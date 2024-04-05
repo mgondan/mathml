@@ -2395,6 +2395,15 @@ option_(NameOption, Flags) :-
     member(Name-String, Flags),
     atom_string(Option, String).
 
+option_(NameOption, Flags, _Default),
+    compound_name_arguments(NameOption, Name, [_]),
+    compound_name_arguments(NameOption0, Name, [_]),
+    option_(NameOption0, Flags)
+ => NameOption = NameOption0.
+    
+option_(NameOption, _Flags, Default)
+ => compound_name_arguments(NameOption, _Name, [Default]).
+
 math(omit_left(Expr), M, Flags),
     option_(error(ignore), Flags)
  => M = Expr.
