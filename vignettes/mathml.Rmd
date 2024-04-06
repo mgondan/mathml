@@ -857,13 +857,21 @@ syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
 
 ## Proofs
+_Mathml_ provides a basic representation for proof trees in the sequent calculus. 
+The supported predicates are 'rcond/2', 'land/2', and 'ax/2'. The first argument contains
+the expression for one line and the second argument for everything above it (which can be
+another predicate of these).
 
 ```{r}
 rolog::consult(system.file(file.path("pl", "bussproofs.pl"), package="mathml"))
 
 term <- quote(rcond(A, B))
 math(term)
+
+term <- quote(rcond(''%>%(A&B)%=>%A, land(A&B%>%A, ax(A%,%B%>%A,''))))
+math(term)
 ```
+<br><br>
 
 # Acknowledgment
 
