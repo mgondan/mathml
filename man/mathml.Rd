@@ -15,7 +15,9 @@ mathml(
 MathML string.}
 
 \item{flags}{(default NULL)
-list of flags that control the translation}
+list of flags that control the translation. This includes "context" settings
+such as error("ignore"), or a default number of decimal places for numeric
+output.}
 
 \item{env}{(default globalenv())
 The R environment in which r_eval is being executed.}
@@ -35,6 +37,8 @@ then searches for the formalArgs of g in the environment \emph{env}.
 }
 \examples{
 mathml(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L))
+mathml(term=3.14159265, flags=list(round=3L))
+mathml(term=3.14159265, flags=list(quote(round(3L))))
 
 }
 \seealso{

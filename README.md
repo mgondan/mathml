@@ -43,6 +43,13 @@ mathout(term)
 
 $a^b + c \cdot (d+3.00) - a^2 \cdot (a+d)$
 
+````
+term <- call("^", quote(x), 2L)
+mathout(term)
+````
+
+$x^2$
+
 # For package developers
 
 If you use `mathml` for your own package, please do not "Import" `mathml` in

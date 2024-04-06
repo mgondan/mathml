@@ -1675,7 +1675,7 @@ math(round(A, D), M, Flags0, Flags1)
     Flags1 = [round(D) | Flags0].
 
 ml(pos(A), M, Flags)
- => option(round(D), Flags, 2),
+ => option_(round(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
     format(string(X), Mask, [A]),
     M = mn(X).
@@ -1687,7 +1687,7 @@ jax(pos(1.0Inf), M, _Flags)
  => M = "\\infty".
 
 jax(pos(A), M, Flags)
- => option(round(D), Flags, 2),
+ => option_(round(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
 
@@ -2394,6 +2394,15 @@ option_(NameOption, Flags) :-
     compound_name_arguments(NameOption, Name, [Option]),
     member(Name-String, Flags),
     atom_string(Option, String).
+
+option_(NameOption, Flags, _Default),
+    compound_name_arguments(NameOption, Name, [_]),
+    compound_name_arguments(NameOption0, Name, [_]),
+    option_(NameOption0, Flags)
+ => NameOption = NameOption0.
+    
+option_(NameOption, _Flags, Default)
+ => compound_name_arguments(NameOption, _Name, [Default]).
 
 math(omit_left(Expr), M, Flags),
     option_(error(ignore), Flags)

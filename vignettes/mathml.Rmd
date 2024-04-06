@@ -127,9 +127,12 @@ math(term)
 ```
 
 An expression such as `1 + -2` may be considered unsatisfactory from an
-aesthetical perspective. It is correct R\ syntax, though, and is reproduced
+aesthetic perspective. It is correct R\ syntax, though, and is reproduced
 accordingly, without the parentheses. Parentheses around negated numbers or
-symbols can be added as shown above for `+ (-Inf)`.
+symbols can be added as shown above for `+ (-Inf)`. If `round` is not given,
+R's default number of decimals from `getOption("digits")` is used (which is way
+too large in the author's opinion---in line with the unfortunate practice of
+statistics programs).
 
 To avoid name clashes with package _stats_, `roof()` is used instead of `hat()`
 to put a hat on a symbol (see next section for further decorations). Note that
@@ -206,10 +209,10 @@ Whereas in standard infix operators, the parentheses typically follow the rules
 for precedence, undesirable results may be obtained in custom operators.
 
 ```{r}
-term <- quote(mean(X) %+-% 1.96 * s / sqrt(N))
+term <- quote(mean(X) %+-% 2L * s / sqrt(N))
 math(term)
-term <- quote('%+-%'(mean(X), 1.96 * s / sqrt(N))) # functional form of '%+-%'
-term <- quote(mean(X) %+-% {1.96 * s / sqrt(N)})   # the same
+term <- quote('%+-%'(mean(X), 2L * s / sqrt(N))) # functional form of '%+-%'
+term <- quote(mean(X) %+-% {2L * s / sqrt(N)})   # the same
 math(term)
 ```
 
