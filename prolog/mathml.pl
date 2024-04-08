@@ -476,6 +476,9 @@ jax(color(C, A), M, Flags)
  => jax(A, X, Flags),
     format(string(M), "\\color{~w}{~w}", [C, X]). 
     
+type(color(_C, A), T, Flags)
+ => type(A, T, Flags).
+
 % Strings are translated to upright text
 math(R, M),
     string(R)
@@ -1691,11 +1694,11 @@ jax(pos(A), M, Flags)
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
 
-type(pos(_), Type, _Flags)
- => Type = [atomic].
+type(pos(A), Type, _Flags)
+ => Type = [numeric(A), atomic].
 
-type(posint(_), Type, _Flags)
- => Type = [atomic].
+type(posint(A), Type, _Flags)
+ => Type = [numeric(A), atomic].
 
 math(number(A), M),
     A < 0
@@ -1704,6 +1707,34 @@ math(number(A), M),
 
 math(number(A), M)
  => M = pos(A).
+
+% p-value
+math(pval(A), M, Flags, Flags1),
+    type(A, T, Flags),
+    member(numeric(N), T),
+    N =< 1,
+    N >= 0.1
+ => M = A,
+    Flags1 = [round(2) | Flags].
+
+math(pval(A), M, Flags, Flags1),
+    type(A, T, Flags),
+    member(numeric(_N), T)
+ => M = A,
+    Flags1 = [round(3) | Flags].
+
+math(pval(A), M, Flags, Flags1)
+ => M = A,
+    Flags1 = Flags.
+
+math(pval(A, P), M, Flags),
+    type(A, T, Flags),
+    member(numeric(N), T),
+    N < 0.001
+ => M = (P < pval(0.001)).
+
+math(pval(A, P), M, _Flags)
+ => M = (P == pval(A)).
 
 % Operators
 math(isin(A, B), X)

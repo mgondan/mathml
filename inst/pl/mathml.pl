@@ -473,7 +473,10 @@ ml(color(C, A), M, Flags),
 jax(color(C, A), M, Flags)
  => jax(A, X, Flags),
     format(string(M), "\\color{~w}{~w}", [C, X]). 
-    
+
+type(color(_C, A), T, Flags)
+ => type(A, T, Flags).
+
 % Strings are translated to upright text
 math(R, M),
     string(R)
@@ -1732,7 +1735,7 @@ ml(posint(A), M, _Flags)
 ml(pos(1.0Inf), M, _Flags)
  => M = mi(&('#x221E')).
 
-% Default number of decimals is 2, change it using Flags
+% Default number of decimals is getOption("digits") from R
 math(round(A, D), M, Flags0, Flags1)
  => M = A,
     Flags1 = [round(D) | Flags0].
@@ -1762,11 +1765,11 @@ jax(pos(A), M, Flags)
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
 
-type(pos(_), Type, _Flags)
- => Type = [atomic].
+type(pos(A), Type, _Flags)
+ => Type = [numeric(A), atomic].
 
-type(posint(_), Type, _Flags)
- => Type = [atomic].
+type(posint(A), Type, _Flags)
+ => Type = [numeric(A), atomic].
 
 math(number(A), M),
     A < 0
@@ -1777,32 +1780,31 @@ math(number(A), M)
  => M = pos(A).
 
 % p-value
-math(pval(A), Flags0, M, Flags),
-    number(A),
-    A =< 1,
-    A >= 0.1
+math(pval(A), M, Flags, Flags1),
+    type(A, T, Flags),
+    member(numeric(N), T),
+    N =< 1,
+    N >= 0.1
  => M = A,
-    Flags = [round(2) | Flags0].
+    Flags1 = [round(2) | Flags].
 
-math(pval(A), Flags0, M, Flags),
-    number(A),
-    A < 0.001,
-    A >= 0
+math(pval(A), M, Flags, Flags1),
+    type(A, T, Flags),
+    member(numeric(_N), T)
  => M = A,
-    Flags = [floor(0.001) | Flags0].
+    Flags1 = [round(3) | Flags].
 
-math(pval(A), Flags0, M, Flags),
-    number(A)
+math(pval(A), M, Flags, Flags1)
  => M = A,
-      Flags = [round(3) | Flags0].
+    Flags1 = Flags.
 
-math(pval(A, P), M),
-    number(A),
-    A < 0.001
- => M = (P < pval(A)).
+math(pval(A, P), M, Flags),
+    type(A, T, Flags),
+    member(numeric(N), T),
+    N < 0.001
+ => M = (P < pval(0.001)).
 
-math(pval(A, P), M),
-    number(A)
+math(pval(A, P), M, _Flags)
  => M = (P == pval(A)).
 
 % Operators
