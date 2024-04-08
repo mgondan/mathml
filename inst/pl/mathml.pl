@@ -1776,6 +1776,35 @@ math(number(A), M),
 math(number(A), M)
  => M = pos(A).
 
+% p-value
+math(pval(A), Flags0, M, Flags),
+    number(A),
+    A =< 1,
+    A >= 0.1
+ => M = A,
+    Flags = [round(2) | Flags0].
+
+math(pval(A), Flags0, M, Flags),
+    number(A),
+    A < 0.001,
+    A >= 0
+ => M = A,
+    Flags = [floor(0.001) | Flags0].
+
+math(pval(A), Flags0, M, Flags),
+    number(A)
+ => M = A,
+      Flags = [round(3) | Flags0].
+
+math(pval(A, P), M),
+    number(A),
+    A < 0.001
+ => M = (P < pval(A)).
+
+math(pval(A, P), M),
+    number(A)
+ => M = (P == pval(A)).
+
 % Operators
 math(isin(A, B), X)
  => current_op(Prec, xfx, =),
