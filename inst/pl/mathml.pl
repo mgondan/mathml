@@ -978,6 +978,10 @@ math(!(A), M)
  => current(Prec, xfy, ^),
     M = fy(Prec, not, A).
 
+math(!(A, B), M)
+ => current(Prec, xfy, ^),
+    M = xfy(Prec, not, A, B).
+
 math(xor(x=A, y=B), M)
  => M = xor(A, B).
 
@@ -1647,6 +1651,9 @@ jax(op(and), M, _Flags)
 ml(op(or), M, _Flags)
  => M = mo(&(or)).
 
+ml(op('%|%'), M, _Flags)
+ => M = mo(&(or)).
+
 jax(op(or), M, _Flags)
  => M = "\\lor".
 
@@ -1655,6 +1662,9 @@ ml(op(not), M, _Flags)
 
 jax(op(not), M, _Flags)
  => M = "\\lnot".
+
+ml(op(~), M, _Flags)
+ => M = mo(&(not)).
 
 ml(op(veebar), M, _Flags)
  => M = mo(&(veebar)).
@@ -1890,6 +1900,16 @@ math('%,%'(A, B), X)
  => current_op(Prec1, xfy, ','),
     Prec is Prec1 - 1,
     X = yfy(Prec, '%,%', A, B).
+
+math('%|%'(A, B), X)
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
+    X = yfy(Prec, '%|%', A, B).
+
+math(~(A), X)
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
+    X = fy(Prec, ~, A).
 
 math(A > B, X)
  => current_op(Prec, xfx, >),

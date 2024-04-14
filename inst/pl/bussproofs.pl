@@ -38,6 +38,24 @@ mlx(rcond(A, B), M, Flags) :-
     ml(mpadded_right(R3), R4, Flags),
     M = mrow([F2, R4]).  
 
+mlx(ror(A, B), M, Flags) :-
+    ml(proof(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
+    ml(or('R', ''), R1, Flags),
+    ml(size(R1, '0.7em'), R2, Flags),
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([F2, R4]). 
+
+mlx(rneg(A, B), M, Flags) :-
+    ml(proof(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
+    ml(!('R',''), R1, Flags),
+    ml(size(R1, '0.7em'), R2, Flags),
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([F2, R4]). 
+
 mlx(land(A, B), M, Flags) :-
     ml(proof(A, B), F1, Flags),
     ml(proof_tree(F1), F2, Flags),
