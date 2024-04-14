@@ -53,5 +53,5 @@ math(pval(A, P), M, Flags) :-
     N < 0.001,
     M = (P < pval(0.001)).
 
-math(pval(A, P), M), _Flags :-
+math(pval(A, P), M, _Flags) :-
     M = (P == pval(A)). */
