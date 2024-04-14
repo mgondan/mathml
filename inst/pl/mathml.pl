@@ -975,7 +975,7 @@ math(or(A, B), M)
     M = xfy(Prec, or, A, B).
 
 math(!(A), M)
- => current(Prec, xfy, ^),
+ => current(Prec, xfy, ','),
     M = fy(Prec, not, A).
 
 math(!(A, B), M)
@@ -1849,7 +1849,8 @@ math('%<=>%'(A, B), X)
 
 math('%->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, '%->%', A, B).
+    Prec1 is Prec - 50,
+    X = yfy(Prec1, '%->%', A, B).
 
 math('%=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
