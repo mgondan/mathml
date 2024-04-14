@@ -13,6 +13,8 @@
 %
 :- dynamic math_hook/2.
 :- multifile math_hook/2.
+:- multifile math/4.
+:- multifile math/3.
 
 % Low-level functions (see, e.g. nthroot.pl)
 %
@@ -973,8 +975,12 @@ math(or(A, B), M)
     M = xfy(Prec, or, A, B).
 
 math(!(A), M)
- => current(Prec, xfy, ^),
+ => current(Prec, xfy, ','),
     M = fy(Prec, not, A).
+
+math(!(A, B), M)
+ => current(Prec, xfy, ^),
+    M = xfy(Prec, not, A, B).
 
 math(xor(x=A, y=B), M)
  => M = xor(A, B).
@@ -1645,6 +1651,9 @@ jax(op(and), M, _Flags)
 ml(op(or), M, _Flags)
  => M = mo(&(or)).
 
+ml(op('%|%'), M, _Flags)
+ => M = mo(&(or)).
+
 jax(op(or), M, _Flags)
  => M = "\\lor".
 
@@ -1653,6 +1662,9 @@ ml(op(not), M, _Flags)
 
 jax(op(not), M, _Flags)
  => M = "\\lnot".
+
+ml(op(~), M, _Flags)
+ => M = mo(&(not)).
 
 ml(op(veebar), M, _Flags)
  => M = mo(&(veebar)).
@@ -1779,34 +1791,6 @@ math(number(A), M),
 math(number(A), M)
  => M = pos(A).
 
-% p-value
-math(pval(A), M, Flags, Flags1),
-    type(A, T, Flags),
-    member(numeric(N), T),
-    N =< 1,
-    N >= 0.1
- => M = A,
-    Flags1 = [round(2) | Flags].
-
-math(pval(A), M, Flags, Flags1),
-    type(A, T, Flags),
-    member(numeric(_N), T)
- => M = A,
-    Flags1 = [round(3) | Flags].
-
-math(pval(A), M, Flags, Flags1)
- => M = A,
-    Flags1 = Flags.
-
-math(pval(A, P), M, Flags),
-    type(A, T, Flags),
-    member(numeric(N), T),
-    N < 0.001
- => M = (P < pval(0.001)).
-
-math(pval(A, P), M, _Flags)
- => M = (P == pval(A)).
-
 % Operators
 math(isin(A, B), X)
  => current_op(Prec, xfx, =),
@@ -1865,7 +1849,8 @@ math('%<=>%'(A, B), X)
 
 math('%->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    X = yfy(Prec, '%->%', A, B).
+    Prec1 is Prec - 50,
+    X = yfy(Prec1, '%->%', A, B).
 
 math('%=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
@@ -1916,6 +1901,16 @@ math('%,%'(A, B), X)
  => current_op(Prec1, xfy, ','),
     Prec is Prec1 - 1,
     X = yfy(Prec, '%,%', A, B).
+
+math('%|%'(A, B), X)
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
+    X = yfy(Prec, '%|%', A, B).
+
+math(~(A), X)
+ => current_op(Prec1, xfy, ','),
+    Prec is Prec1 - 1,
+    X = fy(Prec, ~, A).
 
 math(A > B, X)
  => current_op(Prec, xfx, >),
