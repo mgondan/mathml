@@ -1,24 +1,21 @@
 % p-value
-math_hook(pval(A), M, Flags, Flags1) :-
+math_hook(pval(A), M, Flags) :-
     type(A, T, Flags),
     member(numeric(N), T),
     N =< 1,
     N >= 0.1,
     !,
-    M = A,
-    Flags1 = [round(2) | Flags].
+    M = round(A, 2).
 
-math_hook(pval(A), M, Flags, Flags1) :-
+math_hook(pval(A), M, Flags) :-
     type(A, T, Flags),
     member(numeric(_N), T),
     !,
-    M = A,
-    Flags1 = [round(3) | Flags].
+    M = round(A, 3).
 
-math_hook(pval(A), M, Flags, Flags1) :-
+math_hook(pval(A), M, _Flags) :-
     !,
-    M = A,
-    Flags1 = Flags.
+    M = round(A, 4).
 
 math_hook(pval(A, P), M, Flags) :-
     type(A, T, Flags),

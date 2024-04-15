@@ -11,10 +11,8 @@
 % From R, the hook is installed by
 % mathml::hook(t0, subscript(t, 0))
 %
-:- dynamic math_hook/2.
-:- multifile math_hook/2.
-:- multifile math/4.
-:- multifile math/3.
+:- dynamic math_hook/2, math_hook/3, math_hook/4.
+:- multifile math_hook/2, math_hook/3, math_hook/4.
 
 % Low-level functions (see, e.g. nthroot.pl)
 %
@@ -68,10 +66,20 @@ mathjax(R, M, Flags)
 % Translates the R expression to another R expression M, checking for Flags
 % and eventually changing Flags to Flags1
 %
-macro(R, M, Flags, Flags1) :-
-    math_hook(R, M0),            % math hook from R
+macro(A, A1, Flags, Flags1) :-
+    math_hook(A, A0, Flags, Flags0),
+    !, Flags1 = Flags0,
+    A1 = A0.
+
+macro(A, A1, Flags, Flags1) :-
+    math_hook(A, A0, Flags),
     !, Flags1 = Flags,
-    M = M0.
+    A1 = A0.
+
+macro(A, A1, Flags, Flags1) :-
+    math_hook(A, A0),
+    !, Flags1 = Flags,
+    A1 = A0.
 
 macro(R, M, Flags, Flags1) :-
     math(R, M, Flags, Flags1),   % math/4 macro changing Flags
