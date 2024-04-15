@@ -1,6 +1,11 @@
+:- module(pval, []).
+:- reexport(library(mathml)).
+
+:- multifile math_hook/2, math_hook/3, math_hook/4.
+
 % p-value
 math_hook(pval(A), M, Flags, Flags1) :-
-    type(A, T, Flags),
+    mathml:type(A, T, Flags),
     member(numeric(N), T),
     N =< 1,
     N >= 0.1,
@@ -9,7 +14,7 @@ math_hook(pval(A), M, Flags, Flags1) :-
     Flags1 = [round(2) | Flags].
 
 math_hook(pval(A), M, Flags, Flags1) :-
-    type(A, T, Flags),
+    mathml:type(A, T, Flags),
     member(numeric(_N), T),
     !,
     M = A,
@@ -21,7 +26,7 @@ math_hook(pval(A), M, Flags, Flags1) :-
     Flags1 = Flags.
 
 math_hook(pval(A, P), M, Flags) :-
-    type(A, T, Flags),
+    mathml:type(A, T, Flags),
     member(numeric(N), T),
     N < 0.001,
     !,
