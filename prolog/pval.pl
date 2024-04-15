@@ -20,7 +20,7 @@ math_hook(pval(A), M, Flags, Flags1) :-
     M = A,
     Flags1 = [round(3) | Flags].
 
-math_hook(pval(A), M, Flags, Flags1) :-
+mathml:math_hook(pval(A), M, Flags, Flags1) :-
     !,
     M = A,
     Flags1 = Flags.
@@ -32,6 +32,6 @@ math_hook(pval(A, P), M, Flags) :-
     !,
     M = (P < pval(0.001)).
 
-math_hook(pval(A, P), M, _Flags) :-
+mathml:math_hook(pval(A, P), M, _Flags) :-
     !,
     M = (P == pval(A)).
