@@ -32,6 +32,6 @@ math_hook(pval(A, P), M, Flags) :-
     !,
     M = (P < pval(0.001)).
 
-mathml:math_hook(pval(A, P), M, _Flags) :-
+math_hook(pval(A, P), M, _Flags) :-
     !,
     M = (P == pval(A)).
