@@ -1857,8 +1857,7 @@ math('%<=>%'(A, B), X)
 
 math('%->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    Prec1 is Prec - 50,
-    X = yfy(Prec1, '%->%', A, B).
+    X = yfy(Prec, '%->%', A, B).
 
 math('%=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
@@ -1901,23 +1900,19 @@ math('%prop%'(A, B), X)
     X = yfy(Prec, '%prop%', A, B).
 
 math('%>%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
-    X = yfy(Prec, '%>%', A, B).
+ => current_op(Prec, xfy, ','),
+    X = yfy(900, '%>%', A, B).
 
 math('%,%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, xfy, ','),
     X = yfy(Prec, '%,%', A, B).
 
 math('%|%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, xfy, ';'),
     X = yfy(Prec, '%|%', A, B).
 
 math(~(A), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, fy, \+),
     X = fy(Prec, ~, A).
 
 math(A > B, X)
