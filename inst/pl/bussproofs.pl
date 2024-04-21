@@ -96,6 +96,15 @@ mlx(ax(A, B), M, Flags) :-
     ml(mpadded_right(R3), R4, Flags),
     M = mrow([F2, R4]).
 
+mlx(asq(A, B), M, Flags) :-
+    ml(proof(A, B), F1, Flags),
+    ml(proof_tree(F1), F2, Flags),
+    ml(ident('Asq.'), R1, [mathvariant(italic)]),
+    ml(size(R1, '0.7em'), R2, Flags),
+    ml(mstyle_right(R2), R3, Flags),
+    ml(mpadded_right(R3), R4, Flags),
+    M = mrow([mathcolor(red)], [F2, R4]).
+
 % Render in MathJax
 % jaxx(rcond(A, B), M, Flags) :-
 %     jax(A, A1, Flags),
