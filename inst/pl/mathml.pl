@@ -1647,6 +1647,9 @@ jax(op('%prop%'), M, _Flags)
 ml(op('%>%'), M, _Flags)
  => M = mo(&('#x22A2')).
 
+ml(op('%<%'), M, _Flags)
+ => M = mo(&('#x22AC')).
+
 ml(op('%,%'), M, _Flags)
  => M = mo(',').
 
@@ -1857,8 +1860,7 @@ math('%<=>%'(A, B), X)
 
 math('%->%'(A, B), X)
  => current_op(Prec, xfy, ->),
-    Prec1 is Prec - 50,
-    X = yfy(Prec1, '%->%', A, B).
+    X = yfy(Prec, '%->%', A, B).
 
 math('%=>%'(A, B), X)
  => current_op(Prec, xfy, ->),
@@ -1901,23 +1903,23 @@ math('%prop%'(A, B), X)
     X = yfy(Prec, '%prop%', A, B).
 
 math('%>%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, xfy, ','),
     X = yfy(Prec, '%>%', A, B).
 
+math('%<%'(A, B), X)
+ => current_op(Prec, xfy, ','),
+    X = yfy(Prec, '%<%', A, B).
+
 math('%,%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, xfy, ','),
     X = yfy(Prec, '%,%', A, B).
 
 math('%|%'(A, B), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, xfy, ';'),
     X = yfy(Prec, '%|%', A, B).
 
 math(~(A), X)
- => current_op(Prec1, xfy, ','),
-    Prec is Prec1 - 1,
+ => current_op(Prec, fy, \+),
     X = fy(Prec, ~, A).
 
 math(A > B, X)

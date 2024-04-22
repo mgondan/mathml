@@ -874,6 +874,30 @@ math(term)
 term <- quote(rcond(''%>%(A&B)%=>%A, land(A&B%>%A, ax(A%,%B%>%A,''))))
 math(term)
 ```
+
+## P-value
+With pval/2, a value specified as first argument can be displayed with the following rounding rules:  
+
+0.1 < value < 1 : two digits  
+0.001 < value < 0.1 : three digits  
+value < 0.0001 : output defaults to "< 0.0001". 
+
+The identifier for the value is provided as second argument.
+
+```{r}
+library(mathml)
+rolog::consult(system.file(file.path("pl", "pval.pl"), package="mathml"))
+
+term <- quote(pval(0.539, P))
+math(term)
+
+term <- quote(pval(0.0137, p))
+math(term)
+
+term <- quote(pval(0.0003, P))
+math(term)
+
+```
 <br><br>
 
 # Acknowledgment
