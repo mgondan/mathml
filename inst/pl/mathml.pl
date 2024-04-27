@@ -1910,6 +1910,10 @@ math('%>%'(A, B), X)
  => current_op(Prec, xfy, ','),
     X = yfy(Prec, '%>%', A, B).
 
+math('%<%'(A), X)
+ => current_op(Prec, xfy, ','),
+    X = fy(Prec, '%<%', A).
+
 math('%<%'(A, B), X)
  => current_op(Prec, xfy, ','),
     X = yfy(Prec, '%<%', A, B).
