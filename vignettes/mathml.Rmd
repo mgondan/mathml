@@ -869,7 +869,7 @@ the precedences defined in Prolog, the prefix notation should be used.
 ```{r}
 rolog::consult(system.file(file.path("pl", "bussproofs.pl"), package="mathml"))
 
-term <- quote(rcond(A, B))
+term <- quote(rcond('%>%'(P %->% P), ax(P %>% P, '')))
 math(term)
 
 term <- quote(ror('%>%'('', '%|%'(A, ~A)), 
