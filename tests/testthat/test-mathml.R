@@ -571,31 +571,35 @@ test_that("pnorm",
 test_that("qnorm",
           {
             q <- mathml(quote(qnorm(alpha/2)))
-            expect_equal(q,"<math><mrow><msup><mi>&Phi;</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&alpha;</mi><mo>/</mo><mn>2.00</mn></mrow><mo>)</mo></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><msup><mi>&Phi;</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&alpha;</mi><mo>/</mo><mn>%s</mn></mrow><mo>)</mo></mrow></mrow></math>", format(2, nsmall=getOption("digits"))))
           })
 
 test_that("1mpchisq",
           {
             q <- mathml(quote(1 - pchisq(x, 1)))
-            expect_equal(q,"<math><mrow><mn>1.00</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><mn>%s</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>",
+                                    format(1, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
 test_that("pchisq1malpha",
           {
             q <- mathml(quote(qchisq(1 - alpha, 1)))
-            expect_equal(q,"<math><mrow><msubsup><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>1.00</mn><mo>-</mo><mi>&alpha;</mi></mrow><mo>)</mo></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><msubsup><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mo>-</mo><mi>&alpha;</mi></mrow><mo>)</mo></mrow></mrow></math>",
+                                    format(1, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
 test_that("ptnm1",
           {
             q <- mathml(quote(pt(t, N - 1)))
-            expect_equal(q, "<math><mrow><mi>P</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>T</mi><mo>&le;</mo><mi>t</mi></mrow><mo>;</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>1.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow></mrow><mo>)</mo></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><mi>P</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>T</mi><mo>&le;</mo><mi>t</mi></mrow><mo>;</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow></mrow><mo>)</mo></mrow></mrow></math>", 
+                         format(1, nsmall=getOption("digits"))))
           })
 
 test_that("qtalpha2nm1",
           {
             q <- mathml(quote(qt(alpha/2, N - 1)))
-            expect_equal(q, "<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>2.00</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>1.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>%s</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>",
+                         format(2, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
 test_that("AXB",
@@ -775,7 +779,8 @@ test_that("functionifelse",
 test_that("integrate",
           {
             q <- mathml(canonical(integrate(lower=0L, upper=2L*pi, sin)))
-            expect_equal(q, "<math><mrow><mrow><mi>value</mi><mo>-</mo><mn>0.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>abs.error</mi><mo>-</mo><mn>0.00</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>subdivisions</mi><mo>-</mo><mn>1</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>message</mi><mo>-</mo><mtext>OK</mtext></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>call</mi><mo>-</mo><mrow><mi>integrate</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>f</mi><mo>=</mo><mi>sin</mi></mrow><mo>,</mo><mrow><mi>lower</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mi>upper</mi><mo>=</mo><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math>")
+            expect_equal(q, sprintf("<math><mrow><mrow><mi>value</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>abs.error</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>subdivisions</mi><mo>-</mo><mn>1</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>message</mi><mo>-</mo><mtext>OK</mtext></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>call</mi><mo>-</mo><mrow><mi>integrate</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>f</mi><mo>=</mo><mi>sin</mi></mrow><mo>,</mo><mrow><mi>lower</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mi>upper</mi><mo>=</mo><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math>",
+                                    format(0, nsmall=getOption("digits")), format(0, nsmall=getOption("digits"))))
           })
 
 v <- 1:3
