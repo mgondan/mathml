@@ -2011,8 +2011,8 @@ math(A / B, X)
     X = yfx(Prec, /, A, B).
 
 math((A ; B), X)
- => current_op(Prec, xfy, ;),
-    X = xfy(Prec, ;, A, B).
+ => current_op(Prec, xfx, =),
+    X = yfy(Prec, ;, A, B).
 
 math(A^B, X)
  => X = superscript(A, B).
