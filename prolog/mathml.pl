@@ -1763,10 +1763,10 @@ ml(pos(1.0Inf), M, _Flags)
 % Default number of decimals is 2, change it using Flags
 math(round(A, D), M, Flags0, Flags1)
  => M = A,
-    Flags1 = [round(D) | Flags0].
+    Flags1 = [digits(D) | Flags0].
 
 ml(pos(A), M, Flags)
- => option_(round(D), Flags, 2),
+ => option_(digits(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
     format(string(X), Mask, [A]),
     M = mn(X).
@@ -1778,7 +1778,7 @@ jax(pos(1.0Inf), M, _Flags)
  => M = "\\infty".
 
 jax(pos(A), M, Flags)
- => option_(round(D), Flags, 2),
+ => option_(digits(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
 

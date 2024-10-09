@@ -1761,15 +1761,15 @@ ml(pos(1.0Inf), M, _Flags)
 % Default number of decimals is getOption("digits") from R
 math(round(A, D), M, Flags0, Flags1)
  => M = A,
-    Flags1 = [round(D) | Flags0].
+    Flags1 = [digits(D) | Flags0].
 
 digits(Flags, D),
     r_eval(getOption("digits"), Default),
     integer(Default)
- => option_(round(D), Flags, Default).
+ => option_(digits(D), Flags, Default).
 
 digits(Flags, D)
- => option_(round(D), Flags, 2).
+ => option_(digits(D), Flags, 2).
 
 ml(pos(A), M, Flags)
  => digits(Flags, D),
