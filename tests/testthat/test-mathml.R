@@ -869,3 +869,9 @@ test_that("Tdiamond",
             q <- mathml(quote(T^diamond))
             expect_equal(q, "<math><msup><mi>T</mi><mi>&diamond;</mi></msup></math>")
           })
+
+test_that("digits",
+          {
+            q <- mathml(quote(3.14159265), flags=list(quote(digits(4L))))
+            expect_equal(q, "<math><mn>3.1416</mn></math>")
+          })
