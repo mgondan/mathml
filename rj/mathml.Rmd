@@ -267,10 +267,10 @@ escape <- function(s)
   }
   
   if(knitr::is_html_output())
-    return(sapply(s, FUN=knitr:::escape_html))
+    return(sapply(s, FUN=xfun::html_escape))
   
   warning("escape: no knitr output specified")
-  sapply(s, FUN=knitr:::escape_html)
+  sapply(s, FUN=xfun::html_escape)
 }
 
 op1 <- list(
