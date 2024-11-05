@@ -246,7 +246,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+  op1 <- sapply(op1, FUN=xfun::html_escape)
 
 op2 <- list(
   "A\\ !=\\ B"=quote(A != B),
@@ -267,7 +267,7 @@ op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
+  op2 <- sapply(op2, FUN=xfun::html_escape)
 
 op3 <- list(
   "A\\ %<->%\\ B"=quote(A %<->% B),
@@ -288,7 +288,7 @@ op3 <- names(op3)
 if(knitr::is_latex_output())
   op3 <- sapply(op3, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op3 <- sapply(op3, FUN=knitr:::escape_html)
+  op3 <- sapply(op3, FUN=xfun::html_escape)
 
 t <- cbind(Operator=op1, Output=m1,
   Operator=op2, Output=m2,
@@ -336,7 +336,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+  op1 <- sapply(op1, FUN=xfun::html_escape)
 
 op2 <- list(
   "dbinom(k,\\ N,\\ pi)"=quote(dbinom(k, N, pi)),
@@ -361,7 +361,7 @@ op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=knitr:::escape_html)
+  op2 <- sapply(op2, FUN=xfun::html_escape)
 
 t <- cbind(Function=op1, Output=m1, Function=op2, Output=m2)
 knitr::kable(t, caption="Table 2. R functions from _base_ and _stats_",
@@ -596,7 +596,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=knitr:::escape_html)
+  op1 <- sapply(op1, FUN=xfun::html_escape)
 
 t <- cbind(Operation=op1, 
   "error\\ =\\ asis"=asis, highlight=high, fix=fix, ignore=igno)
