@@ -16,19 +16,6 @@ Vignette: >
 
 ```{r setup, include=FALSE}
 library(mathml)
-
-xfun_html_escape <- function (x, attr=FALSE) 
-{
-    x = gsub("&", "&amp;", x, fixed=TRUE)
-    x = gsub("<", "&lt;", x, fixed=TRUE)
-    x = gsub(">", "&gt;", x, fixed=TRUE)
-    if (attr) {
-        x = gsub("\"", "&quot;", x, fixed=TRUE)
-        x = gsub("\r", "&#13;", x, fixed=TRUE)
-        x = gsub("\n", "&#10;", x, fixed=TRUE)
-    }
-    x
-}
 ```
 
 The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
@@ -259,7 +246,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=xfun_html_escape, attr=TRUE)
+  op1 <- sapply(op1, FUN=xfun::html_escape, attr=TRUE)
 
 op2 <- list(
   "A\\ !=\\ B"=quote(A != B),
@@ -280,7 +267,7 @@ op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=xfun_html_escape, attr=TRUE)
+  op2 <- sapply(op2, FUN=xfun::html_escape, attr=TRUE)
 
 op3 <- list(
   "A\\ %<->%\\ B"=quote(A %<->% B),
@@ -301,7 +288,7 @@ op3 <- names(op3)
 if(knitr::is_latex_output())
   op3 <- sapply(op3, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op3 <- sapply(op3, FUN=xfun_html_escape, attr=TRUE)
+  op3 <- sapply(op3, FUN=xfun::html_escape, attr=TRUE)
 
 t <- cbind(Operator=op1, Output=m1,
   Operator=op2, Output=m2,
@@ -349,7 +336,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=xfun_html_escape, attr=TRUE)
+  op1 <- sapply(op1, FUN=xfun::html_escape, attr=TRUE)
 
 op2 <- list(
   "dbinom(k,\\ N,\\ pi)"=quote(dbinom(k, N, pi)),
@@ -374,7 +361,7 @@ op2 <- names(op2)
 if(knitr::is_latex_output())
   op2 <- sapply(op2, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op2 <- sapply(op2, FUN=xfun_html_escape, attr=TRUE)
+  op2 <- sapply(op2, FUN=xfun::html_escape, attr=TRUE)
 
 t <- cbind(Function=op1, Output=m1, Function=op2, Output=m2)
 knitr::kable(t, caption="Table 2. R functions from _base_ and _stats_",
@@ -609,7 +596,7 @@ op1 <- names(op1)
 if(knitr::is_latex_output())
   op1 <- sapply(op1, FUN=knitr:::escape_latex)
 if(knitr::is_html_output())
-  op1 <- sapply(op1, FUN=xfun_html_escape, attr=TRUE)
+  op1 <- sapply(op1, FUN=xfun::html_escape, attr=TRUE)
 
 t <- cbind(Operation=op1, 
   "error\\ =\\ asis"=asis, highlight=high, fix=fix, ignore=igno)
