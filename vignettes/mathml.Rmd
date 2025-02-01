@@ -33,7 +33,7 @@ cases, these commands are tedious to type and their source code is hard to
 read.
 
 The present R\ package defines a set of rules for the automatic translation of
-R\ expressions to mathematical output in R\ Markdown documents [@Xie2020] and
+R\ expressions to mathematical output in R Markdown documents [@Xie2020] and
 Shiny Apps [@Chang2022]. The translation is done by an embedded Prolog
 interpreter that maps nested expressions recursively to MathML and
 LaTeX/MathJax, respectively. User-defined hooks enable extension of the set of
@@ -95,7 +95,7 @@ necessary in edge cases. The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is
-invoked [see the vignette on custom print methods in @knitr]. An R\ Markdown
+invoked [see the vignette on custom print methods in @knitr]. An R Markdown
 code chunk with `mathout(term)` thus produces:
 
 ````{r, echo=FALSE}
@@ -614,10 +614,10 @@ extends the current features of R\ and existing packages for displaying
 mathematical formulas in R\ [@murrell2000], but most
 importantly, _mathml_ bridges the gap between computational needs,
 presentation of results, and their reproducibility. The package supports both
-MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
+MathML and LaTeX/MathJax for use in R Markdown documents, presentations and
 Shiny App webpages.
 
-Researchers or teachers can already use R\ Markdown to conduct analyses and show
+Researchers or teachers can already use R Markdown to conduct analyses and show
 results, and _mathml_ smoothes this process and allows for integrated
 calculations and output. As shown in the case study of the previous
 section, _mathml_ can help to improve data analyses and statistical reports
