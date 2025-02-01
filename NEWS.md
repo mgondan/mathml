@@ -1,3 +1,8 @@
+# mathml 1.3
+
+* Maintainance release
+* Hopefully fixes CRAN problems reported for MKL
+
 # mathml 1.2
 
 * Revision 2 of manuscript
