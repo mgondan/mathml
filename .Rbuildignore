@@ -4,3 +4,4 @@
 ^pack.pl$
 ^prolog/
 ^test/
+^\.github/
