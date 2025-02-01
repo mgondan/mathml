@@ -20,7 +20,7 @@ library(mathml)
 
 The R\ extension of the markdown language [@Xie2018;@rmarkdown] enables
 reproducible statistical reports with nice typesetting in HTML, Microsoft Word,
-and LaTeX. Moreover, since recently [@R, version 4.2], R\'s manual pages 
+and LaTeX. Moreover, since recently [@R, version 4.3], R\'s manual pages 
 include support for mathematical expressions [@Sarkar2022;@Viechtbauer2022],
 which is already a big improvement. However, except for special cases 
 such as regression models [@equatiomatic] and R's own plotmath annotation, 
@@ -53,7 +53,7 @@ R\ functions (e.g., `quote()`, `call()` etc.) that allow the user to create R\ c
 which can be stored in regular variables and then, for example, evaluated at
 a later stage or in a specific environment [@Wickham2019]. The present package
 includes a set of rules that translate such calls to a mathematical
-representation in MathML and LaTeX. For a first illustration of the \pkg{mathml}
+representation in MathML and LaTeX. For a first illustration of the _mathml_
 package, we consider the binomial probability.
 
 ```{r}
@@ -612,16 +612,16 @@ Further customization requires the assertion of new Prolog rules `math/2`,
 This package allows R\ to render its terms in pretty mathematical equations. It
 extends the current features of R\ and existing packages for displaying
 mathematical formulas in R\ [@murrell2000], but most
-importantly, \pkg{mathml} bridges the gap between computational needs,
+importantly, _mathml_ bridges the gap between computational needs,
 presentation of results, and their reproducibility. The package supports both
 MathML and LaTeX/MathJax for use in R\ Markdown documents, presentations and
 Shiny App webpages.
 
 Researchers or teachers can already use R\ Markdown to conduct analyses and show
-results, and \pkg{mathml} smoothes this process and allows for integrated
+results, and _mathml_ smoothes this process and allows for integrated
 calculations and output. As shown in the case study of the previous
-section, \pkg{mathml} can help to improve data analyses and statistical reports
-from an aesthetical perspective, as well as regarding reproducibility of
+section, _mathml_ can help to improve data analyses and statistical reports
+from an aesthetic perspective, as well as regarding reproducibility of
 research.
 
 Furthermore, the package may also allow for a better detection of possible
@@ -669,11 +669,11 @@ substantially reduce the amount of careless errors in programming.
 One limitation of the package is the lack of a convenient way to insert line
 breaks. This is mostly due to lacking support by MathML and LaTeX renderers. 
 For example, in its current stage, the LaTeX package breqn [@breqn] is mostly
-a proof of concept. Moreover, \pkg{mathml} only works in one direction,
+a proof of concept. Moreover, _mathml_ only works in one direction,
 that is, it is not possible to translate from LaTeX or HTML back to R 
 [see @latex2r, for an example].
 
-The package \pkg{mathml} is available for R\ version 4.2 and later, and can be
+The package _mathml_ is available for R\ version 4.2 and later, and can be
 easily installed using the usual `install.packages("mathml")`. At its present
 stage, it supports output in HTML, LaTeX, and Microsoft 
 Word [via pandoc, @pandoc]. The source code of the package is found
@@ -701,16 +701,16 @@ It's not entirely clear why this is needed.
 ## Implementation details
 
 For convenience, the translation of the R expressions is achieved through a
-Prolog interpreter provided by another R\ package \CRANpkg{rolog} [@rolog]. If a
-version of SWI-Prolog [@swipl] is found on the system, \CRANpkg{rolog} connects
+Prolog interpreter provided by another R\ package _rolog_ [@rolog]. If a
+version of SWI-Prolog [@swipl] is found on the system, _rolog_ connects
 to it. Alternatively, the SWI-Prolog runtime libraries can be conveniently
-accessed by installing the R\ package \CRANpkg{rswipl} [@rswipl]. Prolog is a
+accessed by installing the R\ package _rswipl_ [@rswipl]. Prolog is a
 classical logic programming language with many applications in expert systems,
 computer linguistics and symbolic artificial intelligence. The strength of
 Prolog lies in its concise representation of facts and rules for knowledge and
 grammar, as well as its efficient built-in search engine for closed world
 domains. Whereas Prolog is weak in statistical computation, but strong in
-symbolic manipulation, the converse may be said for the R\ language. \pkg{rolog}
+symbolic manipulation, the converse may be said for the R\ language. _rolog_
 bridges this gap by providing an interface to a SWI-Prolog
 distribution [@swipl] in R. The communication between the two systems is mainly
 in the form of queries from R\ to Prolog, but two Prolog functions allow ring
@@ -756,7 +756,7 @@ In this appendix we describe a few more ways to extend the set of translations
 according to a user's needs. As stated in the background section, the Prolog end
 provides two classes of rules for translation, macros `math/2,3,4` mirroring the
 R\ hooks mentioned above, and the low-level predicates `ml/3` and `jax/3` that
-create proper MathML and LateX terms.
+create proper MathML and LaTeX terms.
 
 ## Linear models
 
@@ -834,7 +834,7 @@ mlx(nthroot(X, N), M, Flags) :-
 
 The explicit unification `M = ...` in the last line serves to avoid clutter in
 the head of `mlx/3`. The Prolog file `nthroot.pl` also includes the respective
-rule for LateX and can be consulted from the package folder via the underlying
+rule for LaTeX and can be consulted from the package folder via the underlying
 package _rolog_.
 
 ```{r}
@@ -889,12 +889,14 @@ lor(A%|%B%>%B,
 math(term)
 ```
 
-## P-value
-With pval/2, a value specified as first argument can be displayed with the following rounding rules:  
+## P-values
 
-0.1 < value < 1 : two digits  
-0.001 < value < 0.1 : three digits  
-value < 0.0001 : output defaults to "< 0.0001". 
+With pval/2, a value specified as first argument can be displayed with the
+following rounding rules:  
+
+* 0.1 < value < 1 : two digits  
+* 0.001 < value < 0.1 : three digits  
+* value < 0.0001 : output defaults to "< 0.0001". 
 
 The identifier for the value is provided as second argument.
 
@@ -910,9 +912,12 @@ math(term)
 
 term <- quote(pval(0.0003, P))
 math(term)
-
 ```
-<br><br>
+
+The file `prolog/pval.pl` illustrates how to distinguish the above cases in
+Prolog. Two nested `math_hook` macros are used to decide if an equation sign
+is needed or the less-than sign, and to determine the number of decimal places
+shown.
 
 # Acknowledgment
 
