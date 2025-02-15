@@ -28,7 +28,8 @@ BugReports: https://github.com/mgondan/mathml/issues
 LinkingTo:
 Suggests: 
     rmarkdown,
-    testthat
+    testthat,
+    rswipl
 VignetteBuilder:
     knitr,
     rmarkdown
