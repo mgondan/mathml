@@ -459,7 +459,7 @@ math(hyph(L, R), M, _Flags)
 ml(hyph(L, R), M, Flags)
  => ml(L, X, Flags),
     ml(R, Y, Flags),
-    M = mtext([X, &('#8209'), Y]). 
+    M = mrow([X, &('#8209'), Y]). 
 
 jax(hyph(L, R), M, Flags)
  => jax(L, X, Flags),
