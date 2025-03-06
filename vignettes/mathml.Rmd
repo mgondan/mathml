@@ -920,7 +920,8 @@ is needed or the less-than sign, and to determine the number of decimal places
 shown.
 
 The file also includes the convenience function `tstat/1` that rounds to two
-digits.
+digits, and `percent/1` that displays a number as a
+percentage (e.g., 0.05 as 5%).
 
 # Acknowledgment
 

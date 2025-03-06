@@ -1768,7 +1768,8 @@ math(round(A, D), M, Flags0, Flags1)
 ml(pos(A), M, Flags)
  => option_(digits(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
-    format(string(X), Mask, [A]),
+    option_(mult(F), Flags, 1),
+    format(string(X), Mask, [F*A]),
     M = mn(X).
 
 jax(posint(A), M, _Flags)

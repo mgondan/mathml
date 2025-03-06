@@ -37,7 +37,12 @@ mathml:math_hook(pval(A, P), M, _Flags) :-
     M = (P == pval(A)).
 
 mathml:math_hook(tstat(A), M, Flags, Flags1) :-
-    !,
     M = A,
     Flags1 = [digits(2) | Flags].
+
+mathml:math_hook(percent(A), M, Flags, Flags1) :-
+    option(digits(D), Flags, 2),
+    D1 is D - 2,
+    Flags1 = [digits(D1), mult(100) | Flags],
+    M = list("", [A, '%']).
 
