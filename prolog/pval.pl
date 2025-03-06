@@ -35,3 +35,9 @@ mathml:math_hook(pval(A, P), M, Flags) :-
 mathml:math_hook(pval(A, P), M, _Flags) :-
     !,
     M = (P == pval(A)).
+
+mathml:math_hook(tstat(A), M, Flags, Flags1) :-
+    !,
+    M = A,
+    Flags1 = [digits(2) | Flags].
+
