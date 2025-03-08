@@ -2920,9 +2920,21 @@ type(A, Type, _Flags),
  => Type = compound.
 
 denoting(A, Den, Flags),
-    math(A, M, Flags, New),
-    dif(Flags-A, New-M)
- => denoting(M, Den, New).
+    math_hook(A, M)
+ => denoting(M, Den, Flags).
+
+denoting(A, Den, Flags),
+    math_hook(A, M, Flags)
+ => denoting(M, Den, Flags).
+
+denoting(A, Den, Flags),
+    math_hook(A, M, Flags, Flags1)
+ => denoting(M, Den, Flags1).
+
+denoting(A, Den, Flags),
+    math(A, M, Flags, Flags1),
+    dif(A-Flags, M-Flags1)
+ => denoting(M, Den, Flags1).
 
 denoting(Expression, Den, Flags),
     compound(Expression)
