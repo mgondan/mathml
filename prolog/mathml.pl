@@ -1833,6 +1833,9 @@ math(A \= B, X)
  => current_op(Prec, xfx, \=),
     X = xfx(Prec, ne, A, B).
 
+math(A =\= B, X)
+ => X = (A \= B).
+
 math(A < B, X)
  => current_op(Prec, xfx, <),
     X = yfy(Prec, <, A, B).
