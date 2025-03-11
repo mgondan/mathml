@@ -2116,31 +2116,37 @@ denoting(yfy(_, _, A, B), D, Flags)
     denoting(B, DB, Flags),
     append(DA, DB, D).
 
-paren(fy(_, _, A), P, Flags)
+paren(fy(_Prec, _Op, A), P, Flags)
  => paren(A, P, Flags).
 
-paren(yf(_, _, A), P, Flags)
+paren(fx(_Prec, _Op, A), P, Flags)
  => paren(A, P, Flags).
 
-paren(xfx(_, _, A, B), P, Flags)
- => paren(A, PA, Flags),
-    paren(B, PB, Flags),
-    P is max(PA, PB).
+paren(xf(_Prec, _Op, A), P, Flags)
+ => paren(A, P, Flags).
 
-paren(yfx(_, _, A, B), P, Flags)
- => paren(A, PA, Flags),
-    paren(B, PB, Flags),
-    P is max(PA, PB).
+paren(yf(_Prec, _Op, A), P, Flags)
+ => paren(A, P, Flags).
 
-paren(xfy(_, _, A, B), P, Flags)
- => paren(A, PA, Flags),
-    paren(B, PB, Flags),
-    P is max(PA, PB).
+paren(xfx(Prec, _Op, A, B), P, Flags)
+ => paren(left(Prec, A), P1, Flags),
+    paren(right(Prec, B), P2, Flags),
+    P is max(P1, P2).
 
-paren(yfy(_, _, A, B), P, Flags)
- => paren(A, PA, Flags),
-    paren(B, PB, Flags),
-    P is max(PA, PB).
+paren(xfy(Prec, _Op, A, B), P, Flags)
+ => paren(left(Prec, A), P1, Flags),
+    paren(right(Prec, B), P2, Flags),
+    P is max(P1, P2).
+
+paren(yfx(Prec, _Op, A, B), P, Flags)
+ => paren(left(Prec, A), P1, Flags),
+    paren(right(Prec, B), P2, Flags),
+    P is max(P1, P2).
+
+paren(yfy(Prec, _Op, A, B), P, Flags)
+ => paren(left(Prec, A), P1, Flags),
+    paren(right(Prec, B), P2, Flags),
+    P is max(P1, P2).
 
 prec(fy(Prec, _, _), P, _Flags)
  => P = Prec.
@@ -2887,6 +2893,18 @@ paren(A, P, Flags),
 paren(A, P, Flags),
     math(A, M, Flags, New),
     dif(Flags-A, New-M)
+ => paren(M, P, New).
+
+paren(A, P, Flags),
+    math_hook(A, M)
+ => paren(M, P, Flags).
+
+paren(A, P, Flags),
+    math_hook(A, M, Flags)
+ => paren(M, P, Flags).
+
+paren(A, P, Flags),
+    math_hook(A, M, Flags, New)
  => paren(M, P, New).
 
 paren(_A, P, _Flags)
