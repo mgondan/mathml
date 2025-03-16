@@ -2715,11 +2715,13 @@ math(pt(Dist, Df, _Tail), M)
  => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
 
 math(dist(T, _t, Tail), M),
-    r_eval(Tail, "lower")
+    r_eval(Tail, Lower),
+    Lower = "lower"
  => M = (T =< _t).
 
 math(dist(T, _t, Tail), M),
-    r_eval(Tail, "upper")
+    r_eval(Tail, Upper),
+    Upper = "upper"
  => M = (T > _t).
 
 math(qt(Alpha, Df), M)
