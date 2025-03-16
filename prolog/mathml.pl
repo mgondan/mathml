@@ -2714,16 +2714,18 @@ math(qchisq(Alpha, Df), M)
 math(pt(Dist, Df, _Tail), M)
  => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
 
-math(dist(T, _t, Tail), M),
-    r_eval(Tail, Lower),
-    Lower = "lower"
+math(pt(Dist, Df, _Tail), M)
+ => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
+
+math(dist(T, _t, "lower"), M)
  => M = (T =< _t).
 
-math(dist(T, _t, Tail), M),
-    r_eval(Tail, Upper),
-    Upper = "upper"
+math(dist(T, _t, "upper"), M)
  => M = (T > _t).
 
+math(dist(T, _t, "two.sided"), M)
+ => M = (abs(T) > abs(_t)).
+ 
 math(qt(Alpha, Df), M)
  => M = fn(subscript('T', Alpha), [list(space, [Df, "df"])]).
 
