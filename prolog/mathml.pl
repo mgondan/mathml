@@ -4,6 +4,7 @@
 :- discontiguous type/3, denoting/3, ml/3, jax/3.
 
 :- use_module(library(http/html_write)).
+:- use_module(library(rolog)).
 
 % Hook to defined own macros
 %
@@ -2710,8 +2711,16 @@ math(pchisq(X, Df), M)
 math(qchisq(Alpha, Df), M)
  => M = fn(subscript('F' ^ -1, fn(chi^2, [list(space, [Df, "df"])])), [Alpha]).
 
-math(pt(T, Df), M)
- => M = fn('P', (['T' =< T] ; [list(space, [Df, "df"])])).
+math(pt(Dist, Df, _Tail), M)
+ => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
+
+math(dist(T, _t, Tail), M),
+    r_eval(Tail, "lower")
+ => M = (T =< _t).
+
+math(dist(T, _t, Tail), M),
+    r_eval(Tail, "upper")
+ => M = (T > _t).
 
 math(qt(Alpha, Df), M)
  => M = fn(subscript('T', Alpha), [list(space, [Df, "df"])]).
