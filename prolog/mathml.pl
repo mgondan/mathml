@@ -1766,6 +1766,31 @@ math(round(A, D), M, Flags0, Flags1)
  => M = A,
     Flags1 = [digits(D) | Flags0].
 
+math(pos(A), M, Flags, Flags2),
+    number(A),
+    A < 0.1,
+    select_option(pval(.), Flags, Flags1)
+ => M = pos(A),
+    Flags2 = [digits(3) | Flags1].
+
+math(pos(A), M, Flags, Flags2),
+    select_option(pval(.), Flags, Flags1)
+ => M = pos(A),
+    Flags2 = [digits(2) | Flags1].
+
+math(pos(A), M, Flags, Flags2),
+    number(A),
+    A < 0.001,
+    select_option(pval(P), Flags, Flags1)
+ => M = (P < 0.001),
+    Flags2 = [pval(.) | Flags1].
+
+math(pos(A), M, Flags, Flags2),
+    number(A),
+    select_option(pval(P), Flags, Flags1)
+ => M = (P = A),
+    Flags2 = [pval(.) | Flags1].
+
 ml(pos(A), M, Flags)
  => option_(digits(D), Flags, 2),
     format(atom(Mask), '~~~wf', [D]),
@@ -2725,6 +2750,9 @@ math(dist(T, _t, "upper"), M)
 
 math(dist(T, _t, "two.sided"), M)
  => M = (abs(T) > abs(_t)).
+
+math(dist(T, _t, "density"), M)
+ => M = (T = _t).
  
 math(qt(Alpha, Df), M)
  => M = fn(subscript('T', Alpha), [list(space, [Df, "df"])]).
