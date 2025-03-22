@@ -481,7 +481,7 @@ ml(color(C, A), M, Flags),
 ml(color(C, A), M, Flags),
     string(C)
  => ml(A, X, Flags),
-    M = mstyle(mathcolor(C), X).
+    M = mrow(style("color: ~w"-C), X).
 
 jax(color(C, A), M, Flags)
  => jax(A, X, Flags),
