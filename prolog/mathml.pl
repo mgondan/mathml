@@ -1300,6 +1300,9 @@ math('which.max'(A), M)
 math('which.min'(A), M)
  => M = argmin(A).
 
+math(arg(Min, Sub), M)
+ => M = subscript(nodot(arg, Min), Sub).
+
 % Extract value from a result (e.g., integrate)
 math($(Fn, "value"), M)
  => M = Fn.
