@@ -1769,6 +1769,9 @@ math(round(A, D), M, Flags0, Flags1)
  => M = A,
     Flags1 = [digits(D) | Flags0].
 
+math(round(A), M)
+ => M = round(A, 0).
+
 math(pos(A), M, Flags, Flags2),
     number(A),
     A < 0.1,
