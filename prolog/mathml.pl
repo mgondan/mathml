@@ -2695,6 +2695,9 @@ math(dbinom(K, N, Pi), M)
 math(pbinom(K, N, Pi), M)
  => M = fn(subscript('P', "Bi"), (['X' =< K] ; [N, Pi])).
 
+math(pbinom(_K, N, Pi, Tail), M)
+ => M = fn(subscript('P', "Bi"), ([Tail] ; [N, Pi])).
+
 math(qbinom(Alpha, N, Pi), M)
  => M = fn(subscript(argmin, k),
           [fn(subscript('P', "Bi"), (['X' =< k] ; [N, Pi])) > Alpha]).
