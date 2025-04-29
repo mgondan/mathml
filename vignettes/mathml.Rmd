@@ -481,7 +481,7 @@ math(term)
 
 Note that the seemingly more convenient `term <- quote(A + B)` yields \(A + B\) in
 the output---instead of the desired matrix representation. This behavior is
-expected because quotation of R calls also quote the components of the
+expected because quotation of R calls also quotes the components of the
 call (here, _A_ and _B_).
 
 ## Short mathematical names for R symbols
