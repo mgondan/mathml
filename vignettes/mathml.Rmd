@@ -518,9 +518,11 @@ hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
 math(term)
 ```
 
-The old behavior is restored with `unhook(term)`.
+The replacement can be checked with `hooked(term)`, and the old behavior is
+restored with `unhook(term)`.
 
 ```{r}
+hooked(term)
 unhook(pbinom(.K, .N, .P))
 math(term)
 ```

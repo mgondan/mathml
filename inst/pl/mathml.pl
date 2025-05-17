@@ -93,6 +93,24 @@ macro(R, M, Flags, Flags) :-
     math(R, M),                  % math/2 ignoring the flags
     dif(R, M).
 
+% Apply hook to entire expression
+math_hooked1(A, A1) :-
+    math_hook(A, A0),
+    !,
+    A1 = A0.
+
+math_hooked1(A, A).
+    
+math_hooked(A, A1) :-
+    compound(A),
+    !,
+    mapargs(math_hooked, A, A0),
+    math_hooked1(A0, A1).
+
+math_hooked(A, A1) :-
+    !,
+    math_hooked1(A, A1).
+
 % Main MathML translation
 %
 % R: R expression

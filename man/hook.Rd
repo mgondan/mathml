@@ -3,11 +3,14 @@
 \name{hook}
 \alias{hook}
 \alias{unhook}
+\alias{hooked}
 \title{Hook for custom symbols}
 \usage{
 hook(term, display, quote = TRUE, as.rolog = TRUE)
 
 unhook(term, quote = TRUE, as.rolog = TRUE)
+
+hooked(term)
 }
 \arguments{
 \item{term}{an R call or symbol/number. This is the expression to replace.}
@@ -21,14 +24,17 @@ indicates that \emph{term} and \emph{display} should be quoted.}
 indicates that simplified quasi-quotation is to be used.}
 }
 \value{
-TRUE on success
+hook and unhook return TRUE on success. hooked returns the hooked
+expression or FALSE on failure.
 }
 \description{
 hook(term, display)
 unhook(term)
+hooked(term)
 }
 \examples{
 hook(t0, subscript(t, 0))
+hooked(quote(t0))
 mathml(quote(t0))
 hook(term=quote(t0), display=quote(superscript(t, 0)), quote=FALSE)
 mathml(quote(t0))

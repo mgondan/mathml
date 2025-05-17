@@ -362,6 +362,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' 
 #' hook(term, display)
 #' unhook(term)
+#' hooked(term)
 #'
 #' @param term
 #' an R call or symbol/number. This is the expression to replace.
@@ -376,12 +377,14 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' indicates that simplified quasi-quotation is to be used.
 #'
 #' @return
-#' TRUE on success
+#' hook and unhook return TRUE on success. hooked returns the hooked
+#' expression or FALSE on failure.
 #'
 #' @md
 #'
 #' @examples
 #' hook(t0, subscript(t, 0))
+#' hooked(quote(t0))
 #' mathml(quote(t0))
 #' hook(term=quote(t0), display=quote(superscript(t, 0)), quote=FALSE)
 #' mathml(quote(t0))
@@ -424,6 +427,17 @@ unhook <- function(term, quote=TRUE, as.rolog=TRUE)
     return(FALSE)
   
   invisible(r)
+}
+
+#' @rdname hook
+#' @export
+hooked <- function(term)
+{
+  r <- rolog::once(call("math_hooked", term, expression(X)))
+  if(isFALSE(r))
+    return(FALSE)
+  
+  return(r$X)
 }
 
 #' Multiplication
