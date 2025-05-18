@@ -2,11 +2,11 @@ Package: mathml
 Type: Package
 Title: Translate R Expressions to 'MathML' and 'LaTeX'/'MathJax'
 Version: 1.4
-Date: 2025-05-17
+Date: 2025-05-18
 Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
-  email="Matthias.Gondan-Rochon@uibk.ac.at", comment="Universität Innsbruck"),
+  email="Matthias.Gondan-Rochon@uibk.ac.at", comment="University of Innsbruck"),
   person("Irene", "Alfarone", role="aut",
-  email="Irene.Alfarone@uibk.ac.at", comment="Universität Innsbruck"),
+  email="Irene.Alfarone@uibk.ac.at", comment="University of Innsbruck"),
   person("European Commission", role="fnd",
   comment="Erasmus+ Programme, 2019-1-EE01-KA203-051708"))
 Maintainer: Matthias Gondan <Matthias.Gondan-Rochon@uibk.ac.at>
