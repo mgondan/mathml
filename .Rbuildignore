@@ -1,6 +1,8 @@
 ^.*\.Rproj$
+^\.Rbuildignore$
 ^\.Rproj\.user$
-^rj
+^rj/
+^\.aspell/
 ^pack.pl$
 ^prolog/
 ^test/

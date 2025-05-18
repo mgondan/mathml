@@ -4,14 +4,14 @@
 gap between computational needs, presentation of results, and their
 reproducibility. 
 
-Researchers or teachers can already use R Markdown to conduct analyses and show
+Researchers or teachers can already use RMarkdown to conduct analyses and show
 results, `mathml` smoothes this process and allows for integrated calculations
 and output. The package `mathml` can help in fact to improve data analyses and
 statistical reports from an aesthetical perspective, as well as regarding 
 reproducibility of research, by allowing also for a better detection of possible
 mistakes in R programs. 
 
-The package supports both MathML and Latex/MathJax for use in R Markdown
+The package supports both MathML and Latex/MathJax for use in RMarkdown
 documents, presentations and Shiny Apps.
 
 ## License
