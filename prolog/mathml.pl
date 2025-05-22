@@ -42,8 +42,9 @@ pl_mathml(R, S)
 % Examples
 % see vignette of R package mathml
 %
-pl_mathml(R, S, Flags)
- => mathml(R, M, Flags),
+pl_mathml(R, S, Flags0)
+ => digits_(Flags0, Flags1),
+    mathml(R, M, Flags1),
     html(M, H, []),
     maplist(atom_string, H, S).
 
@@ -51,5 +52,14 @@ pl_mathml(R, S, Flags)
 pl_mathjax(R, S)
  => pl_mathjax(R, S, []).
 
-pl_mathjax(R, S, Flags)
- => mathjax(R, S, Flags).
+pl_mathjax(R, S, Flags0)
+ => digits_(Flags0, Flags1),
+    mathjax(R, S, Flags1).
+
+ % Default digits if not defined in flags
+ digits_(Flags0, Flags1),
+    option(digits(_), Flags0)
+ => Flags1 = Flags0.
+
+ digits_(Flags0, Flags1)
+  => Flags1 = [digits(2) | Flags0].
