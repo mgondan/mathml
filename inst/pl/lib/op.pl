@@ -1581,28 +1581,8 @@ ml(posint(A), M, _Flags)
 ml(pos(1.0Inf), M, _Flags)
  => M = mi(&('#x221E')).
 
-% Legacy code R 
-% Default number of decimals is getOption("digits") from R
-math(round(A, D), M, Flags0, Flags1)
- => M = A,
-    Flags1 = [digits(D) | Flags0].
-
-digits(Flags, D),
-    r_eval(getOption("digits"), Default),
-    integer(Default)
- => option_(digits(D), Flags, Default).
-
-digits(Flags, D)
- => option_(digits(D), Flags, 2).
-
-ml(pos(A), M, Flags)
- => digits(Flags, D),
-    format(atom(Mask), '~~~wf', [D]),
-    format(string(X), Mask, [A]),
-    M = mn(X).
-% End legacy code R 
-
-% Default number of decimals is 2, change it using Flags
+% The number of decimals is first retrieved from the flags.
+% If the 'digits' option is not set in the flags, it is retrieved with getOption("digits") from R
 math(round(A, D), M, Flags0, Flags1)
  => M = A,
     Flags1 = [digits(D) | Flags0].
@@ -1636,11 +1616,22 @@ math(pos(A), M, Flags, Flags2),
     Flags2 = [pval(.) | Flags1].
 
 ml(pos(A), M, Flags)
- => option_(digits(D), Flags, 2),
+ => digits(Flags, D),
     format(atom(Mask), '~~~wf', [D]),
-    option_(mult(F), Flags, 1),
-    format(string(X), Mask, [F*A]),
+    format(string(X), Mask, [A]),
     M = mn(X).
+
+digits(Flags0, D),
+    option(digits(D0), Flags0)
+ => D = D0.
+
+digits(Flags, D),
+    r_eval(getOption("digits"), Default),
+    integer(Default)
+ => option_(digits(D), Flags, Default).
+
+digits(Flags, D)
+ => option_(digits(D), Flags, 2).
 
 jax(posint(A), M, _Flags)
  => format(string(M), "~w", [A]).
@@ -1649,16 +1640,9 @@ jax(pos(1.0Inf), M, _Flags)
  => M = "\\infty".
 
 jax(pos(A), M, Flags)
- => option_(digits(D), Flags, 2),
-    format(atom(Mask), '~~~wf', [D]),
-    format(string(M), Mask, [A]).
-
-% Legacy code R 
-jax(pos(A), M, Flags)
  => digits(Flags, D),
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
-% End legacy code R 
 
 type(pos(A), Type, _Flags)
  => Type = [numeric(A), atomic].
