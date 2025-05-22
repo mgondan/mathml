@@ -43,7 +43,8 @@ pl_mathml(R, S)
 % see vignette of R package mathml
 %
 pl_mathml(R, S, Flags)
- => mathml(R, M, Flags),
+ => digits(Flags, Flags1),
+    mathml(R, M, Flags1),
     html(M, H, []),
     maplist(atom_string, H, S).
 
@@ -52,4 +53,13 @@ pl_mathjax(R, S)
  => pl_mathjax(R, S, []).
 
 pl_mathjax(R, S, Flags)
- => mathjax(R, S, Flags).
+ => digits(Flags, Flags1),
+    mathjax(R, S, Flags1).
+
+% If no option for the digits is found in the flags, it is added with a default value.
+digits(Flags0, Flags1),
+    option(digits(_), Flags0)
+ => Flags1 = Flags0.
+
+digits(Flags0, Flags1)
+ => Flags1 = [digits(2) | Flags0].
