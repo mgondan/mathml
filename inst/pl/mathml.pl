@@ -40,7 +40,8 @@ r2mathml(R, S)
 % see vignette of R package mathml
 %
 r2mathml(R, S, Flags)
- => mathml(R, M, Flags),
+ => digits(Flags, Flags1),
+    mathml(R, M, Flags1),
     html(M, H, []),
     maplist(atom_string, H, S).
 
@@ -49,7 +50,21 @@ r2mathjax(R, S)
  => r2mathjax(R, S, []).
 
 r2mathjax(R, S, Flags)
- => mathjax(R, S, Flags).
+ => digits(Flags, Flags1),
+    mathjax(R, S, Flags1).
+
+% If no option for digits is found in the flags, it is retrieved with getOption("digits") from R.
+digits(Flags0, Flags1),
+    option(digits(_), Flags0)
+ => Flags1 = Flags0.
+
+digits(Flags0, Flags1),
+    rolog:r_eval(getOption("digits"), Default),
+    integer(Default)
+ => Flags1 = [digits(Default) | Flags0].
+
+digits(Flags0, Flags1) 
+ => Flags1 = [digits(2), Flags0]. 
 
 % Apply hook to entire expression
 math_hooked1(A, A1) :-
