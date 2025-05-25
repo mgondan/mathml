@@ -861,36 +861,6 @@ is illustrated by the other terms in the sum, such macros are limited to purely
 syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
 
-## Proofs
-_Mathml_ provides a basic representation for proof trees in the sequent calculus. 
-The supported predicates are 'rbicond', 'rcond', 'rand', 'ror', 'rneg', 'lbicond', 
-'lcond', 'land', 'lor', 'lneg', each of which both in the variant with 2 and 3 arguments. 
-The first argument contains the expression for one line and the other arguments for everything above it (which can be other predicate of these). To prevent the precedence setting by R and instead enable 
-the precedences defined in Prolog, the prefix notation should be used.
-
-```{r}
-rolog::consult(system.file(file.path("pl", "bussproofs.pl"), package="mathml"))
-
-term <- quote(rcond('%>%'(P %->% P), ax(P %>% P, '')))
-math(term)
-
-term <- quote(ror('%>%'('', '%|%'(A, ~A)), 
-rneg('%>%'('', '%,%'(A, ~A)), 
-ax('%>%'(A, A), ''))))
-math(term)
-
-term <- quote(
-rcond('%>%'('%->%'('%|%'(A, B), ('&'(A, B)))), 
-rand('%>%'('%|%'(A, B), '&'(A, B)), 
-lor('%>%'('%|%'(A, B), A), 
-    ax('%>%'(A, A), ''), 
-    asq(B%<%A, '')), 
-lor(A%|%B%>%B, 
-    asq('%<%'(A, B), ''), 
-    ax('%>%'(B, B), '')))))
-math(term)
-```
-
 ## P-values
 
 With `pval/2`, a value specified as first argument can be displayed with the
