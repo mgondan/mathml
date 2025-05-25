@@ -2,7 +2,7 @@
 :- discontiguous type/3, denoting/3, ml/3, jax/3.
 
 :- use_module(library(http/html_write)).
-:- consult([lib/core, lib/op]).
+:- consult([lib/main, lib/op]).
 
 % Hook to defined own macros
 %
