@@ -272,13 +272,6 @@ ml(hyph(L, R), M, Flags)
     ml(R, Y, Flags),
     M = mrow([X, &('#8209'), Y]). 
 
-% Legacy code R mathml 
-ml(hyph(L, R), M, Flags)
- => ml(L, X, Flags),
-    ml(R, Y, Flags),
-    M = mtext([X, &('#8209'), Y]). 
-% End legacy code
-
 jax(hyph(L, R), M, Flags)
  => jax(L, X, Flags),
     jax(R, Y, Flags),
@@ -2580,10 +2573,8 @@ math(pt(Dist, Df, _Tail), M)
 math(pt(Dist, Df, _Tail), M)
  => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
 
-% Legacy code R
 math(pt(T, Df), M)
  => M = fn('P', (['T' =< T] ; [list(space, [Df, "df"])])).
- % End legacy code R
 
 math(dist(T, _t, "lower"), M)
  => M = (T =< _t).
