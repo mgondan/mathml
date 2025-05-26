@@ -272,13 +272,6 @@ ml(hyph(L, R), M, Flags)
     ml(R, Y, Flags),
     M = mrow([X, &('#8209'), Y]). 
 
-% Legacy code R mathml 
-ml(hyph(L, R), M, Flags)
- => ml(L, X, Flags),
-    ml(R, Y, Flags),
-    M = mtext([X, &('#8209'), Y]). 
-% End legacy code
-
 jax(hyph(L, R), M, Flags)
  => jax(L, X, Flags),
     jax(R, Y, Flags),
@@ -806,10 +799,6 @@ math(!(A), M)
  => current(Prec, xfy, ','),
     M = fy(Prec, not, A).
 
-math(!(A, B), M)
- => current(Prec, xfy, ^),
-    M = xfy(Prec, not, A, B).
-
 math(xor(x=A, y=B), M)
  => M = xor(A, B).
 
@@ -908,57 +897,6 @@ math(Hash, M, _Flags),
     compound_name_arguments(Hash, Name, Elements),
     member(Name, ['##', '$$', '%%', '!!'])
  => M = paren(Elements).
-
-% Prooftree: two tables are needed because of different attributes
-
-% For the table with two rows
-ml(proof_tree(A), M, Flags),
-    compound(A),
-    compound_name_arguments(A, Name, Rows),
-    member(Name, ['###2'])
- => maplist(ml_row(Flags), Rows, R),
-    M = mrow([mtable([align('top 2'), rowlines(solid), framespacing('0 0'), semantics('bspr_inferenceRule:down')], R)]).
-
-% For the table with just one row
-ml(A, M, Flags),
-    compound(A),
-    compound_name_arguments(A, Name, Rows),
-    member(Name, ['###1'])
- => maplist(ml_row2(Flags), Rows, R),
-    M = mrow([mtable([framespacing('0 0')], R)]).
-
-% Needed to set the attribute of the cell to "rowalign('bottom')"
-ml_row2(Flags, Row, M),
-    compound(Row),
-    compound_name_arguments(Row, Name, Cells),
-    member(Name, ['##', '$$', '%%', '!!'])
- => maplist(ml_cell2(Flags), Cells, C),
-    M = mtr(C).
-
-ml_cell2(Flags, Cell, M)
- => ml(Cell, C, Flags),
-    ml(mrow_attribute([semantics('bspr_inference:1;bspr_labelledRule:right')], C), C1, Flags),
-    M = mtd([rowalign('bottom')], C1).
-
-ml(mrow_attribute(Attr, A), M, _Flags)
- => M = mrow(Attr, [A]).
-
-% Needed to add attributes
-ml_cell3(Flags, Cell, M)
- => ml(func3(Cell), C, Flags),
-    M = mtd(C).
-
-ml(func3(A), M, Flags) 
- => ml(A, M1, Flags),
-    %ml(mrow_attribute([data-mjx-textclass('ORD')], M1), M2, Flags),
-    M = mrow(mspace([width('.5ex')], mstyle([displaystyle('false'), scriptlevel('0')], M1))).
-
-/* This should be:
- M = mrow(mspace([width('.5ex')]), mstyle([displaystyle('false'), scriptlevel('0')], M1)).
-
-so that the resulting line is <mrow><mspace width(".5ex")</mspace> ...</mrow>
-but it raises an error
-*/
 
 % Matrices
 ml(Matrix, M, Flags),
@@ -2580,10 +2518,8 @@ math(pt(Dist, Df, _Tail), M)
 math(pt(Dist, Df, _Tail), M)
  => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
 
-% Legacy code R
 math(pt(T, Df), M)
  => M = fn('P', (['T' =< T] ; [list(space, [Df, "df"])])).
- % End legacy code R
 
 math(dist(T, _t, "lower"), M)
  => M = (T =< _t).

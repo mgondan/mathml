@@ -5,7 +5,7 @@
 
 :- use_module(library(http/html_write)).
 :- use_module(library(rolog)).
-:- consult(['../inst/pl/lib/core.pl', '../inst/pl/lib/op.pl']).
+:- consult(['../inst/pl/lib/main.pl', '../inst/pl/lib/op.pl']).
 
 % Hook to defined own macros
 %
