@@ -1530,6 +1530,13 @@ math(round(A), M)
 
 math(pos(A), M, Flags, Flags2),
     number(A),
+    select_option(mult(Mul), Flags, Flags1),
+    A1 is A*Mul
+ => M = A1,
+    Flags2 = Flags1.
+
+math(pos(A), M, Flags, Flags2),
+    number(A),
     A < 0.1,
     select_option(pval(.), Flags, Flags1)
  => M = pos(A),
