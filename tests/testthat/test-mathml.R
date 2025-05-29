@@ -875,3 +875,11 @@ test_that("digits",
             q <- mathml(quote(3.14159265), flags=list(quote(digits(4L))))
             expect_equal(q, "<math><mn>3.1416</mn></math>")
           })
+
+hook(mu_a, mu["A"])
+test_that("hooks",
+          {
+            q <- mathml(quote(dfrac(c / mu_a)))
+            expect_equal(q, "<math><mrow><mi>dfrac</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>c</mi><mo>/</mo><msub><mi>&mu;</mi><mtext>A</mtext></msub></mrow><mo>)</mo></mrow></mrow></math>")
+          })
+
