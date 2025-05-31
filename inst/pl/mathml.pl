@@ -1,6 +1,6 @@
 :- module(mathml, [r2mathml/2, r2mathml/3, r2mathjax/2, r2mathjax/3, math_hooked/2, math_hook/2, math_hook/3, math_hook/4]).
 
-:- discontiguous mathml/0, math/2, math/3, math/4, current/3, paren/3, prec/3.
+:- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3.
 :- discontiguous type/3, denoting/3, ml/3, jax/3.
 
 :- use_module(library(http/html_write)).

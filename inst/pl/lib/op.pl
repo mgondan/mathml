@@ -18,23 +18,11 @@ math(sum_over(Arg, Range), M)
 math(sum_over(Arg, From, To), M)
  => M = fn(subsupscript(sum, From, To), [Arg]).
 
-mathml :-
-    mathml(sum_over('['(x, i), i)).
-
-mathml :-
-    mathml(sum_over('['(x, i), i=1, n)).
-
 math(prod_over(Arg, Range), M)
  => M = fn(subscript(prod, Range), [Arg]).
 
 math(prod_over(Arg, From, To), M)
  => M = fn(subsupscript(prod, From, To), [Arg]).
-
-mathml :-
-    mathml(prod_over('['(x, i), i)).
-
-mathml :-
-    mathml(prod_over('['(x, i), i=1, n)).
 
 % Subscripts like x[i]
 %
@@ -81,15 +69,6 @@ prec(subscript(Base, _Idx), P, Flags)
 type(subscript(Base, Idx), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), index(Idx) | T].
-
-mathml :-
-    mathml(subscript(x, i)).
-
-mathml :-
-    mathml('['(x, i)).
-
-mathml :-
-    mathml('['(x, i, 2)).
 
 % Under
 
@@ -158,15 +137,6 @@ type(superscript(Base, Pwr), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), power(Pwr) | T].
 
-mathml :-
-    mathml(superscript(x, 2)).
-
-mathml :-
-    mathml(x^2).
-
-mathml :-
-    mathml(-1 ^ 2).
-
 % Over
 
 %
@@ -224,15 +194,6 @@ prec(subsupscript(Base, _Idx, Pwr), P, Flags)
 type(subsupscript(Base, Idx, Pwr), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), index(Idx), power(Pwr) | T].
-
-mathml :-
-    mathml(subsupscript(x, i, 2)).
-
-mathml :-
-    mathml(subsupscript(-1, i, 2)).
-
-mathml :-
-    mathml('['(x, i)^2).
 
 % Underover
 ml(underover(A, B, C), M, Flags)
@@ -314,12 +275,6 @@ jax(text(R), M, _Flags)
 type(text(_), T, _Flags)
  => T = [atomic].
 
-mathml :-
-    mathml("text").
-
-mathjax :-
-    mathjax("text").
-
 % Atoms with the name of greek letters are shown in greek
 math(R, M),
     atom(R),
@@ -338,9 +293,6 @@ jax(greek(R), M, _Flags)
 
 type(greek(_), T, _Flags)
  => T = [atomic].
-
-mathml :-
-    mathml(alpha).
 
 % Some special symbols that are rendered as is in MathML and MathJax
 %
@@ -374,10 +326,6 @@ jax(boolean(R), M, _Flags)
 
 type(boolean(_), T, _Flags)
  => T = [atomic].
-
-mathml :-
-    mathml(true),
-    mathml(false).
 
 % Sets
 %
@@ -498,10 +446,6 @@ prec(special(exp), Prec, _Flags)
 
 prec(special(_), Prec, _Flags)
  => current(Prec, yfx, *).
-
-mathml :-
-    mathml(exp(x)),
-    mathml(exp(x + y)).
 
 % Space
 %
