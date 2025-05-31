@@ -842,6 +842,7 @@ package _rolog_.
 ```{r}
 rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
 
+options(digits = 2)
 term <- quote(nthroot(a * (b + c), 3L)^2L)
 math(term)
 term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
