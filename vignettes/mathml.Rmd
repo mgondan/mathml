@@ -527,6 +527,19 @@ unhook(pbinom(.K, .N, .P))
 math(term)
 ```
 
+For custom functions, the function `hook_fn` adds a hook with the function body.
+ 
+```{r}
+square <- function(x)
+{ 
+  return(x^2L) 
+}
+
+hook_fn(square)
+term <- quote(square(a))
+math(term)
+```
+
 ## Abbreviations
 
 We consider the \(t\)-statistic for independent samples with equal variance. To
