@@ -1,8 +1,8 @@
 Package: mathml
 Type: Package
 Title: Translate R Expressions to 'MathML' and 'LaTeX'/'MathJax'
-Version: 1.4
-Date: 2025-05-18
+Version: 1.5
+Date: 2025-06-13
 Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
   email="Matthias.Gondan-Rochon@uibk.ac.at", comment="University of Innsbruck"),
   person("Irene", "Alfarone", role="aut",

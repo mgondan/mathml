@@ -1,3 +1,7 @@
+# mathml 1.5
+
+* hook\_fn(fn) renders the function body of a custom function
+
 # mathml 1.4
 
 * Use hooked to apply hooks to an expression
