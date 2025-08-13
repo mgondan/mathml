@@ -1,5 +1,7 @@
 # `mathml`. Translate R expressions to MathML
 
+_Version 1.5: with Prolog interface_
+
 `mathml` allows rendering R terms as pretty mathematical equations, bridging the
 gap between computational needs, presentation of results, and their
 reproducibility. 
@@ -50,7 +52,7 @@ mathout(term)
 
 $x^2$
 
-# For package developers
+# For R package developers
 
 If you use `mathml` for your own package, please do not "Import" `mathml` in
 your DESCRIPTION, but "Depend" on it.
@@ -66,4 +68,12 @@ Depends:
 ```
 
 It's not entirely clear why this is needed.
+
+# From Prolog
+
+Installation: `pack_install(mathml).`
+
+Usage: `use_module(library(mathml)).`
+
+Example: `pl_mathml(sin(x), X).`
 
