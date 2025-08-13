@@ -1,6 +1,6 @@
 # `mathml`. Translate R expressions to MathML
 
-`mathml` allows rendering R terms in pretty mathematical equations, bridging the
+`mathml` allows rendering R terms as pretty mathematical equations, bridging the
 gap between computational needs, presentation of results, and their
 reproducibility. 
 
@@ -66,3 +66,4 @@ Depends:
 ```
 
 It's not entirely clear why this is needed.
+
