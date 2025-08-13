@@ -1,3 +1,8 @@
+# mathml 1.6
+
+* small bugfix for r-devel
+* Prolog support
+
 # mathml 1.5
 
 * hook\_fn(fn) renders the function body of a custom function
@@ -34,3 +39,4 @@
 # mathml 0.7
 
 * Support for matrices and formulae
+
