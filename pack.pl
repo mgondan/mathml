@@ -1,5 +1,5 @@
 name(mathml).
 title('Translates mathematical expressions to compounds that can be used by html//1 (SWISH) or html//3 (normal SWIPL, with pack http/html_write).').
-version('1.5').
+version('1.6').
 author('Matthias Gondan', 'Matthias.Gondan-Rochon@uibk.ac.at').
 requires(rolog).
