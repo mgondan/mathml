@@ -913,7 +913,7 @@ jax(ifelse(T, Y, N), M, Flags)
     jax(Y, Yes, Flags),
     jax(N, No, Flags),
     format(string(M),
-      "\\left\\{\\begin{array}{ll} {~w} & \\mathrm{if}~~{~w}\\\\ {~w} & \\mathrm{otherwise}\\end{array}\\right.",
+      "\\left\\{\\begin{array}{ll} {~w} & \\text{if}~~{~w}\\\\ {~w} & \\text{otherwise}\\end{array}\\right.",
       [Yes, Test, No]).
 
 paren(ifelse(_, _, _), P, _Flags)
@@ -928,7 +928,7 @@ ml(if(T, Y), M, Flags)
 jax(if(T, Y), M, Flags)
  => jax(T, Test, Flags),
     jax(Y, Yes, Flags),
-    format(string(M), "{~w},\\ \\mathrm{if}\\ {~w}", [Yes, Test]).
+    format(string(M), "{~w},\\ \\text{if}\\ {~w}", [Yes, Test]).
 
 paren(if(_, _), P, _Flags)
  => P is 0.
