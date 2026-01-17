@@ -1,3 +1,7 @@
+# mathml 1.7
+
+* resubmission, since package was archived due to missing dependencies
+
 # mathml 1.6
 
 * small bugfix for r-devel
