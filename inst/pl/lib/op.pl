@@ -2497,12 +2497,12 @@ jax(fn(Name, (Args ; Pars)), M, Flags),
     string(Name)
  => jax(Name, F, Flags),
     jax(paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
-    format(string(M), "~w\\,{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 jax(fn(Name, (Args ; Pars)), M, Flags)
  => jax(Name, F, Flags),
     jax(paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 paren(fn(_Name, (Args ; Pars)), Paren, Flags)
  => paren(list(op(','), Args), X, Flags),
@@ -2526,7 +2526,7 @@ jax(fn(Name, [Arg]), M, Flags),
     type(Arg, paren, Flags)
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 %
 % Omit parenthesis in special functions
@@ -2559,7 +2559,7 @@ jax(fn(Name, [Arg]), M, Flags),
     P >= Prec
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 ml(fn(Name, [Arg]), M, Flags),
     type(Name, Type, Flags),
@@ -2575,7 +2575,7 @@ jax(fn(Name, [Arg]), M, Flags),
     prec(Arg, 0, Flags)
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 ml(fn(Name, Args), M, Flags)
  => ml(Name, F, Flags),
@@ -2585,7 +2585,7 @@ ml(fn(Name, Args), M, Flags)
 jax(fn(Name, Args), M, Flags)
  => jax(Name, F, Flags),
     jax(paren(list(op(','), Args)), X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 paren(fn(_Name, [Arg]), P, Flags),
     type(Arg, paren, Flags)
