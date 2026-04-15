@@ -517,19 +517,8 @@ term <- quote(pbinom(successes, Ntotal, prob))
 hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
 math(term)
 ```
-
-If the first argument is a custom function, and the second argument is
-NULL, `hook` displays the function body:
-
-```{r}
-var_pool <- function(n1, v1, n2, v2)
-  frac((n1 - 1L)*v1 + (n2 - 1L)*v2, n1 + n2 - 2L)
-hook(var_pool)
-math(quote(var_pool(n["A"], s["A"]^2, n["B"], s["B"]^2)))
-```
-
 The replacement can be checked with `hooked(term)`, and the old behavior is
-restored with `unhook(term)`.
+restored with `unhook(head)`.
 
 ```{r}
 hooked(term)
@@ -537,18 +526,26 @@ unhook(pbinom(.K, .N, .P))
 math(term)
 ```
 
-For custom functions, the function `hook_fn` adds a hook with the function body.
- 
-```{r}
-square <- function(x)
-{ 
-  return(x^2L) 
-}
+If the first argument of `hook()` is a custom function, and the second argument 
+is omitted, `hook` adds a hook with the function body. Note that the function
+body should be formatted with "pretty" functions:
 
-hook_fn(square)
-term <- quote(square(a))
-math(term)
+```{r}
+pretty <- function(n1, v1, n2, v2)
+  dfrac(nodot((n1 - 1L), v1) + nodot((n2 - 1L), v2), n1 + n2 - 2L)
+hook(pretty)
+math(quote(pretty(n["A"], s["A"]^2L, n["B"], s["B"]^2L)))
+
+ugly <- function(n1, v1, n2, v2)
+{
+  v1 = v1*(n1 - 1)
+  v2 = v2*(n2 - 1)
+  return((v1 + v2) / (n1 + n2 - 2))
+}
+hook(ugly)
+math(quote(ugly(n["A"], s["A"]^2L, n["B"], s["B"]^2L)))
 ```
+
 
 ## Abbreviations
 

@@ -53,6 +53,9 @@ mathml <- function(term=quote((a + b)^2L == a^2L + 2L*a*b + b^2L), flags=NULL,
   t <- rolog::once(call("r2mathml", term, expression(X), flags),
     options=list(preproc=list(rolog::preproc, mathml_preproc)),
     env=env)
+  if(!is.list(t))
+    stop("r2mathml failed: ", as.character(term), " return value: ", t)
+  
   r <- paste(t$X, collapse="")
   if(flags$cat)
     return(cat(r))
@@ -404,29 +407,35 @@ hook <- function(term, display=NULL, quote=TRUE, as.rolog=TRUE)
 {
   if(quote)
   {
-    term <- substitute(term)
-    display <- substitute(display)
+    term1 <- substitute(term)
+    display1 <- substitute(display)
+  }
+  else
+  {
+    term1 <- term
+    display1 <- display
   }
   
-  if(is.function(term) & is.null(display))
+  if(is.null(display1) && is.function(term))
   {
-    name <- as.character(substitute(term))
-    args <- names(formals(term))
+    name <- as.character(term1)
+    fm <- formals(term)
+    args <- names(fm)
     dotargs <- sprintf(".%s", args)
     subst <- lapply(dotargs, as.name)
     arg1 <- as.call(c(as.name(name), subst))
     names(subst) <- args
     arg2 <- do.call(substitute, list(body(term), subst))
-    return(do.call(hook, list(arg1, arg2, quote, as.rolog)))
+    return(hook(arg1, arg2, quote=FALSE))
   }
   
   if(as.rolog)
   {
-    term <- rolog::as.rolog(term)
-    display <- rolog::as.rolog(display)
+    term1 <- rolog::as.rolog(term1)
+    display1 <- rolog::as.rolog(display1)
   }
 
-  r <- rolog::once(call("asserta", call("math_hook", term, display)))
+  r <- rolog::once(call("asserta", call("math_hook", term1, display1)))
   if(isFALSE(r))
     return(FALSE)
 
