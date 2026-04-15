@@ -4,13 +4,16 @@
 \alias{hook}
 \alias{unhook}
 \alias{hooked}
+\alias{hook_fn}
 \title{Hook for custom symbols}
 \usage{
-hook(term, display, quote = TRUE, as.rolog = TRUE)
+hook(term, display = NULL, quote = TRUE, as.rolog = TRUE)
 
 unhook(term, quote = TRUE, as.rolog = TRUE)
 
 hooked(term)
+
+hook_fn(fn)
 }
 \arguments{
 \item{term}{an R call or symbol/number. This is the expression to replace.}
@@ -22,6 +25,8 @@ indicates that \emph{term} and \emph{display} should be quoted.}
 
 \item{as.rolog}{(default is TRUE)
 indicates that simplified quasi-quotation is to be used.}
+
+\item{fn}{a custom function. The name of \emph{fn} is replaced by its function body.}
 }
 \value{
 hook and unhook return TRUE on success. hooked returns the hooked
@@ -29,6 +34,7 @@ expression or FALSE on failure.
 }
 \description{
 hook(term, display)
+hook_fn(fn)
 unhook(term)
 hooked(term)
 }
@@ -40,5 +46,6 @@ hook(term=quote(t0), display=quote(superscript(t, 0)), quote=FALSE)
 mathml(quote(t0))
 unhook(t0)
 mathml(quote(t0))
+square <- function(x) {x^2} ; hook_fn(square)
 
 }

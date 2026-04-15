@@ -1,11 +1,11 @@
 :- module(mathml, [pl_mathml/2, pl_mathml/3, pl_mathjax/2, pl_mathjax/3]).
 
-:- discontiguous mathml/0, math/2, math/3, math/4, current/3, paren/3, prec/3.
+:- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3.
 :- discontiguous type/3, denoting/3, ml/3, jax/3.
 
 :- use_module(library(http/html_write)).
 :- use_module(library(rolog)).
-:- consult(['../inst/pl/lib/core.pl', '../inst/pl/lib/op.pl']).
+:- consult(['../inst/pl/lib/main.pl', '../inst/pl/lib/op.pl']).
 
 % Hook to defined own macros
 %
@@ -42,8 +42,9 @@ pl_mathml(R, S)
 % Examples
 % see vignette of R package mathml
 %
-pl_mathml(R, S, Flags)
- => mathml(R, M, Flags),
+pl_mathml(R, S, Flags0)
+ => digits_(Flags0, Flags1),
+    mathml(R, M, Flags1),
     html(M, H, []),
     maplist(atom_string, H, S).
 
@@ -51,5 +52,14 @@ pl_mathml(R, S, Flags)
 pl_mathjax(R, S)
  => pl_mathjax(R, S, []).
 
-pl_mathjax(R, S, Flags)
- => mathjax(R, S, Flags).
+pl_mathjax(R, S, Flags0)
+ => digits_(Flags0, Flags1),
+    mathjax(R, S, Flags1).
+
+ % Default digits if not defined in flags
+ digits_(Flags0, Flags1),
+    option(digits(_), Flags0)
+ => Flags1 = Flags0.
+
+ digits_(Flags0, Flags1)
+  => Flags1 = [digits(2) | Flags0].

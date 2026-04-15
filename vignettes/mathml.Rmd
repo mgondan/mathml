@@ -537,6 +537,19 @@ unhook(pbinom(.K, .N, .P))
 math(term)
 ```
 
+For custom functions, the function `hook_fn` adds a hook with the function body.
+ 
+```{r}
+square <- function(x)
+{ 
+  return(x^2L) 
+}
+
+hook_fn(square)
+term <- quote(square(a))
+math(term)
+```
+
 ## Abbreviations
 
 We consider the \(t\)-statistic for independent samples with equal variance. To
@@ -852,6 +865,7 @@ package _rolog_.
 ```{r}
 rolog::consult(system.file(file.path("pl", "nthroot.pl"), package="mathml"))
 
+options(digits = 2)
 term <- quote(nthroot(a * (b + c), 3L)^2L)
 math(term)
 term <- quote(a^(1L/3L) + a^{1L/3L} + a^(1.0/3L))
@@ -870,36 +884,6 @@ first summand. Of course, _mathml_ is not a proper computer algebra system. As
 is illustrated by the other terms in the sum, such macros are limited to purely
 syntactical matching, and terms like `a^{1L/3L}` with the curly brace
 or `a^(1.0/3L)` with a floating point number in the numerator are not detected.
-
-## Proofs
-_Mathml_ provides a basic representation for proof trees in the sequent calculus. 
-The supported predicates are 'rbicond', 'rcond', 'rand', 'ror', 'rneg', 'lbicond', 
-'lcond', 'land', 'lor', 'lneg', each of which both in the variant with 2 and 3 arguments. 
-The first argument contains the expression for one line and the other arguments for everything above it (which can be other predicate of these). To prevent the precedence setting by R and instead enable 
-the precedences defined in Prolog, the prefix notation should be used.
-
-```{r}
-rolog::consult(system.file(file.path("pl", "bussproofs.pl"), package="mathml"))
-
-term <- quote(rcond('%>%'(P %->% P), ax(P %>% P, '')))
-math(term)
-
-term <- quote(ror('%>%'('', '%|%'(A, ~A)), 
-rneg('%>%'('', '%,%'(A, ~A)), 
-ax('%>%'(A, A), ''))))
-math(term)
-
-term <- quote(
-rcond('%>%'('%->%'('%|%'(A, B), ('&'(A, B)))), 
-rand('%>%'('%|%'(A, B), '&'(A, B)), 
-lor('%>%'('%|%'(A, B), A), 
-    ax('%>%'(A, A), ''), 
-    asq(B%<%A, '')), 
-lor(A%|%B%>%B, 
-    asq('%<%'(A, B), ''), 
-    ax('%>%'(B, B), '')))))
-math(term)
-```
 
 ## P-values
 

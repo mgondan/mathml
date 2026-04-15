@@ -12,10 +12,11 @@ summands(S + A, [A, B | Rest]) :-
 % Base case
 summands(A, [A]).
 
-math_hook(LM, M) :-
+mathml:math_hook(LM, M) :-
     compound(LM),
     LM =.. [lm, ~(Y, Sum) | _Tail],
     summands(Sum, Predictors),
-    findall(subscript(b, X) * X, member(X, Predictors), Terms),
+    flatten(Predictors, Predictors1),
+    findall(subscript(b, X) * X, member(X, Predictors1), Terms),
     summands(Model, Terms),
     M = (Y == subscript(b, 0) + Model + epsilon).

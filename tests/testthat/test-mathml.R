@@ -875,3 +875,100 @@ test_that("digits",
             q <- mathml(quote(3.14159265), flags=list(quote(digits(4L))))
             expect_equal(q, "<math><mn>3.1416</mn></math>")
           })
+
+hook(mu_a, mu["A"])
+test_that("hooks",
+          {
+            q <- mathml(quote(dfrac(c / mu_a)))
+            expect_equal(q, "<math><mrow><mi>dfrac</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>c</mi><mo>/</mo><msub><mi>&mu;</mi><mtext>A</mtext></msub></mrow><mo>)</mo></mrow></mrow></math>")
+          })
+          
+test_that("sum_over_1",
+          {
+            q <- mathml(quote(sum_over('['(x, i), i)))
+            expect_equal(q, "<math><mrow><msub><mo>&sum;</mo><mi>i</mi></msub><mo>&af;</mo><msub><mi>x</mi><mi>i</mi></msub></mrow></math>")
+          })
+
+test_that("sum_over_2",
+          {
+            q <- mathml(quote(sum_over('['(x, i), i=1, n)))
+            expect_equal(q, "<math><mrow><msubsup><mo>&sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1.0000000</mn></mrow><mi>n</mi></msubsup><mo>&af;</mo><msub><mi>x</mi><mi>i</mi></msub></mrow></math>")
+          })
+
+test_that("prod_over_1",
+          {
+            q <- mathml(quote(prod_over('['(x, i), i, n)))
+            expect_equal(q, "<math><mrow><msubsup><mo>&prod;</mo><mi>i</mi><mi>n</mi></msubsup><mo>&af;</mo><msub><mi>x</mi><mi>i</mi></msub></mrow></math>")
+          })
+
+test_that("prod_over_2",
+          {
+            q <- mathml(quote(prod_over('['(x, i), i=1, n)))
+            expect_equal(q, "<math><mrow><msubsup><mo>&prod;</mo><mrow><mi>i</mi><mo>=</mo><mn>1.0000000</mn></mrow><mi>n</mi></msubsup><mo>&af;</mo><msub><mi>x</mi><mi>i</mi></msub></mrow></math>")
+          })
+
+test_that("subscript_1",
+          {
+            q <- mathml(quote(subscript(x, i)))
+            expect_equal(q, "<math><msub><mi>x</mi><mi>i</mi></msub></math>")
+          })
+
+test_that("subscript_2",
+          {
+            q <- mathml(quote('['(x, i)))
+            expect_equal(q, "<math><msub><mi>x</mi><mi>i</mi></msub></math>")
+          })
+
+test_that("subscript_3",
+          {
+            q <- mathml(quote('['(x, i, 2)))
+            expect_equal(q, "<math><msub><mi>x</mi><mrow><mi>i</mi><mtext></mtext><mn>2.0000000</mn></mrow></msub></math>")
+          })
+
+test_that("superscript_1",
+          {
+            q <- mathml(quote(superscript(x, 2)))
+            expect_equal(q, "<math><msup><mi>x</mi><mn>2.0000000</mn></msup></math>")
+          })
+
+test_that("superscript_2",
+          {
+            q <- mathml(quote(x^2))
+            expect_equal(q, "<math><msup><mi>x</mi><mn>2.0000000</mn></msup></math>")
+          })
+
+test_that("superscript_3",
+          {
+            q <- mathml(quote(-1 ^ 2))
+            expect_equal(q, "<math><mrow><mo>-</mo><msup><mn>1.0000000</mn><mn>2.0000000</mn></msup></mrow></math>")
+          })
+
+test_that("subsupscript_1",
+          {
+            q <- mathml(quote(subsupscript(x, i, 2)))
+            expect_equal(q, "<math><msubsup><mi>x</mi><mi>i</mi><mn>2.0000000</mn></msubsup></math>")
+          })
+
+test_that("subsupscript_2",
+          {
+            q <- mathml(quote(subsupscript(-1, i, 2)))
+            expect_equal(q, "<math><msubsup><mrow><mo>(</mo><mrow><mo>-</mo><mn>1.0000000</mn></mrow><mo>)</mo></mrow><mi>i</mi><mn>2.0000000</mn></msubsup></math>")
+          })
+
+test_that("subsupscript_3",
+          {
+            q <- mathml(quote('['(x, i)^2))
+            expect_equal(q, "<math><msubsup><mi>x</mi><mi>i</mi><mn>2.0000000</mn></msubsup></math>")
+          })
+
+test_that("true",
+          {
+            q <- mathml(quote(true))
+            expect_equal(q, "<math><mi>T</mi></math>")
+          })
+
+test_that("false",
+          {
+            q <- mathml(quote(false))
+            expect_equal(q, "<math><mi>F</mi></math>")
+          })

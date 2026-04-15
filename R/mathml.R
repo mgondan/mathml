@@ -5,7 +5,7 @@
 
 .onAttach <- function(libname, pkgname)
 {
-  if(!requireNamespace("rolog", quiet=TRUE))
+  if(!requireNamespace("rolog", quietly=TRUE))
     stop("Could not load R package rolog.")
 
   if(!rolog::rolog_ok())
@@ -362,6 +362,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' 
 #' hook(function)
 #' hook(term, display)
+#' hook_fn(fn)
 #' unhook(term)
 #' hooked(term)
 #'
@@ -379,6 +380,9 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' @param as.rolog (default is TRUE)
 #' indicates that simplified quasi-quotation is to be used.
 #'
+#' @param fn
+#' a custom function. The name of _fn_ is replaced by its function body.
+#' 
 #' @return
 #' hook and unhook return TRUE on success. hooked returns the hooked
 #' expression or FALSE on failure.
@@ -394,6 +398,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' mathml(quote(t0))
 #' unhook(t0)
 #' mathml(quote(t0))
+#' square <- function(x) {x^2} ; hook_fn(square)
 #'
 hook <- function(term, display=NULL, quote=TRUE, as.rolog=TRUE)
 {
@@ -454,6 +459,20 @@ hooked <- function(term)
     return(FALSE)
   
   return(r$X)
+}
+
+#' @rdname hook
+#' @export
+hook_fn <- function(fn)
+{
+  name <- as.character(substitute(fn))
+  args <- names(formals(fn))
+  dotargs <- sprintf(".%s", args)
+  subst <- lapply(dotargs, as.name)
+  arg1 <- as.call(c(as.name(name), subst))
+  names(subst) <- args
+  arg2 <- do.call(substitute, list(body(fn), subst))
+  eval(call("hook", arg1, arg2))
 }
 
 #' Multiplication

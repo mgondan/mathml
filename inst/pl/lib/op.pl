@@ -18,23 +18,11 @@ math(sum_over(Arg, Range), M)
 math(sum_over(Arg, From, To), M)
  => M = fn(subsupscript(sum, From, To), [Arg]).
 
-mathml :-
-    mathml(sum_over('['(x, i), i)).
-
-mathml :-
-    mathml(sum_over('['(x, i), i=1, n)).
-
 math(prod_over(Arg, Range), M)
  => M = fn(subscript(prod, Range), [Arg]).
 
 math(prod_over(Arg, From, To), M)
  => M = fn(subsupscript(prod, From, To), [Arg]).
-
-mathml :-
-    mathml(prod_over('['(x, i), i)).
-
-mathml :-
-    mathml(prod_over('['(x, i), i=1, n)).
 
 % Subscripts like x[i]
 %
@@ -81,15 +69,6 @@ prec(subscript(Base, _Idx), P, Flags)
 type(subscript(Base, Idx), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), index(Idx) | T].
-
-mathml :-
-    mathml(subscript(x, i)).
-
-mathml :-
-    mathml('['(x, i)).
-
-mathml :-
-    mathml('['(x, i, 2)).
 
 % Under
 
@@ -158,15 +137,6 @@ type(superscript(Base, Pwr), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), power(Pwr) | T].
 
-mathml :-
-    mathml(superscript(x, 2)).
-
-mathml :-
-    mathml(x^2).
-
-mathml :-
-    mathml(-1 ^ 2).
-
 % Over
 
 %
@@ -225,15 +195,6 @@ type(subsupscript(Base, Idx, Pwr), Type, Flags)
  => type(Base, T, Flags),
     Type = [base(Base), index(Idx), power(Pwr) | T].
 
-mathml :-
-    mathml(subsupscript(x, i, 2)).
-
-mathml :-
-    mathml(subsupscript(-1, i, 2)).
-
-mathml :-
-    mathml('['(x, i)^2).
-
 % Underover
 ml(underover(A, B, C), M, Flags)
  => ml(A, X, Flags),
@@ -271,13 +232,6 @@ ml(hyph(L, R), M, Flags)
  => ml(L, X, Flags),
     ml(R, Y, Flags),
     M = mrow([X, &('#8209'), Y]). 
-
-% Legacy code R mathml 
-ml(hyph(L, R), M, Flags)
- => ml(L, X, Flags),
-    ml(R, Y, Flags),
-    M = mtext([X, &('#8209'), Y]). 
-% End legacy code
 
 jax(hyph(L, R), M, Flags)
  => jax(L, X, Flags),
@@ -321,12 +275,6 @@ jax(text(R), M, _Flags)
 type(text(_), T, _Flags)
  => T = [atomic].
 
-mathml :-
-    mathml("text").
-
-mathjax :-
-    mathjax("text").
-
 % Atoms with the name of greek letters are shown in greek
 math(R, M),
     atom(R),
@@ -345,9 +293,6 @@ jax(greek(R), M, _Flags)
 
 type(greek(_), T, _Flags)
  => T = [atomic].
-
-mathml :-
-    mathml(alpha).
 
 % Some special symbols that are rendered as is in MathML and MathJax
 %
@@ -381,10 +326,6 @@ jax(boolean(R), M, _Flags)
 
 type(boolean(_), T, _Flags)
  => T = [atomic].
-
-mathml :-
-    mathml(true),
-    mathml(false).
 
 % Sets
 %
@@ -505,10 +446,6 @@ prec(special(exp), Prec, _Flags)
 
 prec(special(_), Prec, _Flags)
  => current(Prec, yfx, *).
-
-mathml :-
-    mathml(exp(x)),
-    mathml(exp(x + y)).
 
 % Space
 %
@@ -806,10 +743,6 @@ math(!(A), M)
  => current(Prec, xfy, ','),
     M = fy(Prec, not, A).
 
-math(!(A, B), M)
- => current(Prec, xfy, ^),
-    M = xfy(Prec, not, A, B).
-
 math(xor(x=A, y=B), M)
  => M = xor(A, B).
 
@@ -909,57 +842,6 @@ math(Hash, M, _Flags),
     member(Name, ['##', '$$', '%%', '!!'])
  => M = paren(Elements).
 
-% Prooftree: two tables are needed because of different attributes
-
-% For the table with two rows
-ml(proof_tree(A), M, Flags),
-    compound(A),
-    compound_name_arguments(A, Name, Rows),
-    member(Name, ['###2'])
- => maplist(ml_row(Flags), Rows, R),
-    M = mrow([mtable([align('top 2'), rowlines(solid), framespacing('0 0'), semantics('bspr_inferenceRule:down')], R)]).
-
-% For the table with just one row
-ml(A, M, Flags),
-    compound(A),
-    compound_name_arguments(A, Name, Rows),
-    member(Name, ['###1'])
- => maplist(ml_row2(Flags), Rows, R),
-    M = mrow([mtable([framespacing('0 0')], R)]).
-
-% Needed to set the attribute of the cell to "rowalign('bottom')"
-ml_row2(Flags, Row, M),
-    compound(Row),
-    compound_name_arguments(Row, Name, Cells),
-    member(Name, ['##', '$$', '%%', '!!'])
- => maplist(ml_cell2(Flags), Cells, C),
-    M = mtr(C).
-
-ml_cell2(Flags, Cell, M)
- => ml(Cell, C, Flags),
-    ml(mrow_attribute([semantics('bspr_inference:1;bspr_labelledRule:right')], C), C1, Flags),
-    M = mtd([rowalign('bottom')], C1).
-
-ml(mrow_attribute(Attr, A), M, _Flags)
- => M = mrow(Attr, [A]).
-
-% Needed to add attributes
-ml_cell3(Flags, Cell, M)
- => ml(func3(Cell), C, Flags),
-    M = mtd(C).
-
-ml(func3(A), M, Flags) 
- => ml(A, M1, Flags),
-    %ml(mrow_attribute([data-mjx-textclass('ORD')], M1), M2, Flags),
-    M = mrow(mspace([width('.5ex')], mstyle([displaystyle('false'), scriptlevel('0')], M1))).
-
-/* This should be:
- M = mrow(mspace([width('.5ex')]), mstyle([displaystyle('false'), scriptlevel('0')], M1)).
-
-so that the resulting line is <mrow><mspace width(".5ex")</mspace> ...</mrow>
-but it raises an error
-*/
-
 % Matrices
 ml(Matrix, M, Flags),
     compound(Matrix),
@@ -1031,7 +913,7 @@ jax(ifelse(T, Y, N), M, Flags)
     jax(Y, Yes, Flags),
     jax(N, No, Flags),
     format(string(M),
-      "\\left\\{\\begin{array}{ll} {~w} & \\mathrm{if}~~{~w}\\\\ {~w} & \\mathrm{otherwise}\\end{array}\\right.",
+      "\\left\\{\\begin{array}{ll} {~w} & \\text{if}~~{~w}\\\\ {~w} & \\text{otherwise}\\end{array}\\right.",
       [Yes, Test, No]).
 
 paren(ifelse(_, _, _), P, _Flags)
@@ -1046,7 +928,7 @@ ml(if(T, Y), M, Flags)
 jax(if(T, Y), M, Flags)
  => jax(T, Test, Flags),
     jax(Y, Yes, Flags),
-    format(string(M), "{~w},\\ \\mathrm{if}\\ {~w}", [Yes, Test]).
+    format(string(M), "{~w},\\ \\text{if}\\ {~w}", [Yes, Test]).
 
 paren(if(_, _), P, _Flags)
  => P is 0.
@@ -1581,34 +1463,21 @@ ml(posint(A), M, _Flags)
 ml(pos(1.0Inf), M, _Flags)
  => M = mi(&('#x221E')).
 
-% Legacy code R 
-% Default number of decimals is getOption("digits") from R
-math(round(A, D), M, Flags0, Flags1)
- => M = A,
-    Flags1 = [digits(D) | Flags0].
-
-digits(Flags, D),
-    r_eval(getOption("digits"), Default),
-    integer(Default)
- => option_(digits(D), Flags, Default).
-
-digits(Flags, D)
- => option_(digits(D), Flags, 2).
-
-ml(pos(A), M, Flags)
- => digits(Flags, D),
-    format(atom(Mask), '~~~wf', [D]),
-    format(string(X), Mask, [A]),
-    M = mn(X).
-% End legacy code R 
-
-% Default number of decimals is 2, change it using Flags
+% The number of decimals is first retrieved from the flags.
+% If the 'digits' option is not set in the flags, it is retrieved with getOption("digits") from R
 math(round(A, D), M, Flags0, Flags1)
  => M = A,
     Flags1 = [digits(D) | Flags0].
 
 math(round(A), M)
  => M = round(A, 0).
+
+math(pos(A), M, Flags, Flags2),
+    number(A),
+    select_option(mult(Mul), Flags, Flags1),
+    A1 is A*Mul
+ => M = A1,
+    Flags2 = Flags1.
 
 math(pos(A), M, Flags, Flags2),
     number(A),
@@ -1636,11 +1505,22 @@ math(pos(A), M, Flags, Flags2),
     Flags2 = [pval(.) | Flags1].
 
 ml(pos(A), M, Flags)
- => option_(digits(D), Flags, 2),
+ => digits(Flags, D),
     format(atom(Mask), '~~~wf', [D]),
-    option_(mult(F), Flags, 1),
-    format(string(X), Mask, [F*A]),
+    format(string(X), Mask, [A]),
     M = mn(X).
+
+digits(Flags0, D),
+    option(digits(D0), Flags0)
+ => D = D0.
+
+digits(Flags, D),
+    r_eval(getOption("digits"), Default),
+    integer(Default)
+ => option_(digits(D), Flags, Default).
+
+digits(Flags, D)
+ => option_(digits(D), Flags, 2).
 
 jax(posint(A), M, _Flags)
  => format(string(M), "~w", [A]).
@@ -1649,16 +1529,9 @@ jax(pos(1.0Inf), M, _Flags)
  => M = "\\infty".
 
 jax(pos(A), M, Flags)
- => option_(digits(D), Flags, 2),
-    format(atom(Mask), '~~~wf', [D]),
-    format(string(M), Mask, [A]).
-
-% Legacy code R 
-jax(pos(A), M, Flags)
  => digits(Flags, D),
     format(atom(Mask), '~~~wf', [D]),
     format(string(M), Mask, [A]).
-% End legacy code R 
 
 type(pos(A), Type, _Flags)
  => Type = [numeric(A), atomic].
@@ -2596,10 +2469,8 @@ math(pt(Dist, Df, _Tail), M)
 math(pt(Dist, Df, _Tail), M)
  => M = fn('P', ([Dist] ; [list(space, [Df, "df"])])).
 
-% Legacy code R
 math(pt(T, Df), M)
  => M = fn('P', (['T' =< T] ; [list(space, [Df, "df"])])).
- % End legacy code R
 
 math(dist(T, _t, "lower"), M)
  => M = (T =< _t).
@@ -2626,12 +2497,12 @@ jax(fn(Name, (Args ; Pars)), M, Flags),
     string(Name)
  => jax(Name, F, Flags),
     jax(paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
-    format(string(M), "~w\\,{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 jax(fn(Name, (Args ; Pars)), M, Flags)
  => jax(Name, F, Flags),
     jax(paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 paren(fn(_Name, (Args ; Pars)), Paren, Flags)
  => paren(list(op(','), Args), X, Flags),
@@ -2655,7 +2526,7 @@ jax(fn(Name, [Arg]), M, Flags),
     type(Arg, paren, Flags)
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 %
 % Omit parenthesis in special functions
@@ -2688,7 +2559,7 @@ jax(fn(Name, [Arg]), M, Flags),
     P >= Prec
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 ml(fn(Name, [Arg]), M, Flags),
     type(Name, Type, Flags),
@@ -2704,7 +2575,7 @@ jax(fn(Name, [Arg]), M, Flags),
     prec(Arg, 0, Flags)
  => jax(Name, F, Flags),
     jax(Arg, X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 ml(fn(Name, Args), M, Flags)
  => ml(Name, F, Flags),
@@ -2714,7 +2585,7 @@ ml(fn(Name, Args), M, Flags)
 jax(fn(Name, Args), M, Flags)
  => jax(Name, F, Flags),
     jax(paren(list(op(','), Args)), X, Flags),
-    format(string(M), "~w{~w}", [F, X]).
+    format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
 paren(fn(_Name, [Arg]), P, Flags),
     type(Arg, paren, Flags)

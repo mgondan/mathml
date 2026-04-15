@@ -9,7 +9,7 @@ mathjax(R, M, Flags)
  => jax(R, M0, Flags),
     denoting(R, Denoting, Flags),
     jax(with(Denoting), With, Flags),
-    !, format(string(M), "$~w$~w", [M0, With]).
+    !, format(string(M), "\\ensuremath{~w}\\text{~w}", [M0, With]).
 
 % Translates the compound A to another compound M, checking for Flags
 % and eventually changing Flags to Flags1

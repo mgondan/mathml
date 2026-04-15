@@ -1,3 +1,16 @@
+# mathml 1.7
+
+* resubmission, since package was archived due to missing dependencies
+
+# mathml 1.6
+
+* small bugfix for r-devel
+* Prolog support
+
+# mathml 1.5
+
+* hook\_fn(fn) renders the function body of a custom function
+
 # mathml 1.4
 
 * Use hooked to apply hooks to an expression
@@ -30,3 +43,4 @@
 # mathml 0.7
 
 * Support for matrices and formulae
+
