@@ -518,6 +518,16 @@ hook(pbinom(.K, .N, .P), sum_over(dbinom(i, .N, .P), i=0L, .K))
 math(term)
 ```
 
+If the first argument is a custom function, and the second argument is
+NULL, `hook` displays the function body:
+
+```{r}
+var_pool <- function(n1, v1, n2, v2)
+  frac((n1 - 1L)*v1 + (n2 - 1L)*v2, n1 + n2 - 2L)
+hook(var_pool)
+math(quote(var_pool(n["A"], s["A"]^2, n["B"], s["B"]^2)))
+```
+
 The replacement can be checked with `hooked(term)`, and the old behavior is
 restored with `unhook(term)`.
 

@@ -360,15 +360,18 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 
 #' Hook for custom symbols
 #' 
+#' hook(function)
 #' hook(term, display)
 #' unhook(term)
 #' hooked(term)
 #'
 #' @param term
-#' an R call or symbol/number. This is the expression to replace.
+#' an R call or symbol/number or a function. This is the expression 
+#' to replace.
 #'
-#' @param display
-#' an R call or symbol/number. This is shown instead of _term_.
+#' @param display (default is NULL)
+#' an R call or symbol/number. This is shown instead of _term_. If _term_ is
+#' a function, display is NULL (the function body is rendered instead).
 #'
 #' @param quote (default is TRUE)
 #' indicates that _term_ and _display_ should be quoted.
@@ -383,6 +386,7 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' @md
 #'
 #' @examples
+#' hook(dot)
 #' hook(t0, subscript(t, 0))
 #' hooked(quote(t0))
 #' mathml(quote(t0))
@@ -391,14 +395,26 @@ canonical <- function(term=quote(`%in%`(table=Table, x=X)), drop=TRUE)
 #' unhook(t0)
 #' mathml(quote(t0))
 #'
-hook <- function(term, display, quote=TRUE, as.rolog=TRUE)
+hook <- function(term, display=NULL, quote=TRUE, as.rolog=TRUE)
 {
   if(quote)
   {
     term <- substitute(term)
     display <- substitute(display)
   }
-
+  
+  if(is.function(term) & is.null(display))
+  {
+    name <- as.character(substitute(term))
+    args <- names(formals(term))
+    dotargs <- sprintf(".%s", args)
+    subst <- lapply(dotargs, as.name)
+    arg1 <- as.call(c(as.name(name), subst))
+    names(subst) <- args
+    arg2 <- do.call(substitute, list(body(term), subst))
+    return(do.call(hook, list(arg1, arg2, quote, as.rolog)))
+  }
+  
   if(as.rolog)
   {
     term <- rolog::as.rolog(term)
