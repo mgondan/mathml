@@ -270,7 +270,7 @@ ml(text(R), M, _Flags)
  => M = mtext(R).
 
 jax(text(R), M, _Flags)
- => format(string(M), "\\mathrm{~w}", [R]).
+ => format(string(M), "\\text{~w}", [R]).
 
 type(text(_), T, _Flags)
  => T = [atomic].
