@@ -2,6 +2,7 @@
 
 * hook(fn) renders function body of a custom function
 * use ensuremath instead of dollar-dollar
+* avoid unnecessary parentheses in -a*b
 
 # mathml 1.7
 
