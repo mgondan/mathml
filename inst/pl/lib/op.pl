@@ -1694,8 +1694,11 @@ math(A + B, X)
  => current_op(Prec, yfx, +),
     X = yfy(Prec, +, A, B).
 
+% Use * for precedence of unary -
+%
+% avoids unnecessary parentheses.
 math(-A, X)
- => current_op(Prec, yfx, -),
+ => current_op(Prec, yfx, *),
     X = fy(Prec, -, A).
 
 math(A - B, X)
