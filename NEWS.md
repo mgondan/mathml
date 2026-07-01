@@ -1,3 +1,7 @@
+# mathml 1.9
+
+* resubmission, since package was archived due to missing dependencies
+
 # mathml 1.8
 
 * hook(fn) renders function body of a custom function
