@@ -421,7 +421,7 @@ test_that("identical",
 test_that("ifelse",
           {
             q <- mathml(quote(ifelse(a > b, a, b)))
-            expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mtr><mi>a</mi><mrow><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow></mrow></mtr><mtr><mi>b</mi><mtext>otherwise</mtext></mtr></mtable></mrow></math>")
+            expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mtr><mi>a</mi><mrow><mtext>if</mtext><mspace width=\"0.166em\"></mspace><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow></mrow></mtr><mtr><mi>b</mi><mtext>otherwise</mtext></mtr></mtable></mrow></math>")
           })
 
 test_that("in",
@@ -577,28 +577,28 @@ test_that("qnorm",
 test_that("1mpchisq",
           {
             q <- mathml(quote(1 - pchisq(x, 1)))
-            expect_equal(q, sprintf("<math><mrow><mn>%s</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>",
+            expect_equal(q, sprintf("<math><mrow><mn>%s</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"0.166em\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>",
                                     format(1, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
 test_that("pchisq1malpha",
           {
             q <- mathml(quote(qchisq(1 - alpha, 1)))
-            expect_equal(q, sprintf("<math><mrow><msubsup><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mo>-</mo><mi>&alpha;</mi></mrow><mo>)</mo></mrow></mrow></math>",
+            expect_equal(q, sprintf("<math><mrow><msubsup><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"0.166em\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msubsup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mo>-</mo><mi>&alpha;</mi></mrow><mo>)</mo></mrow></mrow></math>",
                                     format(1, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
 test_that("ptnm1",
           {
             q <- mathml(quote(pt(t, N - 1)))
-            expect_equal(q, sprintf("<math><mrow><mi>P</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>T</mi><mo>&le;</mo><mi>t</mi></mrow><mo>;</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow></mrow><mo>)</mo></mrow></mrow></math>", 
+            expect_equal(q, sprintf("<math><mrow><mi>P</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>T</mi><mo>&le;</mo><mi>t</mi></mrow><mo>;</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"0.166em\"></mspace><mtext>df</mtext></mrow></mrow><mo>)</mo></mrow></mrow></math>", 
                          format(1, nsmall=getOption("digits"))))
           })
 
 test_that("qtalpha2nm1",
           {
             q <- mathml(quote(qt(alpha/2, N - 1)))
-            expect_equal(q, sprintf("<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>%s</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>",
+            expect_equal(q, sprintf("<math><mrow><msub><mi>T</mi><mrow><mi>&alpha;</mi><mo>/</mo><mn>%s</mn></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>N</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"0.166em\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></math>",
                          format(2, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
@@ -773,13 +773,13 @@ f <- function(x)
 test_that("functionifelse",
           {
             q <- mathml(canonical(f))
-            expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mrow><mn>0</mn><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow></mrow><mrow><mrow><mo>-</mo><mn>1</mn></mrow><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>&lt;</mo><mn>0</mn></mrow></mrow><mrow><mn>1</mn><mtext>,</mtext><mspace width=\"thinmathspace\"></mspace><mtext>if</mtext><mspace width=\"thinmathspace\"></mspace><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow></mrow></mtable></mrow></math>")
+            expect_equal(q,"<math><mrow><mo>{</mo><mtable columnalign=\"left\"><mrow><mn>0</mn><mtext>,</mtext><mspace width=\"0.166em\"></mspace><mtext>if</mtext><mspace width=\"0.166em\"></mspace><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow></mrow><mrow><mrow><mo>-</mo><mn>1</mn></mrow><mtext>,</mtext><mspace width=\"0.166em\"></mspace><mtext>if</mtext><mspace width=\"0.166em\"></mspace><mrow><mi>x</mi><mo>&lt;</mo><mn>0</mn></mrow></mrow><mrow><mn>1</mn><mtext>,</mtext><mspace width=\"0.166em\"></mspace><mtext>if</mtext><mspace width=\"0.166em\"></mspace><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow></mrow></mtable></mrow></math>")
           })
 
 test_that("integrate",
           {
             q <- mathml(canonical(integrate(lower=0L, upper=2L*pi, sin)))
-            expect_equal(q, sprintf("<math><mrow><mrow><mi>value</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>abs.error</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>subdivisions</mi><mo>-</mo><mn>1</mn></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>message</mi><mo>-</mo><mtext>OK</mtext></mrow><mspace width=\"thinmathspace\"></mspace><mrow><mi>call</mi><mo>-</mo><mrow><mi>integrate</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>f</mi><mo>=</mo><mi>sin</mi></mrow><mo>,</mo><mrow><mi>lower</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mi>upper</mi><mo>=</mo><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math>",
+            expect_equal(q, sprintf("<math><mrow><mrow><mi>value</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"0.166em\"></mspace><mrow><mi>abs.error</mi><mo>-</mo><mn>%s</mn></mrow><mspace width=\"0.166em\"></mspace><mrow><mi>subdivisions</mi><mo>-</mo><mn>1</mn></mrow><mspace width=\"0.166em\"></mspace><mrow><mi>message</mi><mo>-</mo><mtext>OK</mtext></mrow><mspace width=\"0.166em\"></mspace><mrow><mi>call</mi><mo>-</mo><mrow><mi>integrate</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mrow><mi>f</mi><mo>=</mo><mi>sin</mi></mrow><mo>,</mo><mrow><mi>lower</mi><mo>=</mo><mn>0</mn></mrow><mo>,</mo><mrow><mi>upper</mi><mo>=</mo><mrow><mn>2</mn><mo>&#x2062;</mo><mi>&pi;</mi></mrow></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math>",
                                     format(0, nsmall=getOption("digits")), format(0, nsmall=getOption("digits"))))
           })
 
@@ -787,7 +787,7 @@ v <- 1:3
 test_that("vector",
           {
             q <- mathml(call("t", v))
-            expect_equal(q, "<math><msup><mrow><mo>(</mo><mrow><mn>1</mn><mspace width=\"thinmathspace\"></mspace><mn>2</mn><mspace width=\"thinmathspace\"></mspace><mn>3</mn></mrow><mo>)</mo></mrow><mtext>T</mtext></msup></math>")
+            expect_equal(q, "<math><msup><mrow><mo>(</mo><mrow><mn>1</mn><mspace width=\"0.166em\"></mspace><mn>2</mn><mspace width=\"0.166em\"></mspace><mn>3</mn></mrow><mo>)</mo></mrow><mtext>T</mtext></msup></math>")
           })
 
 A <- matrix(data=11:16, nrow=2, ncol=3)
@@ -819,49 +819,49 @@ t <- quote(omit_left(a + b))
 test_that("omitleft",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><menclose notation=\"updiagonalstrike\"><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></math>")
+            expect_equal(q, "<math><mrow><menclose notation=\"updiagonalstrike\"><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></math>")
           })
 
 t <- quote(omit_right(a + b))
 test_that("omitright",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"updiagonalstrike\"><mrow><mo>+</mo><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
+            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><menclose notation=\"updiagonalstrike\"><mrow><mo>+</mo><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
           })
 
 t <- list(quote(a), quote(b), quote(omit(c)))
 test_that("omit",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mi>b</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"updiagonalstrike\"><mi>c</mi></menclose></mrow></math>")
+            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><mi>b</mi><mspace width=\"0.166em\"></mspace><menclose notation=\"updiagonalstrike\"><mi>c</mi></menclose></mrow></math>")
           })
 
 t <- quote(add_left(a + b))
 test_that("addleft",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><menclose notation=\"roundedbox\"><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></math>")
+            expect_equal(q, "<math><mrow><menclose notation=\"roundedbox\"><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><mo>+</mo></mrow></menclose><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></math>")
           })
 
 t <- quote(add_right(a + b))
 test_that("addright",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"roundedbox\"><mrow><mo>+</mo><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
+            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><menclose notation=\"roundedbox\"><mrow><mo>+</mo><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></menclose></mrow></math>")
           })
 
 t <- list(quote(a), quote(b), quote(add(c)))
 test_that("add",
           {
             q <- mathml(t)
-            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"thinmathspace\"></mspace><mi>b</mi><mspace width=\"thinmathspace\"></mspace><menclose notation=\"roundedbox\"><mi>c</mi></menclose></mrow></math>")
+            expect_equal(q, "<math><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><mi>b</mi><mspace width=\"0.166em\"></mspace><menclose notation=\"roundedbox\"><mi>c</mi></menclose></mrow></math>")
           })
 
 t <- quote(instead(a, b) + c)
 test_that("instead",
           {
             q <- mathml(t)
-            expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead</mtext><mspace width=\"thinmathspace\"></mspace><mtext>of</mtext><mspace width=\"thinmathspace\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
+            expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead</mtext><mspace width=\"0.166em\"></mspace><mtext>of</mtext><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
           })
 
 test_that("Tdiamond",
