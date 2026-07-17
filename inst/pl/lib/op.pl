@@ -450,7 +450,7 @@ prec(special(_), Prec, _Flags)
 % Space
 %
 math(space, M)
- => M = space(thinmathspace).
+ => M = space('0.166em').
 
 ml(space(W), M, _Flags)
  => M = mspace(width(W), []).
