@@ -2507,6 +2507,10 @@ jax(fn(Name, (Args ; Pars)), M, Flags)
     jax(paren(list(op(';'), [list(op(','), Args), list(op(','), Pars)])), X, Flags),
     format(string(M), "\\operatorname{~w}{~w}", [F, X]).
 
+paren(fn(_Name, Args), Paren, Flags)
+ => paren(list(op(','), Args), X, Flags),
+    Paren is X + 1.
+
 paren(fn(_Name, (Args ; Pars)), Paren, Flags)
  => paren(list(op(','), Args), X, Flags),
     paren(list(op(','), Pars), Y, Flags),
