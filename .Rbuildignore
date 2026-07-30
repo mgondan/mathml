@@ -7,3 +7,5 @@
 ^prolog/
 ^test/
 ^\.github/
+^\.positai$
+^\.claude$

@@ -2512,6 +2512,10 @@ paren(fn(_Name, (Args ; Pars)), Paren, Flags)
     paren(list(op(','), Pars), Y, Flags),
     Paren is max(X, Y) + 1.
 
+paren(fn(_Name, Args), Paren, Flags)
+ => paren(list(op(','), Args), X, Flags),
+    Paren is X + 1.
+
 prec(fn(_Name, (_Args ; _Pars)), Prec, Flags)
  => prec(a * b, P0, Flags),
     Prec is P0 - 1.
