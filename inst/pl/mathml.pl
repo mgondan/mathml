@@ -1,4 +1,4 @@
-:- module(mathml, [r2mathml/2, r2mathml/3, r2mathjax/2, r2mathjax/3, math_hooked/2, math_hook/2, math_hook/3, math_hook/4]).
+:- module(mathml, [r2mathml/2, r2mathml/3, r2mathjax/2, r2mathjax/3]).
 
 :- discontiguous math/2, math/3, math/4, current/3, paren/3, prec/3.
 :- discontiguous type/3, denoting/3, ml/3, jax/3.
@@ -14,8 +14,8 @@
 % From R, the hook is installed by
 % mathml::hook(t0, subscript(t, 0))
 %
-:- dynamic math_hook/2, math_hook/3, math_hook/4.
-:- multifile math_hook/2, math_hook/3, math_hook/4.
+:- dynamic user:math_hook/2, user:math_hook/3, user:math_hook/4.
+:- multifile user:math_hook/2, user:math_hook/3, user:math_hook/4.
 
 % Low-level functions (see, e.g. nthroot.pl)
 %
@@ -55,18 +55,18 @@ r2mathjax(R, S, Flags)
 
 % Apply hook to entire expression
 math_hooked1(A, A1) :-
-    math_hook(A, A0),
+    user:math_hook(A, A0),
     !,
     A1 = A0.
 
 math_hooked1(A, A).
     
-math_hooked(A, A1) :-
+user:math_hooked(A, A1) :-
     compound(A),
     !,
-    mapargs(math_hooked, A, A0),
+    mapargs(user:math_hooked, A, A0),
     math_hooked1(A0, A1).
 
-math_hooked(A, A1) :-
+user:math_hooked(A, A1) :-
     !,
     math_hooked1(A, A1).

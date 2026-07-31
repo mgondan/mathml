@@ -12,7 +12,7 @@ summands(S + A, [A, B | Rest]) :-
 % Base case
 summands(A, [A]).
 
-mathml:math_hook(LM, M) :-
+math_hook(LM, M) :-
     compound(LM),
     LM =.. [lm, ~(Y, Sum) | _Tail],
     summands(Sum, Predictors),

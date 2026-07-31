@@ -20,4 +20,4 @@ mathml:parenx(nthroot(X, _N), P, Flags) :-
     mathml:paren(X, P, Flags).
 
 % Show x^(1/n) as nthroot(x, n)
-mathml:math_hook(X ^ '('(1/N), nthroot(X, N)).
+math_hook(X ^ '('(1/N), nthroot(X, N)).
