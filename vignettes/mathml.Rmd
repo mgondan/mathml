@@ -819,6 +819,19 @@ term <- quote(lm(EOT ~ T0 + Therapy, data=d, na.action=na.fail))
 math(term)
 ````
 
+## Hooks for package-specific functions
+
+There is limited support for hooks into package-specific functions.
+
+````{r}
+hook(quote(stats::lm(.Formula, .Data)), quote(.Formula), quote=FALSE)
+
+term <- quote(stats::lm(EOT ~ T0 + Therapy, data=d))
+math(term)
+````
+
+Note that we must quote the objects manually.
+
 ## \(n\)-th root
 
 Base R does not provide a function like `cuberoot(x)` or `nthroot(x, n)`, and

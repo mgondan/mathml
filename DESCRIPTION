@@ -1,8 +1,8 @@
 Package: mathml
 Type: Package
 Title: Translate R Expressions to 'MathML' and 'LaTeX'/'MathJax'
-Version: 1.9
-Date: 2026-07-01
+Version: 1.10
+Date: 2026-10-08
 Authors@R: c(person("Matthias", "Gondan", role=c("aut", "cre", "cph"),
   email="Matthias.Gondan-Rochon@uibk.ac.at", comment="University of Innsbruck"),
   person("Irene", "Alfarone", role="aut",
@@ -15,7 +15,7 @@ Description: Translate R expressions to 'MathML' or 'MathJax'/'LaTeX' so that
 License: FreeBSD
 Depends:
     R (>= 4.3),
-    rolog (>= 0.9.14),
+    rolog (>= 0.9.29),
     knitr
 Imports:
     xfun (>= 0.49)
