@@ -24,6 +24,13 @@ math(prod_over(Arg, Range), M)
 math(prod_over(Arg, From, To), M)
  => M = fn(subsupscript(prod, From, To), [Arg]).
 
+%
+% Outer product (or other function)
+%
+math(outer(A, B, Fun), M)
+ => F =.. [Fun, A, B],
+    M = braces([(list(',', [A, B])) | F]).
+
 % Subscripts like x[i]
 %
 % Terms like x[i] are first translated to subscript(x, i). Then, it is
@@ -2141,8 +2148,15 @@ type(braces(_), T, _Flags)
  => T = paren.
 
 % Lists of things
+math([H], M)
+ => M = list(space, [H]).
+
+math([H | [T1 | T2]], M)
+ => M = list(space, [H | [T1 | T2]]).
+
+% if T is not a list
 math([H | T], M)
- => M = list(space, [H | T]).
+ => M = list(op(&('#x2223')), [H, T]).
 
 ml(list(_, [A]), M, Flags)
  => ml(A, M, Flags).

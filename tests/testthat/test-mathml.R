@@ -864,6 +864,34 @@ test_that("instead",
             expect_equal(q,  "<math><mrow><munder><munder accentunder=\"true\"><mi>a</mi><mo stretchy=\"true\">&UnderBrace;</mo></munder><mrow><mtext>instead</mtext><mspace width=\"0.166em\"></mspace><mtext>of</mtext><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></munder><mo>+</mo><mi>c</mi></mrow></math>")
           })
 
+t <- call("[|]", quote(a), quote(b))
+test_that("pipe",
+          {
+            q <- mathml(t)
+            expect_equal(q,  "<math><mrow><mi>a</mi><mo>&#x2223;</mo><mi>b</mi></mrow></math>")
+          })
+
+t <- call("[|]", quote(a), list(quote(b)))
+test_that("list",
+          {
+            q <- mathml(t)
+            expect_equal(q,  "<math><mrow><mi>a</mi><mspace width=\"0.166em\"></mspace><mi>b</mi></mrow></math>")
+          })
+
+t <- call("list", as.symbol(","), list(quote(a), quote(b)))
+test_that("list_with_comma",
+          {
+            q <- mathml(t)
+            expect_equal(q,  "<math><mrow><mi>a</mi><mi>,</mi><mi>b</mi></mrow></math>")
+          })
+
+t <- quote(outer(a, b, `>`))
+test_that("outer",
+          {
+            q <- mathml(t)
+            expect_equal(q,  "<math><mrow><mo>{</mo><mrow><mrow><mi>a</mi><mi>,</mi><mi>b</mi></mrow><mo>&#x2223;</mo><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow></mrow><mo>}</mo></mrow></math>")
+          })
+
 test_that("Tdiamond",
           {
             q <- mathml(quote(T^diamond))
