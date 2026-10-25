@@ -1,6 +1,7 @@
-# mathml 1.9
+# mathml 1.10
 
 * resubmission, since package was archived due to missing dependencies
+* new denote/3-syntax with ~m placeholder for expression
 
 # mathml 1.8
 
