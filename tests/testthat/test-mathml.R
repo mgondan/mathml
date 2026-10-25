@@ -800,11 +800,11 @@ test_that("summatrix",
 
 z <- function(m, s, n, tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M)
   dfrac(m - denote(E, ET(tau, c, mu_A, sigma_A, mu_B, sigma_B, mu_M),
-                   "the expected mean response time"), s / sqrt(n))
+                   "with ~m denoting the expected mean response time"), s / sqrt(n))
 test_that("denoting",
           {
             q <- mathml(call("=", quote(z[tau]), z))
-            expect_equal(q, "<math><mrow><msub><mi>z</mi><mi>&tau;</mi></msub><mo>=</mo><mstyle displaystyle=\"true\"><mfrac><mrow><mi>m</mi><mo>-</mo><mi>E</mi></mrow><mrow><mi>s</mi><mo>/</mo><msqrt><mi>n</mi></msqrt></mrow></mfrac></mstyle></mrow></math><span>, with&nbsp;<span><math><mrow><mi>E</mi><mo>=</mo><mrow><mi>ET</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&tau;</mi><mo>,</mo><mi>c</mi><mo>,</mo><mi>mu_A</mi><mo>,</mo><mi>sigma_A</mi><mo>,</mo><mi>mu_B</mi><mo>,</mo><mi>sigma_B</mi><mo>,</mo><mi>mu_M</mi></mrow><mo>)</mo></mrow></mrow></mrow></math> denoting the expected mean response time</span></span>")
+            expect_equal(q, "<math><mrow><msub><mi>z</mi><mi>&tau;</mi></msub><mo>=</mo><mstyle displaystyle=\"true\"><mfrac><mrow><mi>m</mi><mo>-</mo><mi>E</mi></mrow><mrow><mi>s</mi><mo>/</mo><msqrt><mi>n</mi></msqrt></mrow></mfrac></mstyle></mrow></math><span>,&nbsp;<span>with <math><mrow><mi>E</mi><mo>=</mo><mrow><mi>ET</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>&tau;</mi><mo>,</mo><mi>c</mi><mo>,</mo><mi>mu_A</mi><mo>,</mo><mi>sigma_A</mi><mo>,</mo><mi>mu_B</mi><mo>,</mo><mi>sigma_B</mi><mo>,</mo><mi>mu_M</mi></mrow><mo>)</mo></mrow></mrow></mrow></math> denoting the expected mean response time</span></span>")
           })
 
 
