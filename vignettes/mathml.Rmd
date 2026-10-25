@@ -90,8 +90,7 @@ library(mathml)
 mathjax(term)
 ```
 
-Some of the curly braces are not really needed in the LaTeX output, but are
-necessary in edge cases. The package also includes a function `mathout()` that
+The package also includes a function `mathout()` that
 wraps a call to `mathml()` for HTML output and `mathjax()` for LaTeX output.
 Moreover, the function `math(x)` adds the class `"math"` to its argument, such
 that a special knitr printing function is
@@ -554,8 +553,7 @@ avoid clutter in the equation, the pooled variance \(s^2_{\mathrm{pool}}\) is
 abbreviated, and a comment is given with the expression
 for \(s^2_{\mathrm{pool}}\). For this purpose, _mathml_ provides a
 function `denote(abbr, expr, info)`, with `expr` actually being
-evaluated, `abbr` being rendered, plus a comment of the
-form "with `expr` denoting `info`".
+evaluated, `abbr` being rendered, plus a comment with a ~m for the expression.
 
 ```{r}
 hook(m_A, mean(X)["A"]) ; hook(s2_A, s["A"]^2L) ;
@@ -564,7 +562,7 @@ hook(m_B, mean(X)["B"]) ; hook(s2_B, s["B"]^2L)
 hook(n_B, n["B"]) ; hook(s2_p, s["pool"]^2L)
 term <- quote(t <- dfrac(m_A - m_B, 
     sqrt(denote(s2_p, frac((n_A - 1L)*s2_A + (n_B - 1L)*s2_B, n_A + n_B - 2L),
-                "the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
+      "with ~m denoting the pooled variance.") * (frac(1L, n_A) + frac(1L, n_B)))))
 math(term)
 ```
 
@@ -928,6 +926,22 @@ shown.
 The file also includes the convenience function `tstat/1` that rounds to two
 digits, and `percent/1` that displays a number as a
 percentage (e.g., 0.05 as 5%).
+
+## R-function outer
+
+```{r}
+library(mathml)
+rolog::consult(system.file(file.path("pl", "outer.pl"), package="mathml"))
+
+# Mann-Whitney
+Ustat <- function(a, b)
+  cardinality(outer(a, b, FUN=">"))
+
+cardinality <- sum
+
+term <- quote(Ustat(a, b))
+math(term)
+```
 
 # Acknowledgment
 
