@@ -1999,11 +1999,17 @@ denoting(denote(A, Expr, Info), Den, Flags)
 %
 ml(denoting(A, Expr, Info), X, Flags)
  => ml(A = Expr, AExpr, Flags),
-    X = span([math(AExpr), " denoting ", Info]).
+    sub_string(Info, Before, _, After, "~m"),
+    sub_atom(Info, 0, Before, _, S1),
+    sub_string(Info, _, After, 0, S2),
+    X = span([S1, math(AExpr), S2]).
 
 jax(denoting(A, Expr, Info), X, Flags)
  => jax(A = Expr, AExpr, Flags),
-    format(string(X), "$~w$ denoting ~w", [AExpr, Info]).
+    sub_string(Info, Before, _, After, "~m"),
+    sub_atom(Info, 0, Before, _, S1),
+    sub_string(Info, _, After, 0, S2),
+    format(string(X), "~w$~w$~w", [S1, AExpr, S2]).
 
 type(denoting(A, _, _), Type, Flags)
  => type(A, Type, Flags).
@@ -2022,12 +2028,12 @@ ml(with_([]), W, _Flags)
 
 ml(with_([A]), W, Flags)
  => ml(A, X, Flags),
-    W = span([", with", &(nbsp), X]).
+    W = span([",", &(nbsp), X]).
 
 ml(with_([A, B | T]), W, Flags)
  => ml(A, X, Flags),
     ml(and([B | T]), Y, Flags),
-    W = span([", with", &(nbsp), X | Y]).
+    W = span([",", &(nbsp), X | Y]).
 
 ml(and([]), W, _Flags)
  => W = ".".
@@ -2046,12 +2052,12 @@ jax(with_([]), W, _Flags)
 
 jax(with_([A]), W, Flags)
  => jax(A, X, Flags),
-    format(string(W), ", with ~w", [X]).
+    format(string(W), ", ~w", [X]).
 
 jax(with_([A, B | T]), W, Flags)
  => jax(A, X, Flags),
     jax(and([B | T]), Y, Flags),
-    format(string(W), ", with ~w~w", [X, Y]).
+    format(string(W), ", ~w~w", [X, Y]).
 
 jax(and([]), W, _Flags)
  => W = ".".
