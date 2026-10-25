@@ -1999,7 +1999,10 @@ denoting(denote(A, Expr, Info), Den, Flags)
 %
 ml(denoting(A, Expr, Info), X, Flags)
  => ml(A = Expr, AExpr, Flags),
-    X = span([math(AExpr), " denoting ", Info]).
+    sub_string(Info, Before, _, After, "~m"),
+    sub_atom(Info, 0, Before, _, S1),
+    sub_string(Info, _, After, 0, S2),
+    X = span([S1, math(AExpr), S2]).
 
 jax(denoting(A, Expr, Info), X, Flags)
  => jax(A = Expr, AExpr, Flags),
@@ -2022,12 +2025,12 @@ ml(with_([]), W, _Flags)
 
 ml(with_([A]), W, Flags)
  => ml(A, X, Flags),
-    W = span([", with", &(nbsp), X]).
+    W = span([",", &(nbsp), X]).
 
 ml(with_([A, B | T]), W, Flags)
  => ml(A, X, Flags),
     ml(and([B | T]), Y, Flags),
-    W = span([", with", &(nbsp), X | Y]).
+    W = span([",", &(nbsp), X | Y]).
 
 ml(and([]), W, _Flags)
  => W = ".".
