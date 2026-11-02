@@ -35,7 +35,7 @@ math(outer(A, B, Fun), M)
 %
 % Terms like x[i] are first translated to subscript(x, i). Then, it is
 % tested if the base is actually a power, and cases with simultaneous
-% index and power are translated to subsubscript(x, index, power). This
+% index and power are translated to subsupscript(x, index, power). This
 % is necessary to avoid extra space in terms like x_i^2.
 %
 base(A, Base, Flags) :-
@@ -2481,7 +2481,7 @@ math(qnorm(Alpha, Mu, Sigma2), M)
  => M = fn('Phi' ^ -1, ([Alpha] ; [Mu, Sigma2])).
 
 math(pchisq(X, Df), M)
- => M = fn(subscript('F', fn(chi^2, [list(space, [Df, "df"])])), [X]).
+ => M = fn('F', ([X] ; [subsupscript(chi, "df"==Df, 2)])).
 
 math(qchisq(Alpha, Df), M)
  => M = fn(subscript('F' ^ -1, fn(chi^2, [list(space, [Df, "df"])])), [Alpha]).
