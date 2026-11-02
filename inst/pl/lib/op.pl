@@ -2481,7 +2481,7 @@ math(qnorm(Alpha, Mu, Sigma2), M)
  => M = fn('Phi' ^ -1, ([Alpha] ; [Mu, Sigma2])).
 
 math(pchisq(X, Df), M)
- => M = fn(subscript('F', fn(chi^2, [list(space, [Df, "df"])])), [X]).
+ => M = fn('F', ([X] ; [fn(chi^2, ["df" == Df])])).
 
 math(qchisq(Alpha, Df), M)
  => M = fn(subscript('F' ^ -1, fn(chi^2, [list(space, [Df, "df"])])), [Alpha]).
