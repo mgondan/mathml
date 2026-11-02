@@ -577,7 +577,8 @@ test_that("qnorm",
 test_that("1mpchisq",
           {
             q <- mathml(quote(1 - pchisq(x, 1)))
-            expect_equal(q, sprintf("<math><mrow><mn>%s</mn><mo>-</mo><mrow><msub><mi>F</mi><mrow><msup><mi>&chi;</mi><mn>2</mn></msup><mo>&af;</mo><mrow><mo>(</mo><mrow><mn>%s</mn><mspace width=\"0.166em\"></mspace><mtext>df</mtext></mrow><mo>)</mo></mrow></mrow></msub><mo>&af;</mo><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mrow></mrow></math>",
+            expect_equal(q, sprintf(
+                      "<math><mrow><mn>%s</mn><mo>-</mo><mrow><mi>F</mi><mo>&af;</mo><mrow><mo>(</mo><mrow><mi>x</mi><mo>;</mo><msubsup><mi>&chi;</mi><mrow><mtext>df</mtext><mo>=</mo><mn>%1</mn></mrow><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></mrow></mrow></math>",
                                     format(1, nsmall=getOption("digits")), format(1, nsmall=getOption("digits"))))
           })
 
