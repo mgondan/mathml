@@ -2041,7 +2041,7 @@ ml(and([]), W, _Flags)
 ml(and([A | T]), W, Flags)
  => ml(A, X, Flags),
     ml(and(T), Y, Flags),
-    W = span([", and", &(nbsp), X | Y]).
+    W = span([",", &(nbsp), X | Y]).
 
 jax(with(Abbreviations), X, Flags)
  => sort(Abbreviations, Sorted), % remove duplicates
@@ -2065,7 +2065,7 @@ jax(and([]), W, _Flags)
 jax(and([A | T]), W, Flags)
  => jax(A, X, Flags),
     jax(and(T), Y, Flags),
-    format(string(W), ", and ~w~w", [X, Y]).
+    format(string(W), ", ~w~w", [X, Y]).
 
 % No parentheses
 math({}(A), M)
